@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import { LinkedInIcon } from "./Icons/LinkedInIcon"
 import { GithubIcon } from "./Icons/GithubIcon"
 import { ResearchGateIcon } from "./Icons/ResearchGateIcon"
+import { ArrowBigDown, Layers2, Scroll, ScrollText } from "lucide-react"
 
 export const Header = () => {
     return (
@@ -25,9 +26,11 @@ export const Header = () => {
                     <GithubIcon size={12} className="text-foreground" />
                 </Link>
 
+                <Link href="resume" className={cn(buttonVariants({variant: "outline"}), "size-6 p-0")}>
+                    <ScrollText size={12} className="text-foreground" />
+                </Link>
             </ul>
             </Section>
         </header>
     )
-
 }
