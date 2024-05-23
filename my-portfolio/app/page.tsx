@@ -26,7 +26,6 @@ export default function Home() {
       <Spacing height={50} />
 
       <Footer />
-
     </main>
   );
 }
