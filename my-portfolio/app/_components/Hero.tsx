@@ -19,11 +19,12 @@ export const Hero = () => {
         <div className='flex-[4] flex flex-col gap-0.5'>
             <h2 className='font-caption font-semibold text-5xl text-primary'>Islam Tayeb</h2>
             <h3 className='font-caption font-medium text-2xl'>I'm a <Typewriter words={['Software Developer', 'Research Analyst', 'Graphic Designer']} cursor typeSpeed={50} loop={0} deleteSpeed={40} delaySpeed={2250} /></h3>
-            <p className='font-sans basis-0 text-muted-foreground'>Sunt magna labore veniam laboris amet enim magna sit ad. Aliquip nulla do consequat occaecat ea aliqua quis elit. <Code>proident</Code> reprehenderit reprehenderit sunt et elit irure quis qui ea deserunt ipsum. Eu anim ea cupidatat nisi reprehenderit incididunt.</p>
-            <div><Button size={"lg"} className='' /></div>
+            <p className='font-sans basis-0 text-muted-foreground'>Computer Science and Bioinformatics student at Duke University. Interested in software development, data analysis, computational and synthetic chemistry, and medical technology. Feel free to reach out at islam.tayeb@duke.edu!</p>
+            <div><Button variant="outline" className='my-3 p-4 font-sans'>Read More...</Button></div>
         </div>
         <div className='flex-[2.25] p-5 m-auto'>
             <MoonIcon className="w-full h-auto max-w-xs max-md:w-56 ml-auto" />
+            {/* <img src="https://ibb.co/T036bW0" className="w-full h-auto max-w-lg max-lg:w-64" /> */}
         </div>
         </div>
     </Section>

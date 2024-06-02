@@ -4,6 +4,7 @@ import React from 'react'
 import { Section } from './Section'
 import { ArrowUpRight, Atom, Binary, Cpu, LucideIcon, Mail, Radiation, ScanEye } from 'lucide-react';
 import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
 
 // =======================================================================
 
