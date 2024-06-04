@@ -17,7 +17,11 @@ const config = {
         "2xl": "1400px",
       },
     },
-
+    // extend: {
+    //   gridTemplateColumns: {
+    //     '20-80': '20% 80%',
+    //   },
+    // },
       "animation": {
       shimmer: "shimmer 2s linear infinite"
       },
@@ -38,6 +42,9 @@ const config = {
       caption: ["var(--font-caption)"],
     },
     extend: {
+      gridTemplateColumns: {
+        '20-80': '20% 80%',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

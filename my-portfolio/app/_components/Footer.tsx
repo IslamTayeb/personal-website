@@ -5,7 +5,7 @@ export const Footer = () => {
     return (
         <footer className='bg-card'>
             <Section>
-                <p className='px-5 py-8 text-muted-foreground text-sm'>@Copywrite 2024 Islam Tayeb</p>
+                <p className='px-5 py-8 text-muted-foreground text-sm'>&copy; Copywrite 2024 Islam Tayeb</p>
             </Section>
         </footer>
     )

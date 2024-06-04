@@ -1,8 +1,14 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { ComponentPropsWithoutRef, useEffect, useState } from 'react'
 import { motion } from "framer-motion";
 import Link from "next/link";
-import style from './Experience.module.css';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { Section } from './Section';
+
+const Code = ({className,...props}: ComponentPropsWithoutRef<"span">) => {
+    return <span className={cn("bg-accent/30 hover:bg-accent/50 transition-colors border border-accent px-1 py-0.5 rounded-sm text-primary font-mono",className)} {...props} />
+}
 
 export const Experience = () => {
     const [selected, setSelected] = useState(0);
@@ -17,20 +23,27 @@ export const Experience = () => {
 
     const experiences = [
         {
-            name: "Rapidops",
+            name: "Duke Institute for Health Innovation",
+            shortname: "DIHI",
             role: "Full Stack Developer",
             url: "https://www.rapidops.com",
             start: "January 2021",
             end: "Present",
             shortDescription: [
-            "I had experience working on a large codebase utilizing Kibana and Elasticsearch.",
-            "Throughout my work, I've utilized various MERN stack technologies, including React, Redux, TypeScript, Node.js, Hapi, and Elasticsearch, among others.",
-            "I've also managed a small team that includes Frontend Developers, Backend Developers, and UI/UX Developers.",
-            "Additionally, I've represented the company in client meetings, communicating effectively on their behalf.",
+            <>
+                I had <Code>experience</Code> working on a large codebase utilizing Kibana and Elasticsearc jfads fajfd dsjf jdah.
+            </>,
+            <>
+                I had <Code>experience</Code> working on a large codebase utilizing Kibana and Elasticsearch.
+            </>,
+            <>
+                I had <Code>experience</Code> working on a large codebase utilizing Kibana and Elasticsearch.
+            </>,
             ],
         },
         {
-            name: "Youtube",
+            name: "Feng Labs",
+            shortname: "Duke",
             role: "Content Creator",
             url: "https://www.youtube.com/kishansheth21",
             start: "April 2021",
@@ -42,7 +55,8 @@ export const Experience = () => {
             ],
         },
         {
-            name: "ACES",
+            name: "Project: Sapien",
+            shortname: "Sapien",
             role: "President",
             url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
             start: "November 2019",
@@ -54,7 +68,8 @@ export const Experience = () => {
             ],
         },
         {
-            name: "ISTE",
+            name: "Saudi Aramco",
+            shortname: "Aramco",
             role: "Web Developer",
             url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
             start: "November 2019",
@@ -66,7 +81,8 @@ export const Experience = () => {
             ],
         },
         {
-            name: "Shashaan",
+            name: "King Abdulaziz University",
+            shortname: "KAU",
             role: "Founder",
             url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
             start: "November 2018",
@@ -74,62 +90,71 @@ export const Experience = () => {
             shortDescription: [
             "While still a student, I founded a web hosting company that offered affordable hosting services.",
             "With over 300 customers, the business thrived until I graduated and sold it to another company.",
-          ],
+            ],
         },
     ]
 
     return (
-    <div className={style.experience}>
+    <Section>
         <motion.div
             initial="hidden"
-            className='font-sans'
             whileInView="visible"
+            className='flex flex-col items-start gap-4'
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
             variants={{
-                visible: { opacity: 1, y: -50 },
-                hidden: { opacity: 0, y: 0 },
+                visible: { opacity: 1, y: 0 },
+                hidden: { opacity: 0, y: 50 },
             }}
         >
-        <div className="title">
-            <h2>Where I&apos;ve Worked</h2>
-        </div>
-        <div className="grid grid-cols-2 gap-1">
+
+        <Badge variant={"outline"}>Experience</Badge>
+
+        {/* <div className='relative'>
+            <h2 className='pb-2 text-3xl font-semibold font-sans first:mt-0 text-primary mb-4'>Where I&apos;ve Worked...</h2>
+        </div> */}
+
+        <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
+            Where I&apos;ve worked...
+        </h2>
+        
+        <div className="container px-1">
+            {/* <ul className="list-none relative h-max"> */}
             <ul className="exp-slider">
             <div className="underline"></div>
             {experiences.map((expereince, index) => {
                 return (
                 <li
-                    className={`exp-slider-item ${
+                className={`exp-slider-item hover:bg-accent ${
                     index === selected && "exp-slider-item-selected"
-                    }`}
+                }`}
                     onClick={() => setSelected(index)}
-                    key={expereince.name}
+                    key={expereince.shortname}
                 >
-                    <span>{expereince.name}</span>
+                    <span>{expereince.shortname}</span>
                 </li>
                 );
             })}
             </ul>
             <div className="exp-details">
-            <div className="exp-details-position">
+            <div className="text-2xl font-medium font-sans">
                 <h3>
                 <span>{experiences[selected].role}</span>
-                <span className="exp-details-position-company">
+                <span className='text-accent-foreground text-2xl font-medium font-sans'>
                     &nbsp;@&nbsp;
-                    <Link href={experiences[selected].url} className="link">
+                    <Link href={experiences[selected].url}>
                     {experiences[selected].name}
                     </Link>
                 </span>
                 </h3>
-                <p className="exp-details-range">
+                <p className="text-base font-medium text-muted-foreground font-mono pb-2">
                 {experiences[selected].start} - {experiences[selected].end}
                 </p>
-                <ul className="exp-details-list">
+                <ul className="text-sm text-muted-foreground font-sans pl-2">
                 {experiences[selected].shortDescription.map(
                     (description, index) => (
-                    <li key={index} className="exp-details-list-item">
-                        {description}
+                    <li key={index} className="text-sm text-muted-foreground font-sans pb-1">
+                        {typeof description === 'string' ? `- ${description}` : <>{`- `}{description}</>}
                     </li>
                     )
                 )}
@@ -138,6 +163,6 @@ export const Experience = () => {
             </div>
         </div>
         </motion.div>
-        </div>
+        </Section>
     )
 }

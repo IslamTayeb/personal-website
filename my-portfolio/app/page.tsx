@@ -6,6 +6,7 @@ import { Status } from "./_components/Status";
 import { Skills } from "./_components/Skills";
 import { Footer } from "./_components/Footer";
 import { Experience } from "./_components/Experience";
+import { Projects } from "./_components/Projects";
 
 export default function Home() {
   return (
@@ -27,6 +28,10 @@ export default function Home() {
       <Spacing height={50} />
 
       <Experience />
+
+      <Spacing height={50} />
+
+      <Projects />
 
       <Spacing height={50} />
 

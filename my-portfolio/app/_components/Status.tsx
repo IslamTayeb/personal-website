@@ -10,7 +10,9 @@ import { Badge } from '@/components/ui/badge';
 
 export const Status = () => {
     return (
+        
         <Section className='flex max-md:flex-col items-start gap-4'>
+            {/*<Badge variant={"outline"}>Summary</Badge> */}
             <Card className='font-sans font-medium flex-[3] w-full flex flex-col h-full gap-2 p-4'><p className="text-lg text-muted-foreground">Professional Experience</p>
             <div className='flex flex-col gap-3'>
                     {WORKS.map((work, index) => (
