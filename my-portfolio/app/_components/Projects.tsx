@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
-import { Link as Link2 } from "lucide-react";
+import { Github, GithubIcon, Link as Link2, LucideGithub } from "lucide-react";
 import React, { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -24,7 +24,7 @@ const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
 export const Projects = () => {
   const projectsData = [
     {
-      image: "/project1.png",
+      image: "/image1.jpg",
       projectName: "Pokedex",
       projectLink: "https://netlify.com",
       projectDescription:
@@ -43,7 +43,7 @@ export const Projects = () => {
       },
     },
     {
-      image: "/project2.png",
+      image: "/image1.jpg",
       projectName: "Realtime Chat App",
       projectLink: "https://netlify.com",
       projectDescription:
@@ -55,6 +55,11 @@ export const Projects = () => {
         "Express",
         "MongoDB",
         "Styled Components",
+        "Styled Components",
+        "Styled Components",
+        "Styled Components",
+        "React",
+
       ],
       projectExternalLinks: {
         github: "",
@@ -62,7 +67,7 @@ export const Projects = () => {
       },
     },
     {
-      image: "/project3.png",
+      image: "/image1.jpg",
       projectName: "Netflix App",
       projectLink: "https://netlify.com",
       projectDescription:
@@ -82,22 +87,27 @@ export const Projects = () => {
     },
   ];
   return (
-    <Section className="font-sans flex-col items-start gap-8">
-      <Badge variant={"outline"}>Summary</Badge>
-      <div className="projects-container">
-      <motion.div
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                variants={{
-                  visible: { opacity: 1, y: 0 },
-                  hidden: { opacity: 0, y: 50 },
-                }}
-              >
-        <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
-            Where I&apos;ve worked...
-        </h2>
+    <Section>
+      <div className="font-sans flex-col gap-4 projects-container">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          className="gap-4"
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          variants={{
+            visible: { opacity: 1, y: 0 },
+            hidden: { opacity: 0, y: 50 },
+          }}
+        >
+          {" "}
+          <div className="mb-4">
+            <Badge variant={"outline"}>Summary</Badge>
+          </div>
+          {/* NOTE: workaronud, added a margin because gaps didn't work. */}
+          <h2 className="text-3xl font-semibold font-sans text-primary">
+            Personal projects...
+          </h2>
         </motion.div>
         {projectsData.map(
           ({
@@ -121,7 +131,6 @@ export const Projects = () => {
                   hidden: { opacity: 0, y: 50 },
                 }}
               >
-                
                 <div className="project-image">
                   <div className="project-image-overlay"></div>
                   <div className="project-image-container">
@@ -129,7 +138,7 @@ export const Projects = () => {
                   </div>
                 </div>
                 <div className="project-info">
-                  <p className="project-info-overline">Featured Project</p>
+                  {/* <p className="project-info-overline">Featured Project</p> */}
                   <h3 className="project-info-title">{projectName}</h3>
                   <div className="project-info-description">
                     <p>{projectDescription}</p>
@@ -147,7 +156,7 @@ export const Projects = () => {
                         href={projectExternalLinks.github}
                         className="project-info-links-item-link"
                       >
-                        <GitHubLogoIcon />
+                        <LucideGithub size={24}/>
                       </Link>
                     </li>
                     <li className="project-info-links-item">
@@ -155,7 +164,7 @@ export const Projects = () => {
                         href={projectExternalLinks.externalLink}
                         className="project-info-links-item-link"
                       >
-                        <Link2 />
+                        <Link2  size={24}/>
                       </Link>
                     </li>
                   </ul>
