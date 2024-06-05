@@ -194,12 +194,12 @@
   }
   .project-image-container {
     position: relative;
-    width: 600px;
-    height: 300px;
-    border-radius: 5rem;
+    width: 500px;
+    height: 250px;
   }
   .project-image {
-    position: absolute;
+    position: relative;
+    flex: nowrap;
     top: 0;
     left: 0;
   }
@@ -230,7 +230,7 @@
   }
   .project-info-overline {
     color: hsl(var(--primary));
-    font-family: var(--font-sans);
+    font-family: var(--font-geist-mono);
   }
   .project-info-title {
     width: max-content;
@@ -250,8 +250,7 @@
     border-radius: 0.25rem;
   }
   .project-info-description p {
-    color: var(--light-slate);
-    font-family: var(--raleway);
+    color: hsl(var(--muted-foreground));
     padding: 1.25rem;
     text-align: end;
   }
@@ -259,8 +258,8 @@
     display: flex;
     list-style-type: none;
     gap: 0.5rem;
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin-left: 0.75rem;
+    margin-right: 0.75rem;
     flex-wrap: wrap;
   }
   .project-info-tech-list-item {

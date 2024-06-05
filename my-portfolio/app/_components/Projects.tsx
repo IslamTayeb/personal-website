@@ -59,7 +59,6 @@ export const Projects = () => {
         "Styled Components",
         "Styled Components",
         "React",
-
       ],
       projectExternalLinks: {
         github: "",
@@ -109,6 +108,7 @@ export const Projects = () => {
             Personal projects...
           </h2>
         </motion.div>
+
         {projectsData.map(
           ({
             image,
@@ -120,7 +120,7 @@ export const Projects = () => {
           }) => {
             return (
               <motion.div
-                className="project"
+                className="project content-center flex-nowrap"
                 key={projectName}
                 initial="hidden"
                 whileInView="visible"
@@ -131,13 +131,7 @@ export const Projects = () => {
                   hidden: { opacity: 0, y: 50 },
                 }}
               >
-                <div className="project-image">
-                  <div className="project-image-overlay"></div>
-                  <div className="project-image-container">
-                    <Image src={image} fill alt={projectName} quality={100} />
-                  </div>
-                </div>
-                <div className="project-info">
+                <div className="project-info flex-nowrap	">
                   {/* <p className="project-info-overline">Featured Project</p> */}
                   <h3 className="project-info-title">{projectName}</h3>
                   <div className="project-info-description">
@@ -156,7 +150,7 @@ export const Projects = () => {
                         href={projectExternalLinks.github}
                         className="project-info-links-item-link"
                       >
-                        <LucideGithub size={24}/>
+                        <LucideGithub size={16} />
                       </Link>
                     </li>
                     <li className="project-info-links-item">
@@ -164,11 +158,24 @@ export const Projects = () => {
                         href={projectExternalLinks.externalLink}
                         className="project-info-links-item-link"
                       >
-                        <Link2  size={24}/>
+                        <Link2 size={16} />
                       </Link>
                     </li>
                   </ul>
                 </div>
+                
+                  <div className="project-image overflow-hidden scale-95 rounded-sm border-accent border flex-nowrap	">
+                    <div className="project-image-container blur-md brightness-50 hover:blur-0 hover:brightness-100 transition-all">
+                      <Image
+                        src={image}
+                        fill
+                        alt={projectName}
+                        quality={100}
+                        className=""
+                      />
+                    </div>
+                  </div>
+
               </motion.div>
             );
           }
