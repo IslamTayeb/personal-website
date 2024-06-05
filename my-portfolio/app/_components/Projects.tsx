@@ -25,10 +25,10 @@ export const Projects = () => {
   const projectsData = [
     {
       image: "/image1.jpg",
-      projectName: "Pokedex",
+      projectName: "Wearable Carbon Nanotube",
       projectLink: "https://netlify.com",
       projectDescription:
-        "This is a web application that uses the PokeAPI to display information about different Pokemon, including their evolution levels and details. You can compare multiple Pokemon using a queue, and add them to your personal list using Firebase's Firestore database.",
+        "Consequat fugiat amet commodo exercitation tempor eiusmod sunt. Reprehenderit occaecat eu duis minim laboris aliqua fugiat. Ea magna voluptate voluptate cillum ad voluptate nisi laboris ipsum exercitation consequat labore amet.",
       projectTech: [
         "React",
         "Redux Toolkit",
@@ -44,21 +44,20 @@ export const Projects = () => {
     },
     {
       image: "/image1.jpg",
-      projectName: "Realtime Chat App",
+      projectName: "Magna exercitation eiusmod",
       projectLink: "https://netlify.com",
       projectDescription:
-        "This is a chat app made with React and Node.js that sends real-time messages and is highly scalable. It uses advanced JavaScript concepts like debouncing and is optimized for React. It has 300+ stars on GitHub and over 180k views on YouTube.",
+        "Adipisicing enim qui non in proident et mollit nisi minim minim. Magna exercitation eiusmod ea aliqua veniam esse ex consequat velit duis velit fugiat non sit. Et quis dolor commodo sint ut aute minim labore nostrud minim minim.",
       projectTech: [
-        "React",
-        "Sockets",
-        "Node.js",
-        "Express",
-        "MongoDB",
-        "Styled Components",
-        "Styled Components",
-        "Styled Components",
-        "Styled Components",
-        "React",
+        "Minim Esse",
+        "Enim",
+        "Deus Ipsum",
+        "Machina Ipsum",
+        "Lorem Duis",
+        "Lorem Ipsum",
+        "Aliqua Ipsum",
+        "Lorem Exercitation",
+        "Adipisicing Ipsum",
       ],
       projectExternalLinks: {
         github: "",
@@ -67,17 +66,17 @@ export const Projects = () => {
     },
     {
       image: "/image1.jpg",
-      projectName: "Netflix App",
+      projectName: "Lorem ipsum",
       projectLink: "https://netlify.com",
       projectDescription:
-        "I made a Netflix copy with TMBD Api. It has infinite scrolling and lets you watch movies by genre. You can also add movies to your favorites list.",
+        "Fugiat pariatur enim quis aliquip veniam. Labore veniam consectetur et magna occaecat magna reprehenderit. Duis veniam ea proident ad irure nulla fugiat sit nisi eu ipsum sit tempor labore.",
       projectTech: [
-        "React",
-        "Node.js",
-        "Firebase",
-        "MongoDB",
-        "Express",
-        "Redux Toolkit",
+        "Lorem",
+        "Lorem",
+        "Lorem",
+        "Lorem Ipsum",
+        "Lorem Ipsum",
+        "Lorem Ipsum",
       ],
       projectExternalLinks: {
         github: "",
@@ -86,29 +85,28 @@ export const Projects = () => {
     },
   ];
   return (
-    <Section>
-      <div className="font-sans flex-col gap-4 projects-container">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          className="gap-4"
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          variants={{
-            visible: { opacity: 1, y: 0 },
-            hidden: { opacity: 0, y: 50 },
-          }}
-        >
-          {" "}
-          <div className="mb-4">
-            <Badge variant={"outline"}>Summary</Badge>
-          </div>
-          {/* NOTE: workaronud, added a margin because gaps didn't work. */}
-          <h2 className="text-3xl font-semibold font-sans text-primary">
-            Personal projects...
-          </h2>
-        </motion.div>
+    <Section className="font-sans flex-col gap-4">
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        className="gap-4"
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        variants={{
+          visible: { opacity: 1, y: 0 },
+          hidden: { opacity: 0, y: 50 },
+        }}
+      >
+        <Badge variant={"outline"} className="mb-4">
+          Summary
+        </Badge>
+        {/* NOTE: workaronud, added a margin because gaps didn't work. */}
+        <h2 className="text-3xl font-semibold font-sans text-primary mb-4">
+          Personal projects...
+        </h2>
+      </motion.div>
 
+      <div className="projects-container">
         {projectsData.map(
           ({
             image,
@@ -120,7 +118,7 @@ export const Projects = () => {
           }) => {
             return (
               <motion.div
-                className="project content-center flex-nowrap"
+                className="project"
                 key={projectName}
                 initial="hidden"
                 whileInView="visible"
@@ -131,9 +129,11 @@ export const Projects = () => {
                   hidden: { opacity: 0, y: 50 },
                 }}
               >
-                <div className="project-info flex-nowrap	">
+                <div className="project-info">
                   {/* <p className="project-info-overline">Featured Project</p> */}
-                  <h3 className="project-info-title">{projectName}</h3>
+                  <h3 className="project-info-title shadow-black antialiased">
+                    {projectName}
+                  </h3>
                   <div className="project-info-description">
                     <p>{projectDescription}</p>
                   </div>
@@ -163,19 +163,20 @@ export const Projects = () => {
                     </li>
                   </ul>
                 </div>
-                
-                  <div className="project-image overflow-hidden scale-95 rounded-sm border-accent border flex-nowrap	">
-                    <div className="project-image-container blur-md brightness-50 hover:blur-0 hover:brightness-100 transition-all">
-                      <Image
-                        src={image}
-                        fill
-                        alt={projectName}
-                        quality={100}
-                        className=""
-                      />
-                    </div>
-                  </div>
 
+                <div className="project-image overflow-hidden scale-95 rounded-sm border-accent border">
+                  <div className="project-image-container blur-md brightness-50 hover:blur-0 hover:brightness-100 transition-all max-md:blur-0">
+                    <Image
+                      src={image}
+                      fill
+                      alt={projectName}
+                      quality={100}
+                      className=""
+                    />
+                  </div>
+                </div>
+
+                {/* <div className="project-image-overlay"></div> */}
               </motion.div>
             );
           }

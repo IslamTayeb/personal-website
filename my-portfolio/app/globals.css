@@ -91,13 +91,13 @@
     height: 20vh;
   }
 
-  @media screen and (max-width: 968px) {
+  @media screen and (max-width: 767px) {
     ::after {
       width: 100px;
     }
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 767px) {
     .container {
       grid-template-columns: 1fr;
     }
@@ -120,7 +120,7 @@
     }
   }
 
-  @media screen and (max-width: 480px) {
+  @media screen and (max-width: 767px) {
     .experience {
       width: 100%;
     }
@@ -194,13 +194,13 @@
   }
   .project-image-container {
     position: relative;
-    width: 500px;
+    width: 450px;
     height: 250px;
   }
   .project-image {
     position: relative;
-    flex: nowrap;
     top: 0;
+    margin-right: auto;
     left: 0;
   }
   .project-image:hover img {
@@ -209,15 +209,15 @@
   .project-image-overlay {
     transition: 0.3s ease-in-out;
     z-index: 1;
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
-    background-color: hsl(var(--popover) / 0.5);
+    background-color: hsl(var(--popover) / 0.0);
     border-radius: 0.25rem;
   }
   .project-image img {
     z-index: 0;
-    filter: grayscale(100%);
+    filter: grayscale(90%);
     transition: 0.3s ease-in-out;
   }
   .project-info {
@@ -225,6 +225,7 @@
     width: 600px;
     display: flex;
     flex-direction: column;
+    position: absolute;
     align-items: flex-end;
     gap: 0.5rem;
   }
@@ -256,6 +257,7 @@
   }
   .project-info-tech-list {
     display: flex;
+    justify-content: flex-end;
     list-style-type: none;
     gap: 0.5rem;
     margin-left: 0.75rem;
@@ -306,14 +308,17 @@
   .project:nth-of-type(even) .project-image {
     right: 0;
     left: initial;
+    margin-left: auto;
+    margin-right: 0;
   }
   .project:nth-of-type(even) .project-info {
     align-items: flex-start;
   }
-  .project:nth-of-type(even) .project-info .project-info-description p {
+  .project:nth-of-type(even) .project-info-description p {
     text-align: start;
+    /* color: hsl(var(--destructive)); */
   }
-  @media screen and (max-width: 1100px) {
+  @media screen and (max-width: 767px) {
     .projects-container {
       align-items: center;
     }
@@ -321,18 +326,27 @@
       justify-content: flex-start;
     }
     .project-info {
-      width: 600px;
+      width: auto;
       height: 300px;
-      background-color: rgba(31, 10, 44, 0.592);
       align-items: flex-start;
       padding: 1rem;
     }
     .project-info-description {
       background-color: transparent;
+      border: 1px;
+      border-color: hsl(var(--border));
     }
     .project-info-description p {
       padding: 0;
       text-align: start;
+    }
+    .project-image {
+      
+    }
+
+    .project-image-container {
+      width: fit-content;
+      height: 350px;
     }
     .project:nth-of-type(even) .project-image {
       left: 0;
