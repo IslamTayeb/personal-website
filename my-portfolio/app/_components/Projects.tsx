@@ -7,7 +7,7 @@ import { Github, GithubIcon, Link as Link2, LucideGithub } from "lucide-react";
 import React, { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Section } from "./Section";
+import { Section } from "./Misc/Section";
 
 const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   return (
@@ -56,8 +56,6 @@ export const Projects = () => {
         "Lorem Duis",
         "Lorem Ipsum",
         "Aliqua Ipsum",
-        "Lorem Exercitation",
-        "Adipisicing Ipsum",
       ],
       projectExternalLinks: {
         github: "",
@@ -66,7 +64,7 @@ export const Projects = () => {
     },
     {
       image: "/image1.jpg",
-      projectName: "Lorem ipsum",
+      projectName: "Wearable Carbon Nanotube Health Sensors",
       projectLink: "https://netlify.com",
       projectDescription:
         "Fugiat pariatur enim quis aliquip veniam. Labore veniam consectetur et magna occaecat magna reprehenderit. Duis veniam ea proident ad irure nulla fugiat sit nisi eu ipsum sit tempor labore.",
@@ -118,7 +116,7 @@ export const Projects = () => {
           }) => {
             return (
               <motion.div
-                className="project"
+                className="project max-md:w-full"
                 key={projectName}
                 initial="hidden"
                 whileInView="visible"
@@ -131,7 +129,7 @@ export const Projects = () => {
               >
                 <div className="project-info">
                   {/* <p className="project-info-overline">Featured Project</p> */}
-                  <h3 className="project-info-title shadow-black antialiased">
+                  <h3 className="project-info-title shadow-black antialiased max-md:w-full">
                     {projectName}
                   </h3>
                   <div className="project-info-description">
@@ -164,7 +162,7 @@ export const Projects = () => {
                   </ul>
                 </div>
 
-                <div className="project-image overflow-hidden scale-95 rounded-sm border-accent border">
+                <div className="project-image overflow-hidden scale-95 rounded-sm border-accent border max-md:rounded-xl">
                   <div className="project-image-container blur-md brightness-50 hover:blur-0 hover:brightness-100 transition-all max-md:blur-0">
                     <Image
                       src={image}

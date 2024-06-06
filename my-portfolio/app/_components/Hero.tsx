@@ -2,7 +2,7 @@
 'use client'
 import { ComponentPropsWithoutRef } from 'react'
 import { MoonIcon } from './Icons/MoonIcon'
-import { Section } from './Section'
+import { Section } from './Misc/Section'
 import { Typewriter, Cursor } from "react-simple-typewriter"
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'

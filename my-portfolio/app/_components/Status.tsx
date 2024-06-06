@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Card } from "@/components/ui/card";
 import React from "react";
-import { Section } from "./Section";
+import { Section } from "./Misc/Section";
 import {
   ArrowUpRight,
   Atom,

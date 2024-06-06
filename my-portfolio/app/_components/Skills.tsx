@@ -1,5 +1,5 @@
 import React, { ComponentPropsWithoutRef } from 'react'
-import { Section } from './Section'
+import { Section } from './Misc/Section'
 import { Polymer } from './Icons/Polymer'
 import { Medtech } from './Icons/Medtech'
 import { cn } from '@/lib/utils'

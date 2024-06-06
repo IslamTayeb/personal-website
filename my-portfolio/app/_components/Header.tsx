@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Section } from "./Section"
+import { Section } from "./Misc/Section"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { LinkedInIcon } from "./Icons/LinkedInIcon"
@@ -9,7 +9,7 @@ import { ArrowBigDown, Layers2, Scroll, ScrollText } from "lucide-react"
 
 export const Header = () => {
     return (
-        <header className="sticky top-0 py-4">
+        <header className="sticky top-0 py-4 z-50">
             <Section className="flex items-baseline">
                 <h1 className="text-lg font-bold text-primary">islamtayeb.com</h1>
             <div className="flex-1" />
