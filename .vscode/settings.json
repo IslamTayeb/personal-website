@@ -6,5 +6,40 @@
     },
     "editor.quickSuggestions": {
         "strings": true
-    }    
+    },
+    "favorites.resources": [
+        {
+            "filePath": "my-portfolio/app/_components/Header.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/_components/Hero.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/_components/Summary.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/_components/About.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/_components/Experience.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/_components/Projects.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/_components/Publications.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/_components/Footer.tsx",
+            "group": "Default"
+        }
+    ],
+    "favorites.sortOrder": "MANUAL"
 }

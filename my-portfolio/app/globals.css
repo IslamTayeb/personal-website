@@ -240,11 +240,7 @@
     font-size: 1.5rem /* 24px */;
     line-height: 2rem /* 32px */;
     font-weight: 500;
-    cursor: pointer;
     transition: 0.3s ease-in-out;
-  }
-  .project-info-title:hover {
-    color: hsl(var(--accent-foreground));
   }
   .project-info-description {
     background-color: hsl(var(--card));
@@ -324,7 +320,7 @@
   }
   @media screen and (max-width: 767px) {
     .project-image img {
-      filter: grayscale(90%) brightness(0.85) blur(0.5px);
+      filter: grayscale(90%) brightness(0.85);
     }
     .project:nth-of-type(even) .project-info-tech-list {
       justify-content: flex-end;

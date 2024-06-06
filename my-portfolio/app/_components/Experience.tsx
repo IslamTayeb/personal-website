@@ -137,7 +137,7 @@ export const Experience = () => {
                 <li
                   className={`exp-slider-item hover:bg-accent transition-colors max-md:justify-center ${
                     index === selected &&
-                    "exp-slider-item-selected max-md:justify-center"
+                    "exp-slider-item-selected max-md:justify-center max-md:bg-accent transition"
                   }`}
                   onClick={() => setSelected(index)}
                   key={expereince.shortname}

@@ -22,11 +22,21 @@ const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
 
 export const Hero = () => {
   return (
-    <Section>
-      <div className="flex max-md:flex-col items-start gap-4">
-        {/* gap is for the gap between the cresent and the text */}
-        {/* replace md with lg if you remove the cresent */}
-        <div className="flex-[3] flex flex-col gap-0.5">
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      variants={{
+        visible: { opacity: 1, y: 0 },
+        hidden: { opacity: 0, y: 50 },
+      }}
+    >
+      <Section>
+        <div className="flex max-md:flex-col items-start gap-4">
+          {/* gap is for the gap between the cresent and the text */}
+          {/* replace md with lg if you remove the cresent */}
+          <div className="flex-[3] flex flex-col gap-0.5">
             <h2 className="font-caption font-semibold text-5xl text-primary">
               Islam Tayeb
             </h2>
@@ -56,13 +66,14 @@ export const Hero = () => {
                 Read More...
               </Button>
             </div>
-        </div>
+          </div>
 
-          <div className="flex-[2] m-auto ">
-            <MoonIcon className="w-full h-auto max-w-xs max-md:w-56 max-md:center ml-auto p-2" />
+          <div className="flex-[2] m-auto">
+            <MoonIcon className="w-full h-auto max-w-xs max-md:w-full max-md:center ml-auto p-2" />
             {/* <img src="https://ibb.co/T036bW0" className="w-full h-auto max-w-lg max-lg:w-64" /> */}
           </div>
-      </div>
-    </Section>
+        </div>
+      </Section>
+    </motion.div>
   );
 };

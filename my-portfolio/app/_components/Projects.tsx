@@ -98,10 +98,10 @@ export const Projects = () => {
         }}
       >
         <Badge variant={"outline"} className="mb-4">
-          Summary
+          Projects
         </Badge>
         {/* NOTE: workaronud, added a margin because gaps didn't work. */}
-        <h2 className="text-3xl font-semibold font-sans text-primary mb-4">
+        <h2 className="text-3xl font-semibold font-sans text-primary mb-3.5">
           Personal projects...
         </h2>
       </motion.div>

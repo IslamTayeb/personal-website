@@ -19,7 +19,7 @@ import { motion } from "framer-motion";
 
 // =======================================================================
 
-export const Status = () => {
+export const Summary = () => {
   return (
     <motion.div
       initial="hidden"

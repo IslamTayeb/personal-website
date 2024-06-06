@@ -11,7 +11,7 @@ const anekTelugu = Anek_Telugu({
 });
 
 export const metadata: Metadata = {
-  title: "Islam Tayeb • Website",
+  title: "Islam Tayeb - Portfolio",
 };
 
 export default function RootLayout({

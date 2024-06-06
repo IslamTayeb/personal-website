@@ -2,11 +2,12 @@ import Image from "next/image";
 import { Header } from "./_components/Header";
 import { Hero } from "./_components/Hero";
 import { Spacing } from "./_components/Misc/Spacing";
-import { Status } from "./_components/Status";
-import { Skills } from "./_components/Skills";
+import { Summary } from "./_components/Summary";
+import { About } from "./_components/About";
 import { Footer } from "./_components/Footer";
 import { Experience } from "./_components/Experience";
 import { Projects } from "./_components/Projects";
+import { Publications } from "./_components/Publications";
 
 export default function Home() {
   return (
@@ -19,11 +20,11 @@ export default function Home() {
 
       <Spacing height={40} />
 
-      <Status />
+      <Summary />
 
       <Spacing height={40} />
 
-      <Skills />
+      <About />
 
       <Spacing height={40} />
 
@@ -32,6 +33,10 @@ export default function Home() {
       <Spacing height={40} />
 
       <Projects />
+
+      <Spacing height={40} />
+
+      <Publications />
 
       <Spacing height={40} />
 

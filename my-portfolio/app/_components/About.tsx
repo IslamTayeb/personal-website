@@ -21,7 +21,7 @@ const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   );
 };
 
-export const Skills = () => {
+export const About = () => {
   return (
     <Section className="flex flex-col items-start gap-4">
       <motion.div
