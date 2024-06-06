@@ -13,27 +13,27 @@ export default function Home() {
     <main>
       <Header />
 
-      <Spacing height={50} />
+      <Spacing height={40} />
 
       <Hero />
 
-      <Spacing height={50} />
+      <Spacing height={40} />
 
       <Status />
 
-      <Spacing height={50} />
+      <Spacing height={40} />
 
       <Skills />
 
-      <Spacing height={50} />
+      <Spacing height={40} />
 
       <Experience />
 
-      <Spacing height={50} />
+      <Spacing height={40} />
 
       <Projects />
 
-      <Spacing height={50} />
+      <Spacing height={40} />
 
       <Footer />
     </main>

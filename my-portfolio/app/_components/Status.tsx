@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
+"use client";
 import { Card } from "@/components/ui/card";
 import React from "react";
 import { Section } from "./Misc/Section";
@@ -14,59 +15,80 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 
 // =======================================================================
 
 export const Status = () => {
   return (
-    <Section className="flex max-md:flex-col items-start gap-4">
-      {/*<Badge variant={"outline"}>Summary</Badge> */}
-      <Card className="font-sans font-medium flex-[3] w-full flex flex-col h-full gap-2 p-4">
-        <p className="text-lg text-muted-foreground">Professional Experience</p>
-        <div className="flex flex-col gap-3">
-          {WORKS.map((work, index) => (
-            <Work
-              key={index}
-              image={work.image}
-              title={work.title}
-              role={work.role}
-              date={work.date}
-              url={work.url}
-            />
-          ))}
-        </div>
-      </Card>
-      <div className="flex-[2] w-full flex flex-col h-full gap-4">
-        <Card className="font-sans font-medium flex-1 p-4">
-          <p className="text-lg text-muted-foreground">Featured Projects</p>
-          <div className="flex flex-col gap-2 pt-2">
-            {SIDE_PROJECTS.map((project, index) => (
-              <SideProject
-                key={index}
-                Logo={project.Logo}
-                title={project.title}
-                description={project.description}
-                url={project.url}
-              />
-            ))}
-          </div>
-        </Card>
-        <Card className="font-sans font-medium flex-1 p-4 text-muted-foreground">
-          <p className="text-lg text-muted-foreground">Contact</p>
-          <div className="flex flex-col gap-2 pt-2">
-            {CONTACT.map((contact, index) => (
-              <Contact
-                key={index}
-                Logo={contact.Logo}
-                title={contact.title}
-                description={contact.description}
-                url={contact.url}
-              />
-            ))}
-          </div>
-        </Card>
+    <motion.div
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      variants={{
+        visible: { opacity: 1, y: 0 },
+        hidden: { opacity: 0, y: 50 },
+      }}
+    >
+      <div className="max-w-3xl px-4 m-auto flex flex-col items-start gap-4">
+        <Badge variant={"outline"} className="mb-4">
+          Summary
+        </Badge>
       </div>
-    </Section>
+      
+      <Section className="flex max-md:flex-col items-start gap-4">
+        <Card className="font-sans font-medium flex-[3] w-full flex flex-col h-full gap-2 p-4">
+          {/*<Badge variant={"outline"}>Summary</Badge> */}
+          <p className="text-lg text-muted-foreground">
+            Professional Experience
+          </p>
+          <div className="flex flex-col gap-3">
+            {WORKS.map((work, index) => (
+              <Work
+                key={index}
+                image={work.image}
+                title={work.title}
+                role={work.role}
+                date={work.date}
+                url={work.url}
+              />
+            ))}
+          </div>
+        </Card>
+
+        <div className="flex-[2] w-full flex flex-col h-full gap-4">
+          <Card className="font-sans font-medium flex-1 p-4">
+            <p className="text-lg text-muted-foreground">Featured Projects</p>
+            <div className="flex flex-col gap-2 pt-2">
+              {SIDE_PROJECTS.map((project, index) => (
+                <SideProject
+                  key={index}
+                  Logo={project.Logo}
+                  title={project.title}
+                  description={project.description}
+                  url={project.url}
+                />
+              ))}
+            </div>
+          </Card>
+          <Card className="font-sans font-medium flex-1 p-4 text-muted-foreground">
+            <p className="text-lg text-muted-foreground">Contact</p>
+            <div className="flex flex-col gap-2 pt-2">
+              {CONTACT.map((contact, index) => (
+                <Contact
+                  key={index}
+                  Logo={contact.Logo}
+                  title={contact.title}
+                  description={contact.description}
+                  url={contact.url}
+                />
+              ))}
+            </div>
+          </Card>
+        </div>
+      </Section>
+    </motion.div>
   );
 };
 
@@ -180,7 +202,7 @@ const Work = (props: WorkProps) => {
       <img
         src={props.image}
         alt={props.title}
-        className="w-9 h-9 object-contain rounded-sm"
+        className="w-9 h-9 object-contain rounded-sm border"
       />
 
       <div>

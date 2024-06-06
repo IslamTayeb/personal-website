@@ -194,7 +194,7 @@
   .project-image-container {
     position: relative;
     width: 450px;
-    height: 250px;
+    height: 275px;
   }
   .project-image {
     position: relative;
@@ -315,15 +315,20 @@
   .project:nth-of-type(even) .project-info {
     align-items: flex-start;
   }
+  .project:nth-of-type(even) .project-info-tech-list {
+    justify-content: flex-start;
+  }
   .project:nth-of-type(even) .project-info-description p {
     text-align: start;
     /* color: hsl(var(--destructive)); */
   }
   @media screen and (max-width: 767px) {
     .project-image img {
-      filter: brightness(0.25);
-      filter: grayscale(80%);
+      filter: grayscale(90%) brightness(0.85) blur(0.5px);
     }
+    .project:nth-of-type(even) .project-info-tech-list {
+      justify-content: flex-end;
+    }  
     .projects-container {
       align-items: center;
     }

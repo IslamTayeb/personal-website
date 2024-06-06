@@ -75,6 +75,8 @@ export const Projects = () => {
         "Lorem Ipsum",
         "Lorem Ipsum",
         "Lorem Ipsum",
+        "Lorem Ipsum",
+        "Lorem Ipsum",
       ],
       projectExternalLinks: {
         github: "",
@@ -132,7 +134,7 @@ export const Projects = () => {
                   <h3 className="project-info-title shadow-black antialiased max-md:w-full">
                     {projectName}
                   </h3>
-                  <div className="project-info-description">
+                  <div className="project-info-description border max-md:border-0">
                     <p>{projectDescription}</p>
                   </div>
                   <ul className="project-info-tech-list">
