@@ -137,7 +137,7 @@ export const Projects = () => {
                   <div className="project-info-description border max-md:border-0">
                     <p>{projectDescription}</p>
                   </div>
-                  <ul className="project-info-tech-list">
+                  <ul className="project-info-tech-list px-3">
                     {projectTech.map((tech) => (
                       <li className="project-info-tech-list-item" key={tech}>
                         {tech}

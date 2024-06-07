@@ -126,7 +126,7 @@ const SideProject = (props: SideProjectProps) => {
   return (
     <Link
       href={props.url}
-      className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2.5 rounded"
+      className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2 rounded"
     >
       <span className="bg-accent text-accent-foreground p-3 rounded-sm">
         <props.Logo size={16} />
@@ -146,9 +146,9 @@ const WORKS: WorkProps[] = [
   {
     image:
       "https://media.licdn.com/dms/image/D560BAQEVg2G3NGXgmw/company-logo_100_100/0/1692466480465/dukeinnovate_logo?e=1724284800&v=beta&t=mSxP_TqfLsPOm_ZXriZ4-dpIVb6POA7U5pbH-4flel0",
-    title: "Inst. for Health Innovation",
+    title: "Duke Inst. for Health Innovation",
     role: "Research Analyst",
-    date: "2024 - Present",
+    date: "2024 - Present",
     url: "/",
   },
   {
@@ -156,7 +156,7 @@ const WORKS: WorkProps[] = [
       "https://financial-aid-files.cloud.duke.edu/sites/default/files/styles/focal_point_large/public/Duke%20garamond%20300x300%20for%20staff%20profile%20pic-01.png?h=e009a64d&itok=lD6LYOQ8",
     title: "Duke University",
     role: "Research Assistant @ Feng Labs",
-    date: "2023 - Present",
+    date: "2023 - Present",
     url: "/",
   },
   {
@@ -164,7 +164,7 @@ const WORKS: WorkProps[] = [
       "https://media.licdn.com/dms/image/D4E0BAQGoQWtvjZAWbg/company-logo_100_100/0/1701588957384?e=1724284800&v=beta&t=0YW-cC6AuH32pc4lHtJvcCdZA_ttcutmd8CGqR74uSY",
     title: "Project Sapien",
     role: "Software Engineer",
-    date: "2023 - 2024",
+    date: "2023 - 2024",
     url: "/",
   },
   {
@@ -172,7 +172,7 @@ const WORKS: WorkProps[] = [
       "https://media.licdn.com/dms/image/C560BAQFjHNUub2MPHA/company-logo_100_100/0/1631328654457?e=1724284800&v=beta&t=62U-7YNMjaN_qj-yndQwQhBgdV18UHVpPofcqWi74h0",
     title: "Saudi Aramco",
     role: "Research Assistant @ CCUS Labs",
-    date: "2022 - 2023",
+    date: "2022 - 2023",
     url: "/",
   },
   {
@@ -180,7 +180,7 @@ const WORKS: WorkProps[] = [
       "https://media.licdn.com/dms/image/C560BAQH8FNoYbuVixQ/company-logo_100_100/0/1631305310418?e=1724284800&v=beta&t=tn3vB1O_jYRSuwaW4iepd-oFhp5OouGPuUnG9J88j2M",
     title: "King Abdulaziz University",
     role: "Research Assistant @ Biotech Dept.",
-    date: "2021 - 2022",
+    date: "2021 - 2022",
     url: "/",
   },
 ];
@@ -197,7 +197,7 @@ const Work = (props: WorkProps) => {
   return (
     <Link
       href={props.url}
-      className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2.5 rounded"
+      className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2 rounded"
     >
       <img
         src={props.image}
@@ -210,8 +210,8 @@ const Work = (props: WorkProps) => {
         <p className="text-sm text-muted-foreground">{props.role}</p>
       </div>
 
-      <div className="ml-auto">
-        <p className="text-xs text-muted-foreground">{props.date}</p>
+      <div className="ml-auto text-right">
+        <p className="text-xs text-muted-foreground font-mono w-min	max-md:text-wrap">{props.date}</p>
       </div>
     </Link>
   );
@@ -239,7 +239,7 @@ const Contact = (props: ContactProps) => {
   return (
     <Link
       href={props.url}
-      className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2.5 rounded"
+      className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2 rounded"
     >
       <span className="bg-accent text-accent-foreground p-3 rounded-sm">
         <props.Logo size={16} />

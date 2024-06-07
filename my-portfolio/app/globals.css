@@ -248,7 +248,7 @@
   }
   .project-info-description p {
     color: hsl(var(--muted-foreground));
-    padding: 1.25rem;
+    padding: 1rem;
     text-align: end;
   }
   .project-info-tech-list {
@@ -256,8 +256,6 @@
     justify-content: flex-end;
     list-style-type: none;
     gap: 0.5rem;
-    margin-left: 0.75rem;
-    margin-right: 0.75rem;
     flex-wrap: wrap;
   }
   .project-info-tech-list-item {

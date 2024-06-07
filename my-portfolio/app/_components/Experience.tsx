@@ -106,11 +106,10 @@ export const Experience = () => {
   ];
 
   return (
-    <Section>
+    <Section className="flex flex-col items-start gap-4">
       <motion.div
         initial="hidden"
         whileInView="visible"
-        className="flex flex-col items-start gap-4"
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
         variants={{
@@ -118,7 +117,7 @@ export const Experience = () => {
           hidden: { opacity: 0, y: 50 },
         }}
       >
-        <Badge variant={"outline"}>Experience</Badge>
+        <Badge variant={"outline"} className="mb-4">Experience</Badge>
 
         {/* <div className='relative'>
             <h2 className='pb-2 text-3xl font-semibold font-sans first:mt-0 text-primary mb-4'>Where I&apos;ve Worked...</h2>
@@ -127,7 +126,18 @@ export const Experience = () => {
         <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
           Where I&apos;ve worked...
         </h2>
+      </motion.div>
 
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        variants={{
+          visible: { opacity: 1, y: 0 },
+          hidden: { opacity: 0, y: 50 },
+        }}
+      >
         <div className="container px-1">
           {/* <ul className="list-none relative h-max"> */}
           <ul className="exp-slider">
