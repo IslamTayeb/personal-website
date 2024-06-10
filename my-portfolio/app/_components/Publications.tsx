@@ -190,8 +190,8 @@ export const Publications = () => {
                   <AccordionTrigger className="text-left gap-4">
                     <div className="text-primary flex flex-col">
                       <div className="text-base font-semibold text-foreground">{pubTitle}</div>
-                      <div className="text-muted-foreground">{pubJournal}</div>
-                      <div className="text-muted-foreground text-xs font-light mt-0.5">
+                      <div className="text-muted-foreground font-mono">{pubJournal}</div>
+                      <div className="text-muted-foreground  text-xs font-light mt-0.5">
                         {typeof pubAuthors === "string" ? (
                           `- ${pubAuthors}`
                         ) : (
