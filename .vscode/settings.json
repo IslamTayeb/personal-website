@@ -33,7 +33,15 @@
             "group": "Default"
         },
         {
+            "filePath": "my-portfolio/app/_components/Skills.tsx",
+            "group": "Default"
+        },
+        {
             "filePath": "my-portfolio/app/_components/Publications.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/_components/Contact.tsx",
             "group": "Default"
         },
         {

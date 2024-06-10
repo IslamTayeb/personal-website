@@ -13,6 +13,13 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Link as Link2 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Tooltip as Tooltip2, Button } from "@material-tailwind/react";
 
 const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   return (
@@ -37,6 +44,7 @@ export const Publications = () => {
           Mohammed Mohammed, Sagheer Onaizi
         </>
       ),
+      pubImpact: "Impact Factor: 5.5",
       pubTitle:
         "Post-synthetic Modification of UiO-66 Analogue Metal-Organic Framework as Potential Solid Sorbent for Direct Air Capture",
       pubJournal: "Journal of CO₂ Utilization",
@@ -58,9 +66,10 @@ export const Publications = () => {
           Dalia Alharthi, Muhammad Tariq, Yasser Babaier
         </>
       ),
+      pubImpact: "Impact Factor: 5.5",
       pubTitle:
         "KRAS G12C-Mutant Non-Small-Cell Lung Adenocarcinoma: First Documented Report in the Arabian Gulf",
-      pubJournal: "Cureus",
+      pubJournal: "Cureus Journal",
       pubDescription:
         "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
       pubLink: "http://dx.doi.org/10.7759/cureus.27090",
@@ -79,6 +88,7 @@ export const Publications = () => {
           Al-Bariqi, Basem Almutiri, Abdullah Alsulaiman
         </>
       ),
+      pubImpact: "Impact Factor: 5.5",
       pubTitle:
         "RAS Gene Mutations and Their Prevalence in Non-Small Cell Lung Cancer: A Review",
       pubJournal: "Bioscience Research",
@@ -100,6 +110,7 @@ export const Publications = () => {
           Romar Pascual, Salman Aloufi, Khalid Alotaibi
         </>
       ),
+      pubImpact: "Impact Factor: 5.5",
       pubTitle:
         "Medicinal Effects and Phytochemical Composition of Capparis Cartilaginea Decne: A Review",
       pubJournal: "Bioscience Research",
@@ -142,6 +153,7 @@ export const Publications = () => {
           pubJournal,
           pubDescription,
           pubLink,
+          pubImpact,
           pubCategory,
         }) => {
           return (
@@ -170,18 +182,29 @@ export const Publications = () => {
                   <AccordionItem value="item-1">
                     <AccordionTrigger className="text-left gap-4">
                       <div className="text-primary flex flex-col">
-                        <Link
-                          href={pubLink}
-                          className="project-info-links-item-link"
-                        >
-                          <div className="text-base font-semibold text-foreground">
-                            {pubTitle + <Link2 size={16} />}
-                            
-                          </div>
-                        </Link>
-                        <div className="text-muted-foreground font-mono">
-                          {pubJournal}
+                        <div className="text-base font-semibold text-foreground">
+                          {pubTitle}
                         </div>
+                        {/* 
+                        <div className="group relative flex justify-start">
+                          <button className="text-muted-foreground font-mono content-start text-left">
+                            {pubJournal}
+                            <span className="relative mx-2 scale-0 transition-all rounded bg-primary p-1 text-xs text-primary-foreground opacity-0 group-hover:opacity-100 group-hover:scale-100">
+                              {pubImpact}
+                            </span>
+                          </button>
+                        </div> */}
+                        <div>
+                          <TooltipProvider delayDuration={50}>
+                            <Tooltip>
+                              <TooltipTrigger>{pubJournal}</TooltipTrigger>
+                              <TooltipContent className="shadow-md shadow-card transition-all">
+                                <p>{pubImpact}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+
                         <div className="text-muted-foreground  text-xs font-light mt-0.5">
                           {typeof pubAuthors === "string" ? (
                             `- ${pubAuthors}`

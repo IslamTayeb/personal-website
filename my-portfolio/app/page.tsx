@@ -8,6 +8,8 @@ import { Footer } from "./_components/Footer";
 import { Experience } from "./_components/Experience";
 import { Projects } from "./_components/Projects";
 import { Publications } from "./_components/Publications";
+import { Skills } from "./_components/Skills";
+import { Contact } from "./_components/Contact";
 
 export default function Home() {
   return (
@@ -36,7 +38,15 @@ export default function Home() {
 
       <Spacing height={40} />
 
+      <Skills />
+
+      <Spacing height={40} />
+
       <Publications />
+
+      <Spacing height={40} />
+
+      <Contact />
 
       <Spacing height={40} />
 
