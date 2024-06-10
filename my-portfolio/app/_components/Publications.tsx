@@ -11,6 +11,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { Link as Link2 } from "lucide-react";
 
 const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   return (
@@ -132,27 +134,6 @@ export const Publications = () => {
         </h2>
       </motion.div>
 
-      {/* <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        variants={{
-          visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 50 },
-        }}
-      > */}
-      {/* // <div className="w-full">
-      //   <Card className="font-sans font-medium p-4 flex gap-12">
-      //     <div>{pubDate}</div>
-      //     <div className="flex-col flex gap-12 ">
-      //       {pubTitle}
-      //       <div>
-      //         {pubAuthors}
-      //       </div>
-      //     </div>
-      //   </Card>
-      // </div> */}
       {publicationsData.map(
         ({
           pubDate,
@@ -165,49 +146,59 @@ export const Publications = () => {
         }) => {
           return (
             <motion.div
-            className="project max-md:w-full"
-            key={pubTitle}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            variants={{
-              visible: { opacity: 1, y: 0 },
-              hidden: { opacity: 0, y: 50 },
-            }}
-          >
-            {/* // <Card className="p-4"> */}
-            <div className="flex items-center gap-4">
-              <div className="text-muted-foreground text-sm w-min pb-2.5">
-                {pubDate}
-              </div>
-              <Accordion
-                type="single"
-                collapsible
-                className="w-full font-sans "
-              >
-                <AccordionItem value="item-1">
-                  <AccordionTrigger className="text-left gap-4">
-                    <div className="text-primary flex flex-col">
-                      <div className="text-base font-semibold text-foreground">{pubTitle}</div>
-                      <div className="text-muted-foreground font-mono">{pubJournal}</div>
-                      <div className="text-muted-foreground  text-xs font-light mt-0.5">
-                        {typeof pubAuthors === "string" ? (
-                          `- ${pubAuthors}`
-                        ) : (
-                          <>{pubAuthors}</>
-                        )}
+              className="project max-md:w-full"
+              key={pubTitle}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              variants={{
+                visible: { opacity: 1, y: 0 },
+                hidden: { opacity: 0, y: 50 },
+              }}
+            >
+              {/* // <Card className="p-4"> */}
+              <div className="flex items-center gap-4">
+                <div className="text-muted-foreground text-sm w-min pb-2.5">
+                  {pubDate}
+                </div>
+                <Accordion
+                  type="single"
+                  collapsible
+                  className="w-full font-sans "
+                >
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger className="text-left gap-4">
+                      <div className="text-primary flex flex-col">
+                        <Link
+                          href={pubLink}
+                          className="project-info-links-item-link"
+                        >
+                          <div className="text-base font-semibold text-foreground">
+                            {pubTitle + <Link2 size={16} />}
+                            
+                          </div>
+                        </Link>
+                        <div className="text-muted-foreground font-mono">
+                          {pubJournal}
+                        </div>
+                        <div className="text-muted-foreground  text-xs font-light mt-0.5">
+                          {typeof pubAuthors === "string" ? (
+                            `- ${pubAuthors}`
+                          ) : (
+                            <>{pubAuthors}</>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  </AccordionTrigger>
+                    </AccordionTrigger>
 
-                  <AccordionContent className="mr-8">
-                    {pubDescription}
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </div>
-            {/* // </Card> */}
+                    <AccordionContent className="mr-8">
+                      {pubDescription}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
+              {/* // </Card> */}
             </motion.div>
           );
         }
