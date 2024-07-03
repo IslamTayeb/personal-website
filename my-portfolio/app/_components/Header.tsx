@@ -7,11 +7,12 @@ import { GithubIcon } from "./Icons/GithubIcon";
 import { ResearchGateIcon } from "./Icons/ResearchGateIcon";
 import { ArrowBigDown, Layers2, Scroll, ScrollText } from "lucide-react";
 
+
 export const Header = () => {
   return (
-    <header className="sticky top-0 py-4 z-50">
+    <header className="sticky top-0 py-3 z-50 bg-card rounded-md bg-clip-padding backdrop-filter backdrop-blur-md bg-opacity-80">
       <Section className="flex items-baseline">
-        <h1 className="text-lg font-bold text-primary">islamtayeb.com</h1>
+        <h1 className="text-lg font-semibold text-primary"><Link href="islamtayeb.net">islamtayeb.net</Link></h1>
         <div className="flex-1" />
         <ul className="flex items-center gap-2">
           <Link

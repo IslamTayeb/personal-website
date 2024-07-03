@@ -25,7 +25,7 @@ export const Summary = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.3 }}
       variants={{
         visible: { opacity: 1, y: 0 },
         hidden: { opacity: 0, y: 50 },
@@ -153,7 +153,7 @@ const WORKS: WorkProps[] = [
   },
   {
     image:
-      "https://financial-aid-files.cloud.duke.edu/sites/default/files/styles/focal_point_large/public/Duke%20garamond%20300x300%20for%20staff%20profile%20pic-01.png?h=e009a64d&itok=lD6LYOQ8",
+      "https://media.licdn.com/dms/image/D4E0BAQE1nqQztnbgIA/company-logo_100_100/0/1704127476142/duke_university_logo?e=1726704000&v=beta&t=d_1-r1Yyp_64aceoDWbHQ2_mXrCkwZqhsE0pwmh0NQA",
     title: "Duke University",
     role: "Research Assistant @ Feng Labs",
     date: "2023 - Present",

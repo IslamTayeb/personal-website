@@ -48,6 +48,7 @@ export const Publications = () => {
       pubTitle:
         "Post-synthetic Modification of UiO-66 Analogue Metal-Organic Framework as Potential Solid Sorbent for Direct Air Capture",
       pubJournal: "Journal of CO₂ Utilization",
+      pubType: "Research Article",
       pubDescription:
         "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
       pubLink: "https://doi.org/10.1016/j.jcou.2023.102647",
@@ -70,6 +71,7 @@ export const Publications = () => {
       pubTitle:
         "KRAS G12C-Mutant Non-Small-Cell Lung Adenocarcinoma: First Documented Report in the Arabian Gulf",
       pubJournal: "Cureus Journal",
+      pubType: "Case Report",
       pubDescription:
         "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
       pubLink: "http://dx.doi.org/10.7759/cureus.27090",
@@ -92,6 +94,7 @@ export const Publications = () => {
       pubTitle:
         "RAS Gene Mutations and Their Prevalence in Non-Small Cell Lung Cancer: A Review",
       pubJournal: "Bioscience Research",
+      pubType: "Literature Review",
       pubDescription:
         "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
       pubLink:
@@ -114,6 +117,7 @@ export const Publications = () => {
       pubTitle:
         "Medicinal Effects and Phytochemical Composition of Capparis Cartilaginea Decne: A Review",
       pubJournal: "Bioscience Research",
+      pubType: "Literature Review",
       pubDescription:
         "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
       pubLink:
@@ -131,7 +135,7 @@ export const Publications = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.3 }}
         variants={{
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 50 },
@@ -163,14 +167,14 @@ export const Publications = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.3 }}
               variants={{
                 visible: { opacity: 1, y: 0 },
                 hidden: { opacity: 0, y: 50 },
               }}
             >
               {/* // <Card className="p-4"> */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 mx-2">
                 <div className="text-muted-foreground text-sm w-min pb-2.5">
                   {pubDate}
                 </div>
@@ -185,15 +189,6 @@ export const Publications = () => {
                         <div className="text-base font-semibold text-foreground">
                           {pubTitle}
                         </div>
-                        {/* 
-                        <div className="group relative flex justify-start">
-                          <button className="text-muted-foreground font-mono content-start text-left">
-                            {pubJournal}
-                            <span className="relative mx-2 scale-0 transition-all rounded bg-primary p-1 text-xs text-primary-foreground opacity-0 group-hover:opacity-100 group-hover:scale-100">
-                              {pubImpact}
-                            </span>
-                          </button>
-                        </div> */}
                         <div>
                           <TooltipProvider delayDuration={50}>
                             <Tooltip>

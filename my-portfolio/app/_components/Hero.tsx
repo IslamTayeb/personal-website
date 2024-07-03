@@ -26,7 +26,7 @@ export const Hero = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: 0.3 }}
       variants={{
         visible: { opacity: 1, y: 0 },
         hidden: { opacity: 0, y: 50 },
@@ -58,8 +58,7 @@ export const Hero = () => {
             <p className="font-sans basis-0 text-muted-foreground">
               Computer Science and Bioinformatics student at Duke University.
               Interested in software development, data analysis, computational
-              and synthetic chemistry, and medical technology. Feel free to
-              reach out at islam.tayeb@duke.edu!
+              and synthetic chemistry, and medical technology.
             </p>
             <div>
               <Button variant="outline" className="my-3 p-4 font-sans">

@@ -12,6 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Icon } from "@iconify/react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const Skills = () => {
   return (
@@ -20,7 +27,7 @@ export const Skills = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.3 }}
         variants={{
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 50 },
@@ -39,7 +46,7 @@ export const Skills = () => {
         whileInView="visible"
         className="w-full"
         viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.3 }}
         variants={{
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 50 },
@@ -48,13 +55,19 @@ export const Skills = () => {
         <Table className="">
           <TableHeader>
             <TableRow>
-              <TableHead className="text-left w-2/6 font-extrabold">Category</TableHead>
-              <TableHead className="text-left w-4/6 font-extrabold">Technologies</TableHead>
+              <TableHead className="text-left w-2/6 font-extrabold">
+                Category
+              </TableHead>
+              <TableHead className="text-left w-4/6 font-extrabold">
+                Technologies
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="text-accent-foreground">
-          <TableRow>
-              <TableCell className="font-medium">Programming Languages</TableCell>
+            <TableRow>
+              <TableCell className="font-medium">
+                Programming Languages
+              </TableCell>
               <TableCell>Paid</TableCell>
             </TableRow>
             <TableRow>
@@ -63,10 +76,66 @@ export const Skills = () => {
             </TableRow>
             <TableRow>
               <TableCell className="font-medium">Machine Learning</TableCell>
-              <TableCell>Paid</TableCell>
+              <TableCell className="flex gap-x-2">
+                <TooltipProvider delayDuration={50}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      {" "}
+                      <div>
+                        <Icon
+                          className="hover:blur absolute transition-all opacity-50"
+                          icon="mdi:react"
+                          width="3em"
+                          height="3em"
+                        />
+                        <Icon
+                          className=""
+                          icon="mdi:react"
+                          width="3em"
+                          height="3em"
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="font-semibold">React</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <div>
+                  <Icon
+                    className="hover:blur absolute transition-all opacity-50"
+                    icon="mdi:react"
+                    width="2em"
+                    height="2em"
+                  />
+                  <Icon
+                    className=""
+                    icon="mdi:react"
+                    width="2em"
+                    height="2em"
+                  />
+                </div>
+                <div>
+                  <Icon
+                    className="hover:blur absolute transition-all opacity-50"
+                    icon="mdi:react"
+                    width="2em"
+                    height="2em"
+                  />
+                  <Icon
+                    className=""
+                    icon="mdi:react"
+                    width="2em"
+                    height="2em"
+                  />
+                </div>
+              </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell className="font-medium">Deployment & Integration</TableCell>
+              <TableCell className="font-medium">
+                Deployment & Integration
+              </TableCell>
               <TableCell>Paid</TableCell>
             </TableRow>
             <TableRow>
