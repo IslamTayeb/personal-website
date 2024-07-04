@@ -422,19 +422,17 @@
   /* Scrollbar */
   ::-webkit-scrollbar {
     width: 0.65em;
-    height: 0.65em;
+    height: 1em;
   }
 
   ::-webkit-scrollbar-track {
     background: hsl(var(--card));
     border-radius: 100vw;
-    margin-block: 0.5em;
   }
 
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--accent));
-    border: 0.125em solid hsl(var(--card));
-    border-radius: 100vw;
+    border: 0.15em solid hsl(var(--card));
   }
 
   ::-webkit-scrollbar-thumb:hover {
