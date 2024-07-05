@@ -82,9 +82,15 @@ export const Contact = () => {
           <div className="font-sans font-medium w-full flex-[3] gap-2">
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(async (formData) => {
+                  const formDataToSend = new FormData();
+                  formDataToSend.append("name", formData.name);
+                  formDataToSend.append("email", formData.email);
+                  formDataToSend.append("subject", formData.subject);
+                  formDataToSend.append("text", formData.text);
+                  await sendEmail(formDataToSend);
+                })}
                 className="space-y-4"
-                action={async (formData) => {await sendEmail(formData)}}
               >
                 <FormField
                   control={form.control}
@@ -132,14 +138,18 @@ export const Contact = () => {
                     <FormItem>
                       <FormLabel>Message</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Type your message here." className="resize-none" {...field} />
+                        <Textarea
+                          placeholder="Type your message here."
+                          className="resize-none"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <div className="pt-4">
-                  <Button type="submit" className="w-full" action={async (formData) => {await sendEmail(formData)}}>
+                  <Button type="submit" className="w-full">
                     Submit
                   </Button>
                 </div>
