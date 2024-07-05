@@ -223,8 +223,8 @@ const CONTACT: ContactProps[] = [
   {
     Logo: Mail,
     title: "Email",
-    description: "imt11@duke.edu",
-    url: "mailto:imt11@duke.edu",
+    description: "islam.tayeb@duke.edu",
+    url: "mailto:islam.tayeb@duke.edu",
   },
 ];
 
