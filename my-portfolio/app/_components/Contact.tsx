@@ -82,14 +82,23 @@ export const Contact = () => {
           <div className="font-sans font-medium w-full flex-[3] gap-2">
             <Form {...form}>
               <form
-                onSubmit={form.handleSubmit(async (formData) => {
-                  const formDataToSend = new FormData();
-                  formDataToSend.append("name", formData.name);
-                  formDataToSend.append("email", formData.email);
-                  formDataToSend.append("subject", formData.subject);
-                  formDataToSend.append("text", formData.text);
-                  await sendEmail(formDataToSend);
-                })}
+                // onSubmit={form.handleSubmit(async (formData) => {
+                //   const formDataToSend = new FormData();
+                //   formDataToSend.append("name", formData.name);
+                //   formDataToSend.append("email", formData.email);
+                //   formDataToSend.append("subject", formData.subject);
+                //   formDataToSend.append("text", formData.text);
+                //   await sendEmail(formDataToSend);
+                // })}
+                action={async (formData) => {
+                  console.log("Running on client");
+                  console.log(formData.get("name"));
+                  console.log(formData.get("email"));
+                  console.log(formData.get("subject"));
+                  console.log(formData.get("text"));
+
+                  await sendEmail(formData);
+                }}
                 className="space-y-4"
               >
                 <FormField
