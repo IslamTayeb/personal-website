@@ -20,12 +20,12 @@ export default function Home() {
 
       <Hero />
 
+      <Spacing height={36} />
+
+      {/* <Summary />
+
       <Spacing height={40} />
-
-      <Summary />
-
-      <Spacing height={40} />
-
+ */}
       <About />
 
       <Spacing height={40} />

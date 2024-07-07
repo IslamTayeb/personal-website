@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { Section } from "./Misc/Section";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +20,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { sendEmail } from "./sendEmail";
+import { useFormStatus } from "react-dom";
+import { ArrowUpRight, Mail } from "lucide-react";
+import { Emails } from "resend/build/src/emails/emails";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -29,6 +32,9 @@ const formSchema = z.object({
 });
 
 export const Contact = () => {
+  const { pending } = useFormStatus();
+  const [isSending, setIsSending] = useState(false);
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -40,11 +46,24 @@ export const Contact = () => {
     },
   });
 
+  const { isSubmitting } = form.formState;
+
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSending(true);
+    try {
+      const formData = new FormData();
+      formData.append("name", values.name);
+      formData.append("email", values.email);
+      formData.append("subject", values.subject);
+      formData.append("text", values.text);
+      await sendEmail(formData);
+      // handle success (e.g., show a success message)
+    } catch (error) {
+      // handle error (e.g., show an error message)
+    } finally {
+      setIsSending(false);
+    }
   }
 
   return (
@@ -82,51 +101,50 @@ export const Contact = () => {
           <div className="font-sans font-medium w-full flex-[3] gap-2">
             <Form {...form}>
               <form
-                // onSubmit={form.handleSubmit(async (formData) => {
-                //   const formDataToSend = new FormData();
-                //   formDataToSend.append("name", formData.name);
-                //   formDataToSend.append("email", formData.email);
-                //   formDataToSend.append("subject", formData.subject);
-                //   formDataToSend.append("text", formData.text);
-                //   await sendEmail(formDataToSend);
-                // })}
+                onSubmit={form.handleSubmit(onSubmit)}
                 action={async (formData) => {
-                  console.log("Running on client");
-                  console.log(formData.get("name"));
-                  console.log(formData.get("email"));
-                  console.log(formData.get("subject"));
-                  console.log(formData.get("text"));
-
                   await sendEmail(formData);
                 }}
                 className="space-y-4"
               >
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Type " {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email Address</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Type " {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="flex flex-row gap-4">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            required
+                            placeholder="John Doe"
+                            className="transition"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email Address</FormLabel>
+                        <FormControl>
+                          <Input
+                            required
+                            placeholder="johndoe@example.com"
+                            className="transition"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={form.control}
                   name="subject"
@@ -134,7 +152,12 @@ export const Contact = () => {
                     <FormItem>
                       <FormLabel>Subject</FormLabel>
                       <FormControl>
-                        <Input placeholder="Type " {...field} />
+                        <Input
+                          required
+                          placeholder="Your subject must be 250 characters or fewer."
+                          className="transition"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -148,8 +171,9 @@ export const Contact = () => {
                       <FormLabel>Message</FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="Type your message here."
-                          className="resize-none"
+                          required
+                          placeholder="Your message must be 2500 characters or fewer."
+                          className="resize-none h-36 transition"
                           {...field}
                         />
                       </FormControl>
@@ -158,14 +182,83 @@ export const Contact = () => {
                   )}
                 />
                 <div className="pt-4">
-                  <Button type="submit" className="w-full">
-                    Submit
+                  <Button
+                    type="submit"
+                    className="w-full "
+                    disabled={isSending}
+                  >
+                    {isSending ? "Sending..." : "Submit"}
                   </Button>
                 </div>
               </form>
             </Form>
           </div>
-          <Card className="font-sans font-medium flex-[2] w-full p-4">Hi</Card>
+
+          <div className="flex flex-col gap-4 h-min">
+            <Card className="font-sans font-medium flex-[2] w-full p-2">
+              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2 rounded w-full">
+                <span className="bg-accent text-accent-foreground p-3 rounded-sm">
+                  <Mail size={16} />
+                </span>
+
+                <div>
+                  <div className="text-lg font-semibold">{"Email"}</div>
+                  <p className="text-sm text-muted-foreground">
+                    {"islam.tayeb@duke.edu"}
+                  </p>
+                </div>
+
+                <div className="ml-auto">
+                  <ArrowUpRight
+                    size={16}
+                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
+                  />
+                </div>
+              </div>
+            </Card>
+            <Card className="font-sans font-medium flex-[2] w-full h-min p-2">
+              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2 rounded w-full">
+                <span className="bg-accent text-accent-foreground p-3 rounded-sm">
+                  <Mail size={16} />
+                </span>
+
+                <div>
+                  <div className="text-lg font-semibold">{"Email"}</div>
+                  <p className="text-sm text-muted-foreground">
+                    {"islam.tayeb@duke.edu"}
+                  </p>
+                </div>
+
+                <div className="ml-auto">
+                  <ArrowUpRight
+                    size={16}
+                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
+                  />
+                </div>
+              </div>
+            </Card>
+            <Card className="font-sans font-medium flex-[2] w-full h-min p-2">
+              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2 rounded w-full">
+                <span className="bg-accent text-accent-foreground p-3 rounded-sm">
+                  <Mail size={16} />
+                </span>
+
+                <div>
+                  <div className="text-lg font-semibold">{"Email"}</div>
+                  <p className="text-sm text-muted-foreground">
+                    {"islam.tayeb@duke.edu"}
+                  </p>
+                </div>
+
+                <div className="ml-auto">
+                  <ArrowUpRight
+                    size={16}
+                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
+                  />
+                </div>
+              </div>
+            </Card>
+          </div>
         </div>
       </motion.div>
     </Section>

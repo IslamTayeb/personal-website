@@ -69,14 +69,14 @@ export const Projects = () => {
       projectDescription:
         "Fugiat pariatur enim quis aliquip veniam. Labore veniam consectetur et magna occaecat magna reprehenderit. Duis veniam ea proident ad irure nulla fugiat sit nisi eu ipsum sit tempor labore.",
       projectTech: [
-        "Lorem",
-        "Lorem",
-        "Lorem",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
-        "Lorem Ipsum",
+        "Sunt non",
+        "Labore",
+        "Tempor labris",
+        "Dolor laboris",
+        "Adiptus amet",
+        "Incididunt",
+        "Duis",
+        "Minim Esse",
       ],
       projectExternalLinks: {
         github: "",

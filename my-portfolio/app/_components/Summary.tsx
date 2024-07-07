@@ -155,7 +155,7 @@ const WORKS: WorkProps[] = [
     image:
       "https://media.licdn.com/dms/image/D4E0BAQE1nqQztnbgIA/company-logo_100_100/0/1704127476142/duke_university_logo?e=1726704000&v=beta&t=d_1-r1Yyp_64aceoDWbHQ2_mXrCkwZqhsE0pwmh0NQA",
     title: "Duke University",
-    role: "Research Assistant @ Feng Labs",
+    role: "Research Assistant",
     date: "2023 - Present",
     url: "/",
   },
@@ -171,7 +171,7 @@ const WORKS: WorkProps[] = [
     image:
       "https://media.licdn.com/dms/image/C560BAQFjHNUub2MPHA/company-logo_100_100/0/1631328654457?e=1724284800&v=beta&t=62U-7YNMjaN_qj-yndQwQhBgdV18UHVpPofcqWi74h0",
     title: "Saudi Aramco",
-    role: "Research Assistant @ CCUS Labs",
+    role: "Research Assistant",
     date: "2022 - 2023",
     url: "/",
   },
@@ -179,7 +179,7 @@ const WORKS: WorkProps[] = [
     image:
       "https://media.licdn.com/dms/image/C560BAQH8FNoYbuVixQ/company-logo_100_100/0/1631305310418?e=1724284800&v=beta&t=tn3vB1O_jYRSuwaW4iepd-oFhp5OouGPuUnG9J88j2M",
     title: "King Abdulaziz University",
-    role: "Research Assistant @ Biotech Dept.",
+    role: "Research Assistant",
     date: "2021 - 2022",
     url: "/",
   },
@@ -206,8 +206,8 @@ const Work = (props: WorkProps) => {
       />
 
       <div>
-        <div className="text-lg font-semibold">{props.title}</div>
-        <p className="text-sm text-muted-foreground">{props.role}</p>
+        <div className="text-lg font-semibold">{props.role}</div>
+        <p className="text-sm text-muted-foreground">{props.title}</p>
       </div>
 
       <div className="ml-auto text-right">
