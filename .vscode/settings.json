@@ -17,10 +17,6 @@
             "group": "Default"
         },
         {
-            "filePath": "my-portfolio/app/_components/Summary.tsx",
-            "group": "Default"
-        },
-        {
             "filePath": "my-portfolio/app/_components/About.tsx",
             "group": "Default"
         },
@@ -46,6 +42,18 @@
         },
         {
             "filePath": "my-portfolio/app/_components/Footer.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/globals.css",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/layout.tsx",
+            "group": "Default"
+        },
+        {
+            "filePath": "my-portfolio/app/page.tsx",
             "group": "Default"
         }
     ],

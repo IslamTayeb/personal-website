@@ -1,13 +1,13 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { motion } from "framer-motion";
-import { Github, GithubIcon, Link as Link2, LucideGithub } from "lucide-react";
+import { LucideGithub, Link as Link2 } from "lucide-react";
 import React, { ComponentPropsWithoutRef } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "./Misc/Section";
+import { Icon } from "@iconify/react";
 
 const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   return (
@@ -37,6 +37,14 @@ export const Projects = () => {
         "Typescript",
         "PokeApi",
       ],
+      projectTechLogo: [
+        "mdi:react",
+        "akar-icons:redux-fill",
+        "mdi:sass",
+        "mdi:firebase",
+        "mdi:typescript-icon",
+        "mdi:pokeapi",
+      ],
       projectExternalLinks: {
         github: "",
         externalLink: "",
@@ -56,6 +64,15 @@ export const Projects = () => {
         "Lorem Duis",
         "Lorem Ipsum",
         "Aliqua Ipsum",
+      ],
+      projectTechLogo: [
+        "logos:some-icon",
+        "logos:another-icon",
+        "logos:third-icon",
+        "logos:fourth-icon",
+        "logos:fifth-icon",
+        "logos:sixth-icon",
+        "logos:seventh-icon",
       ],
       projectExternalLinks: {
         github: "",
@@ -78,12 +95,23 @@ export const Projects = () => {
         "Duis",
         "Minim Esse",
       ],
+      projectTechLogo: [
+        "logos:some-icon",
+        "logos:another-icon",
+        "logos:third-icon",
+        "logos:fourth-icon",
+        "logos:fifth-icon",
+        "logos:sixth-icon",
+        "logos:seventh-icon",
+        "logos:eighth-icon",
+      ],
       projectExternalLinks: {
         github: "",
         externalLink: "",
       },
     },
   ];
+
   return (
     <Section className="font-sans flex-col gap-4">
       <motion.div
@@ -100,7 +128,6 @@ export const Projects = () => {
         <Badge variant={"outline"} className="mb-4">
           Projects
         </Badge>
-        {/* NOTE: workaronud, added a margin because gaps didn't work. */}
         <h2 className="text-3xl font-semibold font-sans text-primary mb-3.5">
           Personal projects...
         </h2>
@@ -115,6 +142,7 @@ export const Projects = () => {
             projectExternalLinks,
             projectName,
             projectTech,
+            projectTechLogo,
           }) => {
             return (
               <motion.div
@@ -130,7 +158,6 @@ export const Projects = () => {
                 }}
               >
                 <div className="project-info">
-                  {/* <p className="project-info-overline">Featured Project</p> */}
                   <h3 className="project-info-title shadow-black antialiased max-md:w-full">
                     {projectName}
                   </h3>
@@ -138,9 +165,16 @@ export const Projects = () => {
                     <p>{projectDescription}</p>
                   </div>
                   <ul className="project-info-tech-list px-3">
-                    {projectTech.map((tech) => (
-                      <li className="project-info-tech-list-item" key={tech}>
-                        {tech}
+                    {projectTech.map((tech, index) => (
+                      <li key={tech}>
+                        <Code>
+                          <Icon
+                            icon={`${projectTechLogo[index]}`} // Assuming projectTechLogo[index] gives the correct logo name
+                            className="inline text-current" // Merged className properties
+                            height="14px"
+                          />{" "}
+                          {tech}
+                        </Code>
                       </li>
                     ))}
                   </ul>
@@ -175,8 +209,6 @@ export const Projects = () => {
                     />
                   </div>
                 </div>
-
-                {/* <div className="project-image-overlay"></div> */}
               </motion.div>
             );
           }
