@@ -41,6 +41,7 @@ export const Hero = () => {
         visible: { opacity: 1, y: 0 },
         hidden: { opacity: 0, y: 50 },
       }}
+      className="ease-in-out"
     >
       <Section>
         <Badge variant={"outline"} className="mb-4">
@@ -48,8 +49,8 @@ export const Hero = () => {
         </Badge>
 
         <div className="flex max-md:flex-col items-start gap-4">
-          <div className="flex-[2] m-auto p-2">
-            <Avatar className="w-full h-auto max-w-xs max-md:w-full max-md:center ml-auto">
+          <div className="flex-[2] p-2 flex my-auto">
+            <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2">
               <AvatarImage
                 className="object-cover scale-105 grayscale hover:grayscale-0 transition"
                 src="https://i.ibb.co/vYG5FZN/myphoto.webp"
@@ -58,7 +59,7 @@ export const Hero = () => {
             </Avatar>
           </div>
 
-          <div className="flex-[3] flex flex-col gap-0.5">
+          <div className="flex-[3] flex flex-col gap-0.5 my-auto">
             <h2 className="font-caption font-semibold text-5xl text-foreground">
               Hello, <span className="text-accent-foreground">Islam</span> here!
             </h2>
@@ -107,6 +108,7 @@ export const Hero = () => {
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                   transition={{ ease: "easeInOut", duration: 0.15 }}
+                  className="ease-in-out"
                 >
                   <p className="font-sans basis-0 text-muted-foreground pt-2">
                     Here is some additional content that becomes visible when

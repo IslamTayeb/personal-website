@@ -5,6 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "./Misc/Section";
+import { ArrowUpRight, Link as Link2 } from "lucide-react";
 
 const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   return (
@@ -60,9 +61,18 @@ export const Experience = () => {
       start: "April 2021",
       end: "Present",
       shortDescription: [
-        "Upon graduating in 2021, I began creating content on YouTube, with the aim of enhancing my skills and working with the latest technologies, specifically React and Node.",
-        "Over time, I have developed and shared over 50 projects using React on my channel.",
-        "As a result, my channel has gained a substantial following, with over 11,000 subscribers to date. I have also had the pleasure of collaborating with various brands throughout my journey.",
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearc jfads fajfd dsjf jdah.
+        </>,
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearch.
+        </>,
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearch.
+        </>,
       ],
     },
     {
@@ -73,9 +83,18 @@ export const Experience = () => {
       start: "November 2019",
       end: "November 2020",
       shortDescription: [
-        "As the elected President of the ACES Departmental Club, I successfully led a team of board members and executive committee members to organize and execute multiple events throughout the year.",
-        "Additionally, I secured sponsorships from reputable brands to support our events.",
-        "Overall, it was a rewarding experience that allowed me to develop my leadership skills while contributing positively to the growth of the organization.",
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearc jfads fajfd dsjf jdah.
+        </>,
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearch.
+        </>,
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearch.
+        </>,
       ],
     },
     {
@@ -86,9 +105,18 @@ export const Experience = () => {
       start: "November 2019",
       end: "November 2020",
       shortDescription: [
-        "Write modern, performant, maintainable code for a diverse array of client and internal projects",
-        "Work with a variety of different languages, platforms, frameworks, and content management systems such as JavaScript, TypeScript, Gatsby, React, Craft, WordPress, Prismic, and Netlify",
-        "Communicate with multi-disciplinary teams of engineers, designers, producers, and clients on a daily basis",
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearc jfads fajfd dsjf jdah.
+        </>,
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearch.
+        </>,
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearch.
+        </>,
       ],
     },
     {
@@ -99,8 +127,19 @@ export const Experience = () => {
       start: "November 2018",
       end: "November 2021",
       shortDescription: [
-        "While still a student, I founded a web hosting company that offered affordable hosting services.",
-        "With over 300 customers, the business thrived until I graduated and sold it to another company.",
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearc jfads fajfd dsjf jdah. I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearc jfads fajfd dsjf jdah
+        </>,
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearch.
+        </>,
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearch.
+        </>,
       ],
     },
   ];
@@ -117,11 +156,9 @@ export const Experience = () => {
           hidden: { opacity: 0, y: 50 },
         }}
       >
-        <Badge variant={"outline"} className="mb-4">Experience</Badge>
-
-        {/* <div className='relative'>
-            <h2 className='pb-2 text-3xl font-semibold font-sans first:mt-0 text-primary mb-4'>Where I&apos;ve Worked...</h2>
-        </div> */}
+        <Badge variant={"outline"} className="mb-4">
+          Experience
+        </Badge>
 
         <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
           Where I&apos;ve worked...
@@ -139,10 +176,9 @@ export const Experience = () => {
         }}
       >
         <div className="container px-1">
-          {/* <ul className="list-none relative h-max"> */}
           <ul className="exp-slider">
             <div className="underline"></div>
-            {experiences.map((expereince, index) => {
+            {experiences.map((experience, index) => {
               return (
                 <li
                   className={`exp-slider-item hover:bg-accent transition-colors max-md:justify-center ${
@@ -150,9 +186,9 @@ export const Experience = () => {
                     "exp-slider-item-selected max-md:justify-center max-md:bg-accent transition"
                   }`}
                   onClick={() => setSelected(index)}
-                  key={expereince.shortname}
+                  key={experience.shortname}
                 >
-                  <span>{expereince.shortname}</span>
+                  <span>{experience.shortname}</span>
                 </li>
               );
             })}
@@ -160,29 +196,29 @@ export const Experience = () => {
           <div className="exp-details">
             <div className="text-2xl font-medium font-sans">
               <h3>
-                <span>{experiences[selected].role}</span>
-                <span className="text-accent-foreground text-2xl font-medium font-sans">
+                <span className="text-accent-foreground font-semibold">{experiences[selected].role}</span>
+                <span className="text-2xl font-medium font-sans">
                   &nbsp;@&nbsp;
                   <Link href={experiences[selected].url}>
-                    {experiences[selected].name}
+                    <div className="inline" >{experiences[selected].name}{" "}</div>
+                    <ArrowUpRight className="inline-block w-5 " />
                   </Link>
                 </span>
               </h3>
               <p className="text-base font-medium text-muted-foreground font-mono pb-2">
                 {experiences[selected].start} - {experiences[selected].end}
               </p>
-              <ul className="text-sm text-muted-foreground font-sans pl-2">
+              <ul className="text-sm text-muted-foreground font-sans">
                 {experiences[selected].shortDescription.map(
                   (description, index) => (
                     <li
                       key={index}
-                      className="text-sm text-muted-foreground font-sans pb-1"
+                      className="text-sm text-muted-foreground font-sans pb-2 list-outside list-disc ml-4"
                     >
                       {typeof description === "string" ? (
-                        `- ${description}`
+                        `${description}`
                       ) : (
                         <>
-                          {`- `}
                           {description}
                         </>
                       )}

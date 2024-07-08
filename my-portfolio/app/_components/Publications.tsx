@@ -3,7 +3,6 @@ import React, { ComponentPropsWithoutRef } from "react";
 import { Section } from "./Misc/Section";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import {
   Accordion,
   AccordionContent,
@@ -11,15 +10,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
-import { Link as Link2 } from "lucide-react";
+import { Icon } from "@iconify/react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Tooltip as Tooltip2, Button } from "@material-tailwind/react";
+import Link from "next/link";
+import { Link as Link2, LucideGithub } from "lucide-react";
 
 const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   return (
@@ -39,8 +38,8 @@ export const Publications = () => {
       pubDate: "Dec. 2023",
       pubAuthors: (
         <>
-          Mahmoud Abdelnaby, <span className="font-extrabold">Islam Tayeb</span>
-          , Ahmed Alloush, Hussain Alyosef, Aljazi Alnoaimi, Mostafa Zeama,
+          Mahmoud Abdelnaby, <span className="font-semibold">Islam Tayeb</span>,
+          Ahmed Alloush, Hussain Alyosef, Aljazi Alnoaimi, Mostafa Zeama,
           Mohammed Mohammed, Sagheer Onaizi
         </>
       ),
@@ -53,9 +52,16 @@ export const Publications = () => {
         "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
       pubLink: "https://doi.org/10.1016/j.jcou.2023.102647",
       pubCategory: [
-        "Metal-Organic Frameworks",
-        "Post-synthetic Modification",
-        "Direct Air Capture",
+        {
+          name: "Metal-Organic Frameworks",
+          icon: "lucide:atom",
+          color: "text-blue-500",
+        },
+        {
+          name: "Post-synthetic Modification",
+          icon: "ion:beaker",
+          color: "text-green-500",
+        },
       ],
     },
     {
@@ -63,7 +69,7 @@ export const Publications = () => {
       pubAuthors: (
         <>
           Abdullah Alsulaiman, Siraj Alharthi, Ahmed Albariqi, Rasha Mutabaqani,
-          Fawzi Bokhari, <span className="font-extrabold">Islam Tayeb</span>,
+          Fawzi Bokhari, <span className="font-semibold">Islam Tayeb</span>,
           Dalia Alharthi, Muhammad Tariq, Yasser Babaier
         </>
       ),
@@ -76,16 +82,23 @@ export const Publications = () => {
         "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
       pubLink: "http://dx.doi.org/10.7759/cureus.27090",
       pubCategory: [
-        "Metal-Organic Frameworks",
-        "Post-synthetic Modification",
-        "Direct Air Capture",
+        {
+          name: "Non-Small-Cell Lung Cancer",
+          icon: "mdi:lungs",
+          color: "text-purple-500",
+        },
+        {
+          name: "Arabian Gulf",
+          icon: "mdi:map-marker",
+          color: "text-yellow-500",
+        },
       ],
     },
     {
       pubDate: "Jun. 2022",
       pubAuthors: (
         <>
-          Siraj Alharthi, <span className="font-extrabold">Islam Tayeb</span>,
+          Siraj Alharthi, <span className="font-semibold">Islam Tayeb</span>,
           Romar Pascual, Salman Aloufi, Rasha Mutabbaqani, Dalia Alharthi, Ahmed
           Al-Bariqi, Basem Almutiri, Abdullah Alsulaiman
         </>
@@ -100,16 +113,19 @@ export const Publications = () => {
       pubLink:
         "https://www.researchgate.net/publication/361118570_RAS_gene_mutations_and_their_prevalence_in_non-small_Cell_lung_cancer_A_Review",
       pubCategory: [
-        "Metal-Organic Frameworks",
-        "Post-synthetic Modification",
-        "Direct Air Capture",
+        {
+          name: "Non-Small-Cell Lung Cancer",
+          icon: "mdi:lungs",
+          color: "text-purple-500",
+        },
+        { name: "Genetic Mutations", icon: "mdi:dna", color: "text-pink-500" },
       ],
     },
     {
       pubDate: "Apr. 2022",
       pubAuthors: (
         <>
-          Siraj Alharthi, <span className="font-extrabold">Islam Tayeb</span>,
+          Siraj Alharthi, <span className="font-semibold">Islam Tayeb</span>,
           Romar Pascual, Salman Aloufi, Khalid Alotaibi
         </>
       ),
@@ -123,12 +139,20 @@ export const Publications = () => {
       pubLink:
         "https://www.researchgate.net/publication/359931677_Medicinal_effects_and_Phytochemical_composition_of_Capparis_Cartilaginea_Decne_A_Review",
       pubCategory: [
-        "Metal-Organic Frameworks",
-        "Post-synthetic Modification",
-        "Direct Air Capture",
+        {
+          name: "Medicinal Effects",
+          icon: "mdi:medical-bag",
+          color: "text-blue-500",
+        },
+        {
+          name: "Phytochemical Composition",
+          icon: "mdi:leaf",
+          color: "text-green-500",
+        },
       ],
     },
   ];
+
   return (
     <Section className="flex flex-col items-start gap-4">
       <motion.div
@@ -158,6 +182,7 @@ export const Publications = () => {
           pubDescription,
           pubLink,
           pubImpact,
+          pubType,
           pubCategory,
         }) => {
           return (
@@ -173,10 +198,29 @@ export const Publications = () => {
                 hidden: { opacity: 0, y: 50 },
               }}
             >
-              {/* // <Card className="p-4"> */}
               <div className="flex items-center gap-4 mx-2">
-                <div className="text-muted-foreground text-sm w-min pb-2.5">
-                  {pubDate}
+                <div className="text-muted-foreground text-sm pb-2.5 flex flex-row w-min">
+                  <div className="flex flex-col my-auto gap-1.5">
+                    {pubCategory.map((category) => (
+                      <TooltipProvider key={category.name} delayDuration={50}>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <div className="mr-1">
+                              <Icon
+                                icon={category.icon}
+                                className={`text-current`}
+                                height="14"
+                              />
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent className="shadow-md shadow-card transition-all">
+                            <p>{category.name}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    ))}
+                  </div>
+                  <p className="ml-1.5">{pubDate}</p>
                 </div>
                 <Accordion
                   type="single"
@@ -186,18 +230,65 @@ export const Publications = () => {
                   <AccordionItem value="item-1">
                     <AccordionTrigger className="text-left gap-4">
                       <div className="text-primary flex flex-col">
-                        <div className="text-base font-semibold text-foreground">
-                          {pubTitle}
+                        <div className="text-base font-bold text-foreground">
+                          {pubTitle}{" "}
+                          {/* {pubCategory.map((category) => (
+                            <TooltipProvider
+                              key={category.name}
+                              delayDuration={50}
+                            >
+                              <Tooltip>
+                                <TooltipTrigger>
+                                  <div className="mr-1">
+                                    <Icon
+                                      icon={category.icon}
+                                      className={`text-current ${category.color}`}
+                                      height="14"
+                                    />
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent className="shadow-md shadow-card transition-all">
+                                  <p>{category.name}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          ))} */}
                         </div>
-                        <div>
+                        <div className="text-muted-foreground text-sm font-normal">
                           <TooltipProvider delayDuration={50}>
                             <Tooltip>
-                              <TooltipTrigger>{pubJournal}</TooltipTrigger>
+                              <TooltipTrigger className="font-semibold">
+                                {pubJournal}
+                              </TooltipTrigger>
                               <TooltipContent className="shadow-md shadow-card transition-all">
                                 <p>{pubImpact}</p>
                               </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
+                          {" - " + pubType}{" "}
+                          <div className="inline ml-1">
+                            {pubCategory.map((category) => (
+                              <TooltipProvider
+                                key={category.name}
+                                delayDuration={50}
+                              >
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <div className="mr-1 h-min">
+                                      <Icon
+                                        icon={category.icon}
+                                        className="h-min bottom-0 align-text-bottom"
+                                        height="12"
+                                      />
+                                    </div>
+                                  </TooltipTrigger>
+                                  <TooltipContent className="shadow-md shadow-card transition-all">
+                                    <p>{category.name}</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            ))}
+                          </div>
                         </div>
 
                         <div className="text-muted-foreground  text-xs font-light mt-0.5">
@@ -216,12 +307,10 @@ export const Publications = () => {
                   </AccordionItem>
                 </Accordion>
               </div>
-              {/* // </Card> */}
             </motion.div>
           );
         }
       )}
-      {/* </motion.div> */}
     </Section>
   );
 };

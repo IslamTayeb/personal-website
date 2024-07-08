@@ -20,6 +20,51 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+// List of skills with their corresponding Iconify logos
+const skillsData = [
+  {
+    category: "Programming Languages",
+    technologies: [
+      { name: "JavaScript", icon: "akar-icons:javascript-fill" },
+      { name: "Python", icon: "akar-icons:python-fill" },
+      { name: "Java", icon: "mdi:java" },
+    ],
+  },
+  {
+    category: "Web Development",
+    technologies: [
+      { name: "React", icon: "mdi:react" },
+      { name: "Redux", icon: "mdi:redux" },
+      { name: "HTML5", icon: "mdi:html-5" },
+      { name: "CSS3", icon: "mdi:css-3" },
+    ],
+  },
+  {
+    category: "Machine Learning",
+    technologies: [
+      { name: "TensorFlow", icon: "mdi:tensorflow" },
+      { name: "PyTorch", icon: "mdi:pytorch" },
+      { name: "scikit-learn", icon: "mdi:scikit-learn" },
+    ],
+  },
+  {
+    category: "Deployment & Integration",
+    technologies: [
+      { name: "Docker", icon: "mdi:docker-icon" },
+      { name: "Kubernetes", icon: "mdi:kubernetes" },
+      { name: "AWS", icon: "mdi:aws" },
+    ],
+  },
+  {
+    category: "Research",
+    technologies: [
+      { name: "LaTeX", icon: "mdi:latex" },
+      { name: "MATLAB", icon: "mdi:matlab" },
+      { name: "R", icon: "mdi:r-lang" },
+    ],
+  },
+];
+
 export const Skills = () => {
   return (
     <Section className="flex flex-col items-start gap-4">
@@ -64,84 +109,40 @@ export const Skills = () => {
             </TableRow>
           </TableHeader>
           <TableBody className="text-accent-foreground">
-            <TableRow>
-              <TableCell className="font-medium">
-                Programming Languages
-              </TableCell>
-              <TableCell>Paid</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Web Development</TableCell>
-              <TableCell>Paid</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Machine Learning</TableCell>
-              <TableCell className="flex gap-x-2">
-                <TooltipProvider delayDuration={50}>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      {" "}
-                      <div>
-                        <Icon
-                          className="hover:blur absolute transition-all opacity-50"
-                          icon="mdi:react"
-                          width="3em"
-                          height="3em"
-                        />
-                        <Icon
-                          className=""
-                          icon="mdi:react"
-                          width="3em"
-                          height="3em"
-                        />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="font-semibold">React</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                <div>
-                  <Icon
-                    className="hover:blur absolute transition-all opacity-50"
-                    icon="mdi:react"
-                    width="2em"
-                    height="2em"
-                  />
-                  <Icon
-                    className=""
-                    icon="mdi:react"
-                    width="2em"
-                    height="2em"
-                  />
-                </div>
-                <div>
-                  <Icon
-                    className="hover:blur absolute transition-all opacity-50"
-                    icon="mdi:react"
-                    width="2em"
-                    height="2em"
-                  />
-                  <Icon
-                    className=""
-                    icon="mdi:react"
-                    width="2em"
-                    height="2em"
-                  />
-                </div>
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">
-                Deployment & Integration
-              </TableCell>
-              <TableCell>Paid</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Research</TableCell>
-              <TableCell>Paid</TableCell>
-            </TableRow>
+            {skillsData.map((skillCategory) => (
+              <TableRow key={skillCategory.category}>
+                <TableCell className="font-medium">
+                  {skillCategory.category}
+                </TableCell>
+                <TableCell className="flex gap-2">
+                  {skillCategory.technologies.map((tech) => (
+                    <TooltipProvider key={tech.name} delayDuration={50}>
+                      <Tooltip>
+                        <TooltipTrigger>
+                          <div className="p-1">
+                            <Icon
+                              className="hover:blur-[6px] absolute transition-all opacity-50"
+                              icon={tech.icon}
+                              width="2.25em"
+                              height="2.25em"
+                            />
+                            <Icon
+                              className=""
+                              icon={tech.icon}
+                              width="2.25em"
+                              height="2.25em"
+                            />
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p className="font-semibold">{tech.name}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </motion.div>

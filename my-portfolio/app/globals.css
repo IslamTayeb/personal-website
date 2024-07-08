@@ -442,12 +442,11 @@
   /* Scrollbar */
   ::-webkit-scrollbar {
     width: 0.65em;
-    height: 1em;
+    height: 0.65em;
   }
 
   ::-webkit-scrollbar-track {
     background: hsl(var(--card));
-    border-radius: 100vw;
   }
 
   ::-webkit-scrollbar-thumb {
