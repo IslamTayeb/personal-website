@@ -53,7 +53,7 @@
   .container {
     display: grid;
     gap: 1rem;
-    grid-template-columns: 20% 80%;
+    grid-template-columns: 17.5% auto;
   }
 
   .exp-slider {

@@ -16,7 +16,7 @@ const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   return (
     <span
       className={cn(
-        "bg-accent/30 hover:bg-accent/50 transition-colors border border-accent px-1 py-0.5 rounded-sm text-primary font-mono text-sm",
+        "bg-accent/30 hover:bg-accent/50 transition-colors border border-accent px-1 py-0.5 rounded-sm text-primary font-mono text-sm text-nowrap",
         className
       )}
       {...props}
@@ -47,13 +47,18 @@ export const Hero = () => {
         <Badge variant={"outline"} className="mb-4">
           Welcome!
         </Badge>
-
         <div className="flex max-md:flex-col items-start gap-4">
           <div className="flex-[2] p-2 flex my-auto">
-            <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2">
+            <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2 relative">
               <AvatarImage
-                className="object-cover scale-105 grayscale hover:grayscale-0 transition"
+                className="object-cover scale-105 absolute top-0 left-0 w-full h-full transition-opacity opacity-0 hover:opacity-100 z-50 border border-accent mix-blend-color saturate-[0.98] -mt-[0.25em]"
                 src="https://i.ibb.co/vYG5FZN/myphoto.webp"
+                alt="Original Photo"
+              />
+              <AvatarImage
+                className="object-cover scale-105 relative contrast-[1.12] border border-accent -mt-[0.25em]"
+                src="https://i.ibb.co/BPVgwFb/myphotogradient.webp"
+                alt="Gradient Photo"
               />
               <AvatarFallback>Islam</AvatarFallback>
             </Avatar>
@@ -63,7 +68,7 @@ export const Hero = () => {
             <h2 className="font-caption font-semibold text-5xl text-foreground">
               Hello, <span className="text-accent-foreground">Islam</span> here!
             </h2>
-            <h3 className="font-caption font-medium text-2xl">
+            <h3 className="font-caption font-medium text-2xl leading-tight">
               I&apos;m a{" "}
               <span className="text-primary">
                 <Typewriter
@@ -111,10 +116,11 @@ export const Hero = () => {
                   className="ease-in-out"
                 >
                   <p className="font-sans basis-0 text-muted-foreground pt-2">
-                    Here is some additional content that becomes visible when
-                    you click "Read More...". This could include more detailed
-                    descriptions of your work, interests, or any other
-                    information you'd like to share.
+                    Culpa mollit aliquip id cupidatat ea laboris aliquip
+                    excepteur incididunt dolor laboris. Occaecat id anim
+                    consequat anim esse incididunt incididunt cillum dolore.
+                    Ipsum occaecat reprehenderit occaecat id dolor irure amet
+                    voluptate occaecat quis.
                   </p>
                 </motion.div>
               )}
@@ -122,7 +128,7 @@ export const Hero = () => {
             <div>
               <Button
                 variant="outline"
-                className="my-3 p-4 font-sans"
+                className="my-2 p-4 font-sans mb-0"
                 onClick={handleReadMoreClick}
               >
                 {showMore ? "Show Less..." : "Read More..."}

@@ -62,6 +62,12 @@ export const Publications = () => {
           icon: "ion:beaker",
           color: "text-green-500",
         },
+        {
+          name: "Phytochemical Composition",
+          icon: "mdi:leaf",
+          color: "text-green-500",
+        },
+
       ],
     },
     {
@@ -92,6 +98,12 @@ export const Publications = () => {
           icon: "mdi:map-marker",
           color: "text-yellow-500",
         },
+        {
+          name: "Phytochemical Composition",
+          icon: "mdi:leaf",
+          color: "text-green-500",
+        },
+
       ],
     },
     {
@@ -119,6 +131,12 @@ export const Publications = () => {
           color: "text-purple-500",
         },
         { name: "Genetic Mutations", icon: "mdi:dna", color: "text-pink-500" },
+        {
+          name: "Phytochemical Composition",
+          icon: "mdi:leaf",
+          color: "text-green-500",
+        },
+
       ],
     },
     {
@@ -143,6 +161,11 @@ export const Publications = () => {
           name: "Medicinal Effects",
           icon: "mdi:medical-bag",
           color: "text-blue-500",
+        },
+        {
+          name: "Phytochemical Composition",
+          icon: "mdi:leaf",
+          color: "text-green-500",
         },
         {
           name: "Phytochemical Composition",
@@ -198,9 +221,9 @@ export const Publications = () => {
                 hidden: { opacity: 0, y: 50 },
               }}
             >
-              <div className="flex items-center gap-4 mx-2">
-                <div className="text-muted-foreground text-sm pb-2.5 flex flex-row w-min">
-                  <div className="flex flex-col my-auto gap-1.5">
+              <div className="flex items-center gap-4 mx-2 ml-4">
+                <div className="text-muted-foreground text-sm pb-2.5 flex flex-row w-min text-left">
+                  {/* <div className="flex flex-col my-auto gap-1.5">
                     {pubCategory.map((category) => (
                       <TooltipProvider key={category.name} delayDuration={50}>
                         <Tooltip>
@@ -208,7 +231,7 @@ export const Publications = () => {
                             <div className="mr-1">
                               <Icon
                                 icon={category.icon}
-                                className={`text-current`}
+                                className={`text-current ${category.color}`}
                                 height="14"
                               />
                             </div>
@@ -219,7 +242,7 @@ export const Publications = () => {
                         </Tooltip>
                       </TooltipProvider>
                     ))}
-                  </div>
+                  </div> */}
                   <p className="ml-1.5">{pubDate}</p>
                 </div>
                 <Accordion
@@ -227,32 +250,11 @@ export const Publications = () => {
                   collapsible
                   className="w-full font-sans "
                 >
-                  <AccordionItem value="item-1">
-                    <AccordionTrigger className="text-left gap-4">
+                  <AccordionItem value="item-1" className="pb-4 text-pretty">
+                    <AccordionTrigger className="text-left gap-4 pb-1.5">
                       <div className="text-primary flex flex-col">
                         <div className="text-base font-bold text-foreground">
                           {pubTitle}{" "}
-                          {/* {pubCategory.map((category) => (
-                            <TooltipProvider
-                              key={category.name}
-                              delayDuration={50}
-                            >
-                              <Tooltip>
-                                <TooltipTrigger>
-                                  <div className="mr-1">
-                                    <Icon
-                                      icon={category.icon}
-                                      className={`text-current ${category.color}`}
-                                      height="14"
-                                    />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent className="shadow-md shadow-card transition-all">
-                                  <p>{category.name}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          ))} */}
                         </div>
                         <div className="text-muted-foreground text-sm font-normal">
                           <TooltipProvider delayDuration={50}>
@@ -301,9 +303,22 @@ export const Publications = () => {
                       </div>
                     </AccordionTrigger>
 
-                    <AccordionContent className="mr-8">
+                    <AccordionContent className="mr-8 pb-2">
                       {pubDescription}
                     </AccordionContent>
+
+                    <div className="inline text-sm">
+                      {pubCategory.map((category) => (
+                        <Code key={category.name} className="mr-2 text-nowrap leading-loose">
+                          <Icon
+                            icon={category.icon}
+                            className={`text-current inline mr-1 align-middle`}
+                            height="14"
+                          />
+                          <span className="">{category.name}</span>
+                        </Code>
+                      ))}
+                    </div>
                   </AccordionItem>
                 </Accordion>
               </div>
