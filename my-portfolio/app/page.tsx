@@ -7,11 +7,9 @@ import { About } from "./_components/About";
 import { Footer } from "./_components/Footer";
 import { Experience } from "./_components/Experience";
 import { Projects } from "./_components/Projects";
-import { Publications } from "./_components/Publications";
 import { Skills } from "./_components/Skills";
 import { Contact } from "./_components/Contact";
-import { Publications_cp } from "./_components/Publications copy";
-import { Publications_cp2 } from "./_components/Publications copy 2";
+import { Publications } from "./_components/Publications";
 
 export default function Home() {
   return (
@@ -44,17 +42,9 @@ export default function Home() {
 
       <Spacing height={40} />
 
-      {/* <Publications />
-
-      <Spacing height={40} /> */}
-
-      <Publications_cp />
+      <Publications />
 
       <Spacing height={40} />
-
-      {/* <Publications_cp2 />
-
-      <Spacing height={40} /> */}
 
       <Contact />
 

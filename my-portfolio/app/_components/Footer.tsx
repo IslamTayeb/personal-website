@@ -1,6 +1,7 @@
 import React from "react";
 import { Section } from "./Misc/Section";
 import { Copyright, CopyrightIcon } from "lucide-react";
+import { Code, DefaultIcon } from "./sharedComponents";
 
 export const Footer = () => {
   return (

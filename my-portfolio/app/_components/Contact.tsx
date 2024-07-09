@@ -21,6 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { sendEmail } from "./sendEmail";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Icon } from "@iconify/react";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name is required" }).max(50, { message: "Your name must be 50 characters or fewer" }),
@@ -82,10 +83,10 @@ export const Contact = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 50 },
+          hidden: { opacity: 0, y: 25 },
         }}
       >
         <Badge variant={"outline"} className="mb-4">
@@ -101,10 +102,10 @@ export const Contact = () => {
         whileInView="visible"
         className="w-full"
         viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 50 },
+          hidden: { opacity: 0, y: 25 },
         }}
       >
         <div className="flex max-md:flex-col flex-row gap-4 max-md:gap-8">

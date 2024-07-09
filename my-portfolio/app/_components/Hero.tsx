@@ -4,25 +4,12 @@ import { ComponentPropsWithoutRef, useState } from "react";
 import { MoonIcon } from "./Icons/MoonIcon";
 import { Section } from "./Misc/Section";
 import { Typewriter, Cursor } from "react-simple-typewriter";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Duke } from "./Icons/Duke";
-import { Atom, Braces, Dna } from "lucide-react";
-
-const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
-  return (
-    <span
-      className={cn(
-        "bg-accent/30 hover:bg-accent/50 transition-colors border border-accent px-1 py-0.5 rounded-sm text-primary font-mono text-sm text-nowrap",
-        className
-      )}
-      {...props}
-    />
-  );
-};
+import { Code, DefaultIcon } from "./sharedComponents";
 
 export const Hero = () => {
   const [showMore, setShowMore] = useState(false);
@@ -36,10 +23,10 @@ export const Hero = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      transition={{ duration: 0.2, ease: "easeOut" }}
       variants={{
         visible: { opacity: 1, y: 0 },
-        hidden: { opacity: 0, y: 50 },
+        hidden: { opacity: 0, y: 25 },
       }}
       className="ease-in-out"
     >
@@ -49,14 +36,14 @@ export const Hero = () => {
         </Badge>
         <div className="flex max-md:flex-col items-start gap-4">
           <div className="flex-[2] p-2 flex my-auto max-md:mx-auto">
-            <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2 relative">
+            <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2 relative border border-accent">
               <AvatarImage
-                className="object-cover scale-105 absolute top-0 left-0 w-full h-full transition-opacity opacity-0 hover:opacity-100 z-50 border border-accent mix-blend-color saturate-[0.98] -mt-[0.25em]"
+                className="object-cover scale-105 absolute top-0 left-0 w-full h-full transition-opacity opacity-0 hover:opacity-100 z-50 mix-blend-color saturate-[0.98] -mt-[0.25em] contrast-[1.1]"
                 src="https://i.ibb.co/vYG5FZN/myphoto.webp"
                 alt="Original Photo"
               />
               <AvatarImage
-                className="object-cover scale-105 relative contrast-[1.12] border border-accent -mt-[0.25em]"
+                className="object-cover scale-105 relative contrast-[1.12] -mt-[0.25em] brightness-[0.95]"
                 src="https://i.ibb.co/BPVgwFb/myphotogradient.webp"
                 alt="Gradient Photo"
               />
@@ -74,8 +61,8 @@ export const Hero = () => {
                 <Typewriter
                   words={[
                     "Software Developer",
+                    "Research Assistant",
                     "Research Analyst",
-                    "Graphic Designer",
                   ]}
                   cursor
                   cursorColor="#a8b1c2"
@@ -88,23 +75,29 @@ export const Hero = () => {
               </span>
             </h3>
             <p className="font-sans basis-0 text-muted-foreground text-pretty">
+              I study{" "}
               <Code>
-                <Braces size={14} className="inline" /> Computer Science
+                <DefaultIcon icon={"lucide:braces"} className="" /> Computer
+                Science
               </Code>{" "}
               ,{" "}
               <Code>
-                <Dna size={14} className="inline" /> Bioinformatics
+                <DefaultIcon icon={"lucide:dna"} className="" /> Bioinformatics
               </Code>{" "}
               , and{" "}
               <Code>
-                <Atom size={14} className="inline" /> Chemistry
+                <DefaultIcon icon={"lucide:atom"} className="" /> Chemistry
               </Code>{" "}
-              student at{" "}
+              at{" "}
               <Code>
                 <Duke size={14} className="text-center" /> Duke University
-              </Code>
-              . Interested in software development, data analysis, computational
-              and synthetic chemistry, and medical technology.
+              </Code>{" "}
+              . Currently based in{" "}
+              <Code>
+                <DefaultIcon icon={"flag:us-1x1"} className="rounded-[1.5px]" />{" "}
+                Durham, NC
+              </Code>{" "}
+              with an interest in applied research and AI/ML.
             </p>
             <AnimatePresence>
               {showMore && (
@@ -116,11 +109,38 @@ export const Hero = () => {
                   className="ease-in-out"
                 >
                   <p className="font-sans basis-0 text-muted-foreground pt-1 text-pretty">
-                    Culpa mollit aliquip id cupidatat ea laboris aliquip
-                    excepteur incididunt dolor laboris. Occaecat id anim
-                    consequat anim esse incididunt incididunt cillum dolore.
-                    Ipsum occaecat reprehenderit occaecat id dolor irure amet
-                    voluptate occaecat quis.
+                    I grew up between{" "}
+                    <Code>
+                      <DefaultIcon
+                        icon={"flag:eg-1x1"}
+                        className="rounded-[1.5px]"
+                      />{" "}
+                      Alexandria, Egypt
+                    </Code>{" "}
+                    and{" "}
+                    <Code>
+                      <DefaultIcon
+                        icon={"flag:sa-1x1"}
+                        className="rounded-[1.5px]"
+                      />{" "}
+                      Taif, Saudi Arabia
+                    </Code>{" "}
+                    . I spent four years doing graphic design professionally—I
+                    eventually shifted my focus, but I still design as a hobby.
+                    I'm a huge fan of{" "}
+                    <Code>
+                      <DefaultIcon icon={"clarity:cd-dvd-solid"} className="" />{" "}
+                      Alternative Hip Hop
+                    </Code>{" "}
+                    , and I like to play{" "}
+                    <Code>
+                      <DefaultIcon
+                        icon={"fluent:tetris-app-16-filled"}
+                        className=""
+                      />{" "}
+                      Tetris
+                    </Code>{" "}
+                    in my free time between classes and work.
                   </p>
                 </motion.div>
               )}

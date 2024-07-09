@@ -6,18 +6,8 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "./Misc/Section";
 import { ArrowUpRight, Link as Link2 } from "lucide-react";
-
-const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
-  return (
-    <span
-      className={cn(
-        "bg-accent/30 hover:bg-accent/50 transition-colors border border-accent px-1 py-0.5 rounded-sm text-primary font-mono text-nowrap",
-        className
-      )}
-      {...props}
-    />
-  );
-};
+import { Icon } from "@iconify/react";
+import { Code, DefaultIcon } from "./sharedComponents";
 
 export const Experience = () => {
   const [selected, setSelected] = useState(0);
@@ -34,6 +24,7 @@ export const Experience = () => {
     {
       name: "Duke Institute for Health Innovation",
       shortname: "DIHI",
+      present: true,
       role: "Full Stack Developer",
       url: "https://www.rapidops.com",
       start: "January 2021",
@@ -56,6 +47,7 @@ export const Experience = () => {
     {
       name: "Feng Labs",
       shortname: "Duke",
+      present: true,
       role: "Content Creator",
       url: "https://www.youtube.com/kishansheth21",
       start: "April 2021",
@@ -78,6 +70,7 @@ export const Experience = () => {
     {
       name: "Project: Sapien",
       shortname: "Sapien",
+      present: false,
       role: "President",
       url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
       start: "November 2019",
@@ -100,6 +93,7 @@ export const Experience = () => {
     {
       name: "Saudi Aramco",
       shortname: "Aramco",
+      present: false,
       role: "Web Developer",
       url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
       start: "November 2019",
@@ -122,6 +116,7 @@ export const Experience = () => {
     {
       name: "King Abdulaziz University",
       shortname: "KAU",
+      present: false,
       role: "Founder",
       url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
       start: "November 2018",
@@ -129,8 +124,9 @@ export const Experience = () => {
       shortDescription: [
         <>
           I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearc jfads fajfd dsjf jdah. I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearc jfads fajfd dsjf jdah
+          Kibana and Elasticsearc jfads fajfd dsjf jdah. I had{" "}
+          <Code>experience</Code> working on a large codebase utilizing Kibana
+          and Elasticsearc jfads fajfd dsjf jdah
         </>,
         <>
           I had <Code>experience</Code> working on a large codebase utilizing
@@ -150,10 +146,10 @@ export const Experience = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 50 },
+          hidden: { opacity: 0, y: 25 },
         }}
       >
         <Badge variant={"outline"} className="mb-4">
@@ -169,10 +165,10 @@ export const Experience = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 50 },
+          hidden: { opacity: 0, y: 25 },
         }}
       >
         <div className="container px-1">
@@ -188,7 +184,15 @@ export const Experience = () => {
                   onClick={() => setSelected(index)}
                   key={experience.shortname}
                 >
-                  <span>{experience.shortname}</span>
+                  <span className="font-semibold mr-2">{experience.shortname}</span>
+                  {index < 2 && experience.present ? (
+                    <Badge
+                      variant={"default"}
+                      className=" p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
+                    >
+                      Present
+                    </Badge>
+                  ) : null}
                 </li>
               );
             })}
@@ -196,11 +200,13 @@ export const Experience = () => {
           <div className="exp-details">
             <div className="text-2xl font-medium font-sans">
               <h3>
-                <span className="text-accent-foreground font-semibold">{experiences[selected].role}</span>
+                <span className="text-accent-foreground font-semibold">
+                  {experiences[selected].role}
+                </span>
                 <span className="text-2xl font-medium font-sans">
                   &nbsp;@&nbsp;
                   <Link href={experiences[selected].url}>
-                    <div className="inline" >{experiences[selected].name}{" "}</div>
+                    <div className="inline">{experiences[selected].name} </div>
                     <ArrowUpRight className="inline-block w-5 " />
                   </Link>
                 </span>
@@ -218,9 +224,7 @@ export const Experience = () => {
                       {typeof description === "string" ? (
                         `${description}`
                       ) : (
-                        <>
-                          {description}
-                        </>
+                        <>{description}</>
                       )}
                     </li>
                   )
