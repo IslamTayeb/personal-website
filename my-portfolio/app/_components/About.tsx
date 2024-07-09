@@ -13,7 +13,7 @@ const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   return (
     <span
       className={cn(
-        "bg-accent/30 hover:bg-accent/50 transition-colors border border-accent px-1 py-0.5 rounded-sm text-primary font-mono",
+        "bg-accent/30 hover:bg-accent/50 transition-colors border border-accent px-1 py-0.5 rounded-sm text-primary font-mono text-nowrap",
         className
       )}
       {...props}
@@ -28,7 +28,7 @@ export const About = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 50 },
@@ -47,7 +47,7 @@ export const About = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
           variants={{
             visible: { opacity: 1, y: 0 },
             hidden: { opacity: 0, y: 50 },

@@ -8,7 +8,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
+} from "@/components/ui/accordionv2";
 import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/react";
 import {
@@ -33,7 +33,7 @@ const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   );
 };
 
-export const Publications = () => {
+export const Publications_cp2 = () => {
   const publicationsData = [
     {
       pubDate: "Dec. 2023",
@@ -68,7 +68,6 @@ export const Publications = () => {
           icon: "mdi:leaf",
           color: "text-green-500",
         },
-
       ],
     },
     {
@@ -104,7 +103,6 @@ export const Publications = () => {
           icon: "mdi:leaf",
           color: "text-green-500",
         },
-
       ],
     },
     {
@@ -137,29 +135,6 @@ export const Publications = () => {
           icon: "mdi:leaf",
           color: "text-green-500",
         },
-        {
-          name: "Non-Small-Cell Lung Cancer",
-          icon: "mdi:lungs",
-          color: "text-purple-500",
-        },
-        { name: "Genetic Mutations", icon: "mdi:dna", color: "text-pink-500" },
-        {
-          name: "Phytochemical Composition",
-          icon: "mdi:leaf",
-          color: "text-green-500",
-        },
-        {
-          name: "Non-Small-Cell Lung Cancer",
-          icon: "mdi:lungs",
-          color: "text-purple-500",
-        },
-        { name: "Genetic Mutations", icon: "mdi:dna", color: "text-pink-500" },
-        {
-          name: "Phytochemical Composition",
-          icon: "mdi:leaf",
-          color: "text-green-500",
-        },
-
       ],
     },
     {
@@ -190,6 +165,17 @@ export const Publications = () => {
           icon: "mdi:leaf",
           color: "text-green-500",
         },
+        {
+          name: "Phytochemical Composition",
+          icon: "mdi:leaf",
+          color: "text-green-500",
+        },
+        {
+          name: "Non-Small-Cell Lung Cancer",
+          icon: "mdi:lungs",
+          color: "text-purple-500",
+        },
+        { name: "Genetic Mutations", icon: "mdi:dna", color: "text-pink-500" },
         {
           name: "Phytochemical Composition",
           icon: "mdi:leaf",
@@ -244,10 +230,11 @@ export const Publications = () => {
                 hidden: { opacity: 0, y: 50 },
               }}
             >
-              <div className="flex items-center gap-4 mx-2">
-                <div className="text-muted-foreground text-sm flex flex-row w-min text-left">
-                  {/* <div className="flex flex-col my-auto">
-                    {pubCategory.slice(0, 2).map((category) => (
+              <div className="flex flex-col">
+                <div className="flex flex-row items-center gap-4 mx-2">
+                  <div className="text-muted-foreground text-sm pb-2.5 flex flex-row w-min text-left">
+                    <div className="flex flex-col my-auto gap-1.5">
+                      {/* {pubCategory.slice(0, 2).map((category) => (
                       <TooltipProvider key={category.name} delayDuration={50}>
                         <Tooltip>
                           <TooltipTrigger>
@@ -264,34 +251,34 @@ export const Publications = () => {
                           </TooltipContent>
                         </Tooltip>
                       </TooltipProvider>
-                    ))}
-                  </div> */}
-                  <p className="ml-1 mb-1.5">{pubDate}</p>
-                </div>
-                <Accordion
-                  type="single"
-                  collapsible
-                  className="w-full font-sans "
-                >
-                  <AccordionItem value="item-1" className="text-pretty">
-                    <AccordionTrigger className="text-left gap-4 pb-2">
-                      <div className="text-primary flex flex-col">
-                        <div className="text-base font-bold text-foreground">
-                          {pubTitle}{" "}
-                        </div>
-                        <div className="text-muted-foreground text-sm font-normal">
-                          <TooltipProvider delayDuration={50}>
-                            <Tooltip>
-                              <TooltipTrigger className="font-semibold">
-                                {pubJournal}
-                              </TooltipTrigger>
-                              <TooltipContent className="shadow-md shadow-card transition-all">
-                                <p>{pubImpact}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                          {" - " + pubType}{" "}
-                          <div className="inline ml-1">
+                    ))} */}
+                    </div>
+                    <p className="">{pubDate}</p>
+                  </div>
+                  <Accordion
+                    type="single"
+                    collapsible
+                    className="w-full font-sans "
+                  >
+                    <AccordionItem value="item-1" className="text-pretty">
+                      <AccordionTrigger className="text-left gap-4 pb-1.5">
+                        <div className="text-primary flex flex-col">
+                          <div className="text-base font-bold text-foreground">
+                            {pubTitle}{" "}
+                          </div>
+                          <div className="text-muted-foreground text-sm font-normal">
+                            <TooltipProvider delayDuration={50}>
+                              <Tooltip>
+                                <TooltipTrigger className="font-semibold">
+                                  {pubJournal}
+                                </TooltipTrigger>
+                                <TooltipContent className="shadow-md shadow-card transition-all">
+                                  <p>{pubImpact}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                            {" - " + pubType}{" "}
+                            {/* <div className="inline ml-1">
                             {pubCategory.map((category) => (
                               <TooltipProvider
                                 key={category.name}
@@ -313,36 +300,40 @@ export const Publications = () => {
                                 </Tooltip>
                               </TooltipProvider>
                             ))}
+                          </div> */}
+                          </div>
+
+                          <div className="text-muted-foreground  text-xs font-light mt-0.5">
+                            {typeof pubAuthors === "string" ? (
+                              `- ${pubAuthors}`
+                            ) : (
+                              <>{pubAuthors}</>
+                            )}
                           </div>
                         </div>
+                      </AccordionTrigger>
 
-                        <div className="text-muted-foreground  text-xs font-light mt-0.5">
-                          {typeof pubAuthors === "string" ? (
-                            `- ${pubAuthors}`
-                          ) : (
-                            <>{pubAuthors}</>
-                          )}
-                        </div>
-                      </div>
-                    </AccordionTrigger>
-
-                    <AccordionContent className="">
-                      {pubDescription}
-                    </AccordionContent>
-                    {/* <div className="inline text-xs">
-                      {pubCategory.map((category) => (
-                        <Code key={category.name} className="mr-2 text-nowrap leading-loose">
-                          <Icon
-                            icon={category.icon}
-                            className={`text-current inline mr-1 align-middle`}
-                            height="14"
-                          />
-                          <span className="">{category.name}</span>
-                        </Code>
-                      ))}
-                    </div> */}
-                  </AccordionItem>
-                </Accordion>
+                      <AccordionContent className="mr-8 pb-2">
+                        {pubDescription}
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </div>
+                <div className="inline text-xs ml-[56px]">
+                  {pubCategory.map((category) => (
+                    <Code
+                      key={category.name}
+                      className="mr-2 text-nowrap leading-loose"
+                    >
+                      <Icon
+                        icon={category.icon}
+                        className={`text-current inline mr-1 align-middle`}
+                        height="14"
+                      />
+                      <span className="">{category.name}</span>
+                    </Code>
+                  ))}
+                </div>
               </div>
             </motion.div>
           );

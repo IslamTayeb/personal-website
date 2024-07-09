@@ -36,7 +36,7 @@ export const Hero = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       variants={{
         visible: { opacity: 1, y: 0 },
         hidden: { opacity: 0, y: 50 },
@@ -48,7 +48,7 @@ export const Hero = () => {
           Welcome!
         </Badge>
         <div className="flex max-md:flex-col items-start gap-4">
-          <div className="flex-[2] p-2 flex my-auto">
+          <div className="flex-[2] p-2 flex my-auto max-md:mx-auto">
             <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2 relative">
               <AvatarImage
                 className="object-cover scale-105 absolute top-0 left-0 w-full h-full transition-opacity opacity-0 hover:opacity-100 z-50 border border-accent mix-blend-color saturate-[0.98] -mt-[0.25em]"
@@ -68,7 +68,7 @@ export const Hero = () => {
             <h2 className="font-caption font-semibold text-5xl text-foreground">
               Hello, <span className="text-accent-foreground">Islam</span> here!
             </h2>
-            <h3 className="font-caption font-medium text-2xl leading-tight">
+            <h3 className="font-caption font-medium text-2xl">
               I&apos;m a{" "}
               <span className="text-primary">
                 <Typewriter
@@ -87,7 +87,7 @@ export const Hero = () => {
                 />
               </span>
             </h3>
-            <p className="font-sans basis-0 text-muted-foreground">
+            <p className="font-sans basis-0 text-muted-foreground text-pretty">
               <Code>
                 <Braces size={14} className="inline" /> Computer Science
               </Code>{" "}
@@ -115,7 +115,7 @@ export const Hero = () => {
                   transition={{ ease: "easeInOut", duration: 0.15 }}
                   className="ease-in-out"
                 >
-                  <p className="font-sans basis-0 text-muted-foreground pt-2">
+                  <p className="font-sans basis-0 text-muted-foreground pt-1 text-pretty">
                     Culpa mollit aliquip id cupidatat ea laboris aliquip
                     excepteur incididunt dolor laboris. Occaecat id anim
                     consequat anim esse incididunt incididunt cillum dolore.
@@ -128,7 +128,7 @@ export const Hero = () => {
             <div>
               <Button
                 variant="outline"
-                className="my-2 p-4 font-sans mb-0"
+                className="my-2.5 p-4 font-sans mb-0"
                 onClick={handleReadMoreClick}
               >
                 {showMore ? "Show Less..." : "Read More..."}

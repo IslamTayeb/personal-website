@@ -72,7 +72,7 @@ export const Skills = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 50 },
@@ -91,20 +91,20 @@ export const Skills = () => {
         whileInView="visible"
         className="w-full"
         viewport={{ once: true }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 50 },
         }}
       >
-        <Table className="">
+        <Table className="-mt-9">
           <TableHeader>
             <TableRow>
               <TableHead className="text-left w-2/6 font-extrabold">
-                Category
+                
               </TableHead>
               <TableHead className="text-left w-4/6 font-extrabold">
-                Technologies
+                
               </TableHead>
             </TableRow>
           </TableHeader>

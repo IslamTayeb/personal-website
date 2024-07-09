@@ -13,7 +13,7 @@ const Code = ({ className, ...props }: ComponentPropsWithoutRef<"span">) => {
   return (
     <span
       className={cn(
-        "bg-accent/30 hover:bg-accent/50 transition-colors border border-accent px-1 py-0.5 rounded-sm text-primary font-mono",
+        "bg-accent/30 hover:bg-accent/50 transition-colors border border-accent px-1 py-0.5 rounded-sm text-primary font-mono text-nowrap",
         className
       )}
       {...props}
@@ -36,6 +36,7 @@ export const Projects = () => {
         "Firebase",
         "Typescript",
         "PokeApi",
+        "Material UI",
       ],
       projectTechLogo: [
         "mdi:react",
@@ -44,6 +45,7 @@ export const Projects = () => {
         "mdi:firebase",
         "mdi:typescript-icon",
         "mdi:pokeapi",
+        "material-symbols:monitor-outline"
       ],
       projectExternalLinks: {
         github: "",
@@ -119,7 +121,7 @@ export const Projects = () => {
         whileInView="visible"
         className="gap-4"
         viewport={{ once: true }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 50 },
@@ -151,7 +153,7 @@ export const Projects = () => {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 variants={{
                   visible: { opacity: 1, y: 0 },
                   hidden: { opacity: 0, y: 50 },
@@ -164,7 +166,7 @@ export const Projects = () => {
                   <div className="project-info-description border max-md:border-0">
                     <p>{projectDescription}</p>
                   </div>
-                  <ul className="project-info-tech-list px-3">
+                  <ul className="project-info-tech-list">
                     {projectTech.map((tech, index) => (
                       <li key={tech}>
                         <Code>

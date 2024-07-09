@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -20,22 +19,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { sendEmail } from "./sendEmail";
-import { useFormStatus } from "react-dom";
 import { ArrowUpRight, Mail } from "lucide-react";
-import { Emails } from "resend/build/src/emails/emails";
+import { useToast } from "@/components/ui/use-toast";
 
 const formSchema = z.object({
-  name: z.string().min(2).max(50),
-  email: z.string().min(2).max(50),
-  subject: z.string().min(2).max(250),
-  text: z.string().min(2).max(2500),
+  name: z.string().min(2, { message: "Name is required" }).max(50, { message: "Your name must be 50 characters or fewer" }),
+  email: z.string().email({ message: "Email must be valid" }),
+  subject: z.string().min(2, { message: "Subject is required" }).max(250, { message: "Subject must be 250 characters or fewer" }),
+  text: z.string().min(2, { message: "Message is required" }).max(2500, { message: "Message must be 2500 characters or fewer" }),
 });
 
 export const Contact = () => {
-  const { pending } = useFormStatus();
+  const { toast } = useToast();
   const [isSending, setIsSending] = useState(false);
 
-  // 1. Define your form.
+  // Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,9 +44,7 @@ export const Contact = () => {
     },
   });
 
-  const { isSubmitting } = form.formState;
-
-  // 2. Define a submit handler.
+  // Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSending(true);
     try {
@@ -57,10 +53,24 @@ export const Contact = () => {
       formData.append("email", values.email);
       formData.append("subject", values.subject);
       formData.append("text", values.text);
-      await sendEmail(formData);
-      // handle success (e.g., show a success message)
+      
+      const { data, error } = await sendEmail(formData);
+
+      if (error) {
+        toast({
+          description: `An unexpected error occurred: ${error}`,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          description: "Successfully sent! I'll get back to you soon.",
+        });
+      }
     } catch (error) {
-      // handle error (e.g., show an error message)
+      toast({
+        description: `An unexpected error occurred: ${error}`,
+        variant: "destructive",
+      });
     } finally {
       setIsSending(false);
     }
@@ -72,7 +82,7 @@ export const Contact = () => {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 50 },
@@ -91,7 +101,7 @@ export const Contact = () => {
         whileInView="visible"
         className="w-full"
         viewport={{ once: true }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         variants={{
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 50 },
@@ -102,9 +112,6 @@ export const Contact = () => {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                action={async (formData) => {
-                  await sendEmail(formData);
-                }}
                 className="space-y-4"
               >
                 <div className="flex flex-row gap-4">

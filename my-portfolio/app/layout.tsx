@@ -5,6 +5,8 @@ import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { cn } from "@/lib/utils";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Moon } from "lucide-react";
+import { Toaster } from "@/components/ui/toaster"
 
 const anekTelugu = Anek_Telugu({
   subsets: ["latin"],
@@ -12,10 +14,15 @@ const anekTelugu = Anek_Telugu({
 });
 
 export const metadata: Metadata = {
-  title: "Islam Tayeb - Portfolio",
-};
+  title: "Islam Tayeb",
+  description: "Islam Tayeb's Portfolio",
+  icons: {
+    icon: ['/favicon.ico?v=4'],
+    apple:[ '/favicon.ico?v=4'],
+  },
+  }
 
-export default function RootLayout({
+  export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -25,6 +32,7 @@ export default function RootLayout({
       <body className={cn(GeistMono.variable, GeistSans.variable, anekTelugu.variable, "font-mono h-full bg-background text-foreground")}>
         {children}
         <SpeedInsights />
+        <Toaster />
       </body>
     </html>
   );

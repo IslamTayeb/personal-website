@@ -10,6 +10,8 @@ import { Projects } from "./_components/Projects";
 import { Publications } from "./_components/Publications";
 import { Skills } from "./_components/Skills";
 import { Contact } from "./_components/Contact";
+import { Publications_cp } from "./_components/Publications copy";
+import { Publications_cp2 } from "./_components/Publications copy 2";
 
 export default function Home() {
   return (
@@ -24,8 +26,8 @@ export default function Home() {
 
       {/* <Summary />
 
-      <Spacing height={40} />
- */}
+      <Spacing height={40} /> */}
+
       <About />
 
       <Spacing height={40} />
@@ -42,9 +44,17 @@ export default function Home() {
 
       <Spacing height={40} />
 
-      <Publications />
+      {/* <Publications />
+
+      <Spacing height={40} /> */}
+
+      <Publications_cp />
 
       <Spacing height={40} />
+
+      {/* <Publications_cp2 />
+
+      <Spacing height={40} /> */}
 
       <Contact />
 
