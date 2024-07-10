@@ -6,6 +6,9 @@ import { LinkedInIcon } from "./Icons/LinkedInIcon";
 import { GithubIcon } from "./Icons/GithubIcon";
 import { ResearchGateIcon } from "./Icons/ResearchGateIcon";
 import { ArrowBigDown, Layers2, Scroll, ScrollText } from "lucide-react";
+import { Code, DefaultIcon } from "./sharedComponents";
+import { Icon } from "@iconify/react/dist/iconify.js";
+
 
 
 export const Header = () => {
@@ -19,7 +22,7 @@ export const Header = () => {
             href="https://www.researchgate.net/profile/Islam-Tayeb"
             className={cn(buttonVariants({ variant: "outline" }), "size-6 p-0")}
           >
-            <ResearchGateIcon size={12} className="text-foreground" />
+            <Icon icon={"academicons:researchgate-square"} className="" />
           </Link>
 
           <Link

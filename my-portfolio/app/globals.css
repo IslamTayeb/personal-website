@@ -50,6 +50,11 @@
   /* ===================================================== */
 
   /* Experiences */
+
+  html {
+    scroll-behavior: smooth;
+  }
+  
   .container {
     display: grid;
     gap: 1rem;
@@ -62,7 +67,7 @@
     height: max-content;
   }
 
-  .underline {
+  .underlineSpecial {
     background-color: hsl(var(--accent-foreground));
     position: absolute;
     left: -0.5px;
@@ -135,7 +140,7 @@
       display: none;
     }
 
-    .underline {
+    .underlineSpecial {
       display: none;
     }
   }
@@ -164,7 +169,7 @@
       display: none;
     }
 
-    .underline {
+    .underlineSpecial {
       display: none;
     }
     .title h2::after {

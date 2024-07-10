@@ -14,8 +14,8 @@ export const Experience = () => {
 
   useEffect(() => {
     const transformSelected = () => {
-      const underline = document.querySelector<HTMLElement>(".underline");
-      underline!.style.top = `${selected * 2.5}rem`;
+      const underlineSpecial = document.querySelector<HTMLElement>(".underlineSpecial");
+      underlineSpecial!.style.top = `${selected * 2.5}rem`;
     };
     transformSelected();
   }, [selected]);
@@ -173,7 +173,7 @@ export const Experience = () => {
       >
         <div className="container px-1">
           <ul className="exp-slider">
-            <div className="underline"></div>
+            <div className="underlineSpecial"></div>
             {experiences.map((experience, index) => {
               return (
                 <li

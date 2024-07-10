@@ -21,7 +21,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { sendEmail } from "./sendEmail";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
-import { Icon } from "@iconify/react";
+import { Code, DefaultIcon } from "./sharedComponents";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name is required" }).max(50, { message: "Your name must be 50 characters or fewer" }),
@@ -89,7 +89,7 @@ export const Contact = () => {
           hidden: { opacity: 0, y: 25 },
         }}
       >
-        <Badge variant={"outline"} className="mb-4">
+        <Badge variant={"outline"} className="mb-4" id="contact">
           Contact
         </Badge>
         <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
