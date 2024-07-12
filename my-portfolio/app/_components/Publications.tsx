@@ -187,7 +187,7 @@ export const Publications = () => {
           hidden: { opacity: 0, y: 50 },
         }}
       >
-        <Badge variant={"outline"} className="mb-4">
+        <Badge variant={"outline"} className="mb-4" id="publications">
           Publications
         </Badge>
         <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">

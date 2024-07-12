@@ -13,7 +13,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 export const Header = () => {
   return (
-    <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80">
+    <header className="sticky top-0 py-3 z-10 bg-card bg-clip-padding bg-opacity-80">
       <Section className="flex items-baseline">
         <h1 className="text-lg font-semibold text-primary"><Link href="islamtayeb.net">islamtayeb.net</Link></h1>
         <div className="flex-1" />
@@ -36,14 +36,14 @@ export const Header = () => {
             href="https://github.com/IslamTayeb"
             className={cn(buttonVariants({ variant: "outline" }), "size-6 p-0")}
           >
-            <GithubIcon size={12} className="text-foreground" />
+            <DefaultIcon fontSize={16} className="text-foreground -mt-0" icon={"jam:github"} />
           </Link>
 
           <Link
             href="resume"
-            className={cn(buttonVariants({ variant: "outline" }), "size-6 p-0")}
+            className={cn(buttonVariants({ variant: "outline" }), "px-1.5 h-6")}
           >
-            <ScrollText size={12} className="text-foreground" />
+            <DefaultIcon fontSize={13} className="text-foreground mr-1" icon={"solar:file-bold"} /><p className="text-foreground m-0 leading-none text-xs">Resume</p>
           </Link>
         </ul>
       </Section>

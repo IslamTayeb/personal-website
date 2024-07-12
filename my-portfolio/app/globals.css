@@ -58,7 +58,7 @@
   .container {
     display: grid;
     gap: 1rem;
-    grid-template-columns: 17.5% auto;
+    grid-template-columns: 20.5% auto;
   }
 
   .exp-slider {
@@ -88,7 +88,7 @@
 
   .exp-slider-item {
     height: 2.5rem;
-    padding: 0 1.5rem;
+    padding: 0 1.25rem;
     display: flex;
     vertical-align: middle;
     cursor: pointer;

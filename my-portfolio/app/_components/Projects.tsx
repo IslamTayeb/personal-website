@@ -15,6 +15,8 @@ export const Projects = () => {
     {
       image: "/image1.jpg",
       projectName: "Wearable Carbon Nanotube",
+      new: false,
+      wip: false,
       projectLink: "https://netlify.com",
       projectDescription:
         "Consequat fugiat amet commodo exercitation tempor eiusmod sunt. Reprehenderit occaecat eu duis minim laboris aliqua fugiat. Ea magna voluptate voluptate cillum ad voluptate nisi laboris ipsum exercitation consequat labore amet.",
@@ -34,7 +36,7 @@ export const Projects = () => {
         "mdi:firebase",
         "mdi:typescript-icon",
         "mdi:pokeapi",
-        "material-symbols:monitor-outline"
+        "material-symbols:monitor-outline",
       ],
       projectExternalLinks: {
         github: "",
@@ -116,7 +118,7 @@ export const Projects = () => {
           hidden: { opacity: 0, y: 25 },
         }}
       >
-        <Badge variant={"outline"} className="mb-4">
+        <Badge variant={"outline"} className="mb-4" id="projects">
           Projects
         </Badge>
         <h2 className="text-3xl font-semibold font-sans text-primary mb-3.5">
@@ -148,8 +150,8 @@ export const Projects = () => {
                   hidden: { opacity: 0, y: 25 },
                 }}
               >
-                <div className="project-info">
-                  <h3 className="project-info-title shadow-black antialiased max-md:w-full">
+                <div className="project-info gap-3">
+                  <h3 className="project-info-title shadow-black antialiased max-md:w-full leading-tight">
                     {projectName}
                   </h3>
                   <div className="project-info-description border max-md:border-0">
@@ -159,7 +161,7 @@ export const Projects = () => {
                     {projectTech.map((tech, index) => (
                       <li key={tech}>
                         <Code>
-                          <Icon
+                          <DefaultIcon
                             icon={`${projectTechLogo[index]}`} // Assuming projectTechLogo[index] gives the correct logo name
                             className="inline text-current" // Merged className properties
                             height="14px"
@@ -170,22 +172,26 @@ export const Projects = () => {
                     ))}
                   </ul>
                   <ul className="project-info-links">
-                    <li className="project-info-links-item">
-                      <Link
-                        href={projectExternalLinks.github}
-                        className="project-info-links-item-link"
-                      >
-                        <LucideGithub size={16} />
-                      </Link>
-                    </li>
-                    <li className="project-info-links-item">
-                      <Link
-                        href={projectExternalLinks.externalLink}
-                        className="project-info-links-item-link"
-                      >
-                        <Link2 size={16} />
-                      </Link>
-                    </li>
+                    {projectExternalLinks.github && (
+                      <li className="project-info-links-item">
+                        <Link
+                          href={projectExternalLinks.github}
+                          className="project-info-links-item-link"
+                        >
+                          <LucideGithub size={16} />
+                        </Link>
+                      </li>
+                    )}
+                    {projectExternalLinks.externalLink && (
+                      <li className="project-info-links-item">
+                        <Link
+                          href={projectExternalLinks.externalLink}
+                          className="project-info-links-item-link"
+                        >
+                          <Link2 size={16} />
+                        </Link>
+                      </li>
+                    )}
                   </ul>
                 </div>
 

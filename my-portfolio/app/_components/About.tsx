@@ -10,6 +10,10 @@ import { initialize } from "next/dist/server/lib/render-server";
 import { motion } from "framer-motion";
 import { Icon } from "@iconify/react";
 import { Code, DefaultIcon } from "./sharedComponents";
+import Link from "next/link";
+import { DukeHealth } from "./Icons/Duke Health";
+import { HAIP } from "./Icons/HAIP";
+import { AMA } from "./Icons/AMA";
 
 export const About = () => {
   return (
@@ -36,7 +40,7 @@ export const About = () => {
         <motion.div
           initial="hidden"
           whileInView="visible"
-          className="flex-1"
+          className="flex-1 "
           viewport={{ once: true }}
           transition={{ duration: 0.2, ease: "easeOut" }}
           variants={{
@@ -47,8 +51,8 @@ export const About = () => {
           <div className="flex flex-col gap-2">
             <Polymer size={54} />
             <h3 className="text-2xl font-medium font-sans">Chemistry Research</h3>
-            <p className="text-sm text-muted-foreground font-sans ">
-              I've worked on chemistry research for over 2+ years in academic, industrial, and competitive settings with 4 papers published, ranging from organic synthesis, physical/computational chemistry, and applied chemistry.
+            <p className="text-sm text-muted-foreground font-sans">
+              2+ years of experience in academic and industrial settings with <Link href={"#publications"} className="underline underline-offset-2">4 papers published</Link> in organic, computational, and applied chemistry. I'm interested in reticular and polymer chemistry, materials discovery, and drug discovery.
             </p>
           </div>
         </motion.div>
@@ -70,7 +74,7 @@ export const About = () => {
               Medical Technology
             </h3>
             <p className="text-sm text-muted-foreground font-sans">
-              I've worked on medical technology solutions for the Duke Health, Health AI Partnership, and the American Medical Associations and competed in national competitions where my team and I designed various medical devices. My skillset ranges from AI in healthcare to medical device design.
+            I've developed medical technology solutions for <Code className="leading-relaxed"><DukeHealth size={16} className="-mt-0.5"/>{" "}Duke Health</Code>{" "}, <Code className="leading-relaxed"><HAIP className="-mt-0.5 inline" height={16} width={14} />{" "}Health AI Partnership</Code>{" "}, and <Code className="leading-relaxed"><AMA height={16} width={14} className="inline -mt-0.5" />{" "}AMA</Code>{" "}, and competed nationally in medical device design.
             </p>
           </div>
         </motion.div>
@@ -90,9 +94,7 @@ export const About = () => {
             <SWEIcon size={54} />
             <h3 className="text-2xl font-medium font-sans">Software Dev</h3>
             <p className="text-sm text-muted-foreground font-sans">
-              Plan it, create it, launch it. <Code>Huggingface API</Code>{" "}
-              Collaborate seamlessly with all the organization and hit your
-              marketing goals every month with our marketing plan.
+              I've worked on projects to increase the accessibility of tools and technologies in healthcare, research, and academic spaces. You can check out my <Link href={"https://github.com/IslamTayeb"} className="underline underline-offset-2">GitHub</Link> for my latest software development projects and contributions.
             </p>
           </div>
         </motion.div>

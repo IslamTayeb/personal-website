@@ -10,6 +10,7 @@ import { Projects } from "./_components/Projects";
 import { Skills } from "./_components/Skills";
 import { Contact } from "./_components/Contact";
 import { Publications } from "./_components/Publications";
+import { HAIP } from "./_components/Icons/HAIP";
 
 export default function Home() {
   return (
@@ -20,7 +21,7 @@ export default function Home() {
 
       <Hero />
 
-      <Spacing height={36} />
+      <Spacing height={40} />
 
       {/* <Summary />
 

@@ -38,7 +38,7 @@ export const Hero = () => {
         </Badge>
         <div className="flex max-md:flex-col items-start gap-4">
           <div className="flex-[2] p-2 flex my-auto max-md:mx-auto">
-          {/* <Icon icon={"material-symbols:asterisk-rounded"} fontSize={140} className="absolute z-50 text-accent-foreground -scale-100 translate-x-[150px] -translate-y-6 animate-spin" /> */}
+            {/* <Icon icon={"material-symbols:asterisk-rounded"} fontSize={140} className="absolute z-50 text-accent-foreground -scale-100 translate-x-[150px] -translate-y-6 animate-spin" /> */}
             <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2 relative border border-accent">
               <AvatarImage
                 className="object-cover scale-105 absolute top-0 left-0 w-full h-full transition-opacity opacity-0 hover:opacity-100 z-50 mix-blend-color saturate-[0.98] -mt-[0.25em] contrast-[1.1]"
@@ -100,7 +100,11 @@ export const Hero = () => {
                 <DefaultIcon icon={"flag:us-1x1"} className="rounded-[1.5px]" />{" "}
                 Durham, NC
               </Code>{" "}
-              with an interest in applied research and AI/ML. Feel free to <Link href={"#contact"} className="underline underline-offset-2">reach out</Link>!
+              with an interest in applied research and AI/ML. Feel free to{" "}
+              <Link href={"#contact"} className="underline underline-offset-2">
+                reach out
+              </Link>
+              !
             </p>
             <AnimatePresence>
               {showMore && (
@@ -128,9 +132,9 @@ export const Hero = () => {
                       />{" "}
                       Saudi Arabia
                     </Code>{" "}
-                    . I spent four years doing graphic design professionally—I
-                    eventually shifted my focus, but I still design as a hobby.
-                    I'm a huge fan of{" "}
+                    . I used to be a semi-professional graphic designer in
+                    esports for 4 years; however, I still design as a hobby. I'm
+                    a huge fan of{" "}
                     <Code>
                       <DefaultIcon icon={"clarity:cd-dvd-solid"} className="" />{" "}
                       Alternative Hip Hop

@@ -8,13 +8,16 @@ import { Section } from "./Misc/Section";
 import { ArrowUpRight, Link as Link2 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { Code, DefaultIcon } from "./sharedComponents";
+import { Duke } from "./Icons/Duke";
+import { DIHI } from "./Icons/DIHI";
 
 export const Experience = () => {
   const [selected, setSelected] = useState(0);
 
   useEffect(() => {
     const transformSelected = () => {
-      const underlineSpecial = document.querySelector<HTMLElement>(".underlineSpecial");
+      const underlineSpecial =
+        document.querySelector<HTMLElement>(".underlineSpecial");
       underlineSpecial!.style.top = `${selected * 2.5}rem`;
     };
     transformSelected();
@@ -22,32 +25,11 @@ export const Experience = () => {
 
   const experiences = [
     {
-      name: "Duke Institute for Health Innovation",
-      shortname: "DIHI",
-      present: true,
-      role: "Full Stack Developer",
-      url: "https://www.rapidops.com",
-      start: "January 2021",
-      end: "Present",
-      shortDescription: [
-        <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearc jfads fajfd dsjf jdah.
-        </>,
-        <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
-        </>,
-        <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
-        </>,
-      ],
-    },
-    {
       name: "Feng Labs",
       shortname: "Duke",
-      present: true,
+      logo: <Duke size={16} className="mr-2 -mt-0 mt-0.5" />,
+      present: false,
+      incoming: true,
       role: "Content Creator",
       url: "https://www.youtube.com/kishansheth21",
       start: "April 2021",
@@ -68,13 +50,15 @@ export const Experience = () => {
       ],
     },
     {
-      name: "Project: Sapien",
-      shortname: "Sapien",
-      present: false,
-      role: "President",
-      url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
-      start: "November 2019",
-      end: "November 2020",
+      name: "Duke Institute for Health Innovation",
+      shortname: "DIHI",
+      logo: <DIHI size={16} className="mr-2" />,
+      present: true,
+      incoming: false,
+      role: "Research Analyst",
+      url: "https://www.rapidops.com",
+      start: "January 2021",
+      end: "Present",
       shortDescription: [
         <>
           I had <Code>experience</Code> working on a large codebase utilizing
@@ -91,50 +75,89 @@ export const Experience = () => {
       ],
     },
     {
-      name: "Saudi Aramco",
-      shortname: "Aramco",
+      name: "Project: Sapien",
+      shortname: "Sapien",
+      logo: (
+        <img
+          src="https://media.licdn.com/dms/image/D4E0BAQGoQWtvjZAWbg/company-logo_200_200/0/1701588957383?e=1728518400&v=beta&t=RJkeTdJo5AqWgIq24YdWLlHGEOzidniz-qc-zRdlBwM"
+          className="h-4 w-4 mr-2 rounded-sm"
+        />
+      ),
       present: false,
-      role: "Web Developer",
+      incoming: false,
+      role: "Software Engineer",
+      url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
+      start: "Dec 2023",
+      end: "Jan 2024",
+      shortDescription: [
+        <>
+          Built NLP algorithms using <Code>Transformers API</Code> to analyze
+          unstructured survey data through semantic analysis, extracting novel
+          population health insights
+        </>,
+        <>
+          Led data collection efforts on campus, communicated with university
+          faculty and facilitated surveys resulting in a diverse and
+          high-quality dataset comprising of population health data
+        </>,
+      ],
+    },
+    {
+      name: "Saudi Aramco & King Fahd University of Petroleum & Minerals",
+      shortname: "Aramco",
+      logo: (
+        <div className="relative inline-block">
+          <img src="/aramco.png" className="h-4 w-4 mr-2 rounded-sm" />
+          <div
+            className="absolute"
+            style={{ backgroundColor: "rgba(255, 0, 0, 0.5)" }}
+          ></div>
+        </div>
+      ),
+      present: false,
+      incoming: false,
+      role: "Research Assistant",
       url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
       start: "November 2019",
       end: "November 2020",
       shortDescription: [
         <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearc jfads fajfd dsjf jdah.
+          Predicted the structure and 6 properties of 3 novel CO2-capturing
+          materials with 97% accuracy by implementing a grand canonical{" "}
+          <Code>Monte Carlo</Code> simulation probabilistic optimization model
+          using MATLAB
         </>,
         <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
+          Composed and presented a research project proposal using
+          computationally predicted materials to a board of Aramco managers
+          under the supervision of Dr. Mahmoud Abdelnaby, acquired approval and
+          $15,000+ in funding
         </>,
         <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
+          Analyzed materials by utilizing <Code>R</Code> to interpret data and
+          highlight key findings to be featured in publications
         </>,
       ],
     },
     {
       name: "King Abdulaziz University",
       shortname: "KAU",
+      logo: <Duke size={16} className="mr-2" />,
       present: false,
-      role: "Founder",
+      incoming: false,
+      role: "Research Assistant",
       url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
-      start: "November 2018",
-      end: "November 2021",
+      start: "Aug 2021",
+      end: "Jun 2022",
       shortDescription: [
         <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearc jfads fajfd dsjf jdah. I had{" "}
-          <Code>experience</Code> working on a large codebase utilizing Kibana
-          and Elasticsearc jfads fajfd dsjf jdah
+          Utilized <Code>Python</Code> <Code>ANOVA</Code> algorithms and{" "}
+          <Code>Nextflow framework</Code> to measure genetic variation of 5
+          plant species{" "}
         </>,
         <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
-        </>,
-        <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
+          Analyzed needle biopsies, CT scans, and genetic/immunostaining results
+          to detect early-stage cancer in patients
         </>,
       ],
     },
@@ -152,7 +175,7 @@ export const Experience = () => {
           hidden: { opacity: 0, y: 25 },
         }}
       >
-        <Badge variant={"outline"} className="mb-4">
+        <Badge variant={"outline"} className="mb-4" id="experience">
           Experience
         </Badge>
 
@@ -184,13 +207,23 @@ export const Experience = () => {
                   onClick={() => setSelected(index)}
                   key={experience.shortname}
                 >
-                  <span className="font-semibold mr-2">{experience.shortname}</span>
-                  {index < 2 && experience.present ? (
+                  <span className="font-semibold mr-2">
+                    {experience.logo} {experience.shortname}
+                  </span>
+                  {experience.present ? (
                     <Badge
                       variant={"default"}
                       className=" p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
                     >
                       Present
+                    </Badge>
+                  ) : null}
+                  {experience.incoming ? (
+                    <Badge
+                      variant={"secondary"}
+                      className=" p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
+                    >
+                      Incoming
                     </Badge>
                   ) : null}
                 </li>
