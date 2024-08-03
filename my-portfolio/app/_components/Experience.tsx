@@ -27,7 +27,7 @@ export const Experience = () => {
     {
       name: "Feng Labs",
       shortname: "Duke",
-      logo: <Duke size={16} className="mr-2 -mt-0 mt-0.5" />,
+      // logo: <Duke size={16} className="mr-2 mt-0.5" />,
       present: false,
       incoming: true,
       role: "Content Creator",
@@ -39,20 +39,12 @@ export const Experience = () => {
           I had <Code>experience</Code> working on a large codebase utilizing
           Kibana and Elasticsearc jfads fajfd dsjf jdah.
         </>,
-        <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
-        </>,
-        <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
-        </>,
       ],
     },
     {
       name: "Duke Institute for Health Innovation",
       shortname: "DIHI",
-      logo: <DIHI size={16} className="mr-2" />,
+      // logo: <DIHI size={16} className="mr-2" />,
       present: true,
       incoming: false,
       role: "Research Analyst",
@@ -77,12 +69,12 @@ export const Experience = () => {
     {
       name: "Project: Sapien",
       shortname: "Sapien",
-      logo: (
-        <img
-          src="https://media.licdn.com/dms/image/D4E0BAQGoQWtvjZAWbg/company-logo_200_200/0/1701588957383?e=1728518400&v=beta&t=RJkeTdJo5AqWgIq24YdWLlHGEOzidniz-qc-zRdlBwM"
-          className="h-4 w-4 mr-2 rounded-sm"
-        />
-      ),
+      // logo: (
+      //   <img
+      //     src="https://media.licdn.com/dms/image/D4E0BAQGoQWtvjZAWbg/company-logo_200_200/0/1701588957383?e=1728518400&v=beta&t=RJkeTdJo5AqWgIq24YdWLlHGEOzidniz-qc-zRdlBwM"
+      //     className="h-4 w-4 mr-2 rounded-sm"
+      //   />
+      // ),
       present: false,
       incoming: false,
       role: "Software Engineer",
@@ -105,15 +97,15 @@ export const Experience = () => {
     {
       name: "Saudi Aramco & King Fahd University of Petroleum & Minerals",
       shortname: "Aramco",
-      logo: (
-        <div className="relative inline-block">
-          <img src="/aramco.png" className="h-4 w-4 mr-2 rounded-sm" />
-          <div
-            className="absolute"
-            style={{ backgroundColor: "rgba(255, 0, 0, 0.5)" }}
-          ></div>
-        </div>
-      ),
+      // logo: (
+      //   <div className="relative inline-block">
+      //     <img src="/aramco.png" className="h-4 w-4 mr-2 rounded-sm" />
+      //     <div
+      //       className="absolute"
+      //       style={{ backgroundColor: "rgba(255, 0, 0, 0.5)" }}
+      //     ></div>
+      //   </div>
+      // ),
       present: false,
       incoming: false,
       role: "Research Assistant",
@@ -142,7 +134,7 @@ export const Experience = () => {
     {
       name: "King Abdulaziz University",
       shortname: "KAU",
-      logo: <Duke size={16} className="mr-2" />,
+      // logo: <Duke size={16} className="mr-2" />,
       present: false,
       incoming: false,
       role: "Research Assistant",
@@ -194,7 +186,7 @@ export const Experience = () => {
           hidden: { opacity: 0, y: 25 },
         }}
       >
-        <div className="container px-1">
+        <div className="container px-1 h-auto">
           <ul className="exp-slider">
             <div className="underlineSpecial"></div>
             {experiences.map((experience, index) => {
@@ -208,7 +200,7 @@ export const Experience = () => {
                   key={experience.shortname}
                 >
                   <span className="font-semibold mr-2">
-                    {experience.logo} {experience.shortname}
+                    {experience.shortname}
                   </span>
                   {experience.present ? (
                     <Badge
@@ -230,7 +222,6 @@ export const Experience = () => {
               );
             })}
           </ul>
-          <div className="exp-details">
             <div className="text-2xl font-medium font-sans">
               <h3>
                 <span className="text-accent-foreground font-semibold">
@@ -252,7 +243,12 @@ export const Experience = () => {
                   (description, index) => (
                     <li
                       key={index}
-                      className="text-sm text-muted-foreground font-sans pb-2 list-outside list-disc ml-4"
+                      className={`text-sm text-muted-foreground font-sans list-outside list-disc ml-4 ${
+                        index !==
+                        experiences[selected].shortDescription.length - 1
+                          ? "pb-2"
+                          : ""
+                      }`}
                     >
                       {typeof description === "string" ? (
                         `${description}`
@@ -264,7 +260,6 @@ export const Experience = () => {
                 )}
               </ul>
             </div>
-          </div>
         </div>
       </motion.div>
     </Section>

@@ -133,8 +133,8 @@ export const Hero = () => {
                       Saudi Arabia
                     </Code>{" "}
                     . I used to be a semi-professional graphic designer in
-                    esports for 4 years; however, I still design as a hobby. I'm
-                    a huge fan of{" "}
+                    esports for 4 years, but I still design as a hobby. I&apos;m
+                    a big fan of{" "}
                     <Code>
                       <DefaultIcon icon={"clarity:cd-dvd-solid"} className="" />{" "}
                       Alternative Hip Hop

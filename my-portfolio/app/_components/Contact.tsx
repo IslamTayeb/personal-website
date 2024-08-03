@@ -64,7 +64,7 @@ export const Contact = () => {
         });
       } else {
         toast({
-          description: "Successfully sent! I'll get back to you soon.",
+          description: "Successfully sent! I&apos;ll get back to you soon.",
         });
       }
     } catch (error) {

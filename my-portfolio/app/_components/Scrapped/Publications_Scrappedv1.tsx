@@ -1,6 +1,6 @@
 "use client";
 import React, { ComponentPropsWithoutRef } from "react";
-import { Section } from "./Misc/Section";
+import { Section } from "../Misc/Section";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -20,9 +20,9 @@ import {
 import Link from "next/link";
 import { Link as Link2, LucideGithub } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { Code, DefaultIcon } from "./sharedComponents";
+import { Code, DefaultIcon } from "../sharedComponents";
 
-export const Publications_scrappedv1 = () => {
+export const Publications_Scrappedv1 = () => {
   const publicationsData = [
     {
       pubDate: "Dec. 2023",
