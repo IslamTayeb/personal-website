@@ -41,13 +41,13 @@ export const Hero = () => {
             {/* <Icon icon={"material-symbols:asterisk-rounded"} fontSize={140} className="absolute z-50 text-accent-foreground -scale-100 translate-x-[150px] -translate-y-6 animate-spin" /> */}
             <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2 relative border border-accent">
               <AvatarImage
-                className="object-cover scale-105 absolute top-0 left-0 w-full h-full transition-opacity opacity-0 hover:opacity-100 z-50 mix-blend-color saturate-[0.98] -mt-[0.25em] contrast-[1.1]"
-                src="https://i.ibb.co/vYG5FZN/myphoto.webp"
+                className="object-cover absolute z-20 opacity-0 hover:opacity-100 transition-all "
+                src="/myphoto.webp"
                 alt="Original Photo"
               />
               <AvatarImage
-                className="object-cover scale-105 relative contrast-[1.12] -mt-[0.25em] brightness-[0.95]"
-                src="https://i.ibb.co/BPVgwFb/myphotogradient.webp"
+                className="object-cover relative contrast-[1.12]"
+                src="/myphotogradient.webp"
                 alt="Gradient Photo"
               />
               <AvatarFallback>Islam</AvatarFallback>

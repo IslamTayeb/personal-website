@@ -52,7 +52,7 @@ export const Skills = () => {
         { name: "Angular", icon: "cib:angular" },
         { name: "Framer Motion", icon: "teenyicons:framer-solid" },
         { name: "HTML5", icon: "simple-icons:html5" },
-        { name: "CSS", icon: "simple-icons:css3" },
+        { name: "CSS3", icon: "simple-icons:css3" },
         { name: "SCSS", icon: "simple-icons:sass" },
       ],
     },

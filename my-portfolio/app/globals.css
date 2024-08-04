@@ -44,7 +44,7 @@
     --destructive: 2 90% 60%;
     --destructive-foreground: 0 0% 100%;
     --ring: 40 75% 61%; */
---radius: 0.5rem;
+    --radius: 0.5rem;
   }
 
   /* ===================================================== */
@@ -54,7 +54,16 @@
   html {
     scroll-behavior: smooth;
   }
-  
+
+  .flex-transition {
+    transition: height 0.3s ease-in-out;
+    overflow: hidden;
+  }
+  .transition-container {
+    overflow: hidden;
+    transition: height 0.3s ease-in-out;
+  }    
+
   .container {
     display: grid;
     gap: 1rem;
@@ -115,7 +124,7 @@
   .exp-details {
     height: 20vh;
   }
-  
+
   @media screen and (max-width: 767px) {
     ::after {
       width: 100px;
@@ -219,7 +228,7 @@
   .project-image-container {
     position: relative;
     width: 450px;
-    height: 275px;
+    height: 255px;
   }
   .project-image {
     position: relative;
@@ -347,7 +356,7 @@
     }
     .project:nth-of-type(even) .project-info-tech-list {
       justify-content: flex-end;
-    }  
+    }
     .projects-container {
       align-items: center;
     }

@@ -13,29 +13,34 @@ export const Projects = () => {
   const projectsData = [
     {
       image: "/image1.jpg",
-      projectName: "Wearable Carbon Nanotube",
+      projectName: "GPT-2 Reproduction",
       new: false,
       wip: true,
-      projectLink: "https://netlify.com",
-      projectDescription:
-        "Consequat fugiat amet commodo exercitation tempor eiusmod sunt. Reprehenderit occaecat eu duis minim laboris aliqua fugiat. Ea magna voluptate voluptate cillum ad voluptate nisi laboris ipsum exercitation consequat labore amet.",
+      projectDescription: (
+        <>
+          Building a GPT-2 clone using pure Python, NumPy, and math to
+          understand how LLMs function under the hood. This
+          project includes creating an autograd engine, makemore, transformers,
+          and tokenizers. Credit to{" "}
+          <Link href={"https://github.com/karpathy/build-nanogpt"}>
+            Andrej Karpathy
+          </Link>
+          .
+        </>
+      ),
       projectTech: [
-        "React",
-        "Redux Toolkit",
-        "SCSS",
-        "Firebase",
-        "Typescript",
-        "PokeApi",
-        "Material UI",
+        "Python",
+        "PyTorch",
+        "Lambda",
+        "Transformers",
+        "Linear Algebra",
       ],
       projectTechLogo: [
-        "mdi:react",
-        "akar-icons:redux-fill",
-        "mdi:sass",
-        "mdi:firebase",
-        "mdi:typescript-icon",
-        "mdi:pokeapi",
-        "material-symbols:monitor-outline",
+        "akar-icons:python-fill",
+        "simple-icons:pytorch",
+        "mdi:lambda",
+        "material-symbols:view-in-ar-outline-rounded",
+        "mdi:matrix",
       ],
       projectExternalLinks: {
         github: "https://github.com/IslamTayeb/GPT-2-reproduction",
@@ -44,32 +49,41 @@ export const Projects = () => {
     },
     {
       image: "/image1.jpg",
-      projectName: "Wearable Carbon Nanotube",
+      projectName: "Web App for Bioactivity Prediction",
       new: false,
       wip: true,
-      projectLink: "https://netlify.com",
-      projectDescription:
-        "Consequat fugiat amet commodo exercitation tempor eiusmod sunt. Reprehenderit occaecat eu duis minim laboris aliqua fugiat. Ea magna voluptate voluptate cillum ad voluptate nisi laboris ipsum exercitation consequat labore amet.",
+      projectDescription: (
+        <>
+          Developing an ML model to analyze acetylcholinesterase bioactivity
+          using molecular structures and descriptors. This model will power a
+          web app for predicting molecule bioactivity, streamlining biochemical
+          research. Credit to{" "}
+          <Link
+            href={
+              "https://github.com/dataprofessor/bioinformatics_freecodecamp/"
+            }
+          >
+            Data Professor
+          </Link>
+          .
+        </>
+      ),
       projectTech: [
+        "Python",
+        "R",
         "React",
-        "Redux Toolkit",
-        "SCSS",
-        "Firebase",
-        "Typescript",
-        "PokeApi",
-        "Material UI",
+        "Descriptor Calculation",
+        "Drug Discovery",
       ],
       projectTechLogo: [
-        "mdi:react",
-        "akar-icons:redux-fill",
-        "mdi:sass",
-        "mdi:firebase",
-        "mdi:typescript-icon",
-        "mdi:pokeapi",
-        "material-symbols:monitor-outline",
+        "akar-icons:python-fill",
+        "mdi:language-r",
+        "akar-icons:react-fill",
+        "game-icons:gooey-molecule",
+        "mdi:drugs",
       ],
       projectExternalLinks: {
-        github: "",
+        github: "https://github.com/IslamTayeb/bioactivity-prediction",
         externalLink: "",
       },
     },
@@ -78,20 +92,19 @@ export const Projects = () => {
       projectName: "Wearable Carbon Nanotube Health Sensors",
       new: false,
       wip: false,
-      projectLink: "https://netlify.com",
       projectDescription:
         "Enhanced wearable carbon nanotube sensors for athlete health monitoring, improving accuracy by 23% by optimizing biosensors and securing a $5,000 grant. Developed a live performance scoring interface with Angular to increase user engagement.",
       projectTech: [
         "Python",
-        "TypeScript",
         "Angular",
+        "TypeScript",
         "SCSS",
         "Medical Devices",
       ],
       projectTechLogo: [
         "akar-icons:python-fill",
-        "akar-icons:typescript-fill",
         "cib:angular",
+        "akar-icons:typescript-fill",
         "akar-icons:sass-fill",
         "mdi:robot-industrial",
       ],
@@ -129,7 +142,6 @@ export const Projects = () => {
             {
               image,
               projectDescription,
-              projectLink,
               projectExternalLinks,
               projectName,
               projectTech,

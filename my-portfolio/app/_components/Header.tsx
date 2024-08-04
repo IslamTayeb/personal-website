@@ -13,7 +13,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 export const Header = () => {
   return (
-    <header className="sticky top-0 py-3 z-10 bg-card bg-clip-padding bg-opacity-80">
+    <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80">
       <Section className="flex items-baseline">
         <h1 className="text-lg font-semibold text-primary"><Link href="islamtayeb.net">islamtayeb.net</Link></h1>
         <div className="flex-1" />

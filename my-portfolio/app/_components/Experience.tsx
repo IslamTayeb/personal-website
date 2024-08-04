@@ -24,23 +24,23 @@ export const Experience = () => {
   }, [selected]);
 
   const experiences = [
-    {
-      name: "Feng Labs",
-      shortname: "Duke",
-      // logo: <Duke size={16} className="mr-2 mt-0.5" />,
-      present: false,
-      incoming: true,
-      role: "Content Creator",
-      url: "https://www.youtube.com/kishansheth21",
-      start: "April 2021",
-      end: "Present",
-      shortDescription: [
-        <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearc jfads fajfd dsjf jdah.
-        </>,
-      ],
-    },
+    // {
+    //   name: "Feng Labs",
+    //   shortname: "Duke",
+    //   // logo: <Duke size={16} className="mr-2 mt-0.5" />,
+    //   present: false,
+    //   incoming: true,
+    //   role: "Content Creator",
+    //   url: "https://www.youtube.com/kishansheth21",
+    //   start: "April 2021",
+    //   end: "Present",
+    //   shortDescription: [
+    //     <>
+    //       I had <Code>experience</Code> working on a large codebase utilizing
+    //       Kibana and Elasticsearc jfads fajfd dsjf jdah.
+    //     </>,
+    //   ],
+    // },
     {
       name: "Duke Institute for Health Innovation",
       shortname: "DIHI",
