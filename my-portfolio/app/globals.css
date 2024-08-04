@@ -115,7 +115,7 @@
   .exp-details {
     height: 20vh;
   }
-
+  
   @media screen and (max-width: 767px) {
     ::after {
       width: 100px;

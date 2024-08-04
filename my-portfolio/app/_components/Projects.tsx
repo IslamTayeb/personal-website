@@ -3,8 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { LucideGithub, Link as Link2 } from "lucide-react";
-import React, { ComponentPropsWithoutRef } from "react";
-import { cn } from "@/lib/utils";
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "./Misc/Section";
 import { Icon } from "@iconify/react";
@@ -16,7 +15,38 @@ export const Projects = () => {
       image: "/image1.jpg",
       projectName: "Wearable Carbon Nanotube",
       new: false,
-      wip: false,
+      wip: true,
+      projectLink: "https://netlify.com",
+      projectDescription:
+        "Consequat fugiat amet commodo exercitation tempor eiusmod sunt. Reprehenderit occaecat eu duis minim laboris aliqua fugiat. Ea magna voluptate voluptate cillum ad voluptate nisi laboris ipsum exercitation consequat labore amet.",
+      projectTech: [
+        "React",
+        "Redux Toolkit",
+        "SCSS",
+        "Firebase",
+        "Typescript",
+        "PokeApi",
+        "Material UI",
+      ],
+      projectTechLogo: [
+        "mdi:react",
+        "akar-icons:redux-fill",
+        "mdi:sass",
+        "mdi:firebase",
+        "mdi:typescript-icon",
+        "mdi:pokeapi",
+        "material-symbols:monitor-outline",
+      ],
+      projectExternalLinks: {
+        github: "https://github.com/IslamTayeb/GPT-2-reproduction",
+        externalLink: "",
+      },
+    },
+    {
+      image: "/image1.jpg",
+      projectName: "Wearable Carbon Nanotube",
+      new: false,
+      wip: true,
       projectLink: "https://netlify.com",
       projectDescription:
         "Consequat fugiat amet commodo exercitation tempor eiusmod sunt. Reprehenderit occaecat eu duis minim laboris aliqua fugiat. Ea magna voluptate voluptate cillum ad voluptate nisi laboris ipsum exercitation consequat labore amet.",
@@ -45,58 +75,25 @@ export const Projects = () => {
     },
     {
       image: "/image1.jpg",
-      projectName: "Magna exercitation eiusmod",
-      projectLink: "https://netlify.com",
-      projectDescription:
-        "Adipisicing enim qui non in proident et mollit nisi minim minim. Magna exercitation eiusmod ea aliqua veniam esse ex consequat velit duis velit fugiat non sit. Et quis dolor commodo sint ut aute minim labore nostrud minim minim.",
-      projectTech: [
-        "Minim Esse",
-        "Enim",
-        "Deus Ipsum",
-        "Machina Ipsum",
-        "Lorem Duis",
-        "Lorem Ipsum",
-        "Aliqua Ipsum",
-      ],
-      projectTechLogo: [
-        "logos:some-icon",
-        "logos:another-icon",
-        "logos:third-icon",
-        "logos:fourth-icon",
-        "logos:fifth-icon",
-        "logos:sixth-icon",
-        "logos:seventh-icon",
-      ],
-      projectExternalLinks: {
-        github: "",
-        externalLink: "",
-      },
-    },
-    {
-      image: "/image1.jpg",
       projectName: "Wearable Carbon Nanotube Health Sensors",
+      new: false,
+      wip: false,
       projectLink: "https://netlify.com",
       projectDescription:
-        "Fugiat pariatur enim quis aliquip veniam. Labore veniam consectetur et magna occaecat magna reprehenderit. Duis veniam ea proident ad irure nulla fugiat sit nisi eu ipsum sit tempor labore.",
+        "Enhanced wearable carbon nanotube sensors for athlete health monitoring, improving accuracy by 23% by optimizing biosensors and securing a $5,000 grant. Developed a live performance scoring interface with Angular to increase user engagement.",
       projectTech: [
-        "Sunt non",
-        "Labore",
-        "Tempor labris",
-        "Dolor laboris",
-        "Adiptus amet",
-        "Incididunt",
-        "Duis",
-        "Minim Esse",
+        "Python",
+        "TypeScript",
+        "Angular",
+        "SCSS",
+        "Medical Devices",
       ],
       projectTechLogo: [
-        "logos:some-icon",
-        "logos:another-icon",
-        "logos:third-icon",
-        "logos:fourth-icon",
-        "logos:fifth-icon",
-        "logos:sixth-icon",
-        "logos:seventh-icon",
-        "logos:eighth-icon",
+        "akar-icons:python-fill",
+        "akar-icons:typescript-fill",
+        "cib:angular",
+        "akar-icons:sass-fill",
+        "mdi:robot-industrial",
       ],
       projectExternalLinks: {
         github: "",
@@ -122,21 +119,27 @@ export const Projects = () => {
           Projects
         </Badge>
         <h2 className="text-3xl font-semibold font-sans text-primary mb-3.5">
-          Personal projects...
+          I&apos;ve been making...
         </h2>
       </motion.div>
 
       <div className="projects-container">
         {projectsData.map(
-          ({
-            image,
-            projectDescription,
-            projectLink,
-            projectExternalLinks,
-            projectName,
-            projectTech,
-            projectTechLogo,
-          }) => {
+          (
+            {
+              image,
+              projectDescription,
+              projectLink,
+              projectExternalLinks,
+              projectName,
+              projectTech,
+              projectTechLogo,
+              new: isNew,
+              wip: isWip,
+            },
+            index
+          ) => {
+            const isOdd = index % 2 !== 0;
             return (
               <motion.div
                 className="project max-md:w-full"
@@ -151,8 +154,52 @@ export const Projects = () => {
                 }}
               >
                 <div className="project-info gap-3">
-                  <h3 className="project-info-title shadow-black antialiased max-md:w-full leading-tight">
-                    {projectName}
+                  <h3
+                    className={`project-info-title shadow-black antialiased max-md:w-full leading-tight flex flex-row items-center gap-2 ${
+                      isOdd ? "text-right" : "text-left"
+                    }`}
+                  >
+                    {!isOdd && (isNew || isWip) && (
+                      <>
+                        {isNew && (
+                          <Badge
+                            variant="default"
+                            className="rounded-full font-semibold font-sans text-[0.35em] px-1 h-fit"
+                          >
+                            New
+                          </Badge>
+                        )}
+                        {isWip && (
+                          <Badge
+                            variant="default"
+                            className="rounded-full text-center font-semibold font-sans text-[0.35em] px-1 h-fit"
+                          >
+                            Work in Progress
+                          </Badge>
+                        )}
+                      </>
+                    )}
+                    <div className="leading-none h-min">{projectName}</div>
+                    {isOdd && (isNew || isWip) && (
+                      <>
+                        {isNew && (
+                          <Badge
+                            variant="default"
+                            className="rounded-full font-semibold font-sans text-[0.35em] px-1 h-fit"
+                          >
+                            New
+                          </Badge>
+                        )}
+                        {isWip && (
+                          <Badge
+                            variant="default"
+                            className="rounded-full text-center font-semibold font-sans text-[0.35em] px-1 h-fit"
+                          >
+                            Work in Progress
+                          </Badge>
+                        )}
+                      </>
+                    )}
                   </h3>
                   <div className="project-info-description border max-md:border-0">
                     <p>{projectDescription}</p>

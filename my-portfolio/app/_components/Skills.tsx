@@ -26,44 +26,63 @@ export const Skills = () => {
     {
       category: "Programming Languages",
       technologies: [
-        { name: "JavaScript", icon: "akar-icons:javascript-fill" },
         { name: "Python", icon: "akar-icons:python-fill" },
-        { name: "Java", icon: "mdi:java" },
-      ],
-    },
-    {
-      category: "Web Development",
-      technologies: [
-        { name: "React", icon: "mdi:react" },
-        { name: "Redux", icon: "mdi:redux" },
-        { name: "HTML5", icon: "mdi:html-5" },
-        { name: "CSS3", icon: "mdi:css-3" },
+        { name: "TypeScript", icon: "akar-icons:typescript-fill" },
+        { name: "Java", icon: "fa6-brands:java" },
+        { name: "MATLAB", icon: "file-icons:matlab" },
+        { name: "C Language", icon: "devicon-plain:c" },
+        // { name: "R Language", icon: "devicon-plain:r" },
+        { name: "LaTeX", icon: "file-icons:latex" },
       ],
     },
     {
       category: "Machine Learning",
       technologies: [
-        { name: "TensorFlow", icon: "mdi:tensorflow" },
-        { name: "PyTorch", icon: "mdi:pytorch" },
-        { name: "scikit-learn", icon: "mdi:scikit-learn" },
+        { name: "TensorFlow", icon: "simple-icons:tensorflow" },
+        { name: "BERT", icon: "bi:google" },
+        { name: "Gemini", icon: "simple-icons:googlegemini" },
+        { name: "GPT", icon: "simple-icons:openai" },
+        { name: "SciKit-Learn", icon: "simple-icons:scikitlearn" },
+      ],
+    },
+    {
+      category: "Web/App Development",
+      technologies: [
+        { name: "React", icon: "akar-icons:react-fill" },
+        { name: "Angular", icon: "cib:angular" },
+        { name: "Framer Motion", icon: "teenyicons:framer-solid" },
+        { name: "HTML5", icon: "simple-icons:html5" },
+        { name: "CSS", icon: "simple-icons:css3" },
+        { name: "SCSS", icon: "simple-icons:sass" },
       ],
     },
     {
       category: "Deployment & Integration",
       technologies: [
-        { name: "Docker", icon: "mdi:docker-icon" },
-        { name: "Kubernetes", icon: "mdi:kubernetes" },
-        { name: "AWS", icon: "mdi:aws" },
+        { name: "Git", icon: "simple-icons:git" },
+        { name: "Docker", icon: "simple-icons:docker" },
+        { name: "Vercel", icon: "ion:logo-vercel" },
       ],
     },
-    {
-      category: "Research",
-      technologies: [
-        { name: "LaTeX", icon: "mdi:latex" },
-        { name: "MATLAB", icon: "mdi:matlab" },
-        { name: "R", icon: "mdi:r-lang" },
-      ],
-    },
+    // {
+    //   category: "Research",
+    //   technologies: [
+    //     { name: "Organic Synthesis (Porous Polymers)", icon: "eos-icons:molecules-outlined" },
+    //     { name: "CO2 & H2O Capture/Utilization", icon: "mdi:molecule-co2" },
+    //     { name: "Physical Modelling", icon: "mdi:atom" },
+    //     { name: "Genetic Variation", icon: "ph:dna-fill" },
+    //     { name: "LaTeX", icon: "file-icons:latex" },
+    //   ],
+    // },
+    // {
+    //   category: "Design",
+    //   technologies: [
+    //     { name: "Adobe Suite", icon: "simple-icons:adobecreativecloud" },
+    //     { name: "Blender", icon: "file-icons:blender" },
+    //     { name: "Cinema4D", icon: "simple-icons:cinema4d" },
+    //     { name: "Graphical Abstracts & Figure", icon: "ri:image-add-fill" },
+    //   ],
+    // },
   ];
 
   return (
@@ -82,7 +101,7 @@ export const Skills = () => {
           Skills
         </Badge>
         <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
-          My skills include...
+          My technical skills include...
         </h2>
       </motion.div>
 
@@ -101,10 +120,10 @@ export const Skills = () => {
         <Table className="">
           <TableHeader>
             <TableRow>
-              <TableHead className="text-left w-2/6 font-extrabold">
+              <TableHead className="text-left w-1/6 font-extrabold">
                 Category
               </TableHead>
-              <TableHead className="text-left w-4/6 font-extrabold">
+              <TableHead className="text-left w-5/6 font-extrabold">
                 Technologies
               </TableHead>
             </TableRow>
@@ -115,14 +134,14 @@ export const Skills = () => {
                 <TableCell className="font-medium">
                   {skillCategory.category}
                 </TableCell>
-                <TableCell className="flex gap-2">
+                <TableCell className="flex gap-3">
                   {skillCategory.technologies.map((tech) => (
                     <TooltipProvider key={tech.name} delayDuration={50}>
                       <Tooltip>
                         <TooltipTrigger>
                           <div className="p-1">
                             <Icon
-                              className="hover:blur-[6px] absolute transition-all opacity-50"
+                              className="hover:blur-[5.5px] absolute transition-all opacity-45"
                               icon={tech.icon}
                               width="2.25em"
                               height="2.25em"

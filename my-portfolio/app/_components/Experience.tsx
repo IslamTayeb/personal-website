@@ -95,8 +95,8 @@ export const Experience = () => {
       ],
     },
     {
-      name: "Saudi Aramco & King Fahd University of Petroleum & Minerals",
-      shortname: "Aramco",
+      name: "King Fahd University of Petroleum & Minerals",
+      shortname: "KFUPM",
       // logo: (
       //   <div className="relative inline-block">
       //     <img src="/aramco.png" className="h-4 w-4 mr-2 rounded-sm" />
@@ -172,7 +172,7 @@ export const Experience = () => {
         </Badge>
 
         <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
-          Where I&apos;ve worked...
+          I&apos;ve worked at...
         </h2>
       </motion.div>
 
