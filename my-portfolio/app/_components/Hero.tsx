@@ -41,12 +41,12 @@ export const Hero = () => {
             {/* <Icon icon={"material-symbols:asterisk-rounded"} fontSize={140} className="absolute z-50 text-accent-foreground -scale-100 translate-x-[150px] -translate-y-6 animate-spin" /> */}
             <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2 relative border border-accent">
               <AvatarImage
-                className="object-cover absolute z-20 opacity-0 hover:opacity-100 transition-all "
+                className="object-cover absolute z-20 opacity-0 hover:opacity-100 transition-all scale-105"
                 src="/myphoto.webp"
                 alt="Original Photo"
               />
               <AvatarImage
-                className="object-cover relative contrast-[1.12]"
+                className="object-cover relative contrast-[1.12] scale-105"
                 src="/myphotogradient.webp"
                 alt="Gradient Photo"
               />
@@ -152,10 +152,10 @@ export const Hero = () => {
                 </motion.div>
               )}
             </AnimatePresence>
-            <div>
+            <div className="flex">
               <Button
                 variant="outline"
-                className="my-2.5 p-4 font-sans mb-0"
+                className="my-2.5 p-3 font-sans mb-0 h-9"
                 onClick={handleReadMoreClick}
               >
                 {showMore ? "Show Less..." : "Read More..."}

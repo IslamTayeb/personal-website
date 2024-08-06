@@ -18,7 +18,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Link from "next/link";
-import { Link as Link2, LucideGithub } from "lucide-react";
+import { ArrowUpRight, Link as Link2, LucideGithub } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { Code, DefaultIcon } from "./sharedComponents";
@@ -29,34 +29,85 @@ export const Publications = () => {
       pubDate: "Dec. 2023",
       pubAuthors: (
         <>
-          Mahmoud Abdelnaby, <span className="font-semibold">Islam Tayeb</span>,
-          Ahmed Alloush, Hussain Alyosef, Aljazi Alnoaimi, Mostafa Zeama,
-          Mohammed Mohammed, Sagheer Onaizi
+          Mahmoud Abdelnaby,{" "}
+          <span className="font-semibold text-primary">Islam Tayeb</span>, Ahmed
+          Alloush, Hussain Alyosef, Aljazi Alnoaimi, Mostafa Zeama, Mohammed
+          Mohammed, Sagheer Onaizi
         </>
       ),
-      pubImpact: "Impact Factor: 5.5",
+      pubImpact: "Impact Factor: 7.2",
       pubTitle:
         "Post-synthetic Modification of UiO-66 Analogue Metal-Organic Framework as Potential Solid Sorbent for Direct Air Capture",
-      pubJournal: "Journal of CO₂ Utilization",
+      pubJournal: (
+        <>
+          Journal of CO
+          <span
+            style={{
+              verticalAlign: "sub",
+              fontSize: 8,
+              lineHeight: "1",
+            }}
+          >
+            2
+          </span>{" "}
+          Utilization
+        </>
+      ),
+      pubJournalLink: "https://www.journals.elsevier.com/journal-of-co2-utilization",
       pubType: "Research Article",
-      pubDescription:
-        "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
+      pubDescription: (
+        <>
+          This study enhances the UiO-66 metal-organic framework for direct air
+          capture by modifying UiO-66-(OH)
+          <span
+            style={{
+              verticalAlign: "sub",
+              fontSize: 7.25,
+              lineHeight: "1",
+              fontWeight: "bold",
+            }}
+          >
+            2
+          </span>{" "}
+          with APTES, resulting in a 15% increase in CO
+          <span
+            style={{
+              verticalAlign: "sub",
+              fontSize: 7.25,
+              lineHeight: "1",
+              fontWeight: "bold",
+            }}
+          >
+            2
+          </span>{" "}
+          adsorption capacity and improved selectivity. The modified
+          UiO-66-APTES demonstrates high stability and effectiveness in CO
+          <span
+            style={{
+              verticalAlign: "sub",
+              fontSize: 7.25,
+              lineHeight: "1",
+              fontWeight: "bold",
+            }}
+          >
+            2
+          </span>{" "}
+          separation from air, making it a promising DAC adsorbent.
+        </>
+      ),
       pubLink: "https://doi.org/10.1016/j.jcou.2023.102647",
       pubCategory: [
         {
-          name: "Metal-Organic Frameworks",
-          icon: "lucide:atom",
-          color: "text-blue-500",
+          name: "Organic Chemistry",
+          icon: "fluent:molecule-16-filled",
         },
         {
-          name: "Post-synthetic Modification",
-          icon: "ion:beaker",
-          color: "text-green-500",
+          name: "Materials Science",
+          icon: "mdi:pipe-disconnected",
         },
         {
-          name: "Phytochemical Composition",
-          icon: "mdi:leaf",
-          color: "text-green-500",
+          name: "Environmental Technology",
+          icon: "mdi:environment",
         },
       ],
     },
@@ -65,33 +116,41 @@ export const Publications = () => {
       pubAuthors: (
         <>
           Abdullah Alsulaiman, Siraj Alharthi, Ahmed Albariqi, Rasha Mutabaqani,
-          Fawzi Bokhari, <span className="font-semibold">Islam Tayeb</span>,
-          Dalia Alharthi, Muhammad Tariq, Yasser Babaier
+          Fawzi Bokhari,{" "}
+          <span className="font-semibold text-primary">Islam Tayeb</span>, Dalia
+          Alharthi, Muhammad Tariq, Yasser Babaier
         </>
       ),
-      pubImpact: "Impact Factor: 5.5",
+      pubImpact: "Impact Factor: 1.2",
       pubTitle:
         "KRAS G12C-Mutant Non-Small-Cell Lung Adenocarcinoma: First Documented Report in the Arabian Gulf",
       pubJournal: "Cureus Journal",
+      pubJournalLink: "https://www.cureus.com/",
       pubType: "Case Report",
-      pubDescription:
-        "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
+      pubDescription: (
+        <>
+          This study reports the first documented cases of KRAS G12C-mutant
+          non-small-cell lung adenocarcinoma in the Arabian Gulf. Two Saudi
+          males, aged 64 and 76, were diagnosed using reverse transcription-PCR.
+          The 64-year-old, an ex-smoker, had generalized lymphadenopathy and a
+          right lung mass. The 76-year-old, a non-smoker, had stage III-A left
+          lung adenocarcinoma. The study calls for further research on KRAS
+          mutations in the region to improve treatment strategies.
+        </>
+      ),
       pubLink: "http://dx.doi.org/10.7759/cureus.27090",
       pubCategory: [
         {
-          name: "Non-Small-Cell Lung Cancer",
-          icon: "mdi:lungs",
-          color: "text-purple-500",
+          name: "Medical Oncology",
+          icon: "fa6-solid:ribbon",
         },
         {
-          name: "Arabian Gulf",
-          icon: "mdi:map-marker",
-          color: "text-yellow-500",
+          name: "Clinical Genetics",
+          icon: "mdi:dna",
         },
         {
-          name: "Phytochemical Composition",
-          icon: "mdi:leaf",
-          color: "text-green-500",
+          name: "Regional Studies",
+          icon: "fluent:location-16-filled",
         },
       ],
     },
@@ -99,31 +158,40 @@ export const Publications = () => {
       pubDate: "Jun. 2022",
       pubAuthors: (
         <>
-          Siraj Alharthi, <span className="font-semibold">Islam Tayeb</span>,
-          Romar Pascual, Salman Aloufi, Rasha Mutabbaqani, Dalia Alharthi, Ahmed
+          Siraj Alharthi,{" "}
+          <span className="font-semibold text-primary">Islam Tayeb</span>, Romar
+          Pascual, Salman Aloufi, Rasha Mutabbaqani, Dalia Alharthi, Ahmed
           Al-Bariqi, Basem Almutiri, Abdullah Alsulaiman
         </>
       ),
-      pubImpact: "Impact Factor: 5.5",
+      pubImpact: "Impact Factor: 0.8",
       pubTitle:
         "RAS Gene Mutations and Their Prevalence in Non-Small Cell Lung Cancer: A Review",
       pubJournal: "Bioscience Research",
+      pubJournalLink: "",
       pubType: "Literature Review",
-      pubDescription:
-        "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
+      pubDescription: (
+        <>
+          This review discusses RAS gene mutations in NSCLC, focusing on KRAS
+          variants G12C, G12V, and G12D. G12C is common in smokers and lung
+          adenocarcinoma, with sotorasib and adagrasib as effective inhibitors.
+          KRAS mutations impact cell growth and survival, with G12D potentially
+          useful as an immunotherapy biomarker. The review highlights the need
+          for further research due to NSCLC's severity and prevalence in high
+          altitude areas especially.,
+        </>
+      ),
       pubLink:
         "https://www.researchgate.net/publication/361118570_RAS_gene_mutations_and_their_prevalence_in_non-small_Cell_lung_cancer_A_Review",
       pubCategory: [
         {
-          name: "Non-Small-Cell Lung Cancer",
-          icon: "mdi:lungs",
-          color: "text-purple-500",
+          name: "Medical Oncology",
+          icon: "fa6-solid:ribbon",
         },
-        { name: "Genetic Mutations", icon: "mdi:dna", color: "text-pink-500" },
+        { name: "Clinical Genetics", icon: "mdi:dna" },
         {
-          name: "Phytochemical Composition",
-          icon: "mdi:leaf",
-          color: "text-green-500",
+          name: "Targeted Therapy",
+          icon: "bx:target-lock",
         },
       ],
     },
@@ -131,45 +199,36 @@ export const Publications = () => {
       pubDate: "Apr. 2022",
       pubAuthors: (
         <>
-          Siraj Alharthi, <span className="font-semibold">Islam Tayeb</span>,
-          Romar Pascual, Salman Aloufi, Khalid Alotaibi
+          Siraj Alharthi,{" "}
+          <span className="font-semibold text-primary">Islam Tayeb</span>, Romar
+          Pascual, Salman Aloufi, Khalid Alotaibi
         </>
       ),
-      pubImpact: "Impact Factor: 5.5",
+      pubImpact: "Impact Factor: 0.8",
       pubTitle:
         "Medicinal Effects and Phytochemical Composition of Capparis Cartilaginea Decne: A Review",
       pubJournal: "Bioscience Research",
+      pubJournalLink: "",
       pubType: "Literature Review",
-      pubDescription:
-        "Tempor laboris velit fugiat cupidatat cupidatat anim. Occaecat aute ex incididunt amet aliqua. Qui cillum adipisicing eiusmod in est consectetur. Ex aliquip ut ipsum dolore do id eu excepteur nostrud nostrud Lorem. Ea velit incididunt non nulla id elit. Qui incididunt elit amet esse anim laborum exercitation cupidatat occaecat eu dolor in qui est. Ea pariatur cillum incididunt ut.",
+      pubDescription: (
+        <>
+          This review highlights Capparis cartilaginea Decne from the
+          Capparaceae family, valued for its medicinal use historically
+          throughout many areas of Asia and Africa. Phytochemical screenings
+          reveal diverse metabolites supporting its therapeutic claims,
+          validating its traditional medicinal applications.
+        </>
+      ),
       pubLink:
         "https://www.researchgate.net/publication/359931677_Medicinal_effects_and_Phytochemical_composition_of_Capparis_Cartilaginea_Decne_A_Review",
       pubCategory: [
         {
-          name: "Medicinal Effects",
-          icon: "mdi:medical-bag",
-          color: "text-blue-500",
-        },
-        {
-          name: "Phytochemical Composition",
+          name: "Phytochemistry",
           icon: "mdi:leaf",
-          color: "text-green-500",
         },
         {
-          name: "Phytochemical Composition",
-          icon: "mdi:leaf",
-          color: "text-green-500",
-        },
-        {
-          name: "Non-Small-Cell Lung Cancer",
-          icon: "mdi:lungs",
-          color: "text-purple-500",
-        },
-        { name: "Genetic Mutations", icon: "mdi:dna", color: "text-pink-500" },
-        {
-          name: "Phytochemical Composition",
-          icon: "mdi:leaf",
-          color: "text-green-500",
+          name: "Traditional Medicine",
+          icon: "icon-park-solid:traditional-chinese-medicine",
         },
       ],
     },
@@ -201,6 +260,7 @@ export const Publications = () => {
           pubAuthors,
           pubTitle,
           pubJournal,
+          pubJournalLink,
           pubDescription,
           pubLink,
           pubImpact,
@@ -221,105 +281,76 @@ export const Publications = () => {
               }}
             >
               <div className="flex items-center gap-4 mx-2 ">
-                <div className="text-muted-foreground text-sm pb-2.5 flex flex-row w-min text-left">
-                  <div className="flex flex-col my-auto gap-1.5">
-                    {/* {pubCategory.slice(0, 2).map((category) => (
-                      <TooltipProvider key={category.name} delayDuration={50}>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <div className="mr-1">
-                              <Icon
-                                icon={category.icon}
-                                className={`text-current`}
-                                height="14"
-                              />
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent className="shadow-md shadow-card transition-all">
-                            <p>{category.name}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    ))} */}
-                  </div>
-                  <p className="pb-0">{pubDate}</p>
-                </div>
                 <Accordion
                   type="single"
                   collapsible
                   className="w-full font-sans "
                 >
-                  <AccordionItem value="item-1" className="pb-4 text-pretty">
-                    <AccordionTrigger className="text-left gap-4">
-                      <div className="text-primary flex flex-col">
-                        <div className="text-base font-bold text-foreground">
-                          {pubTitle}{" "}
-                        </div>
-                        <div className="text-muted-foreground text-sm font-normal">
-                          <TooltipProvider delayDuration={50}>
-                            <Tooltip>
-                              <TooltipTrigger className="font-semibold">
-                                {pubJournal}
-                              </TooltipTrigger>
-                              <TooltipContent className="shadow-md shadow-card transition-all">
-                                <p>{pubImpact}</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                          {" - " + pubType}{" "}
-                          {/* <div className="inline ml-1">
-                            {pubCategory.map((category) => (
-                              <TooltipProvider
-                                key={category.name}
-                                delayDuration={50}
-                              >
-                                <Tooltip>
-                                  <TooltipTrigger>
-                                    <div className="mr-1 h-min">
-                                      <Icon
-                                        icon={category.icon}
-                                        className="h-min bottom-0 align-text-bottom"
-                                        height="12"
-                                      />
-                                    </div>
-                                  </TooltipTrigger>
-                                  <TooltipContent className="shadow-md shadow-card transition-all">
-                                    <p>{category.name}</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </TooltipProvider>
-                            ))}
-                          </div> */}
-                        </div>
-
-                        <div className="text-muted-foreground  text-xs font-light mt-0.5">
-                          {typeof pubAuthors === "string" ? (
-                            `- ${pubAuthors}`
-                          ) : (
-                            <>{pubAuthors}</>
-                          )}
+                  <AccordionItem
+                    value="item-1"
+                    className="pb-4 text-pretty flex flex-row transition gap-4"
+                  >
+                    <div className="flex items-center text-muted-foreground text-sm w-min text-left font-mono">
+                      <p className="">{pubDate}</p>
+                    </div>
+                    <div>
+                      <div className="flex flex-row">
+                        <div className="text-primary flex flex-col">
+                          <div className="text-base font-bold text-foreground">
+                            <Link
+                              href={pubLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <span className="transition brightness-105">{pubTitle}</span>{" "}
+                              <ArrowUpRight
+                                className="inline-block w-5 mb-0.5"
+                                size={16}
+                              />
+                            </Link>
+                          </div>
+                          <div className="text-muted-foreground text-sm font-normal text-[0.925em]">
+                            <TooltipProvider delayDuration={50}>
+                              <Tooltip>
+                                <TooltipTrigger className="font-medium">
+                                <div className="relative after:absolute after:bottom-0 after:left-0 before:h-[0.5px] after:h-[0.5px] after:w-full after:origin-bottom-left after:scale-x-100 hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-200 after:bg-gray-500 text-foreground"><Link href={pubJournalLink} target="_blank" rel="noopener noreferrer">{pubJournal}</Link></div>
+                                </TooltipTrigger>
+                                <TooltipContent className="shadow-md shadow-card transition-all">
+                                  <p>{pubImpact}</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                            {" - " + pubType}{" "}
+                          </div>
+                          <div className="text-muted-foreground  text-xs font-light py-1.5">
+                            {typeof pubAuthors === "string" ? (
+                              `- ${pubAuthors}`
+                            ) : (
+                              <>{pubAuthors}</>
+                            )}
+                          </div>
                         </div>
                       </div>
-                    </AccordionTrigger>
-
-                    <AccordionContent className="mr-8 pb-2">
-                      {pubDescription}
-                    </AccordionContent>
-                    <div className="inline text-xs">
-                      {pubCategory.map((category) => (
-                        <Code
-                          key={category.name}
-                          className="mr-2 text-nowrap leading-loose"
-                        >
-                          <Icon
-                            icon={category.icon}
-                            className={`text-current inline mr-1 align-middle`}
-                            height="14"
-                          />
-                          <span className="">{category.name}</span>
-                        </Code>
-                      ))}
+                      <AccordionContent className="mr-8 pb-2.5 pt-0.5">
+                        {pubDescription}
+                      </AccordionContent>
+                      <div className="inline text-xs leading-none">
+                        {pubCategory.map((category) => (
+                          <Code
+                            key={category.name}
+                            className="mr-2 text-nowrap leading-loose"
+                          >
+                            <DefaultIcon
+                              icon={category.icon}
+                              className={`text-current inline mr-1 align-middle`}
+                              height="14"
+                            />
+                            <span className=""> {category.name}</span>
+                          </Code>
+                        ))}
+                      </div>
                     </div>
+                    <AccordionTrigger className="pb-0 p-1" />
                   </AccordionItem>
                 </Accordion>
               </div>

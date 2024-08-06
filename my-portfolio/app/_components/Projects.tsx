@@ -49,7 +49,7 @@ export const Projects = () => {
     },
     {
       image: "/image1.jpg",
-      projectName: "Web App for Bioactivity Prediction",
+      projectName: "App for Bioactivity Prediction",
       new: false,
       wip: true,
       projectDescription: (
@@ -79,7 +79,7 @@ export const Projects = () => {
         "akar-icons:python-fill",
         "mdi:language-r",
         "akar-icons:react-fill",
-        "game-icons:gooey-molecule",
+        "tabler:tag-filled",
         "mdi:drugs",
       ],
       projectExternalLinks: {
@@ -171,12 +171,13 @@ export const Projects = () => {
                       isOdd ? "text-right" : "text-left"
                     }`}
                   >
+                    <div className="leading-tight h-min invisible absolute max-md:visible max-md:relative text-left w-auto">{projectName}</div>
                     {!isOdd && (isNew || isWip) && (
                       <>
                         {isNew && (
                           <Badge
                             variant="default"
-                            className="rounded-full font-semibold font-sans text-[0.35em] px-1 h-fit"
+                            className="rounded-full font-semibold font-sans text-[0.4em] px-1 h-fit"
                           >
                             New
                           </Badge>
@@ -184,20 +185,20 @@ export const Projects = () => {
                         {isWip && (
                           <Badge
                             variant="default"
-                            className="rounded-full text-center font-semibold font-sans text-[0.35em] px-1 h-fit"
+                            className="rounded-full text-center font-semibold font-sans text-[0.4em] px-1 h-fit "
                           >
-                            Work in Progress
+                            In Progress
                           </Badge>
                         )}
                       </>
                     )}
-                    <div className="leading-none h-min">{projectName}</div>
+                    <div className="leading-tight h-min visible relative max-md:invisible max-md:absolute">{projectName}</div>
                     {isOdd && (isNew || isWip) && (
                       <>
                         {isNew && (
                           <Badge
                             variant="default"
-                            className="rounded-full font-semibold font-sans text-[0.35em] px-1 h-fit"
+                            className="rounded-full font-semibold font-sans text-[0.4em] px-1 h-fit"
                           >
                             New
                           </Badge>
@@ -205,9 +206,9 @@ export const Projects = () => {
                         {isWip && (
                           <Badge
                             variant="default"
-                            className="rounded-full text-center font-semibold font-sans text-[0.35em] px-1 h-fit"
+                            className="rounded-full text-center font-semibold font-sans text-[0.4em] px-1 h-fit text-nowrap"
                           >
-                            Work in Progress
+                            In Progress
                           </Badge>
                         )}
                       </>
@@ -230,9 +231,9 @@ export const Projects = () => {
                       </li>
                     ))}
                   </ul>
-                  <ul className="project-info-links">
+                  <ul className="project-info-links max-md:w-full max-md:justify-end">
                     {projectExternalLinks.github && (
-                      <li className="project-info-links-item">
+                      <li className="project-info-links-item ">
                         <Link
                           href={projectExternalLinks.github}
                           className="project-info-links-item-link"
@@ -242,7 +243,7 @@ export const Projects = () => {
                       </li>
                     )}
                     {projectExternalLinks.externalLink && (
-                      <li className="project-info-links-item">
+                      <li className="project-info-links-item ">
                         <Link
                           href={projectExternalLinks.externalLink}
                           className="project-info-links-item-link"

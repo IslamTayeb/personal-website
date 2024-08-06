@@ -22,12 +22,23 @@ import { sendEmail } from "./sendEmail";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Code, DefaultIcon } from "./sharedComponents";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: "Name is required" }).max(50, { message: "Your name must be 50 characters or fewer" }),
+  name: z
+    .string()
+    .min(2, { message: "Name is required" })
+    .max(50, { message: "Your name must be 50 characters or fewer" }),
   email: z.string().email({ message: "Email must be valid" }),
-  subject: z.string().min(2, { message: "Subject is required" }).max(250, { message: "Subject must be 250 characters or fewer" }),
-  text: z.string().min(2, { message: "Message is required" }).max(2500, { message: "Message must be 2500 characters or fewer" }),
+  subject: z
+    .string()
+    .min(2, { message: "Subject is required" })
+    .max(250, { message: "Subject must be 250 characters or fewer" }),
+  text: z
+    .string()
+    .min(2, { message: "Message is required" })
+    .max(2500, { message: "Message must be 2500 characters or fewer" }),
 });
 
 export const Contact = () => {
@@ -54,7 +65,7 @@ export const Contact = () => {
       formData.append("email", values.email);
       formData.append("subject", values.subject);
       formData.append("text", values.text);
-      
+
       const { data, error } = await sendEmail(formData);
 
       if (error) {
@@ -202,70 +213,114 @@ export const Contact = () => {
             </Form>
           </div>
 
-          <div className="flex flex-col gap-4 h-min">
-            <Card className="font-sans font-medium flex-[2] w-full p-2">
-              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2 rounded w-full">
-                <span className="bg-accent text-accent-foreground p-3 rounded-sm">
-                  <Mail size={16} />
-                </span>
+          <div className="flex flex-col h-min font-sans font-medium flex-[2] w-full justify-between">
+            <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
+              <span className="bg-accent text-accent-foreground p-3 rounded-sm">
+                <Mail size={16} />
+              </span>
 
-                <div>
-                  <div className="text-lg font-semibold">{"Email"}</div>
-                  <p className="text-sm text-muted-foreground">
-                    {"islam.tayeb@duke.edu"}
-                  </p>
-                </div>
-
-                <div className="ml-auto">
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
-                  />
-                </div>
+              <div>
+                <div className="text-lg font-semibold">{"Email"}</div>
+                <p className="text-sm text-muted-foreground">
+                  {"islam.tayeb@duke.edu"}
+                </p>
               </div>
-            </Card>
-            <Card className="font-sans font-medium flex-[2] w-full h-min p-2">
-              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2 rounded w-full">
-                <span className="bg-accent text-accent-foreground p-3 rounded-sm">
-                  <Mail size={16} />
-                </span>
 
-                <div>
-                  <div className="text-lg font-semibold">{"Email"}</div>
-                  <p className="text-sm text-muted-foreground">
-                    {"islam.tayeb@duke.edu"}
-                  </p>
-                </div>
+              <Link href={"mailto:islam.tayeb@duke.edu"} className="ml-auto">
+                <ArrowUpRight
+                  size={16}
+                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
+                />
+              </Link>
+            </div>
 
-                <div className="ml-auto">
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
-                  />
-                </div>
+            <Separator />
+
+            <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
+              <span className="bg-accent text-accent-foreground p-3 rounded-sm">
+                <Mail size={16} />
+              </span>
+
+              <div>
+                <div className="text-lg font-semibold">{"Email"}</div>
+                <p className="text-sm text-muted-foreground">
+                  {"islam.tayeb@duke.edu"}
+                </p>
               </div>
-            </Card>
-            <Card className="font-sans font-medium flex-[2] w-full h-min p-2">
-              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-0.5 px-2 rounded w-full">
-                <span className="bg-accent text-accent-foreground p-3 rounded-sm">
-                  <Mail size={16} />
-                </span>
 
-                <div>
-                  <div className="text-lg font-semibold">{"Email"}</div>
-                  <p className="text-sm text-muted-foreground">
-                    {"islam.tayeb@duke.edu"}
-                  </p>
-                </div>
-
-                <div className="ml-auto">
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
-                  />
-                </div>
+              <div className="ml-auto">
+                <ArrowUpRight
+                  size={16}
+                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
+                />
               </div>
-            </Card>
+            </div>
+
+            <Separator />
+
+            <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
+              <span className="bg-accent text-accent-foreground p-3 rounded-sm">
+                <Mail size={16} />
+              </span>
+
+              <div>
+                <div className="text-lg font-semibold">{"Email"}</div>
+                <p className="text-sm text-muted-foreground">
+                  {"islam.tayeb@duke.edu"}
+                </p>
+              </div>
+
+              <div className="ml-auto">
+                <ArrowUpRight
+                  size={16}
+                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
+                />
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
+              <span className="bg-accent text-accent-foreground p-3 rounded-sm">
+                <Mail size={16} />
+              </span>
+
+              <div>
+                <div className="text-lg font-semibold">{"Email"}</div>
+                <p className="text-sm text-muted-foreground">
+                  {"islam.tayeb@duke.edu"}
+                </p>
+              </div>
+
+              <div className="ml-auto">
+                <ArrowUpRight
+                  size={16}
+                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
+                />
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
+              <span className="bg-accent text-accent-foreground p-3 rounded-sm">
+                <Mail size={16} />
+              </span>
+
+              <div>
+                <div className="text-lg font-semibold">{"Email"}</div>
+                <p className="text-sm text-muted-foreground">
+                  {"islam.tayeb@duke.edu"}
+                </p>
+              </div>
+
+              <div className="ml-auto">
+                <ArrowUpRight
+                  size={16}
+                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>

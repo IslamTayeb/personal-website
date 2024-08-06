@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-	],
+  ],
   prefix: "",
   theme: {
     container: {
@@ -22,20 +22,20 @@ const config = {
     //     '20-80': '20% 80%',
     //   },
     // },
-      "animation": {
+    "animation": {
       shimmer: "shimmer 2s linear infinite"
-      },
-      "keyframes": {
+    },
+    "keyframes": {
       shimmer: {
-          from: {
+        from: {
           "backgroundPosition": "0 0"
-          },
-          to: {
+        },
+        to: {
           "backgroundPosition": "-200% 0"
-          }
+        }
       }
-      },
-  
+    },
+
     fontFamily: {
       mono: ["var(--font-geist-mono)"],
       sans: ["var(--font-geist-sans)"],
@@ -86,6 +86,10 @@ const config = {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        "shine": {
+          from: { backgroundPosition: '200% 0' },
+          to: { backgroundPosition: '-200% 0' },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -98,6 +102,7 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "shine": "shine 8s ease-in-out infinite",
       },
     },
   },

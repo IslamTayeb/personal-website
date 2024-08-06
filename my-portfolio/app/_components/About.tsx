@@ -74,7 +74,7 @@ export const About = () => {
               Medical Technology
             </h3>
             <p className="text-sm text-muted-foreground font-sans">
-            I&apos;ve developed medical technology solutions for <Code className="leading-relaxed"><DukeHealth size={16} className="-mt-0.5"/>{" "}Duke Health</Code>{" "}, <Code className="leading-relaxed"><HAIP className="-mt-0.5 inline" height={16} width={14} />{" "}Health AI Partnership</Code>{" "}, and <Code className="leading-relaxed"><AMA height={16} width={14} className="inline -mt-0.5" />{" "}AMA</Code>{" "}, and competed nationally in medical device design competitions.
+            I&apos;ve developed medical technology solutions for <Code className="leading-relaxed"><DukeHealth size={16} className="-mt-0.5"/>{" "}Duke Health</Code>{" "}, <Code className="leading-relaxed"><HAIP className="-mt-0.5 inline p-[0.5px]" height={16} width={14} />{" "}Health AI Partnership</Code>{" "}, and <Code className="leading-relaxed"><AMA height={16} width={14} className="inline -mt-0.5" />{" "}AMA</Code>{" "}, and competed nationally in medical device design competitions.
             </p>
           </div>
         </motion.div>

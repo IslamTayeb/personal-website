@@ -57,7 +57,7 @@ export const Skills = () => {
       ],
     },
     {
-      category: "Deployment & Integration",
+      category: "Deployment ‎& Integration",
       technologies: [
         { name: "Git", icon: "simple-icons:git" },
         { name: "Docker", icon: "simple-icons:docker" },
@@ -120,10 +120,10 @@ export const Skills = () => {
         <Table className="">
           <TableHeader>
             <TableRow>
-              <TableHead className="text-left w-1/6 font-extrabold">
+              <TableHead className="text-left w-1/6 font-extrabold text-foreground">
                 Category
               </TableHead>
-              <TableHead className="text-left w-5/6 font-extrabold">
+              <TableHead className="text-left w-5/6 font-extrabold text-foreground">
                 Technologies
               </TableHead>
             </TableRow>
@@ -131,7 +131,7 @@ export const Skills = () => {
           <TableBody className="text-accent-foreground">
             {skillsData.map((skillCategory) => (
               <TableRow key={skillCategory.category}>
-                <TableCell className="font-medium">
+                <TableCell className="font-medium text-muted-foreground">
                   {skillCategory.category}
                 </TableCell>
                 <TableCell className="flex gap-3">
@@ -141,7 +141,7 @@ export const Skills = () => {
                         <TooltipTrigger>
                           <div className="p-1">
                             <Icon
-                              className="hover:blur-[5.5px] absolute transition-all opacity-45"
+                              className="hover:blur-[6px] absolute transition-all opacity-35"
                               icon={tech.icon}
                               width="2.25em"
                               height="2.25em"

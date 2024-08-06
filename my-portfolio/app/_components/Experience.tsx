@@ -1,6 +1,6 @@
 "use client";
 import React, { ComponentPropsWithoutRef, useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,8 @@ import { Icon } from "@iconify/react";
 import { Code, DefaultIcon } from "./sharedComponents";
 import { Duke } from "./Icons/Duke";
 import { DIHI } from "./Icons/DIHI";
+import { HAIP } from "./Icons/HAIP";
+import { DukeHealth } from "./Icons/Duke Health";
 
 export const Experience = () => {
   const [selected, setSelected] = useState(0);
@@ -18,7 +20,9 @@ export const Experience = () => {
     const transformSelected = () => {
       const underlineSpecial =
         document.querySelector<HTMLElement>(".underlineSpecial");
-      underlineSpecial!.style.top = `${selected * 2.5}rem`;
+      if (underlineSpecial) {
+        underlineSpecial.style.top = `${selected * 2.5}rem`;
+      }
     };
     transformSelected();
   }, [selected]);
@@ -49,20 +53,35 @@ export const Experience = () => {
       incoming: false,
       role: "Research Analyst",
       url: "https://www.rapidops.com",
-      start: "January 2021",
+      start: "Jun. 2024",
       end: "Present",
       shortDescription: [
         <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearc jfads fajfd dsjf jdah.
+          Developed an LLM agent using{" "}
+          <Code>
+            <DefaultIcon icon={"mdi:microsoft"} className="" /> AutoGen
+          </Code>{" "}
+          and{" "}
+          <Code>
+            <DefaultIcon icon={"mingcute:meta-fill"} className="" /> Llamma
+          </Code>{" "}
+          to create research databases and literature reviews on user-selected
+          topics, funded by{" "}
+          <Code>
+            <HAIP className="-mt-0.5 inline p-[0.5px]" height={16} width={14} />{" "}
+            HAIP
+          </Code>
         </>,
         <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
+          Building a multimodal deep learning predictive model for
+          hospital-acquired thrombosis to be utilized by{" "}
+          <Code>
+            <DukeHealth size={16} className="-mt-0.5" /> Duke Health
+          </Code>
         </>,
         <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearch.
+          Implemented solutions for backend problems in internal products,
+          improving performance speed by 5-15% for each
         </>,
       ],
     },
@@ -77,20 +96,23 @@ export const Experience = () => {
       // ),
       present: false,
       incoming: false,
-      role: "Software Engineer",
+      role: "Software Engineering Intern",
       url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
-      start: "Dec 2023",
-      end: "Jan 2024",
+      start: "Dec. 2023",
+      end: "Jan. 2024",
       shortDescription: [
         <>
-          Built NLP algorithms using <Code>Transformers API</Code> to analyze
-          unstructured survey data through semantic analysis, extracting novel
-          population health insights
+          Created full-stack semantic analysis tools using{" "}
+          <Code>
+            <DefaultIcon icon={"ri:google-fill"} className="rounded-[1.5px]" />{" "}
+            BERT
+          </Code>
+          -based models to help population health scientists extract structured
+          data from unstructured surveys
         </>,
         <>
-          Led data collection efforts on campus, communicated with university
-          faculty and facilitated surveys resulting in a diverse and
-          high-quality dataset comprising of population health data
+          Led data collection for pilot tests, coordinating with faculty and
+          surveying 4,000+ students to create a diverse dataset
         </>,
       ],
     },
@@ -110,24 +132,53 @@ export const Experience = () => {
       incoming: false,
       role: "Research Assistant",
       url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
-      start: "November 2019",
-      end: "November 2020",
+      start: "Jul. 2022",
+      end: "Sep. 2023",
       shortDescription: [
         <>
-          Predicted the structure and 6 properties of 3 novel CO2-capturing
-          materials with 97% accuracy by implementing a grand canonical{" "}
-          <Code>Monte Carlo</Code> simulation probabilistic optimization model
-          using MATLAB
+          Created a{" "}
+          <Code>
+            <DefaultIcon icon={"mdi:chart-bell-curve"} /> GC Monte Carlo
+            simulation
+          </Code>{" "}
+          statistical model, predicting 6 properties of 3 novel CO
+          <span
+            style={{
+              verticalAlign: "sub",
+              fontSize: "x-small",
+              lineHeight: "1",
+            }}
+          >
+            2
+          </span>
+          -capturing materials
         </>,
         <>
-          Composed and presented a research project proposal using
-          computationally predicted materials to a board of Aramco managers
-          under the supervision of Dr. Mahmoud Abdelnaby, acquired approval and
-          $15,000+ in funding
+          Developed phloroglucinol polymers and MOF analogues for direct CO
+          <span
+            style={{
+              verticalAlign: "sub",
+              fontSize: "x-small",
+              lineHeight: "1",
+            }}
+          >
+            2
+          </span>{" "}
+          and H
+          <span
+            style={{
+              verticalAlign: "sub",
+              fontSize: "x-small",
+              lineHeight: "1",
+            }}
+          >
+            2
+          </span>
+          O capture for 2 <Code>Aramco</Code> projects
         </>,
         <>
-          Analyzed materials by utilizing <Code>R</Code> to interpret data and
-          highlight key findings to be featured in publications
+          Assisted with composing a proposal for computationally-predicted
+          materials to a board of <Code>Aramco</Code> managers
         </>,
       ],
     },
@@ -139,13 +190,20 @@ export const Experience = () => {
       incoming: false,
       role: "Research Assistant",
       url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
-      start: "Aug 2021",
-      end: "Jun 2022",
+      start: "Aug. 2021",
+      end: "Jun. 2022",
       shortDescription: [
         <>
-          Utilized <Code>Python</Code> <Code>ANOVA</Code> algorithms and{" "}
-          <Code>Nextflow framework</Code> to measure genetic variation of 5
-          plant species{" "}
+          Utilized{" "}
+          <Code>
+            <DefaultIcon icon={"streamline:ai-generate-variation-spark-solid"} /> ANOVA
+          </Code>{" "}
+          algorithms and{" "}
+          <Code>
+            <DefaultIcon icon={"file-icons:nextflow"} />{" "}
+            Nextflow
+          </Code>{" "}
+          to measure genetic variation and phylogeny of 5 Capparis species
         </>,
         <>
           Analyzed needle biopsies, CT scans, and genetic/immunostaining results
@@ -185,81 +243,113 @@ export const Experience = () => {
           visible: { opacity: 1, y: 0 },
           hidden: { opacity: 0, y: 25 },
         }}
+        className="w-full"
       >
-        <div className="container px-1 h-auto">
-          <ul className="exp-slider">
-            <div className="underlineSpecial"></div>
-            {experiences.map((experience, index) => {
-              return (
-                <li
-                  className={`exp-slider-item hover:bg-accent transition-colors max-md:justify-center ${
-                    index === selected &&
-                    "exp-slider-item-selected max-md:justify-center max-md:bg-accent transition"
+        <div className="container px-1">
+          <ul className="exp-slider mb-4 relative">
+            <motion.div
+              className="underlineSpecial"
+              layoutId="underline"
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            />
+            {experiences.map((experience, index) => (
+              <motion.li
+                className={`exp-slider-item hover:bg-accent transition-colors max-md:justify-center ${
+                  index === selected &&
+                  "exp-slider-item-selected max-md:justify-center max-md:bg-accent transition"
+                }`}
+                onClick={() => setSelected(index)}
+                key={experience.shortname}
+                layout
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                <span
+                  className={`font-semibold ${
+                    experience.present || experience.incoming ? "mr-2" : ""
                   }`}
-                  onClick={() => setSelected(index)}
-                  key={experience.shortname}
                 >
-                  <span className="font-semibold mr-2">
-                    {experience.shortname}
-                  </span>
-                  {experience.present ? (
-                    <Badge
-                      variant={"default"}
-                      className=" p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
-                    >
-                      Present
-                    </Badge>
-                  ) : null}
-                  {experience.incoming ? (
-                    <Badge
-                      variant={"secondary"}
-                      className=" p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
-                    >
-                      Incoming
-                    </Badge>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
-            <div className="text-2xl font-medium font-sans">
-              <h3>
-                <span className="text-accent-foreground font-semibold">
-                  {experiences[selected].role}
+                  {experience.shortname}
                 </span>
-                <span className="text-2xl font-medium font-sans">
-                  &nbsp;@&nbsp;
-                  <Link href={experiences[selected].url}>
-                    <div className="inline">{experiences[selected].name} </div>
-                    <ArrowUpRight className="inline-block w-5 " />
-                  </Link>
-                </span>
-              </h3>
-              <p className="text-base font-medium text-muted-foreground font-mono pb-2">
-                {experiences[selected].start} - {experiences[selected].end}
-              </p>
-              <ul className="text-sm text-muted-foreground font-sans">
-                {experiences[selected].shortDescription.map(
-                  (description, index) => (
-                    <li
-                      key={index}
-                      className={`text-sm text-muted-foreground font-sans list-outside list-disc ml-4 ${
-                        index !==
-                        experiences[selected].shortDescription.length - 1
-                          ? "pb-2"
-                          : ""
-                      }`}
-                    >
-                      {typeof description === "string" ? (
-                        `${description}`
-                      ) : (
-                        <>{description}</>
-                      )}
-                    </li>
-                  )
+                {experience.present && (
+                  <Badge
+                    variant={"default"}
+                    className="p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
+                  >
+                    Present
+                  </Badge>
                 )}
-              </ul>
-            </div>
+                {experience.incoming && (
+                  <Badge
+                    variant={"secondary"}
+                    className="p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
+                  >
+                    Incoming
+                  </Badge>
+                )}
+              </motion.li>
+            ))}
+          </ul>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selected}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{
+                duration: 0.3,
+                opacity: { duration: 0.2 },
+              }}
+              className="text-xl font-medium font-sans text-pretty"
+            >
+              <motion.div
+                layout
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              >
+                <h3>
+                  <span className="text-accent-foreground font-semibold">
+                    {experiences[selected].role}
+                  </span>
+                  <span className="text-xl font-medium font-sans">
+                    &nbsp;@&nbsp;
+                    <Link href={experiences[selected].url}>
+                      <div className="inline">
+                        {experiences[selected].name}{" "}
+                      </div>
+                      <ArrowUpRight
+                        className="inline-block w-5 mb-0.5"
+                        size={16}
+                      />
+                    </Link>
+                  </span>
+                </h3>
+                <p className="text-sm font-medium text-muted-foreground font-mono pb-2 tracking-tight brightness-110">
+                  {experiences[selected].start} - {experiences[selected].end}
+                </p>
+                <ul className="text-sm text-muted-foreground font-sans">
+                  {experiences[selected].shortDescription.map(
+                    (description, index) => (
+                      <motion.li
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                        className={`text-sm text-muted-foreground font-sans list-outside list-disc ml-4 ${
+                          index !==
+                          experiences[selected].shortDescription.length - 1
+                            ? "pb-2"
+                            : ""
+                        }`}
+                      >
+                        {typeof description === "string"
+                          ? description
+                          : description}
+                      </motion.li>
+                    )
+                  )}
+                </ul>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </motion.div>
     </Section>

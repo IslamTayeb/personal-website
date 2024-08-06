@@ -8,7 +8,7 @@
     --background: 216 13% 15%;
     --foreground: 219 18% 71%;
     --muted: 216 12% 19%;
-    --muted-foreground: 216 12% 69%;
+    --muted-foreground: 216 12% 71%;
     --popover: 216 13% 12%;
     --popover-foreground: 219 18% 81%;
     --card: 216 13% 13%;
@@ -62,7 +62,7 @@
   .transition-container {
     overflow: hidden;
     transition: height 0.3s ease-in-out;
-  }    
+  }
 
   .container {
     display: grid;
@@ -352,7 +352,7 @@
   }
   @media screen and (max-width: 767px) {
     .project-image img {
-      filter: grayscale(90%) brightness(0.85);
+      filter: grayscale(90%) brightness(0.75);
     }
     .project:nth-of-type(even) .project-info-tech-list {
       justify-content: flex-end;
@@ -454,6 +454,10 @@
   /* ===================================================== */
 
   /* Scrollbar */
+
+  #publications,#projects,#contact,#about,#experience,#skills,#education,#footer {
+    scroll-margin-top: 100px;
+  }
   ::-webkit-scrollbar {
     width: 0.65em;
     height: 0.65em;

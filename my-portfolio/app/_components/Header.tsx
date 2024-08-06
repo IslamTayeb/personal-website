@@ -18,12 +18,6 @@ export const Header = () => {
         <h1 className="text-lg font-semibold text-primary"><Link href="islamtayeb.net">islamtayeb.net</Link></h1>
         <div className="flex-1" />
         <ul className="flex items-center gap-2">
-          <Link
-            href="https://www.researchgate.net/profile/Islam-Tayeb"
-            className={cn(buttonVariants({ variant: "outline" }), "size-6 p-0")}
-          >
-            <Icon icon={"academicons:researchgate-square"} className="" />
-          </Link>
 
           <Link
             href="https://linkedin.com/in/islam-tayeb"
@@ -40,10 +34,16 @@ export const Header = () => {
           </Link>
 
           <Link
+            href="https://www.researchgate.net/profile/Islam-Tayeb"
+            className={cn(buttonVariants({ variant: "outline" }), "size-6 p-0")}
+          >
+            <Icon icon={"academicons:researchgate-square"} className="" />
+          </Link>
+          <Link
             href="resume"
             className={cn(buttonVariants({ variant: "outline" }), "px-1.5 h-6")}
           >
-            <DefaultIcon fontSize={13} className="text-foreground mr-1" icon={"solar:file-bold"} /><p className="text-foreground m-0 leading-none text-xs">Resume</p>
+            <DefaultIcon fontSize={13} className="text-foreground mr-1 -mt-0.5" icon={"solar:file-bold"} /><p className="text-foreground m-0 leading-none text-xs">Resume</p>
           </Link>
         </ul>
       </Section>
