@@ -291,27 +291,6 @@ export const Contact = () => {
               </div>
 
               <div className="ml-auto flex flex-row gap-2">
-                {/* <TooltipProvider delayDuration={50}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6"
-                        onClick={() => handleCopy("linkedinCopy")}
-                      >
-                        {copiedButton === "linkedinCopy" ? (
-                          <Check size={16} className="text-green-400" />
-                        ) : (
-                          <Copy size={16} className="text-muted-foreground p-[1.5px]" />
-                        )}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{copiedButton === "linkedinCopy" ? "Copied!" : "Copy LinkedIn URL"}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider> */}
 
                 <Link href="https://www.linkedin.com/in/islam-tayeb/" target="_blank" rel="noopener noreferrer">
                   <Button
@@ -328,7 +307,7 @@ export const Contact = () => {
               </div>
             </div>
 
-            <Separator />
+            {/* <Separator />
 
             <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
               <span className="bg-accent text-accent-foreground p-3 rounded-sm">
@@ -340,27 +319,6 @@ export const Contact = () => {
               </div>
 
               <div className="ml-auto flex flex-row gap-2">
-                {/* <TooltipProvider delayDuration={50}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6"
-                        onClick={() => handleCopy("githubCopy")}
-                      >
-                        {copiedButton === "githubCopy" ? (
-                          <Check size={16} className="text-green-400" />
-                        ) : (
-                          <Copy size={16} className="text-muted-foreground p-[1.5px]" />
-                        )}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{copiedButton === "githubCopy" ? "Copied!" : "Copy GitHub URL"}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider> */}
 
                 <Link href="https://github.com/IslamTayeb" target="_blank" rel="noopener noreferrer">
                   <Button
@@ -375,7 +333,7 @@ export const Contact = () => {
                   </Button>
                 </Link>
               </div>
-            </div>
+            </div> */}
 
             <Separator />
 
@@ -389,27 +347,6 @@ export const Contact = () => {
               </div>
 
               <div className="ml-auto flex flex-row gap-2">
-                {/* <TooltipProvider delayDuration={50}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-6 w-6"
-                        onClick={() => handleCopy("githubCopy")}
-                      >
-                        {copiedButton === "githubCopy" ? (
-                          <Check size={16} className="text-green-400" />
-                        ) : (
-                          <Copy size={16} className="text-muted-foreground p-[1.5px]" />
-                        )}
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{copiedButton === "githubCopy" ? "Copied!" : "Copy GitHub URL"}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider> */}
 
                 <Link href="" target="_blank" rel="noopener noreferrer">
                   <Button

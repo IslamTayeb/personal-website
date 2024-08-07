@@ -12,14 +12,14 @@ import { Code, DefaultIcon } from "./sharedComponents";
 export const Projects = () => {
   const projectsData = [
     {
-      image: "/transformers.webp",
+      image: "/gpt2.jpg",
       projectName: "GPT-2 Reproduction",
       new: false,
       wip: true,
       projectDescription: (
         <>
           Building a GPT-2 clone using pure Python, NumPy, and math to
-          understand how LLMs function under the hood. This project includes
+          understand how LLMs work under the hood. This project includes
           creating an autograd engine, makemore, transformers, and tokenizers.
           Credit to{" "}
           <Link href={"https://github.com/karpathy/build-nanogpt"}>
@@ -48,16 +48,16 @@ export const Projects = () => {
       },
     },
     {
-      image: "/drugdiscovery.webp",
+      image: "/drugdiscovery.jpg",
       projectName: "App for Bioactivity Prediction",
       new: false,
       wip: true,
       projectDescription: (
         <>
-          Developing an ML model to analyze acetylcholinesterase bioactivity
-          using molecular structures and descriptors. This model will power a
-          web app for predicting molecule bioactivity, streamlining biochemical
-          research. Credit to{" "}
+          Developing an ML model to analyze bioactivity using molecular
+          structures and descriptors. This model will power a web app for
+          predicting molecule bioactivity, streamlining biochemical research.
+          Credit to{" "}
           <Link
             href={
               "https://github.com/dataprofessor/bioinformatics_freecodecamp/"
@@ -105,9 +105,8 @@ export const Projects = () => {
           >
             2
           </span>
-          , pressure), improving accuracy by 23%,
-          securing a $5,000 grant. Developed a live performance scoring
-          interface with Angular for user engagement.
+          , pressure), improving accuracy by 23%, securing a $5,000 grant.
+          Developed a live performance scoring interface with Angular.
         </>
       ),
       projectTech: [
@@ -276,7 +275,7 @@ export const Projects = () => {
                 </div>
 
                 <div className="project-image overflow-hidden scale-95 rounded-sm border-accent border max-md:rounded-xl">
-                  <div className="project-image-container blur-md brightness-[0.35] hover:blur-0 hover:brightness-100 transition-all max-md:blur-0 scale-105">
+                  <div className="project-image-container blur-sm brightness-[0.35] hover:blur-0 hover:brightness-100 transition-all max-md:blur-0 scale-105">
                     <Image
                       src={image}
                       fill
