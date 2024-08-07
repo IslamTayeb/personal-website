@@ -1,17 +1,15 @@
-/* eslint-disable react/no-unescaped-entities */
 "use client";
-import { ComponentPropsWithoutRef, useState } from "react";
-import { MoonIcon } from "./Icons/MoonIcon";
-import { Section } from "./Misc/Section";
-import { Typewriter, Cursor } from "react-simple-typewriter";
-import { Button } from "@/components/ui/button";
+
+import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Typewriter } from "react-simple-typewriter";
 import { Duke } from "./Icons/Duke";
 import { Code, DefaultIcon } from "./sharedComponents";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import Link from "next/link";
+import { Section } from "./Misc/Section";
 
 export const Hero = () => {
   const [showMore, setShowMore] = useState(false);
@@ -32,13 +30,13 @@ export const Hero = () => {
       }}
       className="ease-in-out"
     >
-      <Section>
-        <Badge variant={"outline"} className="mb-4">
+      <Section className="">
+        <Badge variant="outline" className="mb-4">
           Welcome!
         </Badge>
         <div className="flex max-md:flex-col items-start gap-4">
+          {/* Avatar section remains unchanged */}
           <div className="flex-[2] p-2 flex my-auto max-md:mx-auto">
-            {/* <Icon icon={"material-symbols:asterisk-rounded"} fontSize={140} className="absolute z-50 text-accent-foreground -scale-100 translate-x-[150px] -translate-y-6 animate-spin" /> */}
             <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2 relative border border-accent">
               <AvatarImage
                 className="object-cover absolute z-20 opacity-0 hover:opacity-100 transition-all scale-105"
@@ -59,7 +57,7 @@ export const Hero = () => {
               Hello, <span className="text-accent-foreground">Islam</span> here!
             </h2>
             <h3 className="font-caption font-medium text-2xl">
-              I&apos;m a{" "}
+              I'm a{" "}
               <span className="text-primary">
                 <Typewriter
                   words={[
@@ -78,77 +76,43 @@ export const Hero = () => {
               </span>
             </h3>
             <p className="font-sans basis-0 text-muted-foreground text-pretty">
-              A{" "}
-              <Code>
-                <DefaultIcon icon={"lucide:braces"} className="" /> Computer
-                Science
-              </Code>{" "}
-              ,{" "}
-              <Code>
-                <DefaultIcon icon={"lucide:dna"} className="" /> Bioinformatics
-              </Code>{" "}
-              , and{" "}
-              <Code>
-                <DefaultIcon icon={"lucide:atom"} className="" /> Chemistry
-              </Code>{" "}
-              student at{" "}
-              <Code>
-                <Duke size={14} className="text-center" /> Duke University
-              </Code>{" "}
-              . Currently based in{" "}
-              <Code>
-                <DefaultIcon icon={"flag:us-1x1"} className="rounded-[1.5px]" />{" "}
-                Durham, NC
-              </Code>{" "}
+              A <Code><DefaultIcon icon="lucide:braces" /> Computer Science</Code>,{" "}
+              <Code><DefaultIcon icon="lucide:dna" /> Bioinformatics</Code>, and{" "}
+              <Code><DefaultIcon icon="lucide:atom" /> Chemistry</Code> student at{" "}
+              <Code><Duke size={14} /> Duke University</Code>. Currently based in{" "}
+              <Code><DefaultIcon icon="flag:us-1x1" className="rounded-[1.5px]" /> Durham, NC</Code>{" "}
               with an interest in applied research and AI/ML. Feel free to{" "}
-              <Link href={"#contact"} className="underline underline-offset-2">
+              <Link href="#contact" className="underline underline-offset-2">
                 reach out
               </Link>
               !
             </p>
-            <AnimatePresence>
+            <AnimatePresence initial={false}>
               {showMore && (
                 <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ ease: "easeInOut", duration: 0.15 }}
-                  className="ease-in-out"
+                  key="content"
+                  initial="collapsed"
+                  animate="open"
+                  exit="collapsed"
+                  variants={{
+                    open: { opacity: 1, height: "auto" },
+                    collapsed: { opacity: 1, height: 0 }
+                  }}
+                  transition={{ duration: 0.15, ease: "linear" }}
+                  className="overflow-hidden"
                 >
-                  <p className="font-sans basis-0 text-muted-foreground pt-1 text-pretty">
+                  <motion.p
+                    className="font-sans basis-0 text-muted-foreground pt-1 text-pretty"
+                  >
                     I grew up between{" "}
-                    <Code>
-                      <DefaultIcon
-                        icon={"flag:eg-1x1"}
-                        className="rounded-[1.5px]"
-                      />{" "}
-                      Egypt
-                    </Code>{" "}
+                    <Code><DefaultIcon icon="flag:eg-1x1" className="rounded-[1.5px]" /> Egypt</Code>{" "}
                     and{" "}
-                    <Code>
-                      <DefaultIcon
-                        icon={"flag:sa-1x1"}
-                        className="rounded-[1.5px]"
-                      />{" "}
-                      Saudi Arabia
-                    </Code>{" "}
-                    . I used to be a semi-professional graphic designer in
-                    esports for 4 years, but I still design as a hobby. I&apos;m
-                    a big fan of{" "}
-                    <Code>
-                      <DefaultIcon icon={"clarity:cd-dvd-solid"} className="" />{" "}
-                      Alternative Hip Hop
-                    </Code>{" "}
-                    , and I like to play{" "}
-                    <Code>
-                      <DefaultIcon
-                        icon={"fluent:tetris-app-16-filled"}
-                        className=""
-                      />{" "}
-                      Tetris
-                    </Code>{" "}
+                    <Code><DefaultIcon icon="flag:sa-1x1" className="rounded-[1.5px]" /> Saudi Arabia</Code>.
+                    I used to be a semi-professional graphic designer in esports for 4 years, but I still design as a hobby. I'm a big fan of{" "}
+                    <Code><DefaultIcon icon="clarity:cd-dvd-solid" /> Alternative Hip Hop</Code>, and I like to play{" "}
+                    <Code><DefaultIcon icon="fluent:tetris-app-16-filled" /> Tetris</Code>{" "}
                     in my free time between classes and work.
-                  </p>
+                  </motion.p>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -158,7 +122,7 @@ export const Hero = () => {
                 className="my-2.5 p-3 font-sans mb-0 h-9"
                 onClick={handleReadMoreClick}
               >
-                {showMore ? "Show Less..." : "Read More..."}
+                {showMore ? "Show Less" : "Read More"}
               </Button>
             </div>
           </div>
@@ -167,3 +131,5 @@ export const Hero = () => {
     </motion.div>
   );
 };
+
+export default Hero;

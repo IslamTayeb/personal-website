@@ -19,13 +19,20 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { sendEmail } from "./sendEmail";
-import { ArrowUpRight, Mail } from "lucide-react";
+import { ArrowUpRight, Check, Copy, Mail } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Code, DefaultIcon } from "./sharedComponents";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { LinkedInIcon } from "./Icons/LinkedInIcon";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useCopyToClipboard } from "usehooks-ts";
 
 const formSchema = z.object({
   name: z
@@ -46,6 +53,7 @@ const formSchema = z.object({
 export const Contact = () => {
   const { toast } = useToast();
   const [isSending, setIsSending] = useState(false);
+  const [copiedButton, setCopiedButton] = useState("");
 
   // Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -77,7 +85,7 @@ export const Contact = () => {
         });
       } else {
         toast({
-          description: "Successfully sent! I&apos;ll get back to you soon.",
+          description: "Successfully sent! I'll get back to you soon.",
         });
       }
     } catch (error) {
@@ -89,6 +97,14 @@ export const Contact = () => {
       setIsSending(false);
     }
   }
+
+  const email = "islam.tayeb@duke.edu";
+  const [copiedText, copy] = useCopyToClipboard();
+
+  const handleCopy = (buttonId: React.SetStateAction<string>) => {
+    copy(email);
+    setCopiedButton(buttonId);
+  };
 
   return (
     <Section className="flex flex-col items-start gap-4">
@@ -223,60 +239,190 @@ export const Contact = () => {
 
               <div>
                 <div className="text-lg font-semibold">Email</div>
-                <p className="text-sm text-muted-foreground">
-                  {"islam.tayeb@duke.edu"}
-                </p>
               </div>
 
-              <Link href={"mailto:islam.tayeb@duke.edu"} className="ml-auto">
-                <ArrowUpRight
-                  size={16}
-                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
-                />
-              </Link>
+              <div className="ml-auto flex flex-row gap-2">
+                <TooltipProvider delayDuration={50}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        onClick={() => handleCopy("emailCopy")}
+                      >
+                        {copiedButton === "emailCopy" ? (
+                          <Check size={16} className="text-green-400" />
+                        ) : (
+                          <Copy size={16} className="text-muted-foreground p-[1.5px]" />
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{copiedButton === "emailCopy" ? "Copied!" : "Copy email"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <Link href={"mailto:islam.tayeb@duke.edu"}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 rounded-sm"
+                  >
+                    <ArrowUpRight
+                      size={16}
+                      className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
+                    />
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             <Separator />
 
             <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
               <span className="bg-accent text-accent-foreground p-3 rounded-sm">
-                <LinkedInIcon size={16} />
+                <Icon icon="mdi:linkedin" className="w-4 h-4" />
               </span>
 
               <div>
                 <div className="text-lg font-semibold">LinkedIn</div>
-                {/* <p className="text-sm text-muted-foreground">
-                  {"in/Islam-Tayeb"}
-                </p> */}
               </div>
 
-              <Link href={"https://www.linkedin.com/in/islam-tayeb/"} className="ml-auto">
-                <ArrowUpRight
-                  size={16}
-                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
-                />
-              </Link>
+              <div className="ml-auto flex flex-row gap-2">
+                {/* <TooltipProvider delayDuration={50}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        onClick={() => handleCopy("linkedinCopy")}
+                      >
+                        {copiedButton === "linkedinCopy" ? (
+                          <Check size={16} className="text-green-400" />
+                        ) : (
+                          <Copy size={16} className="text-muted-foreground p-[1.5px]" />
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{copiedButton === "linkedinCopy" ? "Copied!" : "Copy LinkedIn URL"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider> */}
+
+                <Link href="https://www.linkedin.com/in/islam-tayeb/" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 rounded-sm"
+                  >
+                    <ArrowUpRight
+                      size={16}
+                      className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
+                    />
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             <Separator />
 
             <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
               <span className="bg-accent text-accent-foreground p-3 rounded-sm">
-                <Icon icon={"solar:file-bold"} width={16.25} />
+                <Icon icon="jam:github" className="w-4 h-4" />
+              </span>
+
+              <div>
+                <div className="text-lg font-semibold">GitHub</div>
+              </div>
+
+              <div className="ml-auto flex flex-row gap-2">
+                {/* <TooltipProvider delayDuration={50}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        onClick={() => handleCopy("githubCopy")}
+                      >
+                        {copiedButton === "githubCopy" ? (
+                          <Check size={16} className="text-green-400" />
+                        ) : (
+                          <Copy size={16} className="text-muted-foreground p-[1.5px]" />
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{copiedButton === "githubCopy" ? "Copied!" : "Copy GitHub URL"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider> */}
+
+                <Link href="https://github.com/IslamTayeb" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 rounded-sm"
+                  >
+                    <ArrowUpRight
+                      size={16}
+                      className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
+                    />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            <Separator />
+
+            <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
+              <span className="bg-accent text-accent-foreground p-3 rounded-sm">
+                <Icon icon="solar:file-bold" className="w-4 h-4 p-[0.5px]" />
               </span>
 
               <div>
                 <div className="text-lg font-semibold">Resume</div>
-                {/* <p className="text-sm text-muted-foreground">
-                  {"islam.tayeb@duke.edu"}
-                </p> */}
               </div>
 
-              <div className="ml-auto">
-                <ArrowUpRight
-                  size={16}
-                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
-                />
+              <div className="ml-auto flex flex-row gap-2">
+                {/* <TooltipProvider delayDuration={50}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-6 w-6"
+                        onClick={() => handleCopy("githubCopy")}
+                      >
+                        {copiedButton === "githubCopy" ? (
+                          <Check size={16} className="text-green-400" />
+                        ) : (
+                          <Copy size={16} className="text-muted-foreground p-[1.5px]" />
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>{copiedButton === "githubCopy" ? "Copied!" : "Copy GitHub URL"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider> */}
+
+                <Link href="" target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 rounded-sm"
+                  >
+                    <ArrowUpRight
+                      size={16}
+                      className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
+                    />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
