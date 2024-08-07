@@ -30,7 +30,7 @@ export const Header = () => {
             href="https://github.com/IslamTayeb"
             className={cn(buttonVariants({ variant: "outline" }), "size-6 p-0")}
           >
-            <DefaultIcon fontSize={16} className="text-foreground -mt-0" icon={"jam:github"} />
+            <DefaultIcon fontSize={15.25} className="text-foreground -mt-[0.5px]" icon={"jam:github"} />
           </Link>
 
           <Link

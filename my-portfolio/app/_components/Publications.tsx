@@ -53,46 +53,55 @@ export const Publications = () => {
           Utilization
         </>
       ),
-      pubJournalLink: "https://www.journals.elsevier.com/journal-of-co2-utilization",
+      pubJournalLink:
+        "https://www.journals.elsevier.com/journal-of-co2-utilization",
       pubType: "Research Article",
       pubDescription: (
         <>
-          This study enhances the UiO-66 metal-organic framework for direct air
-          capture by modifying UiO-66-(OH)
-          <span
-            style={{
-              verticalAlign: "sub",
-              fontSize: 7.25,
-              lineHeight: "1",
-              fontWeight: "bold",
-            }}
-          >
-            2
-          </span>{" "}
-          with APTES, resulting in a 15% increase in CO
-          <span
-            style={{
-              verticalAlign: "sub",
-              fontSize: 7.25,
-              lineHeight: "1",
-              fontWeight: "bold",
-            }}
-          >
-            2
-          </span>{" "}
-          adsorption capacity and improved selectivity. The modified
-          UiO-66-APTES demonstrates high stability and effectiveness in CO
-          <span
-            style={{
-              verticalAlign: "sub",
-              fontSize: 7.25,
-              lineHeight: "1",
-              fontWeight: "bold",
-            }}
-          >
-            2
-          </span>{" "}
-          separation from air, making it a promising DAC adsorbent.
+          <p className="mb-1.5">
+            This study enhances the UiO-66 metal-organic framework for direct
+            air capture by modifying UiO-66-(OH)
+            <span
+              style={{
+                verticalAlign: "sub",
+                fontSize: 7.25,
+                lineHeight: "1",
+                fontWeight: "bold",
+              }}
+            >
+              2
+            </span>{" "}
+            with APTES, resulting in a 15% increase in CO
+            <span
+              style={{
+                verticalAlign: "sub",
+                fontSize: 7.25,
+                lineHeight: "1",
+                fontWeight: "bold",
+              }}
+            >
+              2
+            </span>{" "}
+            adsorption capacity and improved selectivity. The modified
+            UiO-66-APTES demonstrates high stability and effectiveness in CO
+            <span
+              style={{
+                verticalAlign: "sub",
+                fontSize: 7.25,
+                lineHeight: "1",
+                fontWeight: "bold",
+              }}
+            >
+              2
+            </span>{" "}
+            separation from air, making it a promising DAC adsorbent.
+          </p>
+          <p>
+            I was involved in scheming and synthesizing all materials and
+            performed full material characterization. I was further involved in
+            writing the original manuscript and presenting it at 2 local
+            symposiums in Saudi Arabia.
+          </p>
         </>
       ),
       pubLink: "https://doi.org/10.1016/j.jcou.2023.102647",
@@ -129,13 +138,21 @@ export const Publications = () => {
       pubType: "Case Report",
       pubDescription: (
         <>
-          This study reports the first documented cases of KRAS G12C-mutant
-          non-small-cell lung adenocarcinoma in the Arabian Gulf. Two Saudi
-          males, aged 64 and 76, were diagnosed using reverse transcription-PCR.
-          The 64-year-old, an ex-smoker, had generalized lymphadenopathy and a
-          right lung mass. The 76-year-old, a non-smoker, had stage III-A left
-          lung adenocarcinoma. The study calls for further research on KRAS
-          mutations in the region to improve treatment strategies.
+          <p className="mb-1.5">
+            This case report describes the first documented cases of KRAS
+            G12C-mutant non-small-cell lung adenocarcinoma in the Arabian Gulf.
+            Two Saudi males, aged 64 and 76, were diagnosed using reverse
+            transcription-PCR. The 64-year-old, an ex-smoker, had generalized
+            lymphadenopathy and a right lung mass. The 76-year-old, a
+            non-smoker, had stage III-A left lung adenocarcinoma. The study
+            calls for further research on KRAS mutations in the region to
+            improve treatment strategies.
+          </p>
+          <p>
+            I was involved in data collection and manuscript writing,
+            collaborating with multiple physicians and describing their input
+            and analyses.
+          </p>
         </>
       ),
       pubLink: "http://dx.doi.org/10.7759/cureus.27090",
@@ -302,7 +319,9 @@ export const Publications = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <span className="transition brightness-105">{pubTitle}</span>{" "}
+                              <span className="transition brightness-105">
+                                {pubTitle}
+                              </span>{" "}
                               <ArrowUpRight
                                 className="inline-block w-5 mb-0.5"
                                 size={16}
@@ -313,7 +332,19 @@ export const Publications = () => {
                             <TooltipProvider delayDuration={50}>
                               <Tooltip>
                                 <TooltipTrigger className="font-medium">
-                                <div className="relative after:absolute after:bottom-0 after:left-0 before:h-[0.5px] after:h-[0.5px] after:w-full after:origin-bottom-left after:scale-x-100 hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-200 after:bg-gray-500 text-foreground"><Link href={pubJournalLink} target="_blank" rel="noopener noreferrer">{pubJournal}</Link></div>
+                                  <div className="relative after:absolute after:bottom-0 after:left-0 before:h-[0.5px] after:h-[0.5px] after:w-full after:origin-bottom-left after:scale-x-100 hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-200 after:bg-gray-500 text-foreground">
+                                    {pubJournalLink ? (
+                                      <Link
+                                        href={pubJournalLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                      >
+                                        {pubJournal}
+                                      </Link>
+                                    ) : (
+                                      pubJournal
+                                    )}
+                                  </div>
                                 </TooltipTrigger>
                                 <TooltipContent className="shadow-md shadow-card transition-all">
                                   <p>{pubImpact}</p>

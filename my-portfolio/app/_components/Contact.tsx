@@ -24,6 +24,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { Code, DefaultIcon } from "./sharedComponents";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { LinkedInIcon } from "./Icons/LinkedInIcon";
+import { Icon } from "@iconify/react/dist/iconify.js";
 
 const formSchema = z.object({
   name: z
@@ -124,7 +126,7 @@ export const Contact = () => {
             <Form {...form}>
               <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="space-y-4"
+                className="space-y-3"
               >
                 <div className="flex flex-row gap-4">
                   <FormField
@@ -213,14 +215,14 @@ export const Contact = () => {
             </Form>
           </div>
 
-          <div className="flex flex-col h-min font-sans font-medium flex-[2] w-full justify-between">
+          <div className="flex flex-col h-min font-sans font-medium flex-[2] w-full gap-2">
             <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
               <span className="bg-accent text-accent-foreground p-3 rounded-sm">
                 <Mail size={16} />
               </span>
 
               <div>
-                <div className="text-lg font-semibold">{"Email"}</div>
+                <div className="text-lg font-semibold">Email</div>
                 <p className="text-sm text-muted-foreground">
                   {"islam.tayeb@duke.edu"}
                 </p>
@@ -238,80 +240,36 @@ export const Contact = () => {
 
             <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
               <span className="bg-accent text-accent-foreground p-3 rounded-sm">
-                <Mail size={16} />
+                <LinkedInIcon size={16} />
               </span>
 
               <div>
-                <div className="text-lg font-semibold">{"Email"}</div>
-                <p className="text-sm text-muted-foreground">
-                  {"islam.tayeb@duke.edu"}
-                </p>
+                <div className="text-lg font-semibold">LinkedIn</div>
+                {/* <p className="text-sm text-muted-foreground">
+                  {"in/Islam-Tayeb"}
+                </p> */}
               </div>
 
-              <div className="ml-auto">
+              <Link href={"https://www.linkedin.com/in/islam-tayeb/"} className="ml-auto">
                 <ArrowUpRight
                   size={16}
                   className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
                 />
-              </div>
+              </Link>
             </div>
 
             <Separator />
 
             <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
               <span className="bg-accent text-accent-foreground p-3 rounded-sm">
-                <Mail size={16} />
+                <Icon icon={"solar:file-bold"} width={16.25} />
               </span>
 
               <div>
-                <div className="text-lg font-semibold">{"Email"}</div>
-                <p className="text-sm text-muted-foreground">
+                <div className="text-lg font-semibold">Resume</div>
+                {/* <p className="text-sm text-muted-foreground">
                   {"islam.tayeb@duke.edu"}
-                </p>
-              </div>
-
-              <div className="ml-auto">
-                <ArrowUpRight
-                  size={16}
-                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
-                />
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
-              <span className="bg-accent text-accent-foreground p-3 rounded-sm">
-                <Mail size={16} />
-              </span>
-
-              <div>
-                <div className="text-lg font-semibold">{"Email"}</div>
-                <p className="text-sm text-muted-foreground">
-                  {"islam.tayeb@duke.edu"}
-                </p>
-              </div>
-
-              <div className="ml-auto">
-                <ArrowUpRight
-                  size={16}
-                  className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform"
-                />
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1.5 px-2.5 rounded w-full">
-              <span className="bg-accent text-accent-foreground p-3 rounded-sm">
-                <Mail size={16} />
-              </span>
-
-              <div>
-                <div className="text-lg font-semibold">{"Email"}</div>
-                <p className="text-sm text-muted-foreground">
-                  {"islam.tayeb@duke.edu"}
-                </p>
+                </p> */}
               </div>
 
               <div className="ml-auto">

@@ -12,16 +12,16 @@ import { Code, DefaultIcon } from "./sharedComponents";
 export const Projects = () => {
   const projectsData = [
     {
-      image: "/image1.jpg",
+      image: "/transformers.webp",
       projectName: "GPT-2 Reproduction",
       new: false,
       wip: true,
       projectDescription: (
         <>
           Building a GPT-2 clone using pure Python, NumPy, and math to
-          understand how LLMs function under the hood. This
-          project includes creating an autograd engine, makemore, transformers,
-          and tokenizers. Credit to{" "}
+          understand how LLMs function under the hood. This project includes
+          creating an autograd engine, makemore, transformers, and tokenizers.
+          Credit to{" "}
           <Link href={"https://github.com/karpathy/build-nanogpt"}>
             Andrej Karpathy
           </Link>
@@ -48,7 +48,7 @@ export const Projects = () => {
       },
     },
     {
-      image: "/image1.jpg",
+      image: "/drugdiscovery.webp",
       projectName: "App for Bioactivity Prediction",
       new: false,
       wip: true,
@@ -88,12 +88,28 @@ export const Projects = () => {
       },
     },
     {
-      image: "/image1.jpg",
-      projectName: "Wearable Carbon Nanotube Health Sensors",
+      image: "/carbonfibres.webp",
+      projectName: "Wearable Carbon Fibre Health Sensors",
       new: false,
       wip: false,
-      projectDescription:
-        "Enhanced wearable carbon nanotube sensors for athlete health monitoring, improving accuracy by 23% by optimizing biosensors and securing a $5,000 grant. Developed a live performance scoring interface with Angular to increase user engagement.",
+      projectDescription: (
+        <>
+          Enhanced wearable carbon fibre sensors for athlete health monitoring
+          (lactate, CO
+          <span
+            style={{
+              verticalAlign: "sub",
+              fontSize: "x-small",
+              lineHeight: "1",
+            }}
+          >
+            2
+          </span>
+          , pressure), improving accuracy by 23%,
+          securing a $5,000 grant. Developed a live performance scoring
+          interface with Angular for user engagement.
+        </>
+      ),
       projectTech: [
         "Python",
         "Angular",
@@ -171,7 +187,9 @@ export const Projects = () => {
                       isOdd ? "text-right" : "text-left"
                     }`}
                   >
-                    <div className="leading-tight h-min invisible absolute max-md:visible max-md:relative text-left w-auto">{projectName}</div>
+                    <div className="leading-tight h-min invisible absolute max-md:visible max-md:relative text-left w-auto">
+                      {projectName}
+                    </div>
                     {!isOdd && (isNew || isWip) && (
                       <>
                         {isNew && (
@@ -192,7 +210,9 @@ export const Projects = () => {
                         )}
                       </>
                     )}
-                    <div className="leading-tight h-min visible relative max-md:invisible max-md:absolute">{projectName}</div>
+                    <div className="leading-tight h-min visible relative max-md:invisible max-md:absolute">
+                      {projectName}
+                    </div>
                     {isOdd && (isNew || isWip) && (
                       <>
                         {isNew && (
@@ -256,7 +276,7 @@ export const Projects = () => {
                 </div>
 
                 <div className="project-image overflow-hidden scale-95 rounded-sm border-accent border max-md:rounded-xl">
-                  <div className="project-image-container blur-md brightness-50 hover:blur-0 hover:brightness-100 transition-all max-md:blur-0">
+                  <div className="project-image-container blur-md brightness-[0.35] hover:blur-0 hover:brightness-100 transition-all max-md:blur-0 scale-105">
                     <Image
                       src={image}
                       fill

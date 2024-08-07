@@ -46,7 +46,7 @@ export const Hero = () => {
                 alt="Original Photo"
               />
               <AvatarImage
-                className="object-cover relative contrast-[1.12] scale-105"
+                className="object-cover relative contrast-[1.02] scale-105"
                 src="/myphotogradient.webp"
                 alt="Gradient Photo"
               />

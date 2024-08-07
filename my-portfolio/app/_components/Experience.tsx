@@ -12,21 +12,34 @@ import { Duke } from "./Icons/Duke";
 import { DIHI } from "./Icons/DIHI";
 import { HAIP } from "./Icons/HAIP";
 import { DukeHealth } from "./Icons/Duke Health";
+import { Aramco } from "./Icons/Aramco";
 
-export const Experience = () => {
-  const [selected, setSelected] = useState(0);
+interface Experience {
+  name: string;
+  shortname: string;
+  present: boolean;
+  incoming: boolean;
+  role: string;
+  url: string;
+  start: string;
+  end: string;
+  shortDescription: React.ReactNode[];
+}
+
+export const Experience: React.FC = () => {
+  const [selected, setSelected] = useState<number>(0);
+  const [contentHeight, setContentHeight] = useState<number | "auto">("auto");
 
   useEffect(() => {
     const transformSelected = () => {
-      const underlineSpecial =
-        document.querySelector<HTMLElement>(".underlineSpecial");
+      const underlineSpecial = document.querySelector<HTMLElement>(".underlineSpecial");
       if (underlineSpecial) {
         underlineSpecial.style.top = `${selected * 2.5}rem`;
       }
     };
     transformSelected();
   }, [selected]);
-
+  
   const experiences = [
     // {
     //   name: "Feng Labs",
@@ -57,7 +70,7 @@ export const Experience = () => {
       end: "Present",
       shortDescription: [
         <>
-          Developed an LLM agent using{" "}
+          Developed LLM agents using{" "}
           <Code>
             <DefaultIcon icon={"mdi:microsoft"} className="" /> AutoGen
           </Code>{" "}
@@ -65,12 +78,12 @@ export const Experience = () => {
           <Code>
             <DefaultIcon icon={"mingcute:meta-fill"} className="" /> Llamma
           </Code>{" "}
-          to create research databases and literature reviews on user-selected
-          topics, funded by{" "}
-          <Code>
+          to create literature reviews and research databases for{" "}
+          <Code className="leading-relaxed">
             <HAIP className="-mt-0.5 inline p-[0.5px]" height={16} width={14} />{" "}
-            HAIP
-          </Code>
+            Health AI Partnership
+          </Code>{" "}
+          users
         </>,
         <>
           Building a multimodal deep learning predictive model for
@@ -174,11 +187,19 @@ export const Experience = () => {
           >
             2
           </span>
-          O capture for 2 <Code>Aramco</Code> projects
+          O capture for 2{" "}
+          <Code>
+            <Aramco
+              className="-mt-0.5 inline rounded-[3px] p-[0.05em]"
+              size={16}
+            />{" "}
+            Saudi Aramco
+          </Code>{" "}
+          projects
         </>,
         <>
           Assisted with composing a proposal for computationally-predicted
-          materials to a board of <Code>Aramco</Code> managers
+          materials to a board of managers
         </>,
       ],
     },
@@ -196,12 +217,14 @@ export const Experience = () => {
         <>
           Utilized{" "}
           <Code>
-            <DefaultIcon icon={"streamline:ai-generate-variation-spark-solid"} /> ANOVA
+            <DefaultIcon
+              icon={"streamline:ai-generate-variation-spark-solid"}
+            />{" "}
+            ANOVA
           </Code>{" "}
           algorithms and{" "}
           <Code>
-            <DefaultIcon icon={"file-icons:nextflow"} />{" "}
-            Nextflow
+            <DefaultIcon icon={"file-icons:nextflow"} /> Nextflow
           </Code>{" "}
           to measure genetic variation and phylogeny of 5 Capparis species
         </>,
@@ -225,7 +248,7 @@ export const Experience = () => {
           hidden: { opacity: 0, y: 25 },
         }}
       >
-        <Badge variant={"outline"} className="mb-4" id="experience">
+        <Badge variant="outline" className="mb-4" id="experience">
           Experience
         </Badge>
 
@@ -245,7 +268,7 @@ export const Experience = () => {
         }}
         className="w-full"
       >
-        <div className="container px-1">
+        <div className="container px-1 gap-y-0">
           <ul className="exp-slider mb-4 relative">
             <motion.div
               className="underlineSpecial"
@@ -272,7 +295,7 @@ export const Experience = () => {
                 </span>
                 {experience.present && (
                   <Badge
-                    variant={"default"}
+                    variant="default"
                     className="p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
                   >
                     Present
@@ -280,7 +303,7 @@ export const Experience = () => {
                 )}
                 {experience.incoming && (
                   <Badge
-                    variant={"secondary"}
+                    variant="secondary"
                     className="p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
                   >
                     Incoming
@@ -289,69 +312,79 @@ export const Experience = () => {
               </motion.li>
             ))}
           </ul>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={selected}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{
-                duration: 0.3,
-                opacity: { duration: 0.2 },
-              }}
-              className="text-xl font-medium font-sans text-pretty"
-            >
+          <motion.div
+            animate={{ height: contentHeight }}
+            transition={{ duration: 0.2, ease: "linear" }}
+          >
+            <AnimatePresence mode="wait">
               <motion.div
-                layout
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                key={selected}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 0 }}
+                transition={{
+                  duration: 0.25,
+                  opacity: { duration: 0.25 },
+                }}
+                className="text-xl font-medium font-sans text-pretty"
+                onAnimationComplete={() => {
+                  const element = document.getElementById(`content-${selected}`);
+                  if (element) {
+                    setContentHeight(element.offsetHeight);
+                  }
+                }}
               >
-                <h3>
-                  <span className="text-accent-foreground font-semibold">
-                    {experiences[selected].role}
-                  </span>
-                  <span className="text-xl font-medium font-sans">
-                    &nbsp;@&nbsp;
-                    <Link href={experiences[selected].url}>
-                      <div className="inline">
-                        {experiences[selected].name}{" "}
-                      </div>
-                      <ArrowUpRight
-                        className="inline-block w-5 mb-0.5"
-                        size={16}
-                      />
-                    </Link>
-                  </span>
-                </h3>
-                <p className="text-sm font-medium text-muted-foreground font-mono pb-2 tracking-tight brightness-110">
-                  {experiences[selected].start} - {experiences[selected].end}
-                </p>
-                <ul className="text-sm text-muted-foreground font-sans">
-                  {experiences[selected].shortDescription.map(
-                    (description, index) => (
-                      <motion.li
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className={`text-sm text-muted-foreground font-sans list-outside list-disc ml-4 ${
-                          index !==
-                          experiences[selected].shortDescription.length - 1
-                            ? "pb-2"
-                            : ""
-                        }`}
-                      >
-                        {typeof description === "string"
-                          ? description
-                          : description}
-                      </motion.li>
-                    )
-                  )}
-                </ul>
+                <motion.div
+                  id={`content-${selected}`}
+                  layout
+                  transition={{ type: "spring", stiffness: 425, damping: 30, mass: 0.9 }}
+                >
+                  <h3>
+                    <span className="text-accent-foreground font-semibold">
+                      {experiences[selected].role}
+                    </span>
+                    <span className="text-xl font-medium font-sans">
+                      &nbsp;@&nbsp;
+                      <Link href={experiences[selected].url}>
+                        <div className="inline">
+                          {experiences[selected].name}{" "}
+                        </div>
+                        <ArrowUpRight
+                          className="inline-block w-5 mb-0.5"
+                          size={16}
+                        />
+                      </Link>
+                    </span>
+                  </h3>
+                  <p className="text-sm font-medium text-muted-foreground font-mono pb-2 tracking-tight brightness-110">
+                    {experiences[selected].start} - {experiences[selected].end}
+                  </p>
+                  <ul className="text-sm text-muted-foreground font-sans">
+                    {experiences[selected].shortDescription.map(
+                      (description, index) => (
+                        <motion.li
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className={`text-sm text-muted-foreground font-sans list-outside list-disc ml-4 ${
+                            index !== experiences[selected].shortDescription.length - 1
+                              ? "pb-2"
+                              : ""
+                          }`}
+                        >
+                          {description}
+                        </motion.li>
+                      )
+                    )}
+                  </ul>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          </AnimatePresence>
+            </AnimatePresence>
+          </motion.div>
         </div>
       </motion.div>
     </Section>
   );
 };
+

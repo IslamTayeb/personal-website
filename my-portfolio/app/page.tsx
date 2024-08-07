@@ -12,44 +12,46 @@ import { Contact } from "./_components/Contact";
 import { Publications } from "./_components/Publications";
 import { HAIP } from "./_components/Icons/HAIP";
 
+const height = 45;
+
 export default function Home() {
   return (
     <main>
       <Header />
 
-      <Spacing height={40} />
+      <Spacing height={height} />
 
       <Hero />
 
-      <Spacing height={40} />
+      <Spacing height={height} />
 
       {/* <Summary />
 
-      <Spacing height={40} /> */}
+      <Spacing height={height} /> */}
 
       <About />
 
-      <Spacing height={40} />
+      <Spacing height={height} />
 
       <Experience />
 
-      <Spacing height={40} />
+      <Spacing height={height} />
 
       <Projects />
 
-      <Spacing height={40} />
+      <Spacing height={height} />
 
       <Skills />
 
-      <Spacing height={40} />
+      <Spacing height={height} />
 
       <Publications />
 
-      <Spacing height={40} />
+      <Spacing height={height} />
 
       <Contact />
 
-      <Spacing height={40} />
+      <Spacing height={height} />
 
       <Footer />
     </main>
