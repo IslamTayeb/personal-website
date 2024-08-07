@@ -57,7 +57,7 @@ export const Hero = () => {
               Hello, <span className="text-accent-foreground">Islam</span> here!
             </h2>
             <h3 className="font-caption font-medium text-2xl">
-              I'm a{" "}
+              I&apos;m a{" "}
               <span className="text-primary">
                 <Typewriter
                   words={[
@@ -108,7 +108,7 @@ export const Hero = () => {
                     <Code><DefaultIcon icon="flag:eg-1x1" className="rounded-[1.5px]" /> Egypt</Code>{" "}
                     and{" "}
                     <Code><DefaultIcon icon="flag:sa-1x1" className="rounded-[1.5px]" /> Saudi Arabia</Code>.
-                    I used to be a semi-professional graphic designer in esports for 4 years, but I still design as a hobby. I'm a big fan of{" "}
+                    I used to be a semi-professional graphic designer in esports for 4 years, but I still design as a hobby. I&apos;m a big fan of{" "}
                     <Code><DefaultIcon icon="clarity:cd-dvd-solid" /> Alternative Hip Hop</Code>, and I like to play{" "}
                     <Code><DefaultIcon icon="fluent:tetris-app-16-filled" /> Tetris</Code>{" "}
                     in my free time between classes and work.
