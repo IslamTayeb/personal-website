@@ -194,7 +194,7 @@ export const Publications = () => {
           adenocarcinoma, with sotorasib and adagrasib as effective inhibitors.
           KRAS mutations impact cell growth and survival, with G12D potentially
           useful as an immunotherapy biomarker. The review highlights the need
-          for further research due to NSCLC's severity and prevalence in high
+          for further research due to NSCLC&apos;s severity and prevalence in high
           altitude areas especially.,
         </>
       ),
