@@ -48,7 +48,7 @@ export const Hero = () => {
                 src="/myphotogradient.webp"
                 alt="Gradient Photo"
               />
-              <AvatarFallback>Islam</AvatarFallback>
+              <AvatarFallback className="h-full">Islam</AvatarFallback>
             </Avatar>
           </div>
 
