@@ -229,7 +229,7 @@ export const Publications = () => {
       pubType: "Literature Review",
       pubDescription: (
         <>
-          This review highlights Capparis cartilaginea Decne from the
+          This review highlights Capparis Cartilaginea Decne from the
           Capparaceae family, valued for its medicinal use historically
           throughout many areas of Asia and Africa. Phytochemical screenings
           reveal diverse metabolites supporting its therapeutic claims,

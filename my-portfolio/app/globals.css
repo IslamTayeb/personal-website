@@ -256,7 +256,7 @@
   }
   .project-info {
     z-index: 5;
-    width: 525px;
+    width: 575px;
     display: flex;
     flex-direction: column;
     position: absolute;

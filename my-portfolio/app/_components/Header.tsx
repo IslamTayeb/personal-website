@@ -15,7 +15,7 @@ export const Header = () => {
   return (
     <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80">
       <Section className="flex items-baseline">
-        <h1 className="text-lg font-semibold text-primary"><Link href="islamtayeb.com">islamtayeb.com</Link></h1>
+        <h1 className="text-lg font-semibold text-primary"><Link href="islamtayeb.dev">islamtayeb.dev</Link></h1>
         <div className="flex-1" />
         <ul className="flex items-center gap-2">
 
