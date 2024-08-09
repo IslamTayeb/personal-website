@@ -270,7 +270,7 @@ export const Experience: React.FC = () => {
         className="w-full"
       >
         <div className="container px-1 gap-y-0">
-          <ul className="exp-slider mb-4 relative">
+          <ul className="exp-slider max-md:mb-4 relative">
             <motion.div
               className="underlineSpecial"
               layoutId="underline"
