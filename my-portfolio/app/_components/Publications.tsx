@@ -194,8 +194,8 @@ export const Publications = () => {
           adenocarcinoma, with sotorasib and adagrasib as effective inhibitors.
           KRAS mutations impact cell growth and survival, with G12D potentially
           useful as an immunotherapy biomarker. The review highlights the need
-          for further research due to NSCLC&apos;s severity and prevalence in high
-          altitude areas especially.,
+          for further research due to NSCLC&apos;s severity and prevalence in
+          high altitude areas especially.,
         </>
       ),
       pubLink:
@@ -252,7 +252,7 @@ export const Publications = () => {
   ];
 
   return (
-    <Section className="flex flex-col items-start gap-4 overflow-x-hidden">
+    <Section className="flex flex-col items-start gap-4">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -365,18 +365,18 @@ export const Publications = () => {
                       <AccordionContent className="mr-8 pb-2.5 pt-0.5">
                         {pubDescription}
                       </AccordionContent>
-                      <div className="inline text-xs leading-none">
+                      <div className="flex flex-wrap gap-2 text-xs leading-none">
                         {pubCategory.map((category) => (
                           <Code
                             key={category.name}
-                            className="mr-2 leading-[1.8]"
+                            className="inline-flex items-center"
                           >
                             <DefaultIcon
                               icon={category.icon}
-                              className={`text-current`}
+                              className="text-current"
                               height="14"
                             />
-                            <span className=""> {category.name}</span>
+                            <span className="ml-1.5">{category.name}</span>
                           </Code>
                         ))}
                       </div>

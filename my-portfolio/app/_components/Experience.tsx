@@ -315,6 +315,7 @@ export const Experience: React.FC = () => {
           <motion.div
             animate={{ height: contentHeight }}
             transition={{ duration: 0.2, ease: "linear" }}
+            
           >
             <AnimatePresence mode="wait">
               <motion.div
