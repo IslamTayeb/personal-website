@@ -373,7 +373,7 @@ export const Publications = () => {
                           >
                             <DefaultIcon
                               icon={category.icon}
-                              className="text-current"
+                              className="text-current -mt-0"
                               height="14"
                             />
                             <span className="ml-1.5">{category.name}</span>
