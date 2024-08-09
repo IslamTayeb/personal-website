@@ -348,7 +348,7 @@ export const Contact = () => {
 
               <div className="ml-auto flex flex-row gap-2">
 
-                <Link href="" target="_blank" rel="noopener noreferrer">
+                <Link href="Islam_Tayeb_Resume.pdf" target="_blank" rel="noopener noreferrer">
                   <Button
                     variant="ghost"
                     size="icon"

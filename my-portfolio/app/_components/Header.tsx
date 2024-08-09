@@ -40,7 +40,7 @@ export const Header = () => {
             <Icon icon={"academicons:researchgate-square"} className="" />
           </Link>
           <Link
-            href="resume"
+            href="Islam_Tayeb_Resume.pdf"
             className={cn(buttonVariants({ variant: "outline" }), "px-[4.5px] h-6")}
           >
             <DefaultIcon fontSize={13} className="text-foreground -mt-0.5" icon={"solar:file-bold"} />
