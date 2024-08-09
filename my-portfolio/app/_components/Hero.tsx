@@ -71,7 +71,7 @@ export const Hero = () => {
                   typeSpeed={40}
                   loop={0}
                   deleteSpeed={25}
-                  delaySpeed={2250}
+                  delaySpeed={2000}
                 />
               </span>
             </h3>

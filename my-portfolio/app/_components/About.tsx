@@ -62,7 +62,7 @@ export const About = () => {
           whileInView="visible"
           className="flex-1"
           viewport={{ once: true }}
-          transition={{ duration: 0.2, delay: 0.2 }}
+          transition={{ duration: 0.2, }}
           variants={{
             visible: { opacity: 1, y: 0 },
             hidden: { opacity: 0, y: 25 },
@@ -84,7 +84,7 @@ export const About = () => {
           whileInView="visible"
           className="flex-1"
           viewport={{ once: true }}
-          transition={{ duration: 0.2, delay: 0.4 }}
+          transition={{ duration: 0.2, }}
           variants={{
             visible: { opacity: 1, y: 0 },
             hidden: { opacity: 0, y: 25 },
