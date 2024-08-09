@@ -194,7 +194,7 @@ export const Projects = () => {
                         {isNew && (
                           <Badge
                             variant="default"
-                            className="rounded-full font-semibold font-sans text-[0.4em] px-1 h-fit"
+                            className="rounded-full font-semibold font-sans text-[0.4em] px-1 h-fit text-nowrap"
                           >
                             New
                           </Badge>
@@ -202,14 +202,14 @@ export const Projects = () => {
                         {isWip && (
                           <Badge
                             variant="default"
-                            className="rounded-full text-center font-semibold font-sans text-[0.4em] px-1 h-fit "
+                            className="rounded-full text-center font-semibold font-sans text-[0.4em] px-1 h-fit text-nowrap"
                           >
                             In Progress
                           </Badge>
                         )}
                       </>
                     )}
-                    <div className="leading-tight h-min visible relative max-md:invisible max-md:absolute">
+                    <div className="leading-tight h-min visible relative max-md:invisible max-md:absolute ">
                       {projectName}
                     </div>
                     {isOdd && (isNew || isWip) && (
@@ -217,7 +217,7 @@ export const Projects = () => {
                         {isNew && (
                           <Badge
                             variant="default"
-                            className="rounded-full font-semibold font-sans text-[0.4em] px-1 h-fit"
+                            className="rounded-full font-semibold font-sans text-[0.4em] px-1 h-fit text-nowrap"
                           >
                             New
                           </Badge>
