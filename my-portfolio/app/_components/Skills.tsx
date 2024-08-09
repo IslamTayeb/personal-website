@@ -134,7 +134,7 @@ export const Skills = () => {
           </TableHeader>
           <TableBody className="text-accent-foreground">
             {skillsData.map((skillCategory) => (
-              <TableRow key={skillCategory.category}>
+              <TableRow key={skillCategory.category.toString()}>
                 <TableCell className="font-medium text-muted-foreground">
                   {skillCategory.category}
                 </TableCell>
