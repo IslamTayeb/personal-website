@@ -24,7 +24,12 @@ export const Header = () => {
             rel="noopener noreferrer"
             className={cn(buttonVariants({ variant: "outline" }), "size-6 p-0")}
           >
-            <LinkedInIcon size={12} className="text-foreground" />
+            {/* <LinkedInIcon size={12} className="text-foreground" /> */}
+            <DefaultIcon
+              fontSize={12.7}
+              className="text-foreground -mt-0 rounded-[2.5px]"
+              icon={"bi:linkedin"}
+            />
           </Link>
 
           <Link
@@ -46,7 +51,7 @@ export const Header = () => {
             rel="noopener noreferrer"
             className={cn(buttonVariants({ variant: "outline" }), "size-6 p-0")}
           >
-            <Icon icon={"academicons:researchgate-square"} className="" />
+            <Icon icon={"academicons:researchgate-square"} className="rounded-[4px]" />
           </Link>
           <Link
             href="Islam_Tayeb_Resume.pdf"
@@ -59,7 +64,7 @@ export const Header = () => {
           >
             <DefaultIcon
               fontSize={13}
-              className="text-foreground -mt-0.5"
+              className="text-foreground -mt-0"
               icon={"solar:file-bold"}
             />
 

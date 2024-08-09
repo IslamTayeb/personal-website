@@ -377,7 +377,7 @@ export const Publications = () => {
                               className="text-current -mt-0"
                               height="14"
                             />
-                            <span className="ml-1.5">{category.name}</span>
+                            <span className="ml-2">{category.name}</span>
                           </Code>
                         ))}
                       </div>
