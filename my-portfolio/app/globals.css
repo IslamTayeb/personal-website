@@ -455,7 +455,7 @@
 
   /* Scrollbar */
 
-  #publications,#projects,#contact,#about,#experience,#skills,#education,#footer {
+  #publications,#projects,#contact,#about,#experience,#skills,#education,#footer,#hero {
     scroll-margin-top: 100px;
   }
   ::-webkit-scrollbar {

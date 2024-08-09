@@ -31,7 +31,7 @@ export const Hero = () => {
       className="ease-in-out"
     >
       <Section className="">
-        <Badge variant="outline" className="mb-4">
+        <Badge variant="outline" className="mb-4" id="hero">
           Welcome!
         </Badge>
         <div className="flex max-md:flex-col items-start gap-4">

@@ -15,7 +15,7 @@ export const Header = () => {
   return (
     <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80">
       <Section className="flex items-baseline">
-        <h1 className="text-lg font-semibold text-primary"><Link href="islamtayeb.dev">islamtayeb.dev</Link></h1>
+        <h1 className="text-lg font-semibold text-primary"><Link href="#hero">islamtayeb.dev</Link></h1>
         <div className="flex-1" />
         <ul className="flex items-center gap-2">
 
@@ -41,9 +41,13 @@ export const Header = () => {
           </Link>
           <Link
             href="resume"
-            className={cn(buttonVariants({ variant: "outline" }), "px-1.5 h-6")}
+            className={cn(buttonVariants({ variant: "outline" }), "px-[4.5px] h-6")}
           >
-            <DefaultIcon fontSize={13} className="text-foreground mr-1 -mt-0.5" icon={"solar:file-bold"} /><p className="text-foreground m-0 leading-none text-xs">Resume</p>
+            <DefaultIcon fontSize={13} className="text-foreground -mt-0.5" icon={"solar:file-bold"} />
+            
+            <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-1">
+              Resume
+            </p>
           </Link>
         </ul>
       </Section>

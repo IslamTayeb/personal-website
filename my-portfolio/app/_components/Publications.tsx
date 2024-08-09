@@ -252,7 +252,7 @@ export const Publications = () => {
   ];
 
   return (
-    <Section className="flex flex-col items-start gap-4">
+    <Section className="flex flex-col items-start gap-4 overflow-x-hidden">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -369,11 +369,11 @@ export const Publications = () => {
                         {pubCategory.map((category) => (
                           <Code
                             key={category.name}
-                            className="mr-2 text-nowrap leading-loose"
+                            className="mr-2 leading-[1.8]"
                           >
                             <DefaultIcon
                               icon={category.icon}
-                              className={`text-current inline mr-1 align-middle`}
+                              className={`text-current`}
                               height="14"
                             />
                             <span className=""> {category.name}</span>
