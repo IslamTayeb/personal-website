@@ -22,6 +22,7 @@ import {
 import { Code, DefaultIcon } from "./sharedComponents";
 
 export const Skills = () => {
+  
   const skillsData = [
     {
       category: "Programming Languages",
@@ -29,6 +30,7 @@ export const Skills = () => {
         { name: "Python", icon: "akar-icons:python-fill" },
         { name: "TypeScript", icon: "akar-icons:typescript-fill" },
         { name: "Java", icon: "fa6-brands:java" },
+        { name: "SQL", icon: "fa-solid:database" },
         { name: "MATLAB", icon: "file-icons:matlab" },
         { name: "C Language", icon: "devicon-plain:c" },
         // { name: "R Language", icon: "devicon-plain:r" },
@@ -39,6 +41,7 @@ export const Skills = () => {
       category: "Machine Learning",
       technologies: [
         { name: "TensorFlow", icon: "simple-icons:tensorflow" },
+        { name: "PyTorch", icon: "simple-icons:pytorch" },
         { name: "BERT", icon: "bi:google" },
         { name: "Gemini", icon: "simple-icons:googlegemini" },
         { name: "GPT", icon: "simple-icons:openai" },
@@ -50,14 +53,15 @@ export const Skills = () => {
       technologies: [
         { name: "React", icon: "akar-icons:react-fill" },
         { name: "Angular", icon: "cib:angular" },
+        { name: "SCSS", icon: "simple-icons:sass" },
         { name: "Framer Motion", icon: "teenyicons:framer-solid" },
         { name: "HTML5", icon: "simple-icons:html5" },
         { name: "CSS3", icon: "simple-icons:css3" },
-        { name: "SCSS", icon: "simple-icons:sass" },
+        { name: "PostgreSQL", icon: "akar-icons:postgresql-fill" },
       ],
     },
     {
-      category: "Deployment ‎& Integration",
+      category: <>Deployment&nbsp;& Integration</>,
       technologies: [
         { name: "Git", icon: "simple-icons:git" },
         { name: "Docker", icon: "simple-icons:docker" },

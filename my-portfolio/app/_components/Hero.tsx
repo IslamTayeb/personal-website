@@ -37,7 +37,7 @@ export const Hero = () => {
         <div className="flex max-md:flex-col items-start gap-4">
           {/* Avatar section remains unchanged */}
           <div className="flex-[2] p-2 flex my-auto max-md:mx-auto">
-            <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:my-2 relative border border-accent">
+            <Avatar className="w-11/12 h-auto max-w-xs mx-auto max-md:w-full max-md:mb-2 relative border border-accent">
               <AvatarImage
                 className="object-cover absolute z-20 opacity-0 hover:opacity-100 transition-all scale-105"
                 src="/myphoto.webp"
@@ -79,7 +79,7 @@ export const Hero = () => {
               A <Code><DefaultIcon icon="lucide:braces" /> Computer Science</Code>,{" "}
               <Code><DefaultIcon icon="lucide:dna" /> Bioinformatics</Code>, and{" "}
               <Code><DefaultIcon icon="lucide:atom" /> Chemistry</Code> student at{" "}
-              <Code><Duke size={14} /> Duke University</Code>. Currently based in{" "}
+              <Code className="text-wrap"><Duke size={14} /> Duke University</Code>. Currently based in{" "}
               <Code><DefaultIcon icon="flag:us-1x1" className="rounded-[1.5px]" /> Durham, NC</Code>{" "}
               with an interest in applied research and AI/ML. Feel free to{" "}
               <Link href="#contact" className="underline underline-offset-2">

@@ -115,7 +115,7 @@ export const Publications = () => {
           icon: "mdi:pipe-disconnected",
         },
         {
-          name: "Environmental Technology",
+          name: "Environmental Tech",
           icon: "mdi:environment",
         },
       ],
@@ -244,7 +244,7 @@ export const Publications = () => {
           icon: "mdi:leaf",
         },
         {
-          name: "Traditional Medicine",
+          name: "Folk Medicine",
           icon: "icon-park-solid:traditional-chinese-medicine",
         },
       ],
@@ -367,6 +367,7 @@ export const Publications = () => {
                       </AccordionContent>
                       <div className="flex flex-wrap gap-2 text-xs leading-none">
                         {pubCategory.map((category) => (
+                          // consider using max-md:text-nowrap
                           <Code
                             key={category.name}
                             className="inline-flex items-center"

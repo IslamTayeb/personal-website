@@ -32,14 +32,15 @@ export const Experience: React.FC = () => {
 
   useEffect(() => {
     const transformSelected = () => {
-      const underlineSpecial = document.querySelector<HTMLElement>(".underlineSpecial");
+      const underlineSpecial =
+        document.querySelector<HTMLElement>(".underlineSpecial");
       if (underlineSpecial) {
         underlineSpecial.style.top = `${selected * 2.5}rem`;
       }
     };
     transformSelected();
   }, [selected]);
-  
+
   const experiences = [
     // {
     //   name: "Feng Labs",
@@ -79,7 +80,7 @@ export const Experience: React.FC = () => {
             <DefaultIcon icon={"mingcute:meta-fill"} className="" /> Llamma
           </Code>{" "}
           to create literature reviews and research databases for{" "}
-          <Code className="leading-relaxed">
+          <Code className="leading-relaxed text-wrap">
             <HAIP className="-mt-0.5 inline p-[0.5px]" height={16} width={14} />{" "}
             Health AI Partnership
           </Code>{" "}
@@ -150,7 +151,7 @@ export const Experience: React.FC = () => {
       shortDescription: [
         <>
           Created a{" "}
-          <Code>
+          <Code className="text-wrap leading-relaxed">
             <DefaultIcon icon={"mdi:chart-bell-curve"} /> GC Monte Carlo
             simulation
           </Code>{" "}
@@ -223,7 +224,7 @@ export const Experience: React.FC = () => {
             ANOVA
           </Code>{" "}
           algorithms and{" "}
-          <Code>
+          <Code className="text-wrap">
             <DefaultIcon icon={"file-icons:nextflow"} /> Nextflow
           </Code>{" "}
           to measure genetic variation and phylogeny of 5 Capparis species
@@ -315,7 +316,6 @@ export const Experience: React.FC = () => {
           <motion.div
             animate={{ height: contentHeight }}
             transition={{ duration: 0.2, ease: "linear" }}
-            
           >
             <AnimatePresence mode="wait">
               <motion.div
@@ -329,7 +329,9 @@ export const Experience: React.FC = () => {
                 }}
                 className="text-xl font-medium font-sans text-pretty"
                 onAnimationComplete={() => {
-                  const element = document.getElementById(`content-${selected}`);
+                  const element = document.getElementById(
+                    `content-${selected}`
+                  );
                   if (element) {
                     setContentHeight(element.offsetHeight);
                   }
@@ -338,7 +340,12 @@ export const Experience: React.FC = () => {
                 <motion.div
                   id={`content-${selected}`}
                   layout
-                  transition={{ type: "spring", stiffness: 425, damping: 30, mass: 0.9 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 425,
+                    damping: 30,
+                    mass: 0.9,
+                  }}
                 >
                   <h3>
                     <span className="text-accent-foreground font-semibold">
@@ -369,7 +376,8 @@ export const Experience: React.FC = () => {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.1 }}
                           className={`text-sm text-muted-foreground font-sans list-outside list-disc ml-4 ${
-                            index !== experiences[selected].shortDescription.length - 1
+                            index !==
+                            experiences[selected].shortDescription.length - 1
                               ? "pb-2"
                               : ""
                           }`}
@@ -388,4 +396,3 @@ export const Experience: React.FC = () => {
     </Section>
   );
 };
-

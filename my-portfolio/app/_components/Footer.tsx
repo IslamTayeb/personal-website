@@ -13,7 +13,7 @@ export const Footer = () => {
           <span className=" ml-0.5">
             {"2024"} {"All rights reserved"}{" "}
           </span>
-          <div className="ml-auto text-right">
+          <div className="ml-auto text-right max-[375px]:hidden">
             Made with <HeartFilledIcon className="inline -mt-1" width={11.5}/> in{" "}
             <span className="italic font-semibold">Durham, NC</span>
           </div>
