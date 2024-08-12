@@ -31,10 +31,10 @@ export const Skills = () => {
         { name: "TypeScript", icon: "akar-icons:typescript-fill" },
         { name: "Java", icon: "fa6-brands:java" },
         { name: "SQL", icon: "fa-solid:database" },
-        { name: "MATLAB", icon: "file-icons:matlab" },
+        { name: "R Language", icon: "devicon-plain:r" },
         { name: "C Language", icon: "devicon-plain:c" },
-        // { name: "R Language", icon: "devicon-plain:r" },
-        { name: "LaTeX", icon: "file-icons:latex" },
+        { name: "MATLAB", icon: "file-icons:matlab" },
+        // { name: "LaTeX", icon: "file-icons:latex" },
       ],
     },
     {
