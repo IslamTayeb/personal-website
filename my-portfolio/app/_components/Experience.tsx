@@ -66,7 +66,7 @@ export const Experience: React.FC = () => {
       present: true,
       incoming: false,
       role: "Research Analyst",
-      url: "https://www.rapidops.com",
+      url: "https://dihi.org/",
       start: "Jun. 2024",
       end: "Present",
       shortDescription: [
@@ -111,7 +111,7 @@ export const Experience: React.FC = () => {
       present: false,
       incoming: false,
       role: "Software Engineering Intern",
-      url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
+      url: "https://www.linkedin.com/company/project-sapien/?trk=ppro_cprof",
       start: "Dec. 2023",
       end: "Jan. 2024",
       shortDescription: [
@@ -145,7 +145,7 @@ export const Experience: React.FC = () => {
       present: false,
       incoming: false,
       role: "Research Assistant",
-      url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
+      url: "https://kfupm.edu.sa/",
       start: "Jul. 2022",
       end: "Sep. 2023",
       shortDescription: [
@@ -211,7 +211,7 @@ export const Experience: React.FC = () => {
       present: false,
       incoming: false,
       role: "Research Assistant",
-      url: "https://www.linkedin.com/company/association-of-computer-engineering-students/",
+      url: "https://www.kau.edu.sa/home_english.aspx",
       start: "Aug. 2021",
       end: "Jun. 2022",
       shortDescription: [
