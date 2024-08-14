@@ -353,7 +353,7 @@ export const Experience: React.FC = () => {
                     </span>
                     <span className="text-xl font-medium font-sans">
                       &nbsp;@&nbsp;
-                      <Link href={experiences[selected].url}>
+                      <Link href={experiences[selected].url} target="_blank" rel="noopener noreferrer">
                         <div className="inline">
                           {experiences[selected].name}{" "}
                         </div>
