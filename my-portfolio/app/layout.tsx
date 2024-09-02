@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Moon } from "lucide-react";
 import { Toaster } from "@/components/ui/toaster"
+import { Analytics } from "@vercel/analytics/react"
 
 const anekTelugu = Anek_Telugu({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export const metadata: Metadata = {
       <body className={cn(GeistMono.variable, GeistSans.variable, anekTelugu.variable, "font-mono h-full bg-background text-foreground")}>
         {children}
         <SpeedInsights />
+        <Analytics/>
         <Toaster />
       </body>
     </html>
