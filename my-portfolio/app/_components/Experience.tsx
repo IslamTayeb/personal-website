@@ -35,7 +35,7 @@ export const Experience: React.FC = () => {
       const underlineSpecial =
         document.querySelector<HTMLElement>(".underlineSpecial");
       if (underlineSpecial) {
-        underlineSpecial.style.top = `${selected * 2.5}rem`;
+        underlineSpecial.style.top = `${selected * 2.25}rem`;
       }
     };
     transformSelected();
@@ -43,11 +43,11 @@ export const Experience: React.FC = () => {
 
   const experiences = [
     // {
-    //   name: "Feng Labs",
+    //   name: "Naderri Labs",
     //   shortname: "Duke",
     //   // logo: <Duke size={16} className="mr-2 mt-0.5" />,
-    //   present: false,
-    //   incoming: true,
+    //   present: true,
+    //   incoming: false,
     //   role: "Content Creator",
     //   url: "https://www.youtube.com/kishansheth21",
     //   start: "April 2021",
@@ -63,12 +63,12 @@ export const Experience: React.FC = () => {
       name: "Duke Institute for Health Innovation",
       shortname: "DIHI",
       // logo: <DIHI size={16} className="mr-2" />,
-      present: true,
+      present: false,
       incoming: false,
       role: "Research Analyst",
       url: "https://dihi.org/",
       start: "Jun. 2024",
-      end: "Present",
+      end: "Aug. 2024",
       shortDescription: [
         <>
           Developed LLM agents using{" "}
@@ -92,10 +92,6 @@ export const Experience: React.FC = () => {
           <Code>
             <DukeHealth size={16} className="-mt-0.5" /> Duke Health
           </Code>
-        </>,
-        <>
-          Implemented solutions for backend problems in internal products,
-          improving performance speed by 5-15% for each
         </>,
       ],
     },
@@ -197,10 +193,6 @@ export const Experience: React.FC = () => {
             Saudi Aramco
           </Code>{" "}
           projects
-        </>,
-        <>
-          Assisted with composing a proposal for computationally-predicted
-          materials to a board of managers
         </>,
       ],
     },

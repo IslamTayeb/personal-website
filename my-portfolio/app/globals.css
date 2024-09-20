@@ -67,7 +67,7 @@
   .container {
     display: grid;
     gap: 1rem;
-    grid-template-columns: 20.5% auto;
+    grid-template-columns: 19.75% auto;
   }
 
   .exp-slider {
@@ -76,15 +76,6 @@
     height: max-content;
   }
 
-  .underlineSpecial {
-    background-color: hsl(var(--accent-foreground));
-    position: absolute;
-    left: -0.5px;
-    top: 0;
-    height: 2.5rem;
-    width: 3px;
-    transition: 0.3s ease-in-out;
-  }
 
   .exp-slider::before {
     position: absolute;
@@ -96,13 +87,23 @@
   }
 
   .exp-slider-item {
-    height: 2.5rem;
-    padding: 0 1.25rem;
+    height: 2.25rem;
+    padding: 0 1.2rem;
     display: flex;
     vertical-align: middle;
     cursor: pointer;
     width: 100%;
     color: hsl(var(--primary));
+  }
+
+  .underlineSpecial {
+    background-color: hsl(var(--accent-foreground));
+    position: absolute;
+    left: -0.5px;
+    top: 0;
+    height: 2.25rem;
+    width: 3px;
+    transition: 0.3s ease-in-out;
   }
 
   .exp-slider-item span {
