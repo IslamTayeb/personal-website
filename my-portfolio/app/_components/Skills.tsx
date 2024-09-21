@@ -22,7 +22,7 @@ import {
 import { Code, DefaultIcon } from "./sharedComponents";
 
 export const Skills = () => {
-  
+
   const skillsData = [
     {
       category: "Programming Languages",
@@ -63,6 +63,7 @@ export const Skills = () => {
     {
       category: <>Deployment&nbsp;& Integration</>,
       technologies: [
+        { name: "Linux", icon: "devicon-plain:linux" },
         { name: "Git", icon: "simple-icons:git" },
         { name: "Docker", icon: "simple-icons:docker" },
         { name: "Vercel", icon: "ion:logo-vercel" },

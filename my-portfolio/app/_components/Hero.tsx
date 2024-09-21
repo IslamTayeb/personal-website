@@ -76,11 +76,27 @@ export const Hero = () => {
               </span>
             </h3>
             <p className="font-sans basis-0 text-muted-foreground text-pretty">
-              A <Code><DefaultIcon icon="lucide:braces" /> Computer Science</Code>,{" "}
-              <Code><DefaultIcon icon="lucide:dna" /> Bioinformatics</Code>, and{" "}
-              <Code><DefaultIcon icon="lucide:atom" /> Chemistry</Code> student at{" "}
-              <Code className="text-wrap"><Duke size={14} /> Duke University</Code>. Currently based in{" "}
-              <Code><DefaultIcon icon="flag:us-1x1" className="rounded-[1.5px]" /> Durham, NC</Code>{" "}
+              A{" "}
+              <Code>
+                <DefaultIcon icon="lucide:braces" /> Computer Science
+              </Code>
+              ,{" "}
+              <Code>
+                <DefaultIcon icon="lucide:dna" /> Bioinformatics
+              </Code>
+              , and{" "}
+              <Code>
+                <DefaultIcon icon="lucide:atom" /> Chemistry
+              </Code>{" "}
+              student at{" "}
+              <Code className="text-wrap">
+                <Duke size={14} /> Duke University
+              </Code>
+              . Currently based in{" "}
+              <Code>
+                <DefaultIcon icon="flag:us-1x1" className="rounded-[1.5px]" />{" "}
+                Durham, NC
+              </Code>{" "}
               with an interest in applied research and AI/ML. Feel free to{" "}
               <Link href="#contact" className="underline underline-offset-2">
                 reach out
@@ -96,21 +112,39 @@ export const Hero = () => {
                   exit="collapsed"
                   variants={{
                     open: { opacity: 1, height: "auto" },
-                    collapsed: { opacity: 1, height: 0 }
+                    collapsed: { opacity: 1, height: 0 },
                   }}
                   transition={{ duration: 0.15, ease: "linear" }}
                   className="overflow-hidden"
                 >
-                  <motion.p
-                    className="font-sans basis-0 text-muted-foreground pt-1 text-pretty"
-                  >
+                  <motion.p className="font-sans basis-0 text-muted-foreground pt-1 text-pretty">
                     I grew up between{" "}
-                    <Code><DefaultIcon icon="flag:eg-1x1" className="rounded-[1.5px]" /> Egypt</Code>{" "}
+                    <Code>
+                      <DefaultIcon
+                        icon="flag:eg-1x1"
+                        className="rounded-[1.5px]"
+                      />{" "}
+                      Egypt
+                    </Code>{" "}
                     and{" "}
-                    <Code><DefaultIcon icon="flag:sa-1x1" className="rounded-[1.5px]" /> Saudi Arabia</Code>.
-                    I used to be a semi-professional graphic designer in esports for 4 years, but I still design as a hobby. I&apos;m a big fan of{" "}
-                    <Code><DefaultIcon icon="clarity:cd-dvd-solid" /> Alternative Hip Hop</Code>, and I like to play{" "}
-                    <Code><DefaultIcon icon="fluent:tetris-app-16-filled" /> Tetris</Code>{" "}
+                    <Code>
+                      <DefaultIcon
+                        icon="flag:sa-1x1"
+                        className="rounded-[1.5px]"
+                      />{" "}
+                      Saudi Arabia
+                    </Code>
+                    . I used to be a semi-professional graphic designer in
+                    esports for 4 years, but I still design as a hobby. I&apos;m
+                    a big fan of{" "}
+                    <Code>
+                      <DefaultIcon icon="clarity:cd-dvd-solid" /> Alternative
+                      Hip Hop
+                    </Code>
+                    , and I like to play{" "}
+                    <Code>
+                      <DefaultIcon icon="fluent:tetris-app-16-filled" /> Tetris
+                    </Code>{" "}
                     in my free time between classes and work.
                   </motion.p>
                 </motion.div>
