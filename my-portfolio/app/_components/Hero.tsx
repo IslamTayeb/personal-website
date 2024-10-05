@@ -63,7 +63,8 @@ export const Hero = () => {
                   words={[
                     "Research Assistant",
                     "Software Developer",
-                    "Research Analyst",
+                    "Data Engineer",
+                    "Graphic Designer",
                   ]}
                   cursor
                   cursorColor="#a8b1c2"

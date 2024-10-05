@@ -51,7 +51,7 @@ export const Header = () => {
             rel="noopener noreferrer"
             className={cn(buttonVariants({ variant: "outline" }), "size-6 p-0")}
           >
-            <Icon icon={"academicons:researchgate-square"} className="rounded-[4px]" />
+            <Icon icon={"academicons:researchgate-square"} className="rounded-[4px] text-foreground" />
           </Link>
           <Link
             href="Islam_Tayeb_Resume.pdf"

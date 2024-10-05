@@ -42,23 +42,40 @@ export const Experience: React.FC = () => {
   }, [selected]);
 
   const experiences = [
-    // {
-    //   name: "Naderri Labs",
-    //   shortname: "Duke",
-    //   // logo: <Duke size={16} className="mr-2 mt-0.5" />,
-    //   present: true,
-    //   incoming: false,
-    //   role: "Content Creator",
-    //   url: "https://www.youtube.com/kishansheth21",
-    //   start: "April 2021",
-    //   end: "Present",
-    //   shortDescription: [
-    //     <>
-    //       I had <Code>experience</Code> working on a large codebase utilizing
-    //       Kibana and Elasticsearc jfads fajfd dsjf jdah.
-    //     </>,
-    //   ],
-    // },
+    {
+      name: "Naderi Labs",
+      shortname: "Duke",
+      // logo: <Duke size={16} className="mr-2 mt-0.5" />,
+      present: true,
+      incoming: false,
+      role: "Research Assistant",
+      url: "https://sites.duke.edu/navid/",
+      start: "Sep 2024",
+      end: "Present",
+      shortDescription: [
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearc jfads fajfd dsjf jdah.
+        </>,
+      ],
+    },
+    {
+      name: "Duke Impact Investing Group",
+      shortname: "DIIG",
+      // logo: <Duke size={16} className="mr-2 mt-0.5" />,
+      present: true,
+      incoming: false,
+      role: "Data Analyst",
+      url: "https://www.dukeimpact.org/",
+      start: "Sep 2024",
+      end: "Present",
+      shortDescription: [
+        <>
+          I had <Code>experience</Code> working on a large codebase utilizing
+          Kibana and Elasticsearc jfads fajfd dsjf jdah.
+        </>,
+      ],
+    },
     {
       name: "Duke Institute for Health Innovation",
       shortname: "DIHI",
@@ -187,7 +204,7 @@ export const Experience: React.FC = () => {
           O capture for 2{" "}
           <Code>
             <Aramco
-              className="-mt-0.5 inline rounded-[3px] p-[0.05em]"
+              className="-mt-1 inline rounded-[3px] p-[0.05em]"
               size={16}
             />{" "}
             Saudi Aramco
