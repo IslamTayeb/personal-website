@@ -1,64 +1,38 @@
+# Islam Tayeb's Portfolio
+This project is a personal portfolio website built using Next.js, showcasing my skills and experience in software development, research, and design. Check it out [here](https://islamtayeb.dev/).
+
 ## Features
-* **Responsive Design:** Adapts seamlessly to various screen sizes and devices.
-* **Smooth Animations:** Uses Framer Motion for engaging and visually appealing transitions.
-* **Contact Form:** Enables visitors to easily get in touch via an integrated contact form using the Resend API.  Server-side validation is implemented to prevent spam and ensure data integrity.
-* **Project Showcase:**  Highlights key projects with descriptions, technologies used, and links to GitHub repositories (where available).
-* **Skills Section:**  Presents a comprehensive list of technical skills using an interactive table.
-* **Experience Section:**  Details work experience with interactive elements for showcasing different roles.
-* **Publications Section:**  Lists publications with expandable descriptions, links, and categories.
-* **About Section:** Briefly introduces the creator and highlights areas of expertise.
-
-# Islam Tayeb's Portfolio test
-This project is a personal portfolio website built with Next.js, showcasing my experience and projects.  It features a responsive design, smooth animations, and integrates with the Resend API for contact form submissions.
-<div align="center">
-<img src="https://github.com/IslamTayeb/personal-website/blob/main/image-1736729408814.png?raw=true" alt="image-1736729408814.png" />
-</div>
-
-
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request.
-
-## Installation
-The project uses npm (or yarn, pnpm, bun) for package management.  After cloning the repository, run the following command to install the necessary dependencies:
-
-```bash
-npm install
-```
-
-## Technologies Used (Tech Stack)
-* **Frontend:** Next.js, React, TypeScript, Framer Motion, Tailwind CSS
-* **Backend (API):** Resend API
-* **Styling:** Tailwind CSS
-* **Form Validation:** Zod
-* **Deployment:** Vercel
-* **Fonts:** Geist Sans, Geist Mono, Anek Telugu
-* **Analytics:** Vercel Analytics
-* **Performance Monitoring:** Vercel Speed Insights
-
-## Configuration
-The Resend API key is stored in the environment variable `RESEND_API_KEY`.  Ensure this variable is set before deploying the application.  Refer to Resend's documentation for setting up API keys.
-
-## Dependencies
-The project dependencies are listed in the `package.json` file.  These can be installed using the command mentioned in the Installation section.
+*   **Responsive Design:** Adapts seamlessly to different screen sizes (desktops, tablets, and mobile phones).
+*   **Animated Sections:** Uses Framer Motion for smooth and engaging animations on scroll.
+*   **Interactive Elements:**  Includes interactive elements such as accordions and tooltips for enhanced user experience.
+*   **Content Sections:** Dedicated sections for About Me, Experience, Projects, Skills, Publications, and Contact information.
+*   **Custom Icons:** Uses custom-designed icons to enhance visual appeal.
+*   **Contact Form:** Enables visitors to send emails directly using a contact form with server-side validation and email sending via Resend.
+*   **Social Media Links:** Provides links to my social media profiles (LinkedIn, GitHub, ResearchGate).
+*   **Resume Download:** Offers a downloadable resume in PDF format.
 
 ## Usage
-1. Clone the repository: `git clone https://github.com/IslamTayeb/my-portfolio.git`
-2. Navigate to the project directory: `cd my-portfolio`
-3. Install dependencies: `npm install` or `yarn install` or `pnpm install` or `bun install`
-4. Run the development server: `npm run dev` or `yarn dev` or `pnpm dev` or `bun dev`
-5. Open [http://localhost:3000](http://localhost:3000) in your browser.
+1.  Clone the repository: `git clone https://github.com/IslamTayeb/personal-website.git`
+2.  Navigate to the project directory: `cd my-portfolio`
+3.  Install dependencies: `npm install` or `yarn install` or `pnpm install` or `bun install`
+4.  Start the development server: `npm run dev` or `yarn dev` or `pnpm dev` or `bun dev`
+5.  Open [http://localhost:3000](http://localhost:3000) in your browser to run locally.
 
-## Testing
-No dedicated testing framework is currently implemented.
+## Installation
+This project uses npm, yarn, pnpm, and bun as package managers.  Choose your preferred manager and follow the instructions above under Usage.
 
-## License
-[MIT License](LICENSE)
+## Technologies Used
+*   **Next.js:** A React framework for building web applications, used for the overall structure and routing of the portfolio.
+*   **React:** A JavaScript library for building user interfaces, used for creating interactive components.
+*   **Tailwind CSS:** A utility-first CSS framework, used for styling the website.
+*   **Framer Motion:**  A production-ready motion library for React, used for animations.
+*   **React Hook Form:** A library for creating forms, used in the contact form.
+*   **Zod:** A schema validation library, used to validate form inputs.
+*   **Resend:** A transactional email service, used for sending contact form emails.
+*   **Lucide React:** An icon library for React, used for various icons within the site.
+*   **@iconify/react:** Another icon library, used for a larger selection of icons.
+*   **Google Fonts:** Used for the Inter font.
+*   **Next Auth:** (not used in this specific code base)  This might be a useful addition to add authentication if the project is expanded.
+*   **Vercel Analytics:** For tracking website analytics.
 
-## Publications
-```markdown
-- **Building a Next.js Portfolio Website:**  A guide detailing the process of creating a responsive and interactive portfolio website using Next.js, React, and Tailwind CSS.  [Link to Blog Post/Article](Optional Link)
-- **Integrating Resend API for Contact Forms:** A tutorial focusing on secure contact form implementation with server-side validation using the Resend API and Next.js. [Link to Blog Post/Article](Optional Link)
-
-```
-
-*Made with [Etchr](https://etchr.dev)*
+*README.md was made with [Etchr](https://etchr.dev)*
