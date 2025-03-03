@@ -1,4 +1,3 @@
-"use client";
 import React, { ComponentPropsWithoutRef } from "react";
 import { Section } from "./Misc/Section";
 import { motion } from "framer-motion";
@@ -25,6 +24,46 @@ import { Code, DefaultIcon } from "./sharedComponents";
 
 export const Publications = () => {
   const publicationsData = [
+    {
+      pubDate: "Dec. 2024",
+      pubAuthors: (
+        <>
+          Hamid Zentou, Mansur Aliyu, Mahmoud A. Abdalla, Omar Y. Abdelaziz, Bosirul Hoque, Ahmed M. Alloush, <span className="font-semibold text-primary">Islam M. Tayeb</span>, Kumar Patchigolla, Mahmoud M. Abdelnaby
+        </>
+      ),
+      pubImpact: "Impact Factor: 7.0",
+      pubTitle:
+        "Advancements and Challenges in Adsorption-Based Carbon Capture Technology: From Fundamentals to Deployment",
+      pubJournal: "The Chemical Record",
+      pubJournalLink: "https://onlinelibrary.wiley.com/journal/15280691",
+      pubType: "Literature Review",
+      pubDescription: (
+        <>
+          <p className="mb-1.5">
+            This review comprehensively examines adsorption-based carbon capture technologies from fundamental science to industrial deployment. It explores solid sorbent materials, their molecular-level properties, and pilot-scale demonstrations while addressing engineering aspects crucial for implementation. The paper discusses integration with process simulation and economic evaluations to enhance efficiency and cost-effectiveness of CO<span style={{ verticalAlign: "sub", fontSize: 7.25, lineHeight: "1", fontWeight: "bold" }}>2</span> capture. It highlights technical, economic, and environmental challenges, proposing solutions through hybrid systems, renewable energy integration, and machine learning techniques to effectively combat global warming.
+          </p>
+          <p>
+            I contributed to the materials science sections and analysis of adsorbent performance metrics, while collaborating on the technology deployment roadmap discussion and future research directions.
+          </p>
+        </>
+      ),
+      pubLink:
+        "https://doi.org/10.1002/tcr.202400188",
+      pubCategory: [
+        {
+          name: "Carbon Capture",
+          icon: "carbon:chemistry",
+        },
+        {
+          name: "Climate Mitigation",
+          icon: "mdi:leaf",
+        },
+        {
+          name: "Materials Science",
+          icon: "mdi:pipe-disconnected",
+        },
+      ],
+    },
     {
       pubDate: "Dec. 2023",
       pubAuthors: (
@@ -171,105 +210,13 @@ export const Publications = () => {
         },
       ],
     },
-    {
-      pubDate: "Jun. 2022",
-      pubAuthors: (
-        <>
-          Siraj Alharthi,{" "}
-          <span className="font-semibold text-primary">Islam Tayeb</span>, Romar
-          Pascual, Salman Aloufi, Rasha Mutabbaqani, Dalia Alharthi, Ahmed
-          Al-Bariqi, Basem Almutiri, Abdullah Alsulaiman
-        </>
-      ),
-      pubImpact: "Impact Factor: 0.8",
-      pubTitle:
-        "RAS Gene Mutations and Their Prevalence in Non-Small Cell Lung Cancer: A Review",
-      pubJournal: "Bioscience Research",
-      pubJournalLink: "",
-      pubType: "Literature Review",
-      pubDescription: (
-        <>
-          This review discusses RAS gene mutations in NSCLC, focusing on KRAS
-          variants G12C, G12V, and G12D. G12C is common in smokers and lung
-          adenocarcinoma, with sotorasib and adagrasib as effective inhibitors.
-          KRAS mutations impact cell growth and survival, with G12D potentially
-          useful as an immunotherapy biomarker. The review highlights the need
-          for further research due to NSCLC&apos;s severity and prevalence in
-          high altitude areas especially.,
-        </>
-      ),
-      pubLink:
-        "https://www.researchgate.net/publication/361118570_RAS_gene_mutations_and_their_prevalence_in_non-small_Cell_lung_cancer_A_Review",
-      pubCategory: [
-        {
-          name: "Medical Oncology",
-          icon: "fa6-solid:ribbon",
-        },
-        { name: "Clinical Genetics", icon: "mdi:dna" },
-        {
-          name: "Targeted Therapy",
-          icon: "bx:target-lock",
-        },
-      ],
-    },
-    {
-      pubDate: "Apr. 2022",
-      pubAuthors: (
-        <>
-          Siraj Alharthi,{" "}
-          <span className="font-semibold text-primary">Islam Tayeb</span>, Romar
-          Pascual, Salman Aloufi, Khalid Alotaibi
-        </>
-      ),
-      pubImpact: "Impact Factor: 0.8",
-      pubTitle:
-        "Medicinal Effects and Phytochemical Composition of Capparis Cartilaginea Decne: A Review",
-      pubJournal: "Bioscience Research",
-      pubJournalLink: "",
-      pubType: "Literature Review",
-      pubDescription: (
-        <>
-          This review highlights Capparis Cartilaginea Decne from the
-          Capparaceae family, valued for its medicinal use historically
-          throughout many areas of Asia and Africa. Phytochemical screenings
-          reveal diverse metabolites supporting its therapeutic claims,
-          validating its traditional medicinal applications.
-        </>
-      ),
-      pubLink:
-        "https://www.researchgate.net/publication/359931677_Medicinal_effects_and_Phytochemical_composition_of_Capparis_Cartilaginea_Decne_A_Review",
-      pubCategory: [
-        {
-          name: "Phytochemistry",
-          icon: "mdi:leaf",
-        },
-        {
-          name: "Folk Medicine",
-          icon: "icon-park-solid:traditional-chinese-medicine",
-        },
-      ],
-    },
   ];
 
   return (
     <Section className="flex flex-col items-start gap-4">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        variants={{
-          visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 50 },
-        }}
-      >
-        <Badge variant={"outline"} className="mb-4" id="publications">
-          Publications
-        </Badge>
-        <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
-          Check out my publications...
-        </h2>
-      </motion.div>
+      <Badge variant={"outline"} className="mb-1" id="publications">
+        Selected Publications
+      </Badge>
 
       {publicationsData.map(
         ({
@@ -285,18 +232,7 @@ export const Publications = () => {
           pubCategory,
         }) => {
           return (
-            <motion.div
-              className="project max-md:w-full"
-              key={pubTitle}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
-              variants={{
-                visible: { opacity: 1, y: 0 },
-                hidden: { opacity: 0, y: 50 },
-              }}
-            >
+            <div className="project max-md:w-full text-primary" key={pubTitle}>
               <div className="flex items-center gap-4 mx-2 ">
                 <Accordion
                   type="single"
@@ -313,45 +249,46 @@ export const Publications = () => {
                     <div>
                       <div className="flex flex-row">
                         <div className="text-primary flex flex-col">
-                          <div className="text-base font-bold text-foreground">
+                          <div className="text-base font-medium text-foreground">
                             <Link
                               href={pubLink}
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <span className="transition brightness-105">
+                              <span className="transition text-primary">
                                 {pubTitle}
                               </span>{" "}
-                              <ArrowUpRight
-                                className="inline-block w-5 mb-0.5"
-                                size={16}
-                              />
+                              <DefaultIcon icon={"gridicons:external"} className="inline-block w-3 ml-0.5" />
                             </Link>
                           </div>
                           <div className="text-muted-foreground text-sm font-normal text-[0.925em]">
                             <TooltipProvider delayDuration={50}>
                               <Tooltip>
-                                <TooltipTrigger className="font-medium">
-                                  <div className="relative after:absolute after:bottom-0 after:left-0 before:h-[0.5px] after:h-[0.5px] after:w-full after:origin-bottom-left after:scale-x-100 hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-200 after:bg-gray-500 text-foreground">
-                                    {pubJournalLink ? (
-                                      <Link
-                                        href={pubJournalLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                      >
-                                        {pubJournal}
-                                      </Link>
-                                    ) : (
-                                      pubJournal
-                                    )}
-                                  </div>
+                                <TooltipTrigger className="font-normal">
+                                  {pubJournalLink ? (
+                                    <div className="flex items-center gap-0">
+                                      <div className="relative after:absolute after:bottom-0 after:left-0 before:h-[0.5px] after:h-[0.5px] after:w-full after:origin-bottom-left after:scale-x-100 hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-200 after:bg-gray-500 text-foreground">
+                                        <Link
+                                          href={pubJournalLink}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                        >
+                                          {pubJournal}
+                                        </Link>
+                                      </div>
+                                      {/* <DefaultIcon icon={"gridicons:external"} className="inline-block w-3 ml-1" /> */}
+                                    </div>
+                                  ) : (
+                                    pubJournal
+                                  )}
                                 </TooltipTrigger>
                                 <TooltipContent className="shadow-md shadow-card transition-all">
                                   <p>{pubImpact}</p>
                                 </TooltipContent>
                               </Tooltip>
                             </TooltipProvider>
-                            {" - " + pubType}{" "}
+                            <span className="font-normal"> –</span>
+                            <span className="font-light ml-0.5"> {pubType}</span>
                           </div>
                           <div className="text-muted-foreground  text-xs font-light py-1.5">
                             {typeof pubAuthors === "string" ? (
@@ -385,11 +322,22 @@ export const Publications = () => {
                     <AccordionTrigger className="pb-0 p-1" />
                   </AccordionItem>
                 </Accordion>
+
               </div>
-            </motion.div>
+            </div>
+
+
           );
         }
       )}
+      <Link
+        href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-xs leading-none ml-auto text-muted-foreground/80 hover:text-primary -mt-0.5 flex items-center transition-colors hover:underline tracking-wide"
+      >
+        See more on Scholar...
+      </Link>
     </Section>
   );
 };

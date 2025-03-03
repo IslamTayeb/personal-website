@@ -10,6 +10,7 @@ export const DIHI = (
       height={props.size}
       {...props}
       fill="currentColor"
+      className="p-0.5"
     >
       <defs></defs>
       <title>DIHI-Logo</title>

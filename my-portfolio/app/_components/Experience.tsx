@@ -1,407 +1,351 @@
-"use client";
-import React, { ComponentPropsWithoutRef, useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
-import { Section } from "./Misc/Section";
-import { ArrowUpRight, Link as Link2 } from "lucide-react";
-import { Icon } from "@iconify/react";
-import { Code, DefaultIcon } from "./sharedComponents";
-import { Duke } from "./Icons/Duke";
-import { DIHI } from "./Icons/DIHI";
-import { HAIP } from "./Icons/HAIP";
-import { DukeHealth } from "./Icons/Duke Health";
-import { Aramco } from "./Icons/Aramco";
+"use client"
 
-interface Experience {
-  name: string;
-  shortname: string;
-  present: boolean;
-  incoming: boolean;
-  role: string;
-  url: string;
-  start: string;
-  end: string;
-  shortDescription: React.ReactNode[];
+import { useState } from "react"
+import { ChevronDown, Calendar, MapPin, ExternalLink } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { Code, DefaultIcon } from "./sharedComponents"
+import { Section } from "./Misc/Section"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import dynamic from "next/dynamic"
+
+// Create a component registry object
+const logoComponentRegistry = {
+    "Duke Health": dynamic(() => import("./Icons/Duke Health").then(mod => mod.DukeHealth), { ssr: false }),
+    "DIHI": dynamic(() => import("./Icons/DIHI").then(mod => mod.DIHI), { ssr: false }),
+    "Aramco": dynamic(() => import("./Icons/Aramco").then(mod => mod.Aramco), { ssr: false }),
+    "Helian": dynamic(() => import("./Icons/Helian").then(mod => mod.Helian), { ssr: false }),
+    "Lifeedit": dynamic(() => import("./Icons/Lifeedit").then(mod => mod.Lifeedit), { ssr: false }),
+    "Sapien": dynamic(() => import("./Icons/Sapien").then(mod => mod.Sapien), { ssr: false }),
+    "Reveal": dynamic(() => import("./Icons/Reveal").then(mod => mod.Reveal), { ssr: false }),
+    // Add more as needed
 }
 
-export const Experience: React.FC = () => {
-  const [selected, setSelected] = useState<number>(0);
-  const [contentHeight, setContentHeight] = useState<number | "auto">("auto");
+export function Experience() {
+    const [openIndex, setOpenIndex] = useState<number | null>(null)
 
-  useEffect(() => {
-    const transformSelected = () => {
-      const underlineSpecial =
-        document.querySelector<HTMLElement>(".underlineSpecial");
-      if (underlineSpecial) {
-        underlineSpecial.style.top = `${selected * 2.25}rem`;
-      }
-    };
-    transformSelected();
-  }, [selected]);
+    const toggleAccordion = (index: number, status?: string) => {
+        if (status !== "incoming") {
+            setOpenIndex(openIndex === index ? null : index)
+        }
+    }
 
-  const experiences = [
-    {
-      name: "Naderi Labs",
-      shortname: "Duke",
-      // logo: <Duke size={16} className="mr-2 mt-0.5" />,
-      present: true,
-      incoming: false,
-      role: "Research Assistant",
-      url: "https://sites.duke.edu/navid/",
-      start: "Sep 2024",
-      end: "Present",
-      shortDescription: [
-        <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearc jfads fajfd dsjf jdah.
-        </>,
-      ],
-    },
-    {
-      name: "Duke Impact Investing Group",
-      shortname: "DIIG",
-      // logo: <Duke size={16} className="mr-2 mt-0.5" />,
-      present: true,
-      incoming: false,
-      role: "Data Analyst",
-      url: "https://www.dukeimpact.org/",
-      start: "Sep 2024",
-      end: "Present",
-      shortDescription: [
-        <>
-          I had <Code>experience</Code> working on a large codebase utilizing
-          Kibana and Elasticsearc jfads fajfd dsjf jdah.
-        </>,
-      ],
-    },
-    {
-      name: "Duke Institute for Health Innovation",
-      shortname: "DIHI",
-      // logo: <DIHI size={16} className="mr-2" />,
-      present: false,
-      incoming: false,
-      role: "Research Analyst",
-      url: "https://dihi.org/",
-      start: "Jun. 2024",
-      end: "Aug. 2024",
-      shortDescription: [
-        <>
-          Developed LLM agents using{" "}
-          <Code>
-            <DefaultIcon icon={"mdi:microsoft"} className="" /> AutoGen
-          </Code>{" "}
-          and{" "}
-          <Code>
-            <DefaultIcon icon={"mingcute:meta-fill"} className="" /> Llamma
-          </Code>{" "}
-          to create literature reviews and research databases for{" "}
-          <Code className="leading-relaxed text-wrap">
-            <HAIP className="-mt-0.5 inline p-[0.5px]" height={16} width={14} />{" "}
-            Health AI Partnership
-          </Code>{" "}
-          users
-        </>,
-        <>
-          Building a multimodal deep learning predictive model for
-          hospital-acquired thrombosis to be utilized by{" "}
-          <Code>
-            <DukeHealth size={16} className="-mt-0.5" /> Duke Health
-          </Code>
-        </>,
-      ],
-    },
-    {
-      name: "Project: Sapien",
-      shortname: "Sapien",
-      // logo: (
-      //   <img
-      //     src="https://media.licdn.com/dms/image/D4E0BAQGoQWtvjZAWbg/company-logo_200_200/0/1701588957383?e=1728518400&v=beta&t=RJkeTdJo5AqWgIq24YdWLlHGEOzidniz-qc-zRdlBwM"
-      //     className="h-4 w-4 mr-2 rounded-sm"
-      //   />
-      // ),
-      present: false,
-      incoming: false,
-      role: "Software Engineering Intern",
-      url: "https://www.linkedin.com/company/project-sapien/?trk=ppro_cprof",
-      start: "Dec. 2023",
-      end: "Jan. 2024",
-      shortDescription: [
-        <>
-          Created full-stack semantic analysis tools using{" "}
-          <Code>
-            <DefaultIcon icon={"ri:google-fill"} className="rounded-[1.5px]" />{" "}
-            BERT
-          </Code>
-          -based models to help population health scientists extract structured
-          data from unstructured surveys
-        </>,
-        <>
-          Led data collection for pilot tests, coordinating with faculty and
-          surveying 4,000+ students to create a diverse dataset
-        </>,
-      ],
-    },
-    {
-      name: "King Fahd University of Petroleum & Minerals",
-      shortname: "KFUPM",
-      // logo: (
-      //   <div className="relative inline-block">
-      //     <img src="/aramco.png" className="h-4 w-4 mr-2 rounded-sm" />
-      //     <div
-      //       className="absolute"
-      //       style={{ backgroundColor: "rgba(255, 0, 0, 0.5)" }}
-      //     ></div>
-      //   </div>
-      // ),
-      present: false,
-      incoming: false,
-      role: "Research Assistant",
-      url: "https://kfupm.edu.sa/",
-      start: "Jul. 2022",
-      end: "Sep. 2023",
-      shortDescription: [
-        <>
-          Created a{" "}
-          <Code className="text-wrap leading-relaxed">
-            <DefaultIcon icon={"mdi:chart-bell-curve"} /> GC Monte Carlo
-            simulation
-          </Code>{" "}
-          statistical model, predicting 6 properties of 3 novel CO
-          <span
-            style={{
-              verticalAlign: "sub",
-              fontSize: "x-small",
-              lineHeight: "1",
-            }}
-          >
-            2
-          </span>
-          -capturing materials
-        </>,
-        <>
-          Developed phloroglucinol polymers and MOF analogues for direct CO
-          <span
-            style={{
-              verticalAlign: "sub",
-              fontSize: "x-small",
-              lineHeight: "1",
-            }}
-          >
-            2
-          </span>{" "}
-          and H
-          <span
-            style={{
-              verticalAlign: "sub",
-              fontSize: "x-small",
-              lineHeight: "1",
-            }}
-          >
-            2
-          </span>
-          O capture for 2{" "}
-          <Code>
-            <Aramco
-              className="-mt-1 inline rounded-[3px] p-[0.05em]"
-              size={16}
-            />{" "}
-            Saudi Aramco
-          </Code>{" "}
-          projects
-        </>,
-      ],
-    },
-    {
-      name: "King Abdulaziz University",
-      shortname: "KAU",
-      // logo: <Duke size={16} className="mr-2" />,
-      present: false,
-      incoming: false,
-      role: "Research Assistant",
-      url: "https://www.kau.edu.sa/home_english.aspx",
-      start: "Aug. 2021",
-      end: "Jun. 2022",
-      shortDescription: [
-        <>
-          Utilized{" "}
-          <Code>
-            <DefaultIcon
-              icon={"streamline:ai-generate-variation-spark-solid"}
-            />{" "}
-            ANOVA
-          </Code>{" "}
-          algorithms and{" "}
-          <Code className="text-wrap">
-            <DefaultIcon icon={"file-icons:nextflow"} /> Nextflow
-          </Code>{" "}
-          to measure genetic variation and phylogeny of 5 Capparis species
-        </>,
-        <>
-          Analyzed needle biopsies, CT scans, and genetic/immunostaining results
-          to detect early-stage cancer in patients
-        </>,
-      ],
-    },
-  ];
+    const renderLogo = (logo: string, company: string) => {
+        // Handle TSX components
+        if (typeof logo === 'string' && logo.endsWith('.tsx')) {
+            // Extract component name from path
+            const componentPath = logo.replace('.tsx', '');
+            const componentName = componentPath.split('/').pop();
 
-  return (
-    <Section className="flex flex-col items-start gap-4">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-        variants={{
-          visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 25 },
-        }}
-      >
-        <Badge variant="outline" className="mb-4" id="experience">
-          Experience
-        </Badge>
+            // Check if we have a matching component in registry
+            if (componentName && componentName in logoComponentRegistry) {
+                const LogoComponent = logoComponentRegistry[componentName as keyof typeof logoComponentRegistry];
+                return <LogoComponent className="w-full h-full" />
+            }
 
-        <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
-          I&apos;ve worked at...
-        </h2>
-      </motion.div>
+            // Fallback to first letter
+            return <div className="w-full h-full flex items-center justify-center">{company[0]}</div>
+        }
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-        variants={{
-          visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 25 },
-        }}
-        className="w-full"
-      >
-        <div className="container px-1 gap-y-0">
-          <ul className="exp-slider max-md:mb-4 relative">
-            <motion.div
-              className="underlineSpecial"
-              layoutId="underline"
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            />
+        // Handle image URLs and icon strings
+        return (
+            <Avatar className="w-12 h-12 flex items-center justify-center rounded-md">
+                {typeof logo === 'string' && (logo.startsWith('http') || logo.startsWith('/')) ? (
+                    <AvatarImage src={logo} className="object-contain" />
+                ) : (
+                    <DefaultIcon icon={logo} className="w-6 h-6" />
+                )}
+                <AvatarFallback className="bg-primary text-primary-foreground flex items-center justify-center rounded-md">
+                    {company[0]}
+                </AvatarFallback>
+            </Avatar>
+        )
+    }
+
+    return (
+        <Section className="mx-auto space-y-4">
+            <Badge variant="outline" className="" id="experience">
+                Experience
+            </Badge>
             {experiences.map((experience, index) => (
-              <motion.li
-                className={`exp-slider-item hover:bg-accent transition-colors max-md:justify-center ${
-                  index === selected &&
-                  "exp-slider-item-selected max-md:justify-center max-md:bg-accent transition"
-                }`}
-                onClick={() => setSelected(index)}
-                key={experience.shortname}
-                layout
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              >
-                <span
-                  className={`font-semibold ${
-                    experience.present || experience.incoming ? "mr-2" : ""
-                  }`}
-                >
-                  {experience.shortname}
-                </span>
-                {experience.present && (
-                  <Badge
-                    variant="default"
-                    className="p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
-                  >
-                    Present
-                  </Badge>
-                )}
-                {experience.incoming && (
-                  <Badge
-                    variant="secondary"
-                    className="p-1 my-3 text-[0.6em] leading-none rounded-full text-center font-semibold font-sans"
-                  >
-                    Incoming
-                  </Badge>
-                )}
-              </motion.li>
-            ))}
-          </ul>
-          <motion.div
-            animate={{ height: contentHeight }}
-            transition={{ duration: 0.2, ease: "linear" }}
-          >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={selected}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 0 }}
-                transition={{
-                  duration: 0.25,
-                  opacity: { duration: 0.25 },
-                }}
-                className="text-xl font-medium font-sans text-pretty"
-                onAnimationComplete={() => {
-                  const element = document.getElementById(
-                    `content-${selected}`
-                  );
-                  if (element) {
-                    setContentHeight(element.offsetHeight);
-                  }
-                }}
-              >
-                <motion.div
-                  id={`content-${selected}`}
-                  layout
-                  transition={{
-                    type: "spring",
-                    stiffness: 425,
-                    damping: 30,
-                    mass: 0.9,
-                  }}
-                >
-                  <h3>
-                    <span className="text-accent-foreground font-semibold">
-                      {experiences[selected].role}
-                    </span>
-                    <span className="text-xl font-medium font-sans">
-                      &nbsp;@&nbsp;
-                      <Link href={experiences[selected].url} target="_blank" rel="noopener noreferrer">
-                        <div className="inline">
-                          {experiences[selected].name}{" "}
-                        </div>
-                        <ArrowUpRight
-                          className="inline-block w-5 mb-0.5"
-                          size={16}
-                        />
-                      </Link>
-                    </span>
-                  </h3>
-                  <p className="text-sm font-medium text-muted-foreground font-mono pb-2 tracking-tight brightness-110">
-                    {experiences[selected].start} - {experiences[selected].end}
-                  </p>
-                  <ul className="text-sm text-muted-foreground font-sans">
-                    {experiences[selected].shortDescription.map(
-                      (description, index) => (
-                        <motion.li
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ delay: index * 0.07 }}
-                          className={`text-sm text-muted-foreground font-sans list-outside list-disc ml-4 ${
-                            index !==
-                            experiences[selected].shortDescription.length - 1
-                              ? "pb-2"
-                              : ""
-                          }`}
-                        >
-                          {description}
-                        </motion.li>
-                      )
+                <div
+                    key={index}
+                    className={cn(
+                        "border border-border rounded-lg overflow-hidden transition-all duration-200",
+                        openIndex === index && "shadow-md",
                     )}
-                  </ul>
-                </motion.div>
-              </motion.div>
-            </AnimatePresence>
-          </motion.div>
-        </div>
-      </motion.div>
-    </Section>
-  );
-};
+                >
+                    <div
+                        onClick={() => toggleAccordion(index, experience.status)}
+                        className={cn(
+                            "w-full flex justify-between items-center p-3 text-left",
+                            openIndex === index ? "bg-secondary/40" : "bg-card hover:bg-card/25 transition-all",
+                            experience.status !== "incoming" && "cursor-pointer"
+                        )}
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="flex items-center justify-center w-12 h-12 text-primary">
+                                {renderLogo(experience.logo, experience.company)}
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <h3 className="font-medium text-lg tracking-tight font-sans text-primary">{experience.role}</h3>
+                                    {experience.status === "present" && <Badge variant="default" className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none">Present</Badge>}
+                                    {experience.status === "incoming" && <Badge variant="secondary" className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none">Incoming</Badge>}
+                                </div>
+                                <p className="text-muted-foreground font-normal text-sm space-x-1.5">
+                                    {experience.website ? (
+                                        <span className="inline-flex items-center">
+                                            <a
+                                                href={experience.website}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="font-normal font-sans inline-flex items-center relative after:absolute after:bottom-0 after:left-0 after:h-[0.5px] after:w-full after:origin-bottom-left after:scale-x-100 hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-200 after:bg-gray-500 text-foreground"
+                                            >
+                                                {experience.company}
+                                            </a>
+                                            <ExternalLink className="inline-block w-3 h-3 ml-1" />
+                                        </span>
+                                    ) : (
+                                        <span className="font-normal font-sans text-foreground">
+                                            {experience.company}
+                                        </span>
+                                    )}
+                                    <span>•</span>
+                                    <span className="font-light font-sans">{experience.responsibilities[0]}</span>
+                                </p>
+                            </div>
+                        </div>
+                        {experience.status !== "incoming" && (
+                            <ChevronDown
+                                className={cn(
+                                    "h-5 w-5 transition-transform duration-200 text-muted-foreground flex-shrink-0 self-center",
+                                    openIndex === index && "rotate-180",
+                                )}
+                            />
+                        )}
+                    </div>
+
+                    <div
+                        className={cn(
+                            "overflow-hidden transition-all duration-200",
+                            openIndex === index ? "max-h-[1000px]" : "max-h-0",
+                        )}
+                    >
+                        <div className="p-4 border-t bg-card">
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-2.5 text-sm text-muted-foreground opacity-80">
+                                <div className="flex items-center">
+                                    <Calendar className="mr-1.5 h-4 w-4" />
+                                    <span>{experience.period}</span>
+                                </div>
+                                <div className="flex items-center">
+                                    <MapPin className="mr-1.5 h-4 w-4" />
+                                    <span>{experience.location}</span>
+                                </div>
+                            </div>
+
+                            <div className="font-sans font-normal my-1 mt-3 text-[0.925em]">Responsibilities & Results:</div>
+                            <ul className="list-disc pl-5 text-sm space-y-1.5 text-muted-foreground font-sans font-light">
+
+                                {experience.responsibilities.slice(1).map((item, itemIndex) => (
+                                    <li key={itemIndex}>{item}</li>
+                                ))}
+                            </ul>
+
+                            <div className="flex flex-wrap gap-2 mt-3.5">
+                                {experience.skills.map((skill, skillIndex) => (
+                                    <Code key={skillIndex}>
+                                        <span className="flex items-center gap-1.5 h-4 text-sm">
+                                            <DefaultIcon icon={skill.icon} className="inline text-current mt-[0.75px]"
+                                                height="14px"
+                                            />
+                                            {skill.name}
+                                        </span>
+                                    </Code>
+                                ))}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </Section>
+    )
+}
+
+const highlightStyle = "font-normal"; // You can change this once to update all highlights
+
+const experiences = [
+    {
+        role: "Data Engineer Intern",
+        company: "Reveal Genomics",
+        website: "https://www.reveal-genomics.com/",
+        logo: "Icons/Reveal.tsx",
+        period: "Feb 2025 – Present",
+        location: "Remote",
+        status: "incoming",
+        responsibilities: [
+            "Data pipelines for gene expression patterns",
+            "Engineered genomic pipelines for expression analysis with Python and Next.js",
+            "Developed dashboards visualizing breast cancer gene patterns across datasets",
+            "Implemented biomarker discovery algorithms enhancing treatment precision"
+        ],
+        skills: [
+            { name: "Python", icon: "simple-icons:python" },
+            { name: "Next.js", icon: "simple-icons:nextdotjs" },
+            { name: "Data Processing", icon: "carbon:data-vis-4" },
+            { name: "Git", icon: "simple-icons:git" },
+        ],
+    },
+    {
+        role: "Software Engineer",
+        company: "Helian",
+        website: "https://www.helian.ai/",
+        logo: "Icons/Helian.tsx",
+        period: "Dec 2024 – Present",
+        location: "Durham, NC",
+        status: "present",
+        responsibilities: [
+            "Developing AI insight tool for medical research workflows",
+            <>Engineered ETL pipeline achieving <span className={highlightStyle}>80%</span> speedup and <span className={highlightStyle}>65%</span> resource reduction</>,
+            <>Built document processor embedding <span className={highlightStyle}>25K</span> daily PDFs with <span className={highlightStyle}>&lt;100ms</span> latency</>,
+            <>Implemented caching system reducing costs by <span className={highlightStyle}>15%</span> and storage by <span className={highlightStyle}>10%</span></>,
+            <>Optimized RAG reducing token usage by <span className={highlightStyle}>25%</span> and response time by <span className={highlightStyle}>40%</span></>,
+        ],
+        skills: [
+            { name: "TypeScript", icon: "simple-icons:typescript" },
+            { name: "Python", icon: "simple-icons:python" },
+            { name: "Next.js", icon: "simple-icons:nextdotjs" },
+            { name: "FastAPI", icon: "simple-icons:fastapi" },
+            { name: "Supabase", icon: "simple-icons:supabase" },
+            { name: "AWS", icon: "simple-icons:amazonaws" },
+            { name: "Redis", icon: "devicon-plain:redis" },
+            { name: "Celery", icon: "simple-icons:celery" },
+            { name: "Docker", icon: "simple-icons:docker" },
+            { name: "Git", icon: "simple-icons:git" },
+        ],
+    },
+    {
+        role: "ML Research Assistant",
+        company: "Duke University",
+        logo: "Icons/Duke Health.tsx",
+        period: "Oct 2024 – Present",
+        location: "Durham, NC",
+        status: "present",
+        website: "https://dukehealth.org",
+        responsibilities: [
+            "ML for protein design @ NaderiAlizadeh Lab",
+            <>Engineered continual learning model increasing generalization by <span className={highlightStyle}>9%</span></>,
+            <>Built distributed pipeline optimizing <span className={highlightStyle}>1M+</span> protein candidates with <span className={highlightStyle}>20%</span> speedup</>,
+            <>Implemented GearNet integration boosting prediction accuracy by <span className={highlightStyle}>20%</span></>
+        ],
+        skills: [
+            { name: "Python", icon: "simple-icons:python" },
+            { name: "PyTorch", icon: "simple-icons:pytorch" },
+            { name: "Machine Learning", icon: "carbon:machine-learning" },
+            { name: "Continual Learning", icon: "material-symbols:memory" },
+            { name: "Distributed Training", icon: "carbon:network-4" },
+            { name: "Domain Generalization", icon: "fluent:bezier-curve-square-12-filled" },
+            { name: "HPC", icon: "charm:binary" },
+            { name: "Bioinformatics", icon: "carbon:chemistry" },
+        ],
+    },
+    {
+        role: "Data Engineer Intern",
+        company: "Life Edit Therapeutics",
+        logo: "Icons/Lifeedit.tsx",
+        website: "https://lifeeditinc.com/",
+        period: "Sep 2024 – Jan 2025",
+        location: "Durham, NC",
+        responsibilities: [
+            "Cell editing mechanism classifier + dashboard",
+            <>Engineered classifier achieving <span className={highlightStyle}>92%</span> accuracy for editing mechanism prediction</>,
+            "Built Streamlit dashboard enabling department-wide expression analysis",
+            <>Implemented feature extraction processing <span className={highlightStyle}>50K+</span> gene profiles</>
+        ],
+        skills: [
+            { name: "Python", icon: "simple-icons:python" },
+            { name: "Pandas", icon: "simple-icons:pandas" },
+            { name: "Scikit-Learn", icon: "simple-icons:scikitlearn" },
+            { name: "Streamlit", icon: "simple-icons:streamlit" },
+            { name: "Data Analysis", icon: "carbon:data-vis-4" },
+            { name: "PCA", icon: "carbon:chart-scatter" },
+            { name: "Random Forest", icon: "carbon:decision-tree" },
+            { name: "TF-IDF", icon: "carbon:text-mining" },
+        ],
+    },
+    {
+        role: "Software Engineer Intern",
+        company: "Duke Institute for Health Innovation",
+        website: "https://dihi.org/",
+        logo: "Icons/DIHI.tsx",
+        period: "Jun 2024 – Aug 2024",
+        location: "Durham, NC",
+        responsibilities: [
+            "Auto health literature review system",
+            <>Engineered review system processing <span className={highlightStyle}>250+</span> papers daily</>,
+            <>Built classifier achieving <span className={highlightStyle}>98%</span> accuracy and <span className={highlightStyle}>95%</span> faster processing</>,
+            <>Implemented grant-writing assistant serving <span className={highlightStyle}>350+</span> analysts across organizations</>,
+            <>Developed BERT detector analyzing <span className={highlightStyle}>10K+</span> EHR records hourly</>
+        ],
+        skills: [
+            { name: "Python", icon: "simple-icons:python" },
+            { name: "BERT", icon: "ri:google-fill" },
+            // { name: "NLP", icon: "carbon:text-mining" },
+            { name: "AutoGen", icon: "uil:microsoft" },
+            { name: "LLMs", icon: "carbon:ai" },
+            { name: "GROBID", icon: "carbon:document" },
+            { name: "EHR Analysis", icon: "carbon:data-structured" },
+            { name: "Docker", icon: "simple-icons:docker" },
+        ],
+    },
+    {
+        role: "Software Engineer Intern",
+        company: "Project: Sapien",
+        website: "https://www.projectsapien.com/",
+        logo: "Icons/Sapien.tsx",
+        period: "Dec 2023 – Jan 2024",
+        location: "Remote",
+        responsibilities: [
+            "NLP + population health analysis dashboard",
+            <>Engineered survey builder reducing creation time by <span className={highlightStyle}>25%</span></>,
+            <>Built classification pipeline reducing analysis time by <span className={highlightStyle}>95%+</span></>,
+            "Implemented HIPAA-compliant data anonymization ensuring privacy"
+        ],
+        skills: [
+            { name: "JavaScript", icon: "simple-icons:javascript" },
+            { name: "React", icon: "simple-icons:react" },
+            { name: "Node.js", icon: "simple-icons:nodedotjs" },
+            // { name: "NLP", icon: "carbon:text-mining" },
+            { name: "BERT", icon: "carbon:machine-learning-model" },
+            { name: "Regex", icon: "carbon:string-text" },
+            { name: "Data Privacy", icon: "carbon:security" },
+            { name: "HIPAA", icon: "carbon:certificate" },
+        ],
+    },
+    {
+        role: "ML Research Assistant",
+        company: "Saudi Aramco, KFUPM",
+        website: "https://ri.kfupm.edu.sa/irc-htcm",
+        logo: "Icons/Aramco.tsx",
+        period: "Jul 2022 – Sep 2023",
+        location: "Saudi Arabia",
+        responsibilities: [
+            "Polymers for CO₂ capture @ IRC-HTCM",
+            <>Engineered simulations predicting capture capacity within <span className={highlightStyle}>12%</span> of results</>,
+            <>Built meta-analysis analyzing <span className={highlightStyle}>300+</span> papers for proposals (<span className={highlightStyle}>3</span> publications)</>,
+            <>Implemented breakthrough analysis interface processing <span className={highlightStyle}>36K+</span> points hourly</>
+        ],
+        skills: [
+            { name: "MATLAB", icon: "file-icons:matlab" },
+            { name: "Python", icon: "simple-icons:python" },
+            { name: "Streamlit", icon: "simple-icons:streamlit" },
+            { name: "Scikit-Learn", icon: "simple-icons:scikitlearn" },
+            { name: "Seaborn", icon: "simple-icons:plotly" },
+            { name: "Data Visualization", icon: "carbon:chart-line" },
+            { name: "Monte Carlo", icon: "material-symbols:simulation" },
+            { name: "Meta-Analysis", icon: "streamline:code-analysis-solid" },
+        ],
+    },
+]

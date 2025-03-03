@@ -1,7 +1,5 @@
-"use client";
 import React from "react";
 import { Section } from "./Misc/Section";
-import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -29,12 +27,14 @@ export const Skills = () => {
       technologies: [
         { name: "Python", icon: "akar-icons:python-fill" },
         { name: "TypeScript", icon: "akar-icons:typescript-fill" },
+        { name: "JavaScript", icon: "akar-icons:javascript-fill" },
         { name: "Java", icon: "fa6-brands:java" },
         { name: "SQL", icon: "fa-solid:database" },
         { name: "R Language", icon: "devicon-plain:r" },
-        { name: "C Language", icon: "devicon-plain:c" },
         { name: "MATLAB", icon: "file-icons:matlab" },
-        // { name: "LaTeX", icon: "file-icons:latex" },
+        { name: "C Language", icon: "devicon-plain:c" },
+        { name: "HTML5", icon: "simple-icons:html5" },
+        { name: "CSS3", icon: "simple-icons:css3" },
       ],
     },
     {
@@ -42,86 +42,59 @@ export const Skills = () => {
       technologies: [
         { name: "TensorFlow", icon: "simple-icons:tensorflow" },
         { name: "PyTorch", icon: "simple-icons:pytorch" },
-        { name: "BERT", icon: "bi:google" },
-        { name: "Gemini", icon: "simple-icons:googlegemini" },
-        { name: "GPT", icon: "simple-icons:openai" },
+        { name: "LangChain", icon: "simple-icons:langchain" },
+        { name: "RAG", icon: "carbon:rag" },
+        { name: "AutoGen", icon: "cib:microsoft" },
+        { name: "Google BERT", icon: "bi:google" },
+        // { name: "Gemini", icon: "simple-icons:googlegemini" },
+        { name: "OpenAI", icon: "simple-icons:openai" },
         { name: "SciKit-Learn", icon: "simple-icons:scikitlearn" },
+        { name: "PyRosetta", icon: "fluent:molecule-24-filled" },
       ],
     },
     {
-      category: "Web/App Development",
+      category: "Frontend Development",
       technologies: [
         { name: "React", icon: "akar-icons:react-fill" },
+        { name: "Next.js", icon: "simple-icons:nextdotjs" },
         { name: "Angular", icon: "cib:angular" },
         { name: "SCSS", icon: "simple-icons:sass" },
         { name: "Framer Motion", icon: "teenyicons:framer-solid" },
-        { name: "HTML5", icon: "simple-icons:html5" },
-        { name: "CSS3", icon: "simple-icons:css3" },
-        { name: "PostgreSQL", icon: "akar-icons:postgresql-fill" },
       ],
     },
     {
-      category: <>Deployment&nbsp;& Integration</>,
+      category: "Backend Development",
+      technologies: [
+        { name: "Node.js", icon: "simple-icons:nodedotjs" },
+        { name: "Flask", icon: "simple-icons:flask" },
+        { name: "PostgreSQL", icon: "akar-icons:postgresql-fill" },
+        { name: "Redis", icon: "devicon-plain:redis" },
+        { name: "Supabase", icon: "simple-icons:supabase" },
+        { name: "Pinecone", icon: "teenyicons:vector-document-solid" },
+        { name: "Celery", icon: "simple-icons:celery" },
+        { name: "Selenium", icon: "simple-icons:selenium" },
+      ],
+    },
+    {
+      category: <>Deployment&nbsp;& Cloud</>,
       technologies: [
         { name: "Linux", icon: "devicon-plain:linux" },
         { name: "Git", icon: "simple-icons:git" },
         { name: "Docker", icon: "simple-icons:docker" },
+        { name: "AWS", icon: "cib:amazon-aws" },
+        { name: "GCP", icon: "cib:google-cloud" },
         { name: "Vercel", icon: "ion:logo-vercel" },
       ],
     },
-    // {
-    //   category: "Research",
-    //   technologies: [
-    //     { name: "Organic Synthesis (Porous Polymers)", icon: "eos-icons:molecules-outlined" },
-    //     { name: "CO2 & H2O Capture/Utilization", icon: "mdi:molecule-co2" },
-    //     { name: "Physical Modelling", icon: "mdi:atom" },
-    //     { name: "Genetic Variation", icon: "ph:dna-fill" },
-    //     { name: "LaTeX", icon: "file-icons:latex" },
-    //   ],
-    // },
-    // {
-    //   category: "Design",
-    //   technologies: [
-    //     { name: "Adobe Suite", icon: "simple-icons:adobecreativecloud" },
-    //     { name: "Blender", icon: "file-icons:blender" },
-    //     { name: "Cinema4D", icon: "simple-icons:cinema4d" },
-    //     { name: "Graphical Abstracts & Figure", icon: "ri:image-add-fill" },
-    //   ],
-    // },
   ];
 
   return (
     <Section className="flex flex-col items-start gap-4">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-        variants={{
-          visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 25 },
-        }}
-      >
-        <Badge variant={"outline"} className="mb-4" id="skills">
-          Skills
-        </Badge>
-        <h2 className="text-3xl font-semibold font-sans first:mt-0 text-primary">
-          My technical skills include...
-        </h2>
-      </motion.div>
+      <Badge variant={"outline"} className="" id="skills">
+        Technical Skills
+      </Badge>
 
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        className="w-full"
-        viewport={{ once: true }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-        variants={{
-          visible: { opacity: 1, y: 0 },
-          hidden: { opacity: 0, y: 25 },
-        }}
-      >
-        {/* might want t remve categry and technlgies  */}
+      <div className="w-full">
         <Table className="">
           <TableHeader>
             <TableRow>
@@ -170,7 +143,7 @@ export const Skills = () => {
             ))}
           </TableBody>
         </Table>
-      </motion.div>
+      </div>
     </Section>
   );
 };
