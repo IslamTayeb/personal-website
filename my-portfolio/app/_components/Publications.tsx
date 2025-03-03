@@ -299,7 +299,7 @@ export const Publications = () => {
                           </div>
                         </div>
                       </div>
-                      <AccordionContent className="mr-8 pb-2.5 pt-0.5">
+                      <AccordionContent className="mr-8 pb-3 pt-1 font-light">
                         {pubDescription}
                       </AccordionContent>
                       <div className="flex flex-wrap gap-2 text-xs leading-none">
