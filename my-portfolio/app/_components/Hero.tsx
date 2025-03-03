@@ -76,7 +76,7 @@ export const Hero = () => {
               />
             </span>
           </h3>
-          <p className="font-sans basis-0 text-muted-foreground text-pretty">A <Code><DefaultIcon icon="lucide:braces" /> Computer Science</Code> and <Code><DefaultIcon icon="lucide:atom" /> Chemistry</Code> student at <Code className=""><Duke size={14} /> Duke University</Code>. Currently based in <Code><DefaultIcon icon="flag:us-1x1" className="rounded-[1.5px]" /> Durham, NC</Code> with an interest in applied research and AI/ML. Feel free to <Link href="#contact" className="underline hover:text-primary transition-all underline-offset-2">reach out</Link>!</p>
+          <p className="font-sans basis-0 text-muted-foreground text-pretty">A <Code><DefaultIcon icon="lucide:braces" /> Computer Science</Code> and <Code><DefaultIcon icon="lucide:atom" /> Chemistry</Code> student at <Code className=""><Duke size={14} /> Duke University</Code>. Currently based in <Code><DefaultIcon icon="flag:us-1x1" className="rounded-[1.5px]" /> Durham, NC</Code> with an interest in software engineering and applied ML research. Feel free to <Link href="#contact" className="underline hover:text-primary transition-all underline-offset-2">reach out</Link>!</p>
           <AnimatePresence initial={false}>
             {showMore && (
               <motion.div
