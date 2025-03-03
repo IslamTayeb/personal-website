@@ -186,7 +186,7 @@ const experiences = [
         location: "Remote",
         status: "incoming",
         responsibilities: [
-            "Data pipelines for gene expression patterns",
+            "Data pipelines for non-linear gene expression patterns",
             "Engineered genomic pipelines for expression analysis with Python and Next.js",
             "Developed dashboards visualizing breast cancer gene patterns across datasets",
             "Implemented biomarker discovery algorithms enhancing treatment precision"
@@ -235,7 +235,7 @@ const experiences = [
         status: "present",
         website: "https://dukehealth.org",
         responsibilities: [
-            "ML for protein design @ NaderiAlizadeh Lab",
+            "ML for therapeutic protein design @ NaderiAlizadeh Lab",
             <>Engineered continual learning model increasing generalization by <span className={highlightStyle}>9%</span></>,
             <>Built distributed pipeline optimizing <span className={highlightStyle}>1M+</span> protein candidates with <span className={highlightStyle}>20%</span> speedup</>,
             <>Implemented GearNet integration boosting prediction accuracy by <span className={highlightStyle}>20%</span></>
@@ -283,7 +283,7 @@ const experiences = [
         period: "Jun 2024 – Aug 2024",
         location: "Durham, NC",
         responsibilities: [
-            "Auto health literature review system",
+            "Automated health literature review system",
             <>Engineered review system processing <span className={highlightStyle}>250+</span> papers daily</>,
             <>Built classifier achieving <span className={highlightStyle}>98%</span> accuracy and <span className={highlightStyle}>95%</span> faster processing</>,
             <>Implemented grant-writing assistant serving <span className={highlightStyle}>350+</span> analysts across organizations</>,
@@ -332,7 +332,7 @@ const experiences = [
         period: "Jul 2022 – Sep 2023",
         location: "Saudi Arabia",
         responsibilities: [
-            "Polymers for CO₂ capture @ IRC-HTCM",
+            "Metal-organic polymers for CO₂ capture @ IRC-HTCM",
             <>Engineered simulations predicting capture capacity within <span className={highlightStyle}>12%</span> of results</>,
             <>Built meta-analysis analyzing <span className={highlightStyle}>300+</span> papers for proposals (<span className={highlightStyle}>3</span> publications)</>,
             <>Implemented breakthrough analysis interface processing <span className={highlightStyle}>36K+</span> points hourly</>
