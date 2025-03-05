@@ -38,7 +38,7 @@ export const Header = () => {
             href="https://github.com/IslamTayeb"
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "outline" }), "p-0 flex items-center justify-center h-6")}
+            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
           >
             <span className="flex items-center justify-center px-1 py-0">
               <DefaultIcon
@@ -55,7 +55,7 @@ export const Header = () => {
             href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "outline" }), "p-0 flex items-center justify-center h-6")}
+            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
           >
             <span className="flex items-center justify-center px-1 py-0">
               <Icon icon={"fa6-brands:google-scholar"} fontSize={12} className="rounded-[4px] text-foreground -mt-[0.1em]" />
@@ -68,7 +68,7 @@ export const Header = () => {
             href="https://x.com/IslamTyb"
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "outline" }), "p-0 flex items-center justify-center h-6")}
+            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
           >
             <span className="flex items-center justify-center px-1">
               <Icon icon={"prime:twitter"} fontSize={12} className="text-foreground -mt-[0.1em]" />
@@ -83,7 +83,7 @@ export const Header = () => {
             rel="noopener noreferrer"
             className={cn(
               buttonVariants({ variant: "outline" }),
-              "px-[4.5px] h-6 flex items-center justify-center"
+              "border-dashed px-[4.5px] h-6 flex items-center justify-center"
             )}
           >
             <span className="w-[13px] h-[13px] flex items-center justify-center mr-1">
