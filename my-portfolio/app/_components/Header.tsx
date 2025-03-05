@@ -21,7 +21,7 @@ export const Header = () => {
             href="https://linkedin.com/in/islam-tayeb"
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "outline" }), "p-0 flex items-center justify-center h-6")}
+            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
           >
             <span className="flex items-center justify-center px-1 py-0">
               <DefaultIcon
