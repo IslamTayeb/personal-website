@@ -239,7 +239,7 @@ export const Projects = () => {
                 </div>
 
                 <div
-                  className="project-image overflow-hidden scale-95 rounded-sm border-accent border max-md:rounded-xl"
+                  className="project-image overflow-hidden scale-95 rounded-sm border-accent border max-md:rounded-lg"
                   onClick={() => {
                     // Create a modal/fullscreen view
                     const element = image.endsWith('.mp4')
