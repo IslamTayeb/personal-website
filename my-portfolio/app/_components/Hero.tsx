@@ -30,7 +30,7 @@ export const Hero = () => {
       </Badge>
       <div className="flex max-md:flex-col items-start gap-4">
         {/* Avatar section with skeleton */}
-        <div className="flex-[2] p-2 flex my-auto max-md:mx-auto">
+        <div className="flex-[2] p-2 flex my-auto max-md:mx-auto w-11/12">
           <div className="w-11/12 h-auto aspect-square max-w-xs mx-auto max-md:w-full max-md:mb-2 relative">
             {!imagesLoaded && (
               <div className="absolute inset-0 rounded-2xl z-10 bg-accent/20 animate-pulse" />
