@@ -324,7 +324,6 @@
     align-items: center;
   }
   .project-info-links-item-link {
-    padding: 0.25rem;
     color: hsl(var(--foreground));
     transition: 0.3s ease-in-out;
     outline: 2px dashed transparent;
@@ -371,7 +370,7 @@
       padding-left: 2.1rem;
       padding-right: 2.1rem;
       padding-top: 1.5rem;
-      padding-bottom: 1.25rem;
+      padding-bottom: 1.5rem;
       position: relative;
     }
     project-info-title {

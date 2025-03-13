@@ -210,32 +210,34 @@ export const Projects = () => {
                       </li>
                     ))}
                   </ul>
-                  <ul className="project-info-links max-md:w-full max-md:justify-end">
-                    {projectExternalLinks?.github && (
-                      <li className="project-info-links-item ">
+                    {(projectExternalLinks?.github || projectExternalLinks?.externalLink) && (
+                    <ul className="project-info-links max-md:w-full max-md:justify-end">
+                      {projectExternalLinks?.github && (
+                      <li className="project-info-links-item">
                         <Link
-                          href={projectExternalLinks.github}
-                          className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        href={projectExternalLinks.github}
+                        className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         >
-                          <LucideGithub size={16} /> GitHub
+                        <LucideGithub size={16} /> GitHub
                         </Link>
                       </li>
-                    )}
-                    {projectExternalLinks?.externalLink && (
-                      <li className="project-info-links-item ">
+                      )}
+                      {projectExternalLinks?.externalLink && (
+                      <li className="project-info-links-item">
                         <Link
-                          href={projectExternalLinks.externalLink}
-                          className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium"
-                          target="_blank"
-                          rel="noopener noreferrer"
+                        href={projectExternalLinks.externalLink}
+                        className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         >
-                          <Link2 size={16} /> Link
+                        <Link2 size={16} /> Link
                         </Link>
                       </li>
+                      )}
+                    </ul>
                     )}
-                  </ul>
                 </div>
 
                 <div
