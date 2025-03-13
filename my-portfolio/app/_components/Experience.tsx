@@ -50,7 +50,7 @@ export function Experience() {
 
         // Handle image URLs and icon strings
         return (
-            <Avatar className="w-12 h-12 flex items-center justify-center rounded-md">
+            <Avatar className="w-12 h-12 flex items-center justify-center rounded-md min-w-12 min-h-12">
                 {typeof logo === 'string' && (logo.startsWith('http') || logo.startsWith('/')) ? (
                     <AvatarImage src={logo} className="object-contain" />
                 ) : (
