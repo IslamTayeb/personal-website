@@ -19,15 +19,21 @@ const logoComponentRegistry = {
     "Lifeedit": dynamic(() => import("./Icons/Lifeedit").then(mod => mod.Lifeedit), { ssr: false }),
     "Sapien": dynamic(() => import("./Icons/Sapien").then(mod => mod.Sapien), { ssr: false }),
     "Reveal": dynamic(() => import("./Icons/Reveal").then(mod => mod.Reveal), { ssr: false }),
+    "Soff": dynamic(() => import("./Icons/Soff").then(mod => mod.Soff), { ssr: false }),
     // Add more as needed
 }
 
 export function Experience() {
-    const [openIndex, setOpenIndex] = useState<number | null>(null)
+    const [openIndices, setOpenIndices] = useState<number[]>([])
 
     const toggleAccordion = (index: number, status?: string) => {
         if (status !== "incoming") {
-            setOpenIndex(openIndex === index ? null : index)
+            setOpenIndices(prev => {
+                // If already open, remove from array; otherwise add to array
+                return prev.includes(index)
+                    ? prev.filter(i => i !== index)
+                    : [...prev, index]
+            })
         }
     }
 
@@ -72,27 +78,33 @@ export function Experience() {
                 <div
                     key={index}
                     className={cn(
-                        "border border-border rounded-lg overflow-hidden transition-all duration-200",
-                        openIndex === index && "shadow-md",
+                        "border border-border rounded-lg overflow-hidden transition-all duration-300",
+                        openIndices.includes(index) && "shadow-md",
                     )}
                 >
                     <div
                         onClick={() => toggleAccordion(index, experience.status)}
                         className={cn(
-                            "w-full flex justify-between items-center p-3 text-left",
-                            openIndex === index ? "bg-secondary/40" : "bg-card hover:bg-card/25 transition-all",
+                            "w-full flex justify-between items-center p-3 text-left transition-all duration-300",
+                            openIndices.includes(index) ? "bg-secondary/40" : "bg-card hover:bg-card/25 transition-all",
                             experience.status !== "incoming" && "cursor-pointer"
                         )}
                     >
                         <div className="flex items-center gap-3">
-                            <div className="flex items-center justify-center w-12 h-12 text-primary">
+                            <div className="flex items-center justify-center w-12 h-12 min-w-12 min-h-12 text-primary">
                                 {renderLogo(experience.logo, experience.company)}
                             </div>
                             <div>
                                 <div className="flex items-center gap-2">
                                     <h3 className="font-medium text-lg tracking-tight font-sans text-primary">{experience.role}</h3>
-                                    {experience.status === "present" && <Badge variant="default" className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none">Present</Badge>}
-                                    {experience.status === "incoming" && <Badge variant="secondary" className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none">Incoming</Badge>}
+                                    {experience.status === "present" && <Badge variant="default" className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1">Present</Badge>}
+                                    {experience.status === "incoming" && <Badge variant="secondary" className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1">Incoming</Badge>}
+                                    {experience.company === "Soff" && (
+                                        <Badge variant="outline" className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono leading-none flex items-center gap-0.5">
+                                            <DefaultIcon icon="simple-icons:ycombinator" className="w-2.5 h-2.5 mr-1 rounded-[1.5px]" />
+                                            Backed by YC
+                                        </Badge>
+                                    )}
                                 </div>
                                 <p className="text-muted-foreground font-normal text-sm space-x-1.5">
                                     {experience.website ? (
@@ -101,7 +113,7 @@ export function Experience() {
                                                 href={experience.website}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="font-normal font-sans inline-flex items-center relative after:absolute after:bottom-0 after:left-0 after:h-[0.5px] after:w-full after:origin-bottom-left after:scale-x-100 hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-200 after:bg-gray-500 text-foreground"
+                                                className="font-normal font-sans inline-flex items-center relative md:after:absolute md:after:bottom-0 md:after:left-0 md:after:h-[0.5px] md:after:w-full md:after:origin-bottom-left md:after:scale-x-100 hover:md:after:scale-x-0 md:after:transition-transform md:after:ease-in-out md:after:duration-200 md:after:bg-gray-500 text-foreground underline md:no-underline brightness-105"
                                             >
                                                 {experience.company}
                                             </a>
@@ -121,7 +133,7 @@ export function Experience() {
                             <ChevronDown
                                 className={cn(
                                     "h-5 w-5 transition-transform duration-200 text-muted-foreground flex-shrink-0 self-center",
-                                    openIndex === index && "rotate-180",
+                                    openIndices.includes(index) && "rotate-180",
                                 )}
                             />
                         )}
@@ -129,8 +141,8 @@ export function Experience() {
 
                     <div
                         className={cn(
-                            "overflow-hidden transition-all duration-200",
-                            openIndex === index ? "max-h-[1000px]" : "max-h-0",
+                            "overflow-hidden transition-all duration-200 ease-in-out",
+                            openIndices.includes(index) ? "max-h-[1000px]" : "max-h-0",
                         )}
                     >
                         <div className="p-4 border-t bg-card">
@@ -178,24 +190,24 @@ const highlightStyle = "font-normal"; // You can change this once to update all 
 
 const experiences = [
     {
-        role: "Data Engineer Intern",
-        company: "Reveal Genomics",
-        website: "https://www.reveal-genomics.com/",
-        logo: "Icons/Reveal.tsx",
-        period: "Feb 2025 – Present",
-        location: "Remote",
+        role: "Software Engineer Intern",
+        company: "Soff",
+        website: "https://soff.ai/",
+        logo: "Icons/Soff.tsx",
+        period: "May 2025 – Present",
+        location: "San Francisco, CA",
         status: "incoming",
         responsibilities: [
-            "Data pipelines for non-linear gene expression patterns",
-            "Engineered genomic pipelines for expression analysis with Python and Next.js",
-            "Developed dashboards visualizing breast cancer gene patterns across datasets",
-            "Implemented biomarker discovery algorithms enhancing treatment precision"
+            "AI + infrastructure for supply chain intelligence",
+            "Building cloud-native enterprise integration platform and CI/CD using Kubernetes + Docker + GitHub Actions",
         ],
         skills: [
-            { name: "Python", icon: "simple-icons:python" },
-            { name: "Next.js", icon: "simple-icons:nextdotjs" },
-            { name: "Data Processing", icon: "carbon:data-vis-4" },
-            { name: "Git", icon: "simple-icons:git" },
+            { name: "Kubernetes", icon: "simple-icons:kubernetes" },
+            { name: "Docker", icon: "simple-icons:docker" },
+            { name: "GitHub Actions", icon: "simple-icons:githubactions" },
+            { name: "CI/CD", icon: "carbon:continuous-deployment" },
+            { name: "Cloud", icon: "carbon:cloud" },
+            { name: "AI", icon: "carbon:ai" },
         ],
     },
     {
@@ -203,7 +215,7 @@ const experiences = [
         company: "Helian",
         website: "https://www.helian.ai/",
         logo: "Icons/Helian.tsx",
-        period: "Dec 2024 – Present",
+        period: "Dec 2024 – May 2025",
         location: "Durham, NC",
         status: "present",
         responsibilities: [
@@ -227,13 +239,38 @@ const experiences = [
         ],
     },
     {
+        role: "ML Engineer Intern",
+        company: "Reveal Genomics",
+        website: "https://www.reveal-genomics.com/",
+        logo: "Icons/Reveal.tsx",
+        period: "Feb 2024 – May 2025",
+        location: "Durham, NC",
+        status: "present",
+        responsibilities: [
+            "Breast cancer genomic analysis & biomarker discovery",
+            <>Enhanced biomarker identification by <span className={highlightStyle}>55%</span> with <span className={highlightStyle}>Dask</span> + <span className={highlightStyle}>NetworkX</span> pipelines</>,
+            <>Improved non-linear gene correlation detection by <span className={highlightStyle}>65%</span> using <span className={highlightStyle}>PCA</span> + <span className={highlightStyle}>t-SNE</span></>,
+            <>Reduced R&D analysis time by <span className={highlightStyle}>85%</span> with custom genomic dashboards</>
+        ],
+        skills: [
+            { name: "Python", icon: "simple-icons:python" },
+            { name: "Next.js", icon: "simple-icons:nextdotjs" },
+            { name: "Dask", icon: "simple-icons:dask" },
+            { name: "NetworkX", icon: "devicon-plain:networkx" },
+            { name: "PCA", icon: "carbon:chart-scatter" },
+            { name: "t-SNE", icon: "carbon:chart-t-sne" },
+            { name: "Genomics", icon: "carbon:chemistry" },
+            { name: "Git", icon: "simple-icons:git" },
+        ],
+    },
+    {
         role: "ML Research Assistant",
         company: "Duke University",
         logo: "Icons/Duke Health.tsx",
-        period: "Oct 2024 – Present",
+        period: "Oct 2024 – Apr 2025",
         location: "Durham, NC",
-        status: "present",
-        website: "https://dukehealth.org",
+        // status: "present",
+        website: "https://sites.duke.edu/navid/",
         responsibilities: [
             "ML for therapeutic protein design @ NaderiAlizadeh Lab",
             <>Engineered continual learning model increasing generalization by <span className={highlightStyle}>9%</span></>,
@@ -252,7 +289,7 @@ const experiences = [
         ],
     },
     {
-        role: "Data Engineer Intern",
+        role: "ML Engineer Intern",
         company: "Life Edit Therapeutics",
         logo: "Icons/Lifeedit.tsx",
         website: "https://lifeeditinc.com/",
@@ -306,7 +343,7 @@ const experiences = [
         website: "https://www.projectsapien.com/",
         logo: "Icons/Sapien.tsx",
         period: "Dec 2023 – Jan 2024",
-        location: "Remote",
+        location: "Princeton, NJ",
         responsibilities: [
             "NLP + population health analysis dashboard",
             <>Engineered survey builder reducing creation time by <span className={highlightStyle}>25%</span></>,

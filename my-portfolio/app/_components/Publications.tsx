@@ -267,7 +267,7 @@ export const Publications = () => {
                                 <TooltipTrigger className="font-normal">
                                   {pubJournalLink ? (
                                     <div className="flex items-center gap-0">
-                                      <div className="relative after:absolute after:bottom-0 after:left-0 before:h-[0.5px] after:h-[0.5px] after:w-full after:origin-bottom-left after:scale-x-100 hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-200 after:bg-gray-500 text-foreground">
+                                      <div className="relative md:after:absolute md:after:bottom-0 md:after:left-0 md:before:h-[0.5px] md:after:h-[0.5px] md:after:w-full md:after:origin-bottom-left md:after:scale-x-100 hover:md:after:scale-x-0 md:after:transition-transform md:after:ease-in-out md:after:duration-200 md:after:bg-gray-500 text-foreground underline md:no-underline">
                                         <Link
                                           href={pubJournalLink}
                                           target="_blank"
@@ -276,7 +276,6 @@ export const Publications = () => {
                                           {pubJournal}
                                         </Link>
                                       </div>
-                                      {/* <DefaultIcon icon={"gridicons:external"} className="inline-block w-3 ml-1" /> */}
                                     </div>
                                   ) : (
                                     pubJournal

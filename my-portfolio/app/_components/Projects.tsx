@@ -155,7 +155,7 @@ export const Projects = () => {
                         {isNew && (
                           <Badge
                             variant="default"
-                            className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none"
+                            className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
                           >
                             New!
                           </Badge>
@@ -163,7 +163,7 @@ export const Projects = () => {
                         {isWip && (
                           <Badge
                             variant="secondary"
-                            className="rounded-full text-center font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none"
+                            className="rounded-full text-center font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
                           >
                             In Progress
                           </Badge>)}
@@ -177,7 +177,7 @@ export const Projects = () => {
                         {isNew && (
                           <Badge
                             variant="default"
-                            className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none"
+                            className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
                           >
                             New!
                           </Badge>
@@ -185,7 +185,7 @@ export const Projects = () => {
                         {isWip && (
                           <Badge
                             variant="default"
-                            className="rounded-full text-center font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none"
+                            className="rounded-full text-center font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
                           >
                             In Progress
                           </Badge>
