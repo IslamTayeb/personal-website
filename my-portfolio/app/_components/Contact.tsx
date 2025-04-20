@@ -71,7 +71,7 @@ const contactsData = [
     id: "resume",
     label: "Resume",
     icon: "solar:file-bold",
-    href: "/Islam_Tayeb_Resume.pdf",
+    href: "/resume",
     isCopyable: false,
     iconClass: "p-[0.5px]",
   },

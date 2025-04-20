@@ -78,7 +78,7 @@ export const Header = () => {
             </span>
           </Link>
           <Link
-            href="Islam_Tayeb_Resume.pdf"
+            href="/resume"
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
