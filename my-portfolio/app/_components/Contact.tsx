@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { sendEmail } from "./sendEmail";
-import { ArrowUpRight, Check, Copy, Mail } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
@@ -30,7 +29,53 @@ import {
 } from "@/components/ui/tooltip";
 import { useCopyToClipboard } from "usehooks-ts";
 
-
+// Contact links data
+const contactsData = [
+  {
+    id: "email",
+    label: "Email",
+    icon: "lucide:mail",
+    value: "islam.tayeb@duke.edu",
+    href: "mailto:islam.tayeb@duke.edu",
+    isCopyable: true,
+  },
+  {
+    id: "linkedin",
+    label: "LinkedIn",
+    icon: "mdi:linkedin",
+    href: "https://www.linkedin.com/in/islam-tayeb/",
+    isCopyable: false,
+  },
+  {
+    id: "github",
+    label: "GitHub",
+    icon: "jam:github",
+    href: "https://github.com/IslamTayeb",
+    isCopyable: false,
+  },
+  {
+    id: "twitter",
+    label: "X (Twitter)",
+    icon: "prime:twitter",
+    href: "https://x.com/IslamTyb",
+    isCopyable: false,
+  },
+  {
+    id: "scholar",
+    label: "Google Scholar",
+    icon: "fa6-brands:google-scholar",
+    href: "https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ",
+    isCopyable: false,
+  },
+  {
+    id: "resume",
+    label: "Resume",
+    icon: "solar:file-bold",
+    href: "/Islam_Tayeb_Resume.pdf",
+    isCopyable: false,
+    iconClass: "p-[0.5px]",
+  },
+];
 
 const formSchema = z.object({
   name: z
@@ -96,11 +141,10 @@ export const Contact = () => {
     }
   }
 
-  const email = "islam.tayeb@duke.edu";
   const [copiedText, copy] = useCopyToClipboard();
 
-  const handleCopy = (buttonId: React.SetStateAction<string>) => {
-    copy(email);
+  const handleCopy = (value: string, buttonId: string) => {
+    copy(value);
     setCopiedButton(buttonId);
   };
 
@@ -205,192 +249,59 @@ export const Contact = () => {
         </div>
 
         <div className="flex flex-col h-min font-sans font-medium flex-[2] w-full gap-2">
-          <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 px-1.5 rounded w-full">
-            <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
-              <Mail size={16} />
-            </span>
+          {contactsData.map((contact, index) => (
+            <React.Fragment key={contact.id}>
+              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 px-1.5 rounded w-full">
+                <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
+                  <Icon icon={contact.icon} className={`w-4 h-4 ${contact.iconClass || ''}`} />
+                </span>
 
-            <div>
-              <div className="text-base font-medium">Email</div>
-            </div>
+                <div>
+                  <div className="text-base font-medium">{contact.label}</div>
+                </div>
 
-            <div className="ml-auto flex flex-row gap-2">
-              <TooltipProvider delayDuration={50}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
+                <div className="ml-auto flex flex-row gap-2">
+                  {contact.isCopyable && (
+                    <TooltipProvider delayDuration={50}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6"
+                            onClick={() => handleCopy(contact.value || '', `${contact.id}Copy`)}
+                          >
+                            {copiedButton === `${contact.id}Copy` ? (
+                              <Icon icon="lucide:check" className="w-4 h-4 text-green-400" />
+                            ) : (
+                              <Icon icon="lucide:copy" className="w-4 h-4 text-muted-foreground p-[1.5px]" />
+                            )}
+                          </Button>
+                        </TooltipTrigger>
+                        <TooltipContent>
+                          <p>{copiedButton === `${contact.id}Copy` ? "Copied!" : `Copy ${contact.label.toLowerCase()}`}</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  )}
+
+                  <Link href={contact.href} target={contact.href.startsWith('mailto') ? undefined : "_blank"} rel="noopener noreferrer">
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-6 w-6"
-                      onClick={() => handleCopy("emailCopy")}
+                      className="h-6 w-6 rounded-sm"
                     >
-                      {copiedButton === "emailCopy" ? (
-                        <Check size={16} className="text-green-400" />
-                      ) : (
-                        <Copy size={16} className="text-muted-foreground p-[1.5px]" />
-                      )}
+                      <Icon
+                        icon="lucide:arrow-up-right"
+                        className="w-4 h-4 text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
+                      />
                     </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>{copiedButton === "emailCopy" ? "Copied!" : "Copy email"}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-
-              <Link href={"mailto:islam.tayeb@duke.edu"}>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 rounded-sm"
-                >
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
-                  />
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 p-1.5 rounded w-full">
-            <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
-              <Icon icon="mdi:linkedin" className="w-4 h-4" />
-            </span>
-
-            <div>
-              <div className="text-base font-medium">LinkedIn</div>
-            </div>
-
-            <div className="ml-auto flex flex-row gap-2">
-
-              <Link href="https://www.linkedin.com/in/islam-tayeb/" target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 rounded-sm"
-                >
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
-                  />
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 p-1.5 rounded w-full">
-            <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
-              <Icon icon="jam:github" className="w-4 h-4" />
-            </span>
-
-            <div>
-              <div className="text-base font-medium">GitHub</div>
-            </div>
-
-            <div className="ml-auto flex flex-row gap-2">
-
-              <Link href="https://github.com/IslamTayeb" target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 rounded-sm"
-                >
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
-                  />
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 p-1.5 rounded w-full">
-            <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
-              <Icon icon="prime:twitter" className="w-4 h-4" />
-            </span>
-
-            <div>
-              <div className="text-base font-medium">X (Twitter)</div>
-            </div>
-
-            <div className="ml-auto flex flex-row gap-2">
-
-              <Link href="https://x.com/IslamTyb" target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 rounded-sm"
-                >
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
-                  />
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 p-1.5 rounded w-full">
-            <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
-              <Icon icon="fa6-brands:google-scholar" className="w-4 h-4" />
-            </span>
-
-            <div>
-              <div className="text-base font-medium">Google Scholar</div>
-            </div>
-
-            <div className="ml-auto flex flex-row gap-2">
-
-              <Link href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 rounded-sm"
-                >
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
-                  />
-                </Button>
-              </Link>
-            </div>
-          </div>
-
-          <Separator />
-
-          <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 p-1.5 rounded w-full">
-            <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
-              <Icon icon="solar:file-bold" className="w-4 h-4 p-[0.5px]" />
-            </span>
-
-            <div>
-              <div className="text-base font-medium">Resume</div>
-            </div>
-
-            <div className="ml-auto flex flex-row gap-2">
-
-              <Link href="/Islam_Tayeb_Resume.pdf" target="_blank" rel="noopener noreferrer">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 rounded-sm"
-                >
-                  <ArrowUpRight
-                    size={16}
-                    className="text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
-                  />
-                </Button>
-              </Link>
-            </div>
-          </div>
+                  </Link>
+                </div>
+              </div>
+              {index < contactsData.length - 1 && <Separator />}
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </Section>
