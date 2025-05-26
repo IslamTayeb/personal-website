@@ -4,6 +4,7 @@ import { Hero } from "./_components/Hero";
 import { Spacing } from "./_components/Misc/Spacing";
 import { Summary } from "./_components/Summary";
 import { About } from "./_components/About";
+import { About2 } from "./_components/About2";
 import { Footer } from "./_components/Footer";
 import { Experience } from "./_components/Experience";
 import { Projects } from "./_components/Projects";
@@ -29,9 +30,13 @@ export default function Home() {
 
       <Spacing height={height} /> */}
 
-      <About />
+      {/* <About />
 
-      <Spacing height={height} />
+      <Spacing height={height} /> */}
+
+      {/* <About2 />
+
+      <Spacing height={height} /> */}
 
       <Experience />
 

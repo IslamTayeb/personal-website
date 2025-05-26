@@ -40,14 +40,11 @@ export const Skills = () => {
     {
       category: "Machine Learning",
       technologies: [
-        { name: "TensorFlow", icon: "simple-icons:tensorflow" },
         { name: "PyTorch", icon: "simple-icons:pytorch" },
+        { name: "TensorFlow", icon: "simple-icons:tensorflow" },
         { name: "LangChain", icon: "simple-icons:langchain" },
-        { name: "RAG", icon: "carbon:rag" },
         { name: "AutoGen", icon: "cib:microsoft" },
         { name: "Google BERT", icon: "bi:google" },
-        // { name: "Gemini", icon: "simple-icons:googlegemini" },
-        { name: "OpenAI", icon: "simple-icons:openai" },
         { name: "SciKit-Learn", icon: "simple-icons:scikitlearn" },
         { name: "PyRosetta", icon: "fluent:molecule-24-filled" },
       ],
@@ -60,6 +57,7 @@ export const Skills = () => {
         { name: "Angular", icon: "cib:angular" },
         { name: "SCSS", icon: "simple-icons:sass" },
         { name: "Framer Motion", icon: "teenyicons:framer-solid" },
+        { name: "Zustand", icon: "devicon-plain:zustand" },
       ],
     },
     {
@@ -67,6 +65,9 @@ export const Skills = () => {
       technologies: [
         { name: "Node.js", icon: "simple-icons:nodedotjs" },
         { name: "Flask", icon: "simple-icons:flask" },
+        { name: "FastAPI", icon: "simple-icons:fastapi" },
+        { name: "SQLAlchemy", icon: "devicon-plain:sqlalchemy" },
+        { name: "Prisma", icon: "simple-icons:prisma" },
         { name: "PostgreSQL", icon: "akar-icons:postgresql-fill" },
         { name: "Redis", icon: "devicon-plain:redis" },
         { name: "Supabase", icon: "simple-icons:supabase" },
@@ -78,11 +79,11 @@ export const Skills = () => {
     {
       category: <>Deployment&nbsp;& Cloud</>,
       technologies: [
-        { name: "Linux", icon: "devicon-plain:linux" },
         { name: "Git", icon: "simple-icons:git" },
         { name: "Docker", icon: "simple-icons:docker" },
-        { name: "AWS", icon: "cib:amazon-aws" },
-        { name: "GCP", icon: "cib:google-cloud" },
+        { name: "AWS (S3, EC2, and Lambda)", icon: "cib:amazon-aws" },
+        { name: "GCP (Compute, Cloud Run, and Cloud SQL)", icon: "cib:google-cloud" },
+        { name: "Linux", icon: "devicon-plain:linux" },
         { name: "Vercel", icon: "ion:logo-vercel" },
       ],
     },

@@ -20,6 +20,8 @@ const logoComponentRegistry = {
     "Sapien": dynamic(() => import("./Icons/Sapien").then(mod => mod.Sapien), { ssr: false }),
     "Reveal": dynamic(() => import("./Icons/Reveal").then(mod => mod.Reveal), { ssr: false }),
     "Soff": dynamic(() => import("./Icons/Soff").then(mod => mod.Soff), { ssr: false }),
+    "DukeUni": dynamic(() => import("./Icons/DukeUni").then(mod => mod.DukeUni), { ssr: false }),
+    "DukeUni2": dynamic(() => import("./Icons/DukeUni2").then(mod => mod.DukeUni2), { ssr: false }),
     // Add more as needed
 }
 
@@ -27,7 +29,7 @@ export function Experience() {
     const [openIndices, setOpenIndices] = useState<number[]>([])
 
     const toggleAccordion = (index: number, status?: string) => {
-        if (status !== "incoming") {
+        if (status !== "incoming" && experiences[index].responsibilities.length > 1) {
             setOpenIndices(prev => {
                 // If already open, remove from array; otherwise add to array
                 return prev.includes(index)
@@ -78,7 +80,7 @@ export function Experience() {
                 <div
                     key={index}
                     className={cn(
-                        "border border-border rounded-lg overflow-hidden transition-all duration-300",
+                        "border border-secondary rounded-lg overflow-hidden transition-all duration-300",
                         openIndices.includes(index) && "shadow-md",
                     )}
                 >
@@ -87,7 +89,7 @@ export function Experience() {
                         className={cn(
                             "w-full flex justify-between items-center p-3 text-left transition-all duration-300",
                             openIndices.includes(index) ? "bg-secondary/40" : "bg-card hover:bg-card/25 transition-all",
-                            experience.status !== "incoming" && "cursor-pointer"
+                            experience.status !== "incoming" && experience.responsibilities.length > 1 && "cursor-pointer"
                         )}
                     >
                         <div className="flex items-center gap-3">
@@ -129,7 +131,7 @@ export function Experience() {
                                 </p>
                             </div>
                         </div>
-                        {experience.status !== "incoming" && (
+                        {experience.status !== "incoming" && experience.responsibilities.length > 1 && (
                             <ChevronDown
                                 className={cn(
                                     "h-5 w-5 transition-transform duration-200 text-muted-foreground flex-shrink-0 self-center",
@@ -145,7 +147,7 @@ export function Experience() {
                             openIndices.includes(index) ? "max-h-[1000px]" : "max-h-0",
                         )}
                     >
-                        <div className="p-4 border-t bg-card">
+                        <div className="p-4 border-t border-secondary bg-card">
                             <div className="flex flex-col sm:flex-row sm:items-center gap-6 mb-2.5 text-sm text-muted-foreground opacity-80">
                                 <div className="flex items-center">
                                     <Calendar className="mr-1.5 h-4 w-4" />
@@ -166,7 +168,7 @@ export function Experience() {
                             </ul>
 
                             <div className="flex flex-wrap gap-2 mt-3.5">
-                                {experience.skills.map((skill, skillIndex) => (
+                                {(experience.skills || []).map((skill, skillIndex) => (
                                     <Code key={skillIndex}>
                                         <span className="flex items-center gap-1.5 h-4 text-sm">
                                             <DefaultIcon icon={skill.icon} className="inline text-current mt-[0.75px]"
@@ -190,25 +192,47 @@ const highlightStyle = "font-normal"; // You can change this once to update all 
 
 const experiences = [
     {
+        role: "ML Research Assistant",
+        company: "Duke University",
+        logo: "Icons/DukeUni2.tsx",
+        // period: "Oct 2024 – Apr 2025",
+        location: "Durham, NC",
+        status: "incoming",
+        website: "https://www.romerolab.org/",
+        responsibilities: [
+            "ML + infrastructure for enzyme design @ Romero Lab",
+        ],
+        skills: [
+            { name: "Python", icon: "simple-icons:python" },
+            { name: "PyTorch", icon: "simple-icons:pytorch" },
+            { name: "Machine Learning", icon: "carbon:machine-learning" },
+            { name: "Continual Learning", icon: "material-symbols:memory" },
+            { name: "Distributed Training", icon: "carbon:network-4" },
+            { name: "Domain Generalization", icon: "fluent:bezier-curve-square-12-filled" },
+            { name: "HPC", icon: "charm:binary" },
+            { name: "Bioinformatics", icon: "carbon:chemistry" },
+        ],
+    },
+    {
         role: "Software Engineer Intern",
         company: "Soff",
         website: "https://soff.ai/",
         logo: "Icons/Soff.tsx",
         period: "May 2025 – Present",
         location: "San Francisco, CA",
-        status: "incoming",
+        status: "present",
         responsibilities: [
             "AI + infrastructure for supply chain intelligence",
-            "Building cloud-native enterprise integration platform and CI/CD using Kubernetes + Docker + GitHub Actions",
+            // "Building cloud-native enterprise integration platform and CI/CD using Kubernetes + Docker + GitHub Actions",
         ],
-        skills: [
-            { name: "Kubernetes", icon: "simple-icons:kubernetes" },
-            { name: "Docker", icon: "simple-icons:docker" },
-            { name: "GitHub Actions", icon: "simple-icons:githubactions" },
-            { name: "CI/CD", icon: "carbon:continuous-deployment" },
-            { name: "Cloud", icon: "carbon:cloud" },
-            { name: "AI", icon: "carbon:ai" },
-        ],
+        // skills: [
+        //     { name: "Kubernetes", icon: "simple-icons:kubernetes" },
+        //     { name: "Docker", icon: "simple-icons:docker" },
+        //     { name: "GitHub Actions", icon: "simple-icons:githubactions" },
+        //     { name: "CI/CD", icon: "carbon:continuous-deployment" },
+        //     { name: "Cloud", icon: "carbon:cloud" },
+        //     { name: "AI", icon: "carbon:ai" },
+        // ],
     },
     {
         role: "Software Engineer",
@@ -217,7 +241,7 @@ const experiences = [
         logo: "Icons/Helian.tsx",
         period: "Dec 2024 – May 2025",
         location: "Durham, NC",
-        status: "present",
+        // status: "present",
         responsibilities: [
             "Developing AI insight tool for medical research workflows",
             <>Engineered ETL pipeline achieving <span className={highlightStyle}>80%</span> speedup and <span className={highlightStyle}>65%</span> resource reduction</>,
@@ -243,9 +267,9 @@ const experiences = [
         company: "Reveal Genomics",
         website: "https://www.reveal-genomics.com/",
         logo: "Icons/Reveal.tsx",
-        period: "Feb 2024 – May 2025",
+        period: "Sep 2024 – Apr 2025",
         location: "Durham, NC",
-        status: "present",
+        // status: "present",
         responsibilities: [
             "Breast cancer genomic analysis & biomarker discovery",
             <>Enhanced biomarker identification by <span className={highlightStyle}>55%</span> with <span className={highlightStyle}>Dask</span> + <span className={highlightStyle}>NetworkX</span> pipelines</>,
@@ -254,19 +278,22 @@ const experiences = [
         ],
         skills: [
             { name: "Python", icon: "simple-icons:python" },
-            { name: "Next.js", icon: "simple-icons:nextdotjs" },
+            { name: "Pandas", icon: "simple-icons:pandas" },
+            { name: "Streamlit", icon: "simple-icons:streamlit" },
             { name: "Dask", icon: "simple-icons:dask" },
             { name: "NetworkX", icon: "devicon-plain:networkx" },
+            { name: "Scikit-Learn", icon: "simple-icons:scikitlearn" },
             { name: "PCA", icon: "carbon:chart-scatter" },
+            { name: "Random Forest", icon: "carbon:decision-tree" },
+            { name: "TF-IDF", icon: "carbon:text-mining" },
             { name: "t-SNE", icon: "carbon:chart-t-sne" },
-            { name: "Genomics", icon: "carbon:chemistry" },
             { name: "Git", icon: "simple-icons:git" },
         ],
     },
     {
         role: "ML Research Assistant",
         company: "Duke University",
-        logo: "Icons/Duke Health.tsx",
+        logo: "Icons/DukeUni2.tsx",
         period: "Oct 2024 – Apr 2025",
         location: "Durham, NC",
         // status: "present",
@@ -286,30 +313,6 @@ const experiences = [
             { name: "Domain Generalization", icon: "fluent:bezier-curve-square-12-filled" },
             { name: "HPC", icon: "charm:binary" },
             { name: "Bioinformatics", icon: "carbon:chemistry" },
-        ],
-    },
-    {
-        role: "ML Engineer Intern",
-        company: "Life Edit Therapeutics",
-        logo: "Icons/Lifeedit.tsx",
-        website: "https://lifeeditinc.com/",
-        period: "Sep 2024 – Jan 2025",
-        location: "Durham, NC",
-        responsibilities: [
-            "Cell editing mechanism classifier + dashboard",
-            <>Engineered classifier achieving <span className={highlightStyle}>92%</span> accuracy for editing mechanism prediction</>,
-            "Built Streamlit dashboard enabling department-wide expression analysis",
-            <>Implemented feature extraction processing <span className={highlightStyle}>50K+</span> gene profiles</>
-        ],
-        skills: [
-            { name: "Python", icon: "simple-icons:python" },
-            { name: "Pandas", icon: "simple-icons:pandas" },
-            { name: "Scikit-Learn", icon: "simple-icons:scikitlearn" },
-            { name: "Streamlit", icon: "simple-icons:streamlit" },
-            { name: "Data Analysis", icon: "carbon:data-vis-4" },
-            { name: "PCA", icon: "carbon:chart-scatter" },
-            { name: "Random Forest", icon: "carbon:decision-tree" },
-            { name: "TF-IDF", icon: "carbon:text-mining" },
         ],
     },
     {

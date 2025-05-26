@@ -55,7 +55,7 @@ const contactsData = [
   },
   {
     id: "twitter",
-    label: "X (Twitter)",
+    label: "X",
     icon: "prime:twitter",
     href: "https://x.com/IslamTyb",
     isCopyable: false,

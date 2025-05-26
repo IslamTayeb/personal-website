@@ -11,7 +11,7 @@ export const Footer = () => {
         <p className="py-3.5 text-muted-foreground text-sm flex gap-x-1">
           {/* <Copyright size={12.5} className="bottom-0 mt-1" />{" "} */}
           <span className="">
-            Last Updated 03/03/2025
+            Last Updated 05/26/2025
             {/* {"2024"} {"All rights reserved"}{" "} */}
           </span>
           <div className="ml-auto text-right max-[375px]:hidden">

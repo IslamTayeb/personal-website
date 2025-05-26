@@ -52,19 +52,6 @@ export const Header = () => {
             </span>
           </Link>
           <Link
-            href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
-          >
-            <span className="flex items-center justify-center px-1 py-0">
-              <Icon icon={"fa6-brands:google-scholar"} fontSize={12} className="rounded-[4px] text-foreground -mt-[0.1em]" />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em]">
-                Scholar
-              </p>
-            </span>
-          </Link>
-          <Link
             href="https://x.com/IslamTyb"
             target="_blank"
             rel="noopener noreferrer"
@@ -74,6 +61,19 @@ export const Header = () => {
               <Icon icon={"prime:twitter"} fontSize={12} className="text-foreground -mt-[0.1em]" />
               <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em]">
                 X
+              </p>
+            </span>
+          </Link>
+          <Link
+            href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
+          >
+            <span className="flex items-center justify-center px-1 py-0">
+              <Icon icon={"fa6-brands:google-scholar"} fontSize={12} className="rounded-[4px] text-foreground -mt-[0.1em]" />
+              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em]">
+                Scholar
               </p>
             </span>
           </Link>
