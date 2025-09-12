@@ -18,73 +18,56 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Code, DefaultIcon } from "./sharedComponents";
+import { Pinecone } from "./Icons/Pinecone";
 
 export const Skills = () => {
+  type Technology = {
+    name: string;
+    icon: string;
+    component?: React.ComponentType<{ size?: number; className?: string }>;
+  };
 
-  const skillsData = [
+  const skillsData: { category: React.ReactNode; technologies: Technology[] }[] = [
     {
-      category: "Programming Languages",
+      category: "Languages",
       technologies: [
-        { name: "Python", icon: "akar-icons:python-fill" },
         { name: "TypeScript", icon: "akar-icons:typescript-fill" },
         { name: "JavaScript", icon: "akar-icons:javascript-fill" },
+        { name: "Python", icon: "akar-icons:python-fill" },
         { name: "Java", icon: "fa6-brands:java" },
+        { name: "C++", icon: "simple-icons:cplusplus" },
         { name: "SQL", icon: "fa-solid:database" },
-        { name: "R Language", icon: "devicon-plain:r" },
-        { name: "MATLAB", icon: "file-icons:matlab" },
-        { name: "C Language", icon: "devicon-plain:c" },
-        { name: "HTML5", icon: "simple-icons:html5" },
-        { name: "CSS3", icon: "simple-icons:css3" },
+        { name: "R", icon: "devicon-plain:r" },
+        { name: "HTML", icon: "simple-icons:html5" },
+        { name: "CSS", icon: "simple-icons:css3" },
       ],
     },
     {
-      category: "Machine Learning",
+      category: <>Frameworks&nbsp;& Libraries</>,
       technologies: [
-        { name: "PyTorch", icon: "simple-icons:pytorch" },
-        { name: "TensorFlow", icon: "simple-icons:tensorflow" },
-        { name: "LangChain", icon: "simple-icons:langchain" },
-        { name: "AutoGen", icon: "cib:microsoft" },
-        { name: "Google BERT", icon: "bi:google" },
-        { name: "SciKit-Learn", icon: "simple-icons:scikitlearn" },
-        { name: "PyRosetta", icon: "fluent:molecule-24-filled" },
-      ],
-    },
-    {
-      category: "Frontend Development",
-      technologies: [
-        { name: "React", icon: "akar-icons:react-fill" },
         { name: "Next.js", icon: "simple-icons:nextdotjs" },
-        { name: "Angular", icon: "cib:angular" },
-        { name: "SCSS", icon: "simple-icons:sass" },
-        { name: "Framer Motion", icon: "teenyicons:framer-solid" },
-        { name: "Zustand", icon: "devicon-plain:zustand" },
-      ],
-    },
-    {
-      category: "Backend Development",
-      technologies: [
-        { name: "Node.js", icon: "simple-icons:nodedotjs" },
+        { name: "React", icon: "akar-icons:react-fill" },
         { name: "Flask", icon: "simple-icons:flask" },
         { name: "FastAPI", icon: "simple-icons:fastapi" },
-        { name: "SQLAlchemy", icon: "devicon-plain:sqlalchemy" },
-        { name: "Prisma", icon: "simple-icons:prisma" },
-        { name: "PostgreSQL", icon: "akar-icons:postgresql-fill" },
-        { name: "Redis", icon: "devicon-plain:redis" },
-        { name: "Supabase", icon: "simple-icons:supabase" },
-        { name: "Pinecone", icon: "teenyicons:vector-document-solid" },
-        { name: "Celery", icon: "simple-icons:celery" },
-        { name: "Selenium", icon: "simple-icons:selenium" },
+        { name: "Node.js", icon: "simple-icons:nodedotjs" },
+        { name: "PyTorch", icon: "simple-icons:pytorch" },
+        { name: "LangChain", icon: "simple-icons:langchain" },
+        { name: "AutoGen", icon: "cib:microsoft" },
       ],
     },
     {
-      category: <>Deployment&nbsp;& Cloud</>,
+      category: <>Infrastructure&nbsp;& Tools</>,
       technologies: [
-        { name: "Git", icon: "simple-icons:git" },
+        { name: "AWS", icon: "cib:amazon-aws" },
+        { name: "GCP", icon: "cib:google-cloud" },
         { name: "Docker", icon: "simple-icons:docker" },
-        { name: "AWS (S3, EC2, and Lambda)", icon: "cib:amazon-aws" },
-        { name: "GCP (Compute, Cloud Run, and Cloud SQL)", icon: "cib:google-cloud" },
-        { name: "Linux", icon: "devicon-plain:linux" },
-        { name: "Vercel", icon: "ion:logo-vercel" },
+        { name: "Unix/Linux", icon: "devicon-plain:linux" },
+        { name: "Redis", icon: "devicon-plain:redis" },
+        { name: "PostgreSQL", icon: "akar-icons:postgresql-fill" },
+        { name: "Pinecone", icon: "custom", component: Pinecone },
+        { name: "Prisma", icon: "simple-icons:prisma" },
+        { name: "SQLAlchemy", icon: "devicon-plain:sqlalchemy" },
+        { name: "Selenium", icon: "simple-icons:selenium" },
       ],
     },
   ];
@@ -108,8 +91,8 @@ export const Skills = () => {
             </TableRow>
           </TableHeader>
           <TableBody className="text-accent-foreground">
-            {skillsData.map((skillCategory) => (
-              <TableRow key={skillCategory.category.toString()}>
+            {skillsData.map((skillCategory, index) => (
+              <TableRow key={index}>
                 <TableCell className="font-medium text-muted-foreground">
                   {skillCategory.category}
                 </TableCell>
@@ -118,19 +101,34 @@ export const Skills = () => {
                     <TooltipProvider key={tech.name} delayDuration={50}>
                       <Tooltip>
                         <TooltipTrigger>
-                          <div className="p-1">
-                            <Icon
-                              className="hover:blur-[6px] absolute transition-all opacity-35"
-                              icon={tech.icon}
-                              width="2.25em"
-                              height="2.25em"
-                            />
-                            <Icon
-                              className=""
-                              icon={tech.icon}
-                              width="2.25em"
-                              height="2.25em"
-                            />
+                          <div className="p-1 relative group">
+                            {tech.icon === "custom" && tech.component ? (
+                              <>
+                                <tech.component
+                                  className="group-hover:blur-[6px] absolute transition-all opacity-35"
+                                  size={36}
+                                />
+                                <tech.component
+                                  className="relative"
+                                  size={36}
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <Icon
+                                  className="group-hover:blur-[6px] absolute transition-all opacity-35"
+                                  icon={tech.icon}
+                                  width="2.25em"
+                                  height="2.25em"
+                                />
+                                <Icon
+                                  className="relative"
+                                  icon={tech.icon}
+                                  width="2.25em"
+                                  height="2.25em"
+                                />
+                              </>
+                            )}
                           </div>
                         </TooltipTrigger>
                         <TooltipContent>

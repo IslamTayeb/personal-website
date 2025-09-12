@@ -67,14 +67,6 @@ const contactsData = [
     href: "https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ",
     isCopyable: false,
   },
-  {
-    id: "resume",
-    label: "Resume",
-    icon: "solar:file-bold",
-    href: "/resume",
-    isCopyable: false,
-    iconClass: "p-[0.5px]",
-  },
 ];
 
 const formSchema = z.object({

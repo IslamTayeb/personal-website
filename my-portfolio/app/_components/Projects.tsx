@@ -11,36 +11,9 @@ import { Code, DefaultIcon } from "./sharedComponents";
 export const Projects = () => {
   const projectsData = [
     {
-      image: "/finder.avif",
-      projectName: "Better Finder",
-      new: false,
-      wip: true,
-      projectDescription: (
-        <>
-          Developing a native macOS Finder alternative for developers with AI-powered search, customizable workflows, and advanced filtering capabilities. Designed to offer power users with maximal automation and productivity.
-        </>
-      ),
-      projectTech: [
-        "Swift",
-        "SwiftUI",
-        "Core ML",
-        "macOS API",
-        "Metal",
-        "FileProvider",
-      ],
-      projectTechLogo: [
-        "simple-icons:swift",
-        "cib:swift",
-        "simple-icons:apple",
-        "fa6-brands:apple",
-        "file-icons:metal",
-        "material-symbols:folder-outline",
-      ],
-    },
-    {
       image: "/Etchr.mp4",
       projectName: "Etchr – GitHub README Generator",
-      new: true,
+      new: false,
       wip: false,
       projectDescription: (
         <>
@@ -48,34 +21,22 @@ export const Projects = () => {
         </>
       ),
       projectTech: [
-        "TypeScript",
         "Next.js",
-        // "React.js",
-        "Express.js",
         "Node.js",
-        "Supabase",
-        // "PostgreSQL",
-        "Google Gemini",
-        // "REST APIs",
-        // "Framer Motion",
-        // "Tailwind CSS",
+        "Express",
+        "PostgreSQL",
+        "Gemini",
+        "GitHub API",
         "GCP",
-        // "Docker"
       ],
       projectTechLogo: [
-        "simple-icons:typescript",
         "simple-icons:nextdotjs",
-        // "simple-icons:react",
-        "simple-icons:express",
         "simple-icons:nodedotjs",
-        "simple-icons:supabase",
-        // "simple-icons:postgresql",
+        "simple-icons:express",
+        "simple-icons:postgresql",
         "simple-icons:google",
-        // "mdi:api",
-        // "simple-icons:framer",
-        // "simple-icons:tailwindcss",
+        "simple-icons:github",
         "simple-icons:googlecloud",
-        // "simple-icons:docker"
       ],
       projectExternalLinks: {
         github: "https://github.com/IslamTayeb/etchr",
@@ -210,62 +171,38 @@ export const Projects = () => {
                       </li>
                     ))}
                   </ul>
-                    {(projectExternalLinks?.github || projectExternalLinks?.externalLink) && (
+                  {(projectExternalLinks?.github || projectExternalLinks?.externalLink) && (
                     <ul className="project-info-links max-md:w-full max-md:justify-end">
                       {projectExternalLinks?.github && (
-                      <li className="project-info-links-item">
-                        <Link
-                        href={projectExternalLinks.github}
-                        className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >
-                        <LucideGithub size={16} /> GitHub
-                        </Link>
-                      </li>
+                        <li className="project-info-links-item">
+                          <Link
+                            href={projectExternalLinks.github}
+                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline transition-all duration-150"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <LucideGithub size={16} /> GitHub
+                          </Link>
+                        </li>
                       )}
                       {projectExternalLinks?.externalLink && (
-                      <li className="project-info-links-item">
-                        <Link
-                        href={projectExternalLinks.externalLink}
-                        className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        >
-                        <Link2 size={16} /> Link
-                        </Link>
-                      </li>
+                        <li className="project-info-links-item">
+                          <Link
+                            href={projectExternalLinks.externalLink}
+                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline transition-all duration-150"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Link2 size={16} /> Link
+                          </Link>
+                        </li>
                       )}
                     </ul>
-                    )}
+                  )}
                 </div>
 
                 <div
                   className="project-image overflow-hidden scale-95 rounded-sm border-accent border max-md:rounded-lg"
-                  onClick={() => {
-                    // Create a modal/fullscreen view
-                    const element = image.endsWith('.mp4')
-                      ? document.createElement('video')
-                      : document.createElement('img');
-
-                    const modal = document.createElement('div');
-                    modal.className = 'fixed inset-0 bg-black/80 z-50 flex items-center justify-center';
-                    modal.onclick = () => document.body.removeChild(modal);
-
-                    if (image.endsWith('.mp4')) {
-                      (element as HTMLVideoElement).src = image;
-                      (element as HTMLVideoElement).autoplay = true;
-                      (element as HTMLVideoElement).loop = true;
-                      (element as HTMLVideoElement).muted = true;
-                      (element as HTMLVideoElement).playsInline = true;
-                    } else {
-                      (element as HTMLImageElement).src = image;
-                    }
-
-                    element.className = 'max-h-[90vh] max-w-[90vw] object-contain';
-                    modal.appendChild(element);
-                    document.body.appendChild(modal);
-                  }}
                 >
                   {image.endsWith('.mp4') ? (
                     <video
@@ -297,7 +234,7 @@ export const Projects = () => {
         href="https://github.com/IslamTayeb"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-xs leading-none ml-auto text-muted-foreground/80 hover:text-primary mt-3 justify-end flex items-center transition-colors hover:underline font-mono tracking-wide"
+        className="text-xs leading-none ml-auto text-muted-foreground/80 hover:text-primary mt-3 justify-end flex items-center underline hover:no-underline font-mono tracking-wide transition-colors duration-150"
       >
         See more on GitHub...
       </Link>

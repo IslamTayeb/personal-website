@@ -21,7 +21,7 @@ export const Header = () => {
             href="https://linkedin.com/in/islam-tayeb"
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
+            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6 group")}
           >
             <span className="flex items-center justify-center px-1 py-0">
               <DefaultIcon
@@ -29,7 +29,7 @@ export const Header = () => {
                 className="text-foreground rounded-[2.5px] -mt-[0.04em]"
                 icon={"bi:linkedin"}
               />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em]">
+              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
                 LinkedIn
               </p>
             </span>
@@ -38,7 +38,7 @@ export const Header = () => {
             href="https://github.com/IslamTayeb"
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
+            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6 group")}
           >
             <span className="flex items-center justify-center px-1 py-0">
               <DefaultIcon
@@ -46,7 +46,7 @@ export const Header = () => {
                 className="text-foreground -mt-[0.5px]"
                 icon={"jam:github"}
               />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em]">
+              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
                 GitHub
               </p>
             </span>
@@ -55,11 +55,11 @@ export const Header = () => {
             href="https://x.com/IslamTyb"
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
+            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6 group")}
           >
             <span className="flex items-center justify-center px-1">
               <Icon icon={"prime:twitter"} fontSize={12} className="text-foreground -mt-[0.1em]" />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em]">
+              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
                 X
               </p>
             </span>
@@ -68,35 +68,16 @@ export const Header = () => {
             href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
             target="_blank"
             rel="noopener noreferrer"
-            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6")}
+            className={cn(buttonVariants({ variant: "outline" }), "border-dashed p-0 flex items-center justify-center h-6 group")}
           >
             <span className="flex items-center justify-center px-1 py-0">
               <Icon icon={"fa6-brands:google-scholar"} fontSize={12} className="rounded-[4px] text-foreground -mt-[0.1em]" />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em]">
+              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
                 Scholar
               </p>
             </span>
           </Link>
-          <Link
-            href="/resume"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              buttonVariants({ variant: "outline" }),
-              "border-dashed px-[4.5px] h-6 flex items-center justify-center"
-            )}
-          >
-            <span className="w-[13px] h-[13px] flex items-center justify-center mr-1">
-              <DefaultIcon
-                fontSize={13}
-                className="text-foreground"
-                icon={"solar:file-bold"}
-              />
-            </span>
-            <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden">
-              Resume
-            </p>
-          </Link>
+
         </ul>
       </div>
     </header>

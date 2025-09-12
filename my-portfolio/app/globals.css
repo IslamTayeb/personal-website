@@ -328,9 +328,6 @@
     transition: 0.3s ease-in-out;
     outline: 2px dashed transparent;
   }
-  .project-info-links-item-link:hover {
-    color: hsl(var(--accent-foreground));
-  }
   .project:nth-of-type(even) {
     justify-content: flex-start;
   }

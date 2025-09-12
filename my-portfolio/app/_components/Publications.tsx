@@ -17,7 +17,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Link from "next/link";
-import { ArrowUpRight, Link as Link2, LucideGithub } from "lucide-react";
+import { ArrowUpRight, Link as Link2, LucideGithub, ExternalLink } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { Code, DefaultIcon } from "./sharedComponents";
@@ -25,10 +25,49 @@ import { Code, DefaultIcon } from "./sharedComponents";
 export const Publications = () => {
   const publicationsData = [
     {
+      pubDate: "May 2025",
+      pubAuthors: (
+        <>
+          <span className="font-semibold text-primary">Islam Tayeb</span>, Navid NaderiAlizadeh
+        </>
+      ),
+      pubImpact: "Technical Report",
+      pubTitle:
+        "Primal Dual Continual Learning for Robust Antibody Design",
+      pubJournal: null,
+      pubJournalLink: null,
+      pubType: "Technical Report",
+      pubDescription: (
+        <>
+          <p className="mb-1.5">
+            Framework for handling distribution shifts in antibody design using constrained continual learning. Uses dual variables to adaptively allocate memory and prevent catastrophic forgetting across design cycles.
+          </p>
+          <p>
+            I developed the algorithm and implemented the full framework for the Antibody DomainBed benchmark.
+          </p>
+        </>
+      ),
+      pubLink: "https://doi.org/10.13140/RG.2.2.11182.98880",
+      pubCategory: [
+        {
+          name: "Machine Learning",
+          icon: "simple-icons:tensorflow",
+        },
+        {
+          name: "Protein Design",
+          icon: "fluent:molecule-16-filled",
+        },
+        {
+          name: "Continual Learning",
+          icon: "mdi:brain",
+        },
+      ],
+    },
+    {
       pubDate: "Dec. 2024",
       pubAuthors: (
         <>
-          Hamid Zentou, Mansur Aliyu, Mahmoud A. Abdalla, Omar Y. Abdelaziz, Bosirul Hoque, Ahmed M. Alloush, <span className="font-semibold text-primary">Islam M. Tayeb</span>, Kumar Patchigolla, Mahmoud M. Abdelnaby
+          Hamid Zentou, Mansur Aliyu, Mahmoud A. Abdalla, Omar Y. Abdelaziz, Bosirul Hoque, Ahmed M. Alloush, <span className="font-semibold text-primary">Islam Tayeb</span>, Kumar Patchigolla, Mahmoud M. Abdelnaby
         </>
       ),
       pubImpact: "Impact Factor: 7.0",
@@ -40,10 +79,10 @@ export const Publications = () => {
       pubDescription: (
         <>
           <p className="mb-1.5">
-            This review comprehensively examines adsorption-based carbon capture technologies from fundamental science to industrial deployment. It explores solid sorbent materials, their molecular-level properties, and pilot-scale demonstrations while addressing engineering aspects crucial for implementation. The paper discusses integration with process simulation and economic evaluations to enhance efficiency and cost-effectiveness of CO<span style={{ verticalAlign: "sub", fontSize: 7.25, lineHeight: "1", fontWeight: "bold" }}>2</span> capture. It highlights technical, economic, and environmental challenges, proposing solutions through hybrid systems, renewable energy integration, and machine learning techniques to effectively combat global warming.
+            Review of solid materials used to capture CO<span style={{ verticalAlign: "sub", fontSize: 7.25, lineHeight: "1", fontWeight: "bold" }}>2</span> from industrial sources, covering lab research to implementation. Discusses cost and engineering challenges for scaling up these technologies.
           </p>
           <p>
-            I contributed to the materials science sections and analysis of adsorbent performance metrics, while collaborating on the technology deployment roadmap discussion and future research directions.
+            I wrote the materials science sections and analyzed adsorbent performance data.
           </p>
         </>
       ),
@@ -98,48 +137,10 @@ export const Publications = () => {
       pubDescription: (
         <>
           <p className="mb-1.5">
-            This study enhances the UiO-66 metal-organic framework for direct
-            air capture by modifying UiO-66-(OH)
-            <span
-              style={{
-                verticalAlign: "sub",
-                fontSize: 7.25,
-                lineHeight: "1",
-                fontWeight: "bold",
-              }}
-            >
-              2
-            </span>{" "}
-            with APTES, resulting in a 15% increase in CO
-            <span
-              style={{
-                verticalAlign: "sub",
-                fontSize: 7.25,
-                lineHeight: "1",
-                fontWeight: "bold",
-              }}
-            >
-              2
-            </span>{" "}
-            adsorption capacity and improved selectivity. The modified
-            UiO-66-APTES demonstrates high stability and effectiveness in CO
-            <span
-              style={{
-                verticalAlign: "sub",
-                fontSize: 7.25,
-                lineHeight: "1",
-                fontWeight: "bold",
-              }}
-            >
-              2
-            </span>{" "}
-            separation from air, making it a promising DAC adsorbent.
+            Modified a metal-organic framework polymer to better capture CO<span style={{ verticalAlign: "sub", fontSize: 7.25, lineHeight: "1", fontWeight: "bold" }}>2</span> directly from air. The modified version captured 15% more CO<span style={{ verticalAlign: "sub", fontSize: 7.25, lineHeight: "1", fontWeight: "bold" }}>2</span> than the original material.
           </p>
           <p>
-            I was involved in scheming and synthesizing all materials and
-            performed full material characterization. I was further involved in
-            writing the original manuscript and presenting it at 2 local
-            symposiums in Saudi Arabia.
+            I designed and synthesized the materials in the lab, characterized their properties, and helped write the paper.
           </p>
         </>
       ),
@@ -156,57 +157,6 @@ export const Publications = () => {
         {
           name: "Environmental Tech",
           icon: "mdi:environment",
-        },
-      ],
-    },
-    {
-      pubDate: "Jul. 2022",
-      pubAuthors: (
-        <>
-          Abdullah Alsulaiman, Siraj Alharthi, Ahmed Albariqi, Rasha Mutabaqani,
-          Fawzi Bokhari,{" "}
-          <span className="font-semibold text-primary">Islam Tayeb</span>, Dalia
-          Alharthi, Muhammad Tariq, Yasser Babaier
-        </>
-      ),
-      pubImpact: "Impact Factor: 1.2",
-      pubTitle:
-        "KRAS G12C-Mutant Non-Small-Cell Lung Adenocarcinoma: First Documented Report in the Arabian Gulf",
-      pubJournal: "Cureus Journal",
-      pubJournalLink: "https://www.cureus.com/",
-      pubType: "Case Report",
-      pubDescription: (
-        <>
-          <p className="mb-1.5">
-            This case report describes the first documented cases of KRAS
-            G12C-mutant non-small-cell lung adenocarcinoma in the Arabian Gulf.
-            Two Saudi males, aged 64 and 76, were diagnosed using reverse
-            transcription-PCR. The 64-year-old, an ex-smoker, had generalized
-            lymphadenopathy and a right lung mass. The 76-year-old, a
-            non-smoker, had stage III-A left lung adenocarcinoma. The study
-            calls for further research on KRAS mutations in the region to
-            improve treatment strategies.
-          </p>
-          <p>
-            I was involved in data collection and manuscript writing,
-            collaborating with multiple physicians and describing their input
-            and analyses.
-          </p>
-        </>
-      ),
-      pubLink: "http://dx.doi.org/10.7759/cureus.27090",
-      pubCategory: [
-        {
-          name: "Medical Oncology",
-          icon: "fa6-solid:ribbon",
-        },
-        {
-          name: "Clinical Genetics",
-          icon: "mdi:dna",
-        },
-        {
-          name: "Regional Studies",
-          icon: "fluent:location-16-filled",
         },
       ],
     },
@@ -232,7 +182,7 @@ export const Publications = () => {
           pubCategory,
         }) => {
           return (
-            <div className="project max-md:w-full text-primary" key={pubTitle}>
+            <div className="project max-md:w-full text-primary w-full" key={pubTitle}>
               <div className="flex items-center gap-4 mx-2 ">
                 <Accordion
                   type="single"
@@ -250,30 +200,28 @@ export const Publications = () => {
                       <div className="flex flex-row">
                         <div className="text-primary flex flex-col">
                           <div className="text-base font-medium text-foreground">
-                            <Link
-                              href={pubLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <span className="transition text-primary">
-                                {pubTitle}
-                              </span>{" "}
-                              <DefaultIcon icon={"gridicons:external"} className="inline-block w-3 ml-0.5" />
-                            </Link>
+                            <span className="transition text-primary">
+                              {pubTitle}
+                            </span>
                           </div>
-                          <div className="text-muted-foreground text-sm font-normal text-[0.925em]">
+                          <div className="text-muted-foreground text-sm font-normal text-[0.925em] ">
+                            <Link href={pubLink} target="_blank" rel="noopener noreferrer" className="group">
+                                <span className="underline group-hover:no-underline">Open Paper</span> <ExternalLink className="inline-block w-3 ml-0.5" />
+                            </Link>
+                            {pubJournal && <span className="font-normal"> – </span>}
                             <TooltipProvider delayDuration={50}>
                               <Tooltip>
                                 <TooltipTrigger className="font-normal">
                                   {pubJournalLink ? (
                                     <div className="flex items-center gap-0">
-                                      <div className="relative md:after:absolute md:after:bottom-0 md:after:left-0 md:before:h-[0.5px] md:after:h-[0.5px] md:after:w-full md:after:origin-bottom-left md:after:scale-x-100 hover:md:after:scale-x-0 md:after:transition-transform md:after:ease-in-out md:after:duration-200 md:after:bg-gray-500 text-foreground underline md:no-underline">
+                                      <div className="group">
                                         <Link
                                           href={pubJournalLink}
                                           target="_blank"
                                           rel="noopener noreferrer"
+                                          className="group"
                                         >
-                                          {pubJournal}
+                                          <span className="underline group-hover:no-underline">{pubJournal}</span> <ExternalLink className="inline-block w-3 ml-0.5" />
                                         </Link>
                                       </div>
                                     </div>
@@ -333,7 +281,7 @@ export const Publications = () => {
         href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-xs leading-none ml-auto text-muted-foreground/80 hover:text-primary -mt-0.5 flex items-center transition-colors hover:underline tracking-wide"
+        className="text-xs leading-none ml-auto text-muted-foreground/80 hover:text-primary -mt-0.5 flex items-center transition-colors underline hover:no-underline tracking-wide"
       >
         See more on Scholar...
       </Link>
