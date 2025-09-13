@@ -29,8 +29,19 @@ import {
 } from "@/components/ui/tooltip";
 import { useCopyToClipboard } from "usehooks-ts";
 
+// Type definition for contact items
+type ContactItem = {
+  id: string;
+  label: string;
+  icon: string;
+  value?: string;
+  href: string;
+  isCopyable: boolean;
+  iconClass?: string;
+};
+
 // Contact links data
-const contactsData = [
+const contactsData: ContactItem[] = [
   {
     id: "email",
     label: "Email",
