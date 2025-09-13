@@ -157,7 +157,7 @@ export const Projects = () => {
                       </>
                     )}
                   </h3>
-                  <div className="project-info-description border max-md:border-0">
+                  <div className="project-info-description border max-md:border-0 bg-card">
                     <p>{projectDescription}</p>
                   </div>
                   <ul className="project-info-tech-list">

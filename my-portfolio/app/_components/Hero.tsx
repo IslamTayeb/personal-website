@@ -45,7 +45,7 @@ export const Hero = () => {
             {!imagesLoaded && (
               <div className="absolute inset-0 rounded-lg z-10 bg-accent/20 animate-pulse" />
             )}
-            <Avatar className="w-full h-full relative border border-border">
+            <Avatar className="w-full h-full relative border border-border rounded-lg">
               <AvatarImage
                 className="object-cover absolute z-20 transition-all scale-110 -mt-2"
                 src="/myphoto.webp"
