@@ -49,7 +49,7 @@ export const About2 = () => {
             </Code>
             , and I like to play{" "}
             <Code>
-              <DefaultIcon icon="fluent:tetris-app-16-filled" /> <a href="https://ch.tetr.io/u/mivi" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-primary transition-all">Tetris</a>
+              <DefaultIcon icon="fluent:tetris-app-16-filled" /> <a href="https://ch.tetr.io/u/mivi" target="_blank" rel="noopener noreferrer" className="underline-2">Tetris</a>
             </Code>{" "}
             in my free time between classes and work.
           </p>
@@ -58,7 +58,7 @@ export const About2 = () => {
         <div className="flex flex-col gap-2 flex-1">
           <h3 className="text-2xl font-medium font-sans">Writing</h3>
           <p className="text-sm text-muted-foreground font-sans">
-            I write opinion articles on <Code><DefaultIcon icon="mdi:newspaper-variant" /> <a href="https://www.dukechronicle.com/staff/islam-tayeb" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 hover:text-primary transition-all">Duke Chronicle</a></Code>.
+            I write opinion articles on <Code><DefaultIcon icon="mdi:newspaper-variant" /> <a href="https://www.dukechronicle.com/staff/islam-tayeb" target="_blank" rel="noopener noreferrer" className="underline-2">Duke Chronicle</a></Code>.
           </p>
         </div>
       </div>

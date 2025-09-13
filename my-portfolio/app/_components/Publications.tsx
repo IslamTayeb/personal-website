@@ -17,7 +17,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Link from "next/link";
-import { ArrowUpRight, Link as Link2, LucideGithub, ExternalLink } from "lucide-react";
+import { ArrowUpRight, Link as Link2, LucideGithub } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 import { Code, DefaultIcon } from "./sharedComponents";
@@ -183,30 +183,30 @@ export const Publications = () => {
         }) => {
           return (
             <div className="project max-md:w-full text-primary w-full" key={pubTitle}>
-              <div className="flex items-center gap-4 mx-2 ">
+              <div className="w-full mx-2">
                 <Accordion
                   type="single"
                   collapsible
-                  className="w-full font-sans "
+                  className="w-full font-sans"
                 >
                   <AccordionItem
                     value="item-1"
-                    className="pb-4 text-pretty flex flex-row transition gap-4"
+                    className="pb-4 text-pretty flex flex-row transition gap-4 w-full"
                   >
-                    <div className="flex items-center text-muted-foreground text-sm w-min text-left font-mono">
+                    <div className="flex items-center text-muted-foreground text-sm w-min text-left font-mono shrink-0">
                       <p className="">{pubDate}</p>
                     </div>
-                    <div>
-                      <div className="flex flex-row">
-                        <div className="text-primary flex flex-col">
-                          <div className="text-base font-medium text-foreground">
-                            <span className="transition text-primary">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-row w-full">
+                        <div className="text-primary flex flex-col w-full">
+                          <div className="text-base font-medium text-foreground w-full">
+                            <span className="transition text-primary block">
                               {pubTitle}
                             </span>
                           </div>
                           <div className="text-muted-foreground text-sm font-normal text-[0.925em] ">
                             <Link href={pubLink} target="_blank" rel="noopener noreferrer" className="group">
-                                <span className="underline group-hover:no-underline">Open Paper</span> <ExternalLink className="inline-block w-3 ml-0.5" />
+                              <span className="underline group-hover:no-underline">Full-text</span>
                             </Link>
                             {pubJournal && <span className="font-normal"> – </span>}
                             <TooltipProvider delayDuration={50}>
@@ -221,7 +221,7 @@ export const Publications = () => {
                                           rel="noopener noreferrer"
                                           className="group"
                                         >
-                                          <span className="underline group-hover:no-underline">{pubJournal}</span> <ExternalLink className="inline-block w-3 ml-0.5" />
+                                          <span className="underline group-hover:no-underline">{pubJournal}</span>
                                         </Link>
                                       </div>
                                     </div>
@@ -266,7 +266,7 @@ export const Publications = () => {
                         ))}
                       </div>
                     </div>
-                    <AccordionTrigger className="pb-0 p-1" />
+                    <AccordionTrigger className="pb-0 p-1 flex-none" />
                   </AccordionItem>
                 </Accordion>
 
@@ -281,7 +281,7 @@ export const Publications = () => {
         href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-xs leading-none ml-auto text-muted-foreground/80 hover:text-primary -mt-0.5 flex items-center transition-colors underline hover:no-underline tracking-wide"
+        className="text-xs leading-none ml-auto text-muted-foreground/80 -mt-0.5 flex items-center underline hover:no-underline tracking-wide"
       >
         See more on Scholar...
       </Link>

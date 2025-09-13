@@ -325,7 +325,6 @@
   }
   .project-info-links-item-link {
     color: hsl(var(--foreground));
-    transition: 0.3s ease-in-out;
     outline: 2px dashed transparent;
   }
   .project:nth-of-type(even) {

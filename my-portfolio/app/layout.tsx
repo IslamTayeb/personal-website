@@ -12,6 +12,8 @@ import { Analytics } from "@vercel/analytics/react"
 const anekTelugu = Anek_Telugu({
   subsets: ["latin"],
   variable: "--font-caption",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {

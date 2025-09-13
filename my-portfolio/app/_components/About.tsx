@@ -24,14 +24,14 @@ export const About = () => {
           <SWEIcon size={54} />
           <h3 className="text-2xl font-medium font-sans">Software Dev</h3>
           <p className="text-sm text-muted-foreground font-sans">
-            I&apos;ve worked on projects to increase the accessibility of tools and technologies in healthcare, research, and academic spaces. You can check out my <Link href={"https://github.com/IslamTayeb"} target="_blank" rel="noopener noreferrer" className="underline hover:text-primary transition-all underline-offset-2">GitHub</Link> for my latest software development projects and contributions.
+            I&apos;ve worked on projects to increase the accessibility of tools and technologies in healthcare, research, and academic spaces. You can check out my <Link href={"https://github.com/IslamTayeb"} target="_blank" rel="noopener noreferrer" className="underline-2">GitHub</Link> for my latest software development projects and contributions.
           </p>
         </div>
         <div className="flex flex-col gap-2 flex-1 ">
           <Polymer size={54} />
           <h3 className="text-2xl font-medium font-sans">Research Work</h3>
           <p className="text-sm text-muted-foreground font-sans">
-            3+ years of experience in academic and industrial settings with <Link href={"#publications"} className="underline hover:text-primary transition-all underline-offset-2"> multiple papers published</Link> in ML and organic chemistry. I&apos;m interested in protein design, protein language models, and reticular chemistry.
+            3+ years of experience in academic and industrial settings with <Link href={"#publications"} className="underline-2"> multiple papers published</Link> in ML and organic chemistry. I&apos;m interested in protein design, protein language models, and reticular chemistry.
           </p>
         </div>
 

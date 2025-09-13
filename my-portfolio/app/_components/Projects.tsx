@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { LucideGithub, Link as Link2 } from "lucide-react";
+import { LucideGithub, Link2 } from "lucide-react";
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "./Misc/Section";
@@ -17,7 +17,7 @@ export const Projects = () => {
       wip: false,
       projectDescription: (
         <>
-          Web application that reduces README creation time from 120+ minutes to 5 clicks, serving 100+ users with 65% repeat usage by leveraging Google&apos;s Gemini AI to analyze codebases and generate documentation.
+          Web application that uses Google&apos;s Gemini AI to automatically generate comprehensive GitHub README files by analyzing codebases, with a sliding window approach to handle large repositories.
         </>
       ),
       projectTech: [
@@ -177,7 +177,7 @@ export const Projects = () => {
                         <li className="project-info-links-item">
                           <Link
                             href={projectExternalLinks.github}
-                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline transition-all duration-150"
+                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -189,7 +189,7 @@ export const Projects = () => {
                         <li className="project-info-links-item">
                           <Link
                             href={projectExternalLinks.externalLink}
-                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline transition-all duration-150"
+                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
                             target="_blank"
                             rel="noopener noreferrer"
                           >
@@ -234,7 +234,7 @@ export const Projects = () => {
         href="https://github.com/IslamTayeb"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-xs leading-none ml-auto text-muted-foreground/80 hover:text-primary mt-3 justify-end flex items-center underline hover:no-underline font-mono tracking-wide transition-colors duration-150"
+        className="text-xs leading-none ml-auto text-muted-foreground/80 mt-3 justify-end flex items-center underline hover:no-underline font-mono tracking-wide"
       >
         See more on GitHub...
       </Link>
