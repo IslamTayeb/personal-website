@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full bg-card">
       <body className={cn(GeistMono.variable, GeistSans.variable, anekTelugu.variable, "font-mono h-full bg-background text-foreground")}>
         {children}
         <SpeedInsights />

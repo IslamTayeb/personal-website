@@ -17,7 +17,7 @@ const height = 45;
 
 export default function Home() {
   return (
-    <main>
+    <main className="bg-background">
       <Header />
 
       <Spacing height={height} />

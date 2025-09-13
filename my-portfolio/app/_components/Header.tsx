@@ -10,10 +10,10 @@ import { Code, DefaultIcon } from "./sharedComponents";
 import { Icon } from "@iconify/react/dist/iconify.js";
 export const Header = () => {
   return (
-    <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80 h-12">
+    <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80 h-12 border-b border-dashed">
       <div className="flex max-w-3xl m-auto px-4">
         <h1 className="text-lg font-semibold text-primary leading-none my-auto">
-          <Link href="#hero" className="leading-none">islam-tayeb</Link>
+          <Link href="#hero" className="leading-none">Islam<sup className="ml-0.5">2</sup> M<sup className="ml-0.5">2</sup> Tayeb</Link>
         </h1>
         <div className="flex-1" />
         <ul className="flex gap-2">
