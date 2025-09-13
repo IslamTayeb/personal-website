@@ -14,8 +14,7 @@ export const Header = () => {
       <div className="flex max-w-3xl m-auto px-4">
         <h1 className="text-lg font-normal text-primary leading-none my-auto">
           <Link href="#hero" className="leading-none">
-            Islam<sup className="ml-0.5">2</sup> M
-            <sup className="ml-0.5">2</sup> Tayeb
+            (Islam M)<sup className="ml-0.5">2</sup> Tayeb
           </Link>
         </h1>
         <div className="flex-1" />
