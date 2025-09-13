@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
-"use client";
-import { Card } from "@/components/ui/card";
-import React from "react";
-import { Section } from "./Misc/Section";
+'use client';
+import { Card } from '@/components/ui/card';
+import React from 'react';
+import { Section } from './Misc/Section';
 import {
   ArrowUpRight,
   Atom,
@@ -12,10 +12,10 @@ import {
   Mail,
   Radiation,
   ScanEye,
-} from "lucide-react";
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
+} from 'lucide-react';
+import Link from 'next/link';
+import { Badge } from '@/components/ui/badge';
+import { motion } from 'framer-motion';
 
 // =======================================================================
 
@@ -25,18 +25,18 @@ export const Summary = () => {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
       variants={{
         visible: { opacity: 1, y: 0 },
         hidden: { opacity: 0, y: 50 },
       }}
     >
       <div className="max-w-3xl px-4 m-auto flex flex-col items-start gap-4">
-        <Badge variant={"outline"} className="mb-4">
+        <Badge variant={'outline'} className="mb-4">
           Summary
         </Badge>
       </div>
-      
+
       <Section className="flex max-md:flex-col items-start gap-4">
         <Card className="font-sans font-medium flex-[3] w-full flex flex-col h-full gap-2 p-4">
           {/*<Badge variant={"outline"}>Summary</Badge> */}
@@ -97,21 +97,21 @@ export const Summary = () => {
 const SIDE_PROJECTS: SideProjectProps[] = [
   {
     Logo: Binary,
-    title: "Medical Imaging",
-    description: "ML & Computer Vision",
-    url: "/",
+    title: 'Medical Imaging',
+    description: 'ML & Computer Vision',
+    url: '/',
   },
   {
     Logo: Atom,
-    title: "2D Bin Packing",
-    description: "Algorithm Engineering",
-    url: "/",
+    title: '2D Bin Packing',
+    description: 'Algorithm Engineering',
+    url: '/',
   },
   {
     Logo: ScanEye,
-    title: "CNT Biosensors",
-    description: "Athletic Medical Device",
-    url: "/",
+    title: 'CNT Biosensors',
+    description: 'Athletic Medical Device',
+    url: '/',
   },
 ];
 
@@ -145,43 +145,43 @@ const SideProject = (props: SideProjectProps) => {
 const WORKS: WorkProps[] = [
   {
     image:
-      "https://media.licdn.com/dms/image/D560BAQEVg2G3NGXgmw/company-logo_100_100/0/1692466480465/dukeinnovate_logo?e=1724284800&v=beta&t=mSxP_TqfLsPOm_ZXriZ4-dpIVb6POA7U5pbH-4flel0",
-    title: "Duke Inst. for Health Innovation",
-    role: "Research Analyst",
-    date: "2024 - Present",
-    url: "/",
+      'https://media.licdn.com/dms/image/D560BAQEVg2G3NGXgmw/company-logo_100_100/0/1692466480465/dukeinnovate_logo?e=1724284800&v=beta&t=mSxP_TqfLsPOm_ZXriZ4-dpIVb6POA7U5pbH-4flel0',
+    title: 'Duke Inst. for Health Innovation',
+    role: 'Research Analyst',
+    date: '2024 - Present',
+    url: '/',
   },
   {
     image:
-      "https://media.licdn.com/dms/image/D4E0BAQE1nqQztnbgIA/company-logo_100_100/0/1704127476142/duke_university_logo?e=1726704000&v=beta&t=d_1-r1Yyp_64aceoDWbHQ2_mXrCkwZqhsE0pwmh0NQA",
-    title: "Duke University",
-    role: "Research Assistant",
-    date: "2023 - Present",
-    url: "/",
+      'https://media.licdn.com/dms/image/D4E0BAQE1nqQztnbgIA/company-logo_100_100/0/1704127476142/duke_university_logo?e=1726704000&v=beta&t=d_1-r1Yyp_64aceoDWbHQ2_mXrCkwZqhsE0pwmh0NQA',
+    title: 'Duke University',
+    role: 'Research Assistant',
+    date: '2023 - Present',
+    url: '/',
   },
   {
     image:
-      "https://media.licdn.com/dms/image/D4E0BAQGoQWtvjZAWbg/company-logo_100_100/0/1701588957384?e=1724284800&v=beta&t=0YW-cC6AuH32pc4lHtJvcCdZA_ttcutmd8CGqR74uSY",
-    title: "Project Sapien",
-    role: "Software Engineer",
-    date: "2023 - 2024",
-    url: "/",
+      'https://media.licdn.com/dms/image/D4E0BAQGoQWtvjZAWbg/company-logo_100_100/0/1701588957384?e=1724284800&v=beta&t=0YW-cC6AuH32pc4lHtJvcCdZA_ttcutmd8CGqR74uSY',
+    title: 'Project Sapien',
+    role: 'Software Engineer',
+    date: '2023 - 2024',
+    url: '/',
   },
   {
     image:
-      "https://media.licdn.com/dms/image/C560BAQFjHNUub2MPHA/company-logo_100_100/0/1631328654457?e=1724284800&v=beta&t=62U-7YNMjaN_qj-yndQwQhBgdV18UHVpPofcqWi74h0",
-    title: "Saudi Aramco",
-    role: "Research Assistant",
-    date: "2022 - 2023",
-    url: "/",
+      'https://media.licdn.com/dms/image/C560BAQFjHNUub2MPHA/company-logo_100_100/0/1631328654457?e=1724284800&v=beta&t=62U-7YNMjaN_qj-yndQwQhBgdV18UHVpPofcqWi74h0',
+    title: 'Saudi Aramco',
+    role: 'Research Assistant',
+    date: '2022 - 2023',
+    url: '/',
   },
   {
     image:
-      "https://media.licdn.com/dms/image/C560BAQH8FNoYbuVixQ/company-logo_100_100/0/1631305310418?e=1724284800&v=beta&t=tn3vB1O_jYRSuwaW4iepd-oFhp5OouGPuUnG9J88j2M",
-    title: "King Abdulaziz University",
-    role: "Research Assistant",
-    date: "2021 - 2022",
-    url: "/",
+      'https://media.licdn.com/dms/image/C560BAQH8FNoYbuVixQ/company-logo_100_100/0/1631305310418?e=1724284800&v=beta&t=tn3vB1O_jYRSuwaW4iepd-oFhp5OouGPuUnG9J88j2M',
+    title: 'King Abdulaziz University',
+    role: 'Research Assistant',
+    date: '2021 - 2022',
+    url: '/',
   },
 ];
 
@@ -211,7 +211,9 @@ const Work = (props: WorkProps) => {
       </div>
 
       <div className="ml-auto text-right">
-        <p className="text-xs text-muted-foreground font-mono w-min	max-md:text-wrap">{props.date}</p>
+        <p className="text-xs text-muted-foreground font-mono w-min	max-md:text-wrap">
+          {props.date}
+        </p>
       </div>
     </Link>
   );
@@ -222,9 +224,9 @@ const Work = (props: WorkProps) => {
 const CONTACT: ContactProps[] = [
   {
     Logo: Mail,
-    title: "Email",
-    description: "islam.tayeb@duke.edu",
-    url: "mailto:islam.tayeb@duke.edu",
+    title: 'Email',
+    description: 'islam.tayeb@duke.edu',
+    url: 'mailto:islam.tayeb@duke.edu',
   },
 ];
 

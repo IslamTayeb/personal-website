@@ -1,57 +1,80 @@
-"use client"
+'use client';
 
-import { Calendar } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Code, DefaultIcon } from "./sharedComponents"
-import { Section } from "./Misc/Section"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import dynamic from "next/dynamic"
-import { useState } from "react"
+import { Calendar } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Code, DefaultIcon } from './sharedComponents';
+import { Section } from './Misc/Section';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import dynamic from 'next/dynamic';
+import { useState } from 'react';
 
 // Create a component registry object
 const logoComponentRegistry = {
-  "Duke Health": dynamic(() => import("./Icons/Duke Health").then(mod => mod.DukeHealth), { ssr: false }),
-  "DIHI": dynamic(() => import("./Icons/DIHI").then(mod => mod.DIHI), { ssr: false }),
-  "Aramco": dynamic(() => import("./Icons/Aramco").then(mod => mod.Aramco), { ssr: false }),
-  "Helian": dynamic(() => import("./Icons/Helian").then(mod => mod.Helian), { ssr: false }),
-  "Lifeedit": dynamic(() => import("./Icons/Lifeedit").then(mod => mod.Lifeedit), { ssr: false }),
-  "Sapien": dynamic(() => import("./Icons/Sapien").then(mod => mod.Sapien), { ssr: false }),
-  "Reveal": dynamic(() => import("./Icons/Reveal").then(mod => mod.Reveal), { ssr: false }),
-  "Soff": dynamic(() => import("./Icons/Soff").then(mod => mod.Soff), { ssr: false }),
-  "DukeUni": dynamic(() => import("./Icons/DukeUni").then(mod => mod.DukeUni), { ssr: false }),
-  "DukeUni2": dynamic(() => import("./Icons/DukeUni2").then(mod => mod.DukeUni2), { ssr: false }),
-}
+  'Duke Health': dynamic(
+    () => import('./Icons/Duke Health').then((mod) => mod.DukeHealth),
+    { ssr: false }
+  ),
+  DIHI: dynamic(() => import('./Icons/DIHI').then((mod) => mod.DIHI), {
+    ssr: false,
+  }),
+  Aramco: dynamic(() => import('./Icons/Aramco').then((mod) => mod.Aramco), {
+    ssr: false,
+  }),
+  Helian: dynamic(() => import('./Icons/Helian').then((mod) => mod.Helian), {
+    ssr: false,
+  }),
+  Lifeedit: dynamic(
+    () => import('./Icons/Lifeedit').then((mod) => mod.Lifeedit),
+    { ssr: false }
+  ),
+  Sapien: dynamic(() => import('./Icons/Sapien').then((mod) => mod.Sapien), {
+    ssr: false,
+  }),
+  Reveal: dynamic(() => import('./Icons/Reveal').then((mod) => mod.Reveal), {
+    ssr: false,
+  }),
+  Soff: dynamic(() => import('./Icons/Soff').then((mod) => mod.Soff), {
+    ssr: false,
+  }),
+  DukeUni: dynamic(() => import('./Icons/DukeUni').then((mod) => mod.DukeUni), {
+    ssr: false,
+  }),
+  DukeUni2: dynamic(
+    () => import('./Icons/DukeUni2').then((mod) => mod.DukeUni2),
+    { ssr: false }
+  ),
+};
 
 export function Experience() {
-  const [showAll, setShowAll] = useState(false)
-  const visibleExperiences = showAll ? experiences : experiences.slice(0, 3)
+  const [showAll, setShowAll] = useState(false);
+  const visibleExperiences = showAll ? experiences : experiences.slice(0, 3);
 
   const renderLogo = (logo: string, company: string) => {
     // Handle TSX components
-    if (typeof logo === "string" && logo.endsWith(".tsx")) {
-      const componentPath = logo.replace(".tsx", "")
-      const componentName = componentPath.split("/").pop()
+    if (typeof logo === 'string' && logo.endsWith('.tsx')) {
+      const componentPath = logo.replace('.tsx', '');
+      const componentName = componentPath.split('/').pop();
 
       if (componentName && componentName in logoComponentRegistry) {
         const LogoComponent =
           logoComponentRegistry[
-          componentName as keyof typeof logoComponentRegistry
-          ]
-        return <LogoComponent className="w-full h-full" />
+            componentName as keyof typeof logoComponentRegistry
+          ];
+        return <LogoComponent className="w-full h-full" />;
       }
 
       return (
         <div className="w-full h-full flex items-center justify-center">
           {company[0]}
         </div>
-      )
+      );
     }
 
     // Handle image URLs and icon strings
     return (
       <Avatar className="w-12 h-12 flex items-center justify-center rounded-md min-w-12 min-h-12">
-        {typeof logo === "string" &&
-          (logo.startsWith("http") || logo.startsWith("/")) ? (
+        {typeof logo === 'string' &&
+        (logo.startsWith('http') || logo.startsWith('/')) ? (
           <AvatarImage src={logo} className="object-contain" />
         ) : (
           <DefaultIcon icon={logo} className="w-6 h-6" />
@@ -60,8 +83,8 @@ export function Experience() {
           {company[0]}
         </AvatarFallback>
       </Avatar>
-    )
-  }
+    );
+  };
 
   return (
     <Section className="mx-auto space-y-4">
@@ -84,7 +107,7 @@ export function Experience() {
                   <h3 className="font-medium text-lg leading-snug font-sans text-primary">
                     {experience.role}
                   </h3>
-                  {experience.status === "present" && (
+                  {experience.status === 'present' && (
                     <Badge
                       variant="default"
                       className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
@@ -92,7 +115,7 @@ export function Experience() {
                       Present
                     </Badge>
                   )}
-                  {experience.status === "incoming" && (
+                  {experience.status === 'incoming' && (
                     <Badge
                       variant="secondary"
                       className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
@@ -100,7 +123,7 @@ export function Experience() {
                       Incoming
                     </Badge>
                   )}
-                  {experience.company === "Soff" && (
+                  {experience.company === 'Soff' && (
                     <Badge
                       variant="outline"
                       className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono leading-none"
@@ -169,126 +192,127 @@ export function Experience() {
             onClick={() => setShowAll(!showAll)}
             className="text-xs leading-none text-muted-foreground/80 -mt-0.5 flex items-center underline hover:no-underline tracking-wide"
           >
-            {showAll ? "See less..." : "See more..."}
+            {showAll ? 'See less...' : 'See more...'}
           </button>
         </div>
       )}
     </Section>
-  )
+  );
 }
 
 const experiences = [
   {
-    role: "Software Engineer",
-    company: "Duke University",
-    logo: "Icons/DukeUni2.tsx",
-    period: "Aug 2025 – Present",
-    location: "Durham, NC",
-    status: "present",
-    website: "https://www.romerolab.org/",
+    role: 'Software Engineer',
+    company: 'Duke University',
+    logo: 'Icons/DukeUni2.tsx',
+    period: 'Aug 2025 – Present',
+    location: 'Durham, NC',
+    status: 'present',
+    website: 'https://www.romerolab.org/',
     responsibilities: [
-      "Building assay discovery platform for enzyme design using NLP and chemical similarity",
+      'Building assay discovery platform for enzyme design using NLP and chemical similarity',
     ],
     skills: [
       {
-        name: "Next.js", icon: "simple-icons:nextdotjs"
+        name: 'Next.js',
+        icon: 'simple-icons:nextdotjs',
       },
-      { name: "FastAPI", icon: "simple-icons:fastapi" },
-      { name: "PyTorch", icon: "simple-icons:pytorch" },
+      { name: 'FastAPI', icon: 'simple-icons:fastapi' },
+      { name: 'PyTorch', icon: 'simple-icons:pytorch' },
     ],
   },
   {
-    role: "Software Engineer",
-    company: "Soff (YC S24)",
-    website: "https://soff.ai/",
-    logo: "Icons/Soff.tsx",
-    period: "May 2025 – Present",
-    location: "San Francisco, CA",
-    status: "present",
+    role: 'Software Engineer',
+    company: 'Soff (YC S24)',
+    website: 'https://soff.ai/',
+    logo: 'Icons/Soff.tsx',
+    period: 'May 2025 – Present',
+    location: 'San Francisco, CA',
+    status: 'present',
     responsibilities: [
-      "Building sales automation and procurement tools for supply chain intelligence platform as employee #2",
+      'Building sales automation and procurement tools for supply chain intelligence platform as employee #2',
     ],
     skills: [
-      { name: "Next.js", icon: "simple-icons:nextdotjs" },
-      { name: "Node.js", icon: "simple-icons:nodedotjs" },
-      { name: "AWS", icon: "simple-icons:amazonaws" },
+      { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
+      { name: 'Node.js', icon: 'simple-icons:nodedotjs' },
+      { name: 'AWS', icon: 'simple-icons:amazonaws' },
     ],
   },
   {
-    role: "Software Engineer Intern",
-    company: "Helian",
-    website: "https://www.helian.ai/",
-    logo: "Icons/Helian.tsx",
-    period: "Dec 2024 – May 2025",
-    location: "Durham, NC",
+    role: 'Software Engineer Intern',
+    company: 'Helian',
+    website: 'https://www.helian.ai/',
+    logo: 'Icons/Helian.tsx',
+    period: 'Dec 2024 – May 2025',
+    location: 'Durham, NC',
     responsibilities: [
-      "Developed AI-powered document analysis tools for medical research workflows",
+      'Developed AI-powered document analysis tools for medical research workflows',
     ],
     skills: [
-      { name: "Next.js", icon: "simple-icons:nextdotjs" },
-      { name: "FastAPI", icon: "simple-icons:fastapi" },
-      { name: "AWS", icon: "simple-icons:amazonaws" },
+      { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
+      { name: 'FastAPI', icon: 'simple-icons:fastapi' },
+      { name: 'AWS', icon: 'simple-icons:amazonaws' },
     ],
   },
   {
-    role: "Software Engineer Intern",
-    company: "Life Edit Therapeutics",
-    website: "https://lifeeditinc.com/",
-    logo: "Icons/Lifeedit.tsx",
-    period: "Sep 2024 – May 2025",
-    location: "Durham, NC",
+    role: 'Software Engineer Intern',
+    company: 'Life Edit Therapeutics',
+    website: 'https://lifeeditinc.com/',
+    logo: 'Icons/Lifeedit.tsx',
+    period: 'Sep 2024 – May 2025',
+    location: 'Durham, NC',
     responsibilities: [
-      "Built RNA-seq analysis dashboard and validation pipeline for CRISPR experiments",
+      'Built RNA-seq analysis dashboard and validation pipeline for CRISPR experiments',
     ],
     skills: [
-      { name: "Python", icon: "simple-icons:python" },
-      { name: "Dash", icon: "simple-icons:plotly" },
+      { name: 'Python', icon: 'simple-icons:python' },
+      { name: 'Dash', icon: 'simple-icons:plotly' },
     ],
   },
   {
-    role: "ML Research Assistant",
-    company: "Duke University",
-    logo: "Icons/DukeUni2.tsx",
-    period: "Oct 2024 – Apr 2025",
-    location: "Durham, NC",
-    website: "https://sites.duke.edu/navid/",
+    role: 'ML Research Assistant',
+    company: 'Duke University',
+    logo: 'Icons/DukeUni2.tsx',
+    period: 'Oct 2024 – Apr 2025',
+    location: 'Durham, NC',
+    website: 'https://sites.duke.edu/navid/',
     responsibilities: [
-      "Developed continual learning frameworks and antibody screening tools for therapeutic protein design",
+      'Developed continual learning frameworks and antibody screening tools for therapeutic protein design',
     ],
     skills: [
-      { name: "Python", icon: "simple-icons:python" },
-      { name: "PyTorch", icon: "simple-icons:pytorch" },
+      { name: 'Python', icon: 'simple-icons:python' },
+      { name: 'PyTorch', icon: 'simple-icons:pytorch' },
     ],
   },
   {
-    role: "Software Engineer Intern",
-    company: "Duke Institute for Health Innovation",
-    website: "https://dihi.org/",
-    logo: "Icons/DIHI.tsx",
-    period: "Jun 2024 – Aug 2024",
-    location: "Durham, NC",
+    role: 'Software Engineer Intern',
+    company: 'Duke Institute for Health Innovation',
+    website: 'https://dihi.org/',
+    logo: 'Icons/DIHI.tsx',
+    period: 'Jun 2024 – Aug 2024',
+    location: 'Durham, NC',
     responsibilities: [
-      "Built automated literature review systems and medical record analysis tools for health innovation",
+      'Built automated literature review systems and medical record analysis tools for health innovation',
     ],
     skills: [
-      { name: "Python", icon: "simple-icons:python" },
-      { name: "Docker", icon: "simple-icons:docker" },
+      { name: 'Python', icon: 'simple-icons:python' },
+      { name: 'Docker', icon: 'simple-icons:docker' },
     ],
   },
   {
-    role: "Software Engineer Intern",
-    company: "Project: Sapien",
-    website: "https://www.projectsapien.com/",
-    logo: "Icons/Sapien.tsx",
-    period: "Nov 2023 – Feb 2024",
-    location: "Princeton, NJ",
+    role: 'Software Engineer Intern',
+    company: 'Project: Sapien',
+    website: 'https://www.projectsapien.com/',
+    logo: 'Icons/Sapien.tsx',
+    period: 'Nov 2023 – Feb 2024',
+    location: 'Princeton, NJ',
     responsibilities: [
-      "Built survey platform and NLP classification tools for population health research studies",
+      'Built survey platform and NLP classification tools for population health research studies',
     ],
     skills: [
-      { name: "React", icon: "simple-icons:react" },
-      { name: "Node.js", icon: "simple-icons:nodedotjs" },
-      { name: "AWS", icon: "simple-icons:amazonaws" },
+      { name: 'React', icon: 'simple-icons:react' },
+      { name: 'Node.js', icon: 'simple-icons:nodedotjs' },
+      { name: 'AWS', icon: 'simple-icons:amazonaws' },
     ],
   },
-]
+];

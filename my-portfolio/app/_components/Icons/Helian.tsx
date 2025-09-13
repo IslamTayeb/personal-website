@@ -1,7 +1,11 @@
-import React, { ComponentPropsWithoutRef } from "react";
+import React, { ComponentPropsWithoutRef } from 'react';
 
 export const Helian = (
-  props: ComponentPropsWithoutRef<"svg"> & { size?: number, height?: number, width?: number }
+  props: ComponentPropsWithoutRef<'svg'> & {
+    size?: number;
+    height?: number;
+    width?: number;
+  }
 ) => {
   return (
     <svg
@@ -13,7 +17,7 @@ export const Helian = (
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 100 100"
       fill="currentColor"
-      style={{ display: "inline" }}
+      style={{ display: 'inline' }}
       className="scale-[1.17]"
     >
       {/* <path d="M100,0v100H0V0h100ZM78,61.5c.26-.22,2.61.46,2.5-1.25.32-12.97,1.91-25.92,1.88-38.88-.24-.94-4.25-5.41-5.1-5.9-2.59-1.48-14.18.91-17.72,1.08l-1.61,22.39-18.69,2.56v-1.01s3.24,0,3.24,0c-.15-3.36,1.9-13.83.53-16.27-.53-.93-5.58-6.38-6.37-6.62-2.07.08-14.91.65-15.42,1.37-1.3,1.86-.65,12.31-1.22,15.26l3.49,4.26c-2.36.16-3.59-.96-3.95,1.79l-2.08,34.99c.17,1.25,5.11,6.59,6.25,7.25.66.38,1.23.63,2.02.52,2.62-1.09,12.26-.31,13.94-1.5s.72-19.76,1.87-21c.61-.66,15.54-1.72,17.72-2.55,3.35,1.72-2.21.84-2.27,2.76.47,3.79-1.02,7.81-.52,11.53.3,2.27,5.31,5.14,6.87,7.15l16.12-1.45c-.38-4.14,1.28-9.17.52-13.21-.2-1.07-2.58-2.74-1.99-3.26Z" /> */}

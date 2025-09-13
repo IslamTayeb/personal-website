@@ -1,7 +1,7 @@
-import { ComponentPropsWithoutRef } from "react";
+import { ComponentPropsWithoutRef } from 'react';
 
 export const Duke = (
-  props: ComponentPropsWithoutRef<"svg"> & { size?: number }
+  props: ComponentPropsWithoutRef<'svg'> & { size?: number }
 ) => {
   return (
     <svg
@@ -9,7 +9,7 @@ export const Duke = (
       {...props}
       viewBox="0 0 150 175"
       fill="currentColor"
-      style={{ display: "inline" }} // Added inline style for display
+      style={{ display: 'inline' }} // Added inline style for display
     >
       <path
         xmlns="http://www.w3.org/2000/svg"

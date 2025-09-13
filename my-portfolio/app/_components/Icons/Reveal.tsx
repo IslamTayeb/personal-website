@@ -1,7 +1,11 @@
-import React, { ComponentPropsWithoutRef } from "react";
+import React, { ComponentPropsWithoutRef } from 'react';
 
 export const Reveal = (
-  props: ComponentPropsWithoutRef<"svg"> & { size?: number, height?: number, width?: number }
+  props: ComponentPropsWithoutRef<'svg'> & {
+    size?: number;
+    height?: number;
+    width?: number;
+  }
 ) => {
   return (
     <svg
@@ -13,7 +17,7 @@ export const Reveal = (
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 240 240"
       fill="currentColor"
-      style={{ display: "inline" }}
+      style={{ display: 'inline' }}
       className="scale-[1] p-0.5"
     >
       <g>

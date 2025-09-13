@@ -1,7 +1,11 @@
-import React, { ComponentPropsWithoutRef } from "react";
+import React, { ComponentPropsWithoutRef } from 'react';
 
 export const HAIP = (
-  props: ComponentPropsWithoutRef<"svg"> & { size?: number, height?: number, width?: number}
+  props: ComponentPropsWithoutRef<'svg'> & {
+    size?: number;
+    height?: number;
+    width?: number;
+  }
 ) => {
   return (
     <svg

@@ -1,7 +1,7 @@
-import React, { ComponentPropsWithoutRef } from "react";
+import React, { ComponentPropsWithoutRef } from 'react';
 
 export const DukeHealth = (
-  props: ComponentPropsWithoutRef<"svg"> & { size?: number }
+  props: ComponentPropsWithoutRef<'svg'> & { size?: number }
 ) => {
   return (
     <svg
@@ -9,7 +9,7 @@ export const DukeHealth = (
       {...props}
       viewBox="3 4 25 25"
       fill="currentColor"
-      style={{ display: "inline" }} // Added inline style for display
+      style={{ display: 'inline' }} // Added inline style for display
     >
       <g xmlns="http://www.w3.org/2000/svg">
         <path
@@ -38,7 +38,7 @@ export const DukeHealth = (
             d="M18.4,14.5V6.2h-1.2V16c0,0,0,0.7,0,1C18.6,15.9,18.4,14.5,18.4,14.5z"
           />
         </g>
-      </g>{" "}
+      </g>{' '}
     </svg>
   );
 };

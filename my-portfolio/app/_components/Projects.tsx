@@ -1,84 +1,88 @@
-"use client";
-import Image from "next/image";
-import Link from "next/link";
-import { LucideGithub, Link2 } from "lucide-react";
-import React from "react";
-import { Badge } from "@/components/ui/badge";
-import { Section } from "./Misc/Section";
-import { Icon } from "@iconify/react";
-import { Code, DefaultIcon } from "./sharedComponents";
+'use client';
+import Image from 'next/image';
+import Link from 'next/link';
+import { LucideGithub, Link2 } from 'lucide-react';
+import React from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Section } from './Misc/Section';
+import { Icon } from '@iconify/react';
+import { Code, DefaultIcon } from './sharedComponents';
 
 export const Projects = () => {
   const projectsData = [
     {
-      image: "/Etchr.mp4",
-      projectName: "Etchr – GitHub README Generator",
+      image: '/Etchr.mp4',
+      projectName: 'Etchr – GitHub README Generator',
       new: false,
       wip: false,
       projectDescription: (
         <>
-          Web application that uses Google&apos;s Gemini AI to automatically generate comprehensive GitHub README files by analyzing codebases, with a sliding window approach to handle large repositories.
+          Web application that uses Google&apos;s Gemini AI to automatically
+          generate comprehensive GitHub README files by analyzing codebases,
+          with a sliding window approach to handle large repositories.
         </>
       ),
       projectTech: [
-        "Next.js",
-        "Node.js",
-        "Express",
-        "PostgreSQL",
-        "Gemini",
-        "GitHub API",
-        "GCP",
+        'Next.js',
+        'Node.js',
+        'Express',
+        'PostgreSQL',
+        'Gemini',
+        'GitHub API',
+        'GCP',
       ],
       projectTechLogo: [
-        "simple-icons:nextdotjs",
-        "simple-icons:nodedotjs",
-        "simple-icons:express",
-        "simple-icons:postgresql",
-        "simple-icons:google",
-        "simple-icons:github",
-        "simple-icons:googlecloud",
+        'simple-icons:nextdotjs',
+        'simple-icons:nodedotjs',
+        'simple-icons:express',
+        'simple-icons:postgresql',
+        'simple-icons:google',
+        'simple-icons:github',
+        'simple-icons:googlecloud',
       ],
       projectExternalLinks: {
-        github: "https://github.com/IslamTayeb/etchr",
-        externalLink: "https://www.etchr.dev/",
+        github: 'https://github.com/IslamTayeb/etchr',
+        externalLink: 'https://www.etchr.dev/',
       },
     },
     {
-      image: "/Jobtrack.mp4",
-      projectName: "Job Track – CLI Job Tracker",
+      image: '/Jobtrack.mp4',
+      projectName: 'Job Track – CLI Job Tracker',
       new: false,
       wip: false,
       projectDescription: (
         <>
-          CLI tool that automates the tracking of job applications by extracting information from Gmail emails using Google Gemini AI and updating a Google Sheet, eliminating manual data entry.
+          CLI tool that automates the tracking of job applications by extracting
+          information from Gmail emails using Google Gemini AI and updating a
+          Google Sheet, eliminating manual data entry.
         </>
       ),
       projectTech: [
-        "Python",
-        "Google Gmail API",
-        "Google Sheets API",
-        "Google Gemini",
+        'Python',
+        'Google Gmail API',
+        'Google Sheets API',
+        'Google Gemini',
         // "OAuth",
-        "CLI",
+        'CLI',
       ],
       projectTechLogo: [
-        "simple-icons:python",
-        "simple-icons:gmail",
-        "simple-icons:googlesheets",
-        "simple-icons:google",
+        'simple-icons:python',
+        'simple-icons:gmail',
+        'simple-icons:googlesheets',
+        'simple-icons:google',
         // "mdi:key-chain",
-        "mdi:console-line",
+        'mdi:console-line',
       ],
       projectExternalLinks: {
-        github: "https://github.com/IslamTayeb/job-sheet-tracker",
-        externalLink: "",
+        github: 'https://github.com/IslamTayeb/job-sheet-tracker',
+        externalLink: '',
       },
     },
   ];
 
   return (
     <Section className="font-sans flex-col gap-4">
-      <Badge variant={"outline"} className="mb-4" id="projects">
+      <Badge variant={'outline'} className="mb-4" id="projects">
         Selected Projects
       </Badge>
 
@@ -99,14 +103,12 @@ export const Projects = () => {
           ) => {
             const isOdd = index % 2 !== 0;
             return (
-              <div
-                className="project max-md:w-full"
-                key={projectName}
-              >
+              <div className="project max-md:w-full" key={projectName}>
                 <div className="project-info gap-2.5">
                   <h3
-                    className={`project-info-title antialiased max-md:w-full leading-tight flex flex-row items-center gap-2 text-primary  ${isOdd ? "text-right" : "text-left"
-                      }`}
+                    className={`project-info-title antialiased max-md:w-full leading-tight flex flex-row items-center gap-2 text-primary  ${
+                      isOdd ? 'text-right' : 'text-left'
+                    }`}
                   >
                     <div className="leading-none h-min invisible absolute max-md:visible max-md:relative text-left w-auto font-semibold">
                       {projectName}
@@ -127,7 +129,8 @@ export const Projects = () => {
                             className="rounded-full text-center font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
                           >
                             In Progress
-                          </Badge>)}
+                          </Badge>
+                        )}
                       </>
                     )}
                     <div className="leading-none h-min visible relative max-md:invisible max-md:absolute font-semibold">
@@ -165,13 +168,14 @@ export const Projects = () => {
                             icon={`${projectTechLogo[index]}`}
                             className="inline text-current"
                             height="14px"
-                          />{" "}
+                          />{' '}
                           {tech}
                         </Code>
                       </li>
                     ))}
                   </ul>
-                  {(projectExternalLinks?.github || projectExternalLinks?.externalLink) && (
+                  {(projectExternalLinks?.github ||
+                    projectExternalLinks?.externalLink) && (
                     <ul className="project-info-links max-md:w-full max-md:justify-end">
                       {projectExternalLinks?.github && (
                         <li className="project-info-links-item">
@@ -201,9 +205,7 @@ export const Projects = () => {
                   )}
                 </div>
 
-                <div
-                  className="project-image overflow-hidden scale-95 rounded-sm border-accent border max-md:rounded-lg"
-                >
+                <div className="project-image overflow-hidden scale-95 rounded-sm border-accent border max-md:rounded-lg">
                   {image.endsWith('.mp4') ? (
                     <video
                       src={image}

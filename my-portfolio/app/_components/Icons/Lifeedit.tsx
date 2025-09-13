@@ -1,7 +1,11 @@
-import React, { ComponentPropsWithoutRef } from "react";
+import React, { ComponentPropsWithoutRef } from 'react';
 
 export const Lifeedit = (
-  props: ComponentPropsWithoutRef<"svg"> & { size?: number, height?: number, width?: number }
+  props: ComponentPropsWithoutRef<'svg'> & {
+    size?: number;
+    height?: number;
+    width?: number;
+  }
 ) => {
   return (
     <svg
@@ -13,10 +17,9 @@ export const Lifeedit = (
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 630 630"
       fill="currentColor"
-      style={{ display: "inline" }}
+      style={{ display: 'inline' }}
       className="scale-[1] p-[0.2rem]"
     >
-
       <path d="M564.37,168.37c18.94-18.27,46.46-4.27,49.65,20.11l.02,240.06c-6.84,33.97-50.3,37.84-59.06,2.98l-.03-245.07c.76-5.84,5.24-14.04,9.42-18.07Z" />
       <path d="M45.73,173.25c18.59-.53,28.76,13.03,30.32,30.2,7.05,77.7-3.93,168.69-1.84,247.26-13.39,28.89-53.02,23.19-56.26-10.17-7.34-75.62,5.58-163.16.08-240.02.33-14.31,13.8-26.88,27.7-27.28Z" />
       <path d="M461.36,339.36c19.44-16.6,47.32-2.15,49.6,22.27,2.52,27.06,2.52,104.75-.19,131.64-3.56,35.36-51.58,37.86-58.68,6.14-3.11-13.89-3.11-132.52.21-145.62.93-3.65,6.26-12.04,9.06-14.44Z" />

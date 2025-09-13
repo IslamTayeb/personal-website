@@ -1,6 +1,6 @@
-import React from "react";
-import { Section } from "./Misc/Section";
-import { Badge } from "@/components/ui/badge";
+import React from 'react';
+import { Section } from './Misc/Section';
+import { Badge } from '@/components/ui/badge';
 import {
   Table,
   TableBody,
@@ -9,16 +9,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Icon } from "@iconify/react";
+} from '@/components/ui/table';
+import { Icon } from '@iconify/react';
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Code, DefaultIcon } from "./sharedComponents";
-import { Pinecone } from "./Icons/Pinecone";
+} from '@/components/ui/tooltip';
+import { Code, DefaultIcon } from './sharedComponents';
+import { Pinecone } from './Icons/Pinecone';
 
 export const Skills = () => {
   type Technology = {
@@ -27,54 +27,57 @@ export const Skills = () => {
     component?: React.ComponentType<{ size?: number; className?: string }>;
   };
 
-  const skillsData: { category: React.ReactNode; technologies: Technology[] }[] = [
+  const skillsData: {
+    category: React.ReactNode;
+    technologies: Technology[];
+  }[] = [
     {
-      category: "Languages",
+      category: 'Languages',
       technologies: [
-        { name: "TypeScript", icon: "akar-icons:typescript-fill" },
-        { name: "JavaScript", icon: "akar-icons:javascript-fill" },
-        { name: "Python", icon: "akar-icons:python-fill" },
-        { name: "Java", icon: "fa6-brands:java" },
-        { name: "C++", icon: "simple-icons:cplusplus" },
-        { name: "SQL", icon: "fa-solid:database" },
-        { name: "R", icon: "devicon-plain:r" },
-        { name: "HTML", icon: "simple-icons:html5" },
-        { name: "CSS", icon: "simple-icons:css3" },
+        { name: 'TypeScript', icon: 'akar-icons:typescript-fill' },
+        { name: 'JavaScript', icon: 'akar-icons:javascript-fill' },
+        { name: 'Python', icon: 'akar-icons:python-fill' },
+        { name: 'Java', icon: 'fa6-brands:java' },
+        { name: 'C++', icon: 'simple-icons:cplusplus' },
+        { name: 'SQL', icon: 'fa-solid:database' },
+        { name: 'R', icon: 'devicon-plain:r' },
+        { name: 'HTML', icon: 'simple-icons:html5' },
+        { name: 'CSS', icon: 'simple-icons:css3' },
       ],
     },
     {
       category: <>Frameworks&nbsp;& Libraries</>,
       technologies: [
-        { name: "Next.js", icon: "simple-icons:nextdotjs" },
-        { name: "React", icon: "akar-icons:react-fill" },
-        { name: "Flask", icon: "simple-icons:flask" },
-        { name: "FastAPI", icon: "simple-icons:fastapi" },
-        { name: "Node.js", icon: "simple-icons:nodedotjs" },
-        { name: "PyTorch", icon: "simple-icons:pytorch" },
-        { name: "LangChain", icon: "simple-icons:langchain" },
-        { name: "AutoGen", icon: "cib:microsoft" },
+        { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
+        { name: 'React', icon: 'akar-icons:react-fill' },
+        { name: 'Flask', icon: 'simple-icons:flask' },
+        { name: 'FastAPI', icon: 'simple-icons:fastapi' },
+        { name: 'Node.js', icon: 'simple-icons:nodedotjs' },
+        { name: 'PyTorch', icon: 'simple-icons:pytorch' },
+        { name: 'LangChain', icon: 'simple-icons:langchain' },
+        { name: 'AutoGen', icon: 'cib:microsoft' },
       ],
     },
     {
       category: <>Infrastructure&nbsp;& Tools</>,
       technologies: [
-        { name: "AWS", icon: "cib:amazon-aws" },
-        { name: "GCP", icon: "cib:google-cloud" },
-        { name: "Docker", icon: "simple-icons:docker" },
-        { name: "Unix/Linux", icon: "devicon-plain:linux" },
-        { name: "Redis", icon: "devicon-plain:redis" },
-        { name: "PostgreSQL", icon: "akar-icons:postgresql-fill" },
-        { name: "Pinecone", icon: "custom", component: Pinecone },
-        { name: "Prisma", icon: "simple-icons:prisma" },
-        { name: "SQLAlchemy", icon: "devicon-plain:sqlalchemy" },
-        { name: "Selenium", icon: "simple-icons:selenium" },
+        { name: 'AWS', icon: 'cib:amazon-aws' },
+        { name: 'GCP', icon: 'cib:google-cloud' },
+        { name: 'Docker', icon: 'simple-icons:docker' },
+        { name: 'Unix/Linux', icon: 'devicon-plain:linux' },
+        { name: 'Redis', icon: 'devicon-plain:redis' },
+        { name: 'PostgreSQL', icon: 'akar-icons:postgresql-fill' },
+        { name: 'Pinecone', icon: 'custom', component: Pinecone },
+        { name: 'Prisma', icon: 'simple-icons:prisma' },
+        { name: 'SQLAlchemy', icon: 'devicon-plain:sqlalchemy' },
+        { name: 'Selenium', icon: 'simple-icons:selenium' },
       ],
     },
   ];
 
   return (
     <Section className="flex flex-col items-start gap-4">
-      <Badge variant={"outline"} className="" id="skills">
+      <Badge variant={'outline'} className="" id="skills">
         Technical Skills
       </Badge>
 
@@ -102,7 +105,7 @@ export const Skills = () => {
                       <Tooltip>
                         <TooltipTrigger>
                           <div className="p-1 relative group">
-                            {tech.icon === "custom" && tech.component ? (
+                            {tech.icon === 'custom' && tech.component ? (
                               <>
                                 <tech.component
                                   className="group-hover:blur-[6px] absolute transition-all opacity-35"
