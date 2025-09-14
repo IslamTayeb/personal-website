@@ -61,9 +61,9 @@ export const Hero = () => {
         <div className="flex-[2.5] flex flex-col my-auto gap-1.5">
           <p className="font-sans text-muted-foreground text-pretty">
             <Code>
-              <Duke size={14} /> Duke
+              <Duke size={14} className="-mt-[0.07em]" /> Duke
             </Code>{' '}
-            student finding lazy automations. Love reading about{' '}
+            junior finding lazy automations. Love reading about{' '}
             <ExternalLink href="https://www.wired.com/2015/09/whatsapp-serves-900-million-users-50-engineers/">
               <UnderlineSpan>cool</UnderlineSpan>
             </ExternalLink>{' '}
@@ -72,8 +72,16 @@ export const Hero = () => {
             </ExternalLink>{' '}
             <ExternalLink href="https://corecursive.com/066-sqlite-with-richard-hipp/">
               <UnderlineSpan>stories</UnderlineSpan>
-            </ExternalLink>
-            . Based in{' '}
+            </ExternalLink>{' '}
+            and over-optimizing{' '}
+            <Code>
+              <DefaultIcon icon="simple-icons:raycast" /> Raycast
+            </Code>{' '}
+            and{' '}
+            <Code>
+              <DefaultIcon icon="simple-icons:yabai" /> Yabai
+            </Code>{' '}
+            configs. Currently based in{' '}
             <Code>
               <DefaultIcon icon="flag:us-1x1" className="rounded-[1.5px]" />{' '}
               Durham, NC
@@ -92,14 +100,7 @@ export const Hero = () => {
               <DefaultIcon icon="flag:sa-1x1" className="rounded-[1.5px]" />{' '}
               Saudi Arabia
             </Code>
-            . I&#39;m a big fan of{' '}
-            <ExternalLink href="https://open.spotify.com/user/zipdczhtagmnksbxxvobzv1l1?si=06358152c977484d">
-              <Code>
-                <DefaultIcon icon="clarity:cd-dvd-solid" />{' '}
-                <UnderlineSpan>Alternative Hip Hop</UnderlineSpan>
-              </Code>
-            </ExternalLink>{' '}
-            and enjoy playing{' '}
+            . I also enjoy playing{' '}
             <ExternalLink href="https://ch.tetr.io/u/mivi">
               <Code>
                 <DefaultIcon icon="fluent:tetris-app-16-filled" />{' '}
@@ -112,27 +113,53 @@ export const Hero = () => {
                 <DefaultIcon icon="simple-icons:monkeytype" />{' '}
                 <UnderlineSpan>Monkeytype</UnderlineSpan>
               </Code>
-            </ExternalLink>
-            .
+            </ExternalLink>{' '}
+            in my free time.
           </p>
 
           <p className="font-sans text-muted-foreground text-pretty">
-            I nearly dropped out of high school to work full-time as a{' '}
-            <Code>
-              <DefaultIcon icon="material-symbols:design-services" /> graphic
-              designer
-            </Code>{' '}
-            for an esports team. Around the same time, I was playing{' '}
+            In high school, I worked full-time as a graphic designer for an{' '}
+            <a
+              href="https://yuki.gg/"
+              className="underline hover:no-underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              esports team
+            </a>
+            . Around the same time, I was playing{' '}
             <ExternalLink href="https://osu.ppy.sh/users/11749586">
               <Code>
                 <DefaultIcon icon="simple-icons:osu" />{' '}
                 <UnderlineSpan>osu!</UnderlineSpan>
               </Code>
             </ExternalLink>{' '}
-            professionally and designed skins that were downloaded{' '}
-            <span className="font-medium">500K+ times</span>. I initially came
-            into Duke as a pre-med computational chemist, but kept gravitating
-            toward the computational part.
+            professionally and designed a{' '}
+            <a
+              href="https://skins.osuck.net/skins/1762?v=0"
+              className="underline hover:no-underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              few
+            </a>{' '}
+            <a
+              href="https://skins.osuck.net/skins/1464?v=0"
+              className="underline hover:no-underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              skins
+            </a>{' '}
+            (<span>500K+ downloads</span>).
+          </p>
+          <p className="font-sans text-muted-foreground text-pretty">
+            I initially came to{' '}
+            <Code>
+              <Duke size={14} className="-mt-[0.07em]" /> Duke
+            </Code>{' '}
+            as a pre-med computational chemist, but kept gravitating toward the
+            &quot;computational&quot; part until I started building.
           </p>
 
           <p className="font-sans text-muted-foreground text-pretty">

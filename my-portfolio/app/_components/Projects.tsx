@@ -157,7 +157,7 @@ export const Projects = () => {
                       </>
                     )}
                   </h3>
-                  <div className="project-info-description border max-md:border-0 bg-card">
+                  <div className="project-info-description border max-md:border-0 bg-card hover:bg-[#22262D]">
                     <p>{projectDescription}</p>
                   </div>
                   <ul className="project-info-tech-list">

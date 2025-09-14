@@ -32,11 +32,11 @@ export const Publications = () => {
           NaderiAlizadeh
         </>
       ),
-      pubImpact: 'Technical Report',
+      pubImpact: 'Pre-print',
       pubTitle: 'Primal Dual Continual Learning for Robust Antibody Design',
       pubJournal: null,
       pubJournalLink: null,
-      pubType: 'Technical Report',
+      pubType: 'Pre-print',
       pubDescription: (
         <>
           <p className="mb-1.5">
