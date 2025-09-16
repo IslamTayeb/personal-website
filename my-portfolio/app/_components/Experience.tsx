@@ -315,4 +315,20 @@ const experiences = [
       { name: 'AWS', icon: 'simple-icons:amazonaws' },
     ],
   },
+  {
+    role: 'ML Research Assistant',
+    company: 'Saudi Aramco + KFUPM',
+    website: 'https://www.aramco.com/',
+    logo: 'Icons/Aramco.tsx',
+    period: 'Jul 2022 – Sep 2023',
+    location: 'Dhahran, Saudi Arabia',
+    responsibilities: [
+      'Developed ML models and simulations for CO₂ capture with polymers at HTCM + Aramco (3 publications)',
+    ],
+    skills: [
+      { name: 'Python', icon: 'simple-icons:python' },
+      { name: 'LAMMPS', icon: 'simple-icons:moleculer' },
+      { name: 'Materials Science', icon: 'mdi:molecule' },
+    ],
+  },
 ];

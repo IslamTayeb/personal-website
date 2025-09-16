@@ -25,6 +25,61 @@ import { Code, DefaultIcon } from './sharedComponents';
 export const Publications = () => {
   const publicationsData = [
     {
+      pubDate: 'Sep 2025',
+      pubAuthors: (
+        <>
+          Hamid Zentou, Ali Tayeb,{' '}
+          <span className="font-semibold text-primary">Islam Tayeb</span>,
+          Mahmoud Abdelnaby
+        </>
+      ),
+      pubImpact: 'Impact Factor: 7.2',
+      pubTitle:
+        'Machine learning for predicting and optimizing the CO₂ uptake in porous organic polymers',
+      pubJournal: 'Journal of Environmental Chemical Engineering',
+      pubJournalLink:
+        'https://www.journals.elsevier.com/journal-of-environmental-chemical-engineering',
+      pubType: 'Research Article',
+      pubDescription: (
+        <>
+          <p className="mb-1.5">
+            Developed a machine learning framework to predict CO
+            <span
+              style={{
+                verticalAlign: 'sub',
+                fontSize: 7.25,
+                lineHeight: '1',
+                fontWeight: 'bold',
+              }}
+            >
+              2
+            </span>{' '}
+            adsorption capacity in porous organic polymers. Using gradient
+            boosting and genetic algorithms, achieved R² = 0.963 accuracy.
+          </p>
+          <p>
+            I helped develop the ML framework, performed data curation and
+            processing, and helped write the original manuscript.
+          </p>
+        </>
+      ),
+      pubLink: 'https://doi.org/10.1016/j.jece.2025.119315',
+      pubCategory: [
+        {
+          name: 'Python',
+          icon: 'simple-icons:python',
+        },
+        {
+          name: 'Carbon Capture',
+          icon: 'carbon:chemistry',
+        },
+        {
+          name: 'Materials Science',
+          icon: 'mdi:pipe-disconnected',
+        },
+      ],
+    },
+    {
       pubDate: 'May 2025',
       pubAuthors: (
         <>
@@ -54,8 +109,8 @@ export const Publications = () => {
       pubLink: 'https://doi.org/10.13140/RG.2.2.11182.98880',
       pubCategory: [
         {
-          name: 'Machine Learning',
-          icon: 'simple-icons:tensorflow',
+          name: 'PyTorch',
+          icon: 'simple-icons:pytorch',
         },
         {
           name: 'Protein Design',
@@ -68,63 +123,7 @@ export const Publications = () => {
       ],
     },
     {
-      pubDate: 'Dec. 2024',
-      pubAuthors: (
-        <>
-          Hamid Zentou, Mansur Aliyu, Mahmoud A. Abdalla, Omar Y. Abdelaziz,
-          Bosirul Hoque, Ahmed M. Alloush,{' '}
-          <span className="font-semibold text-primary">Islam Tayeb</span>, Kumar
-          Patchigolla, Mahmoud M. Abdelnaby
-        </>
-      ),
-      pubImpact: 'Impact Factor: 7.0',
-      pubTitle:
-        'Advancements and Challenges in Adsorption-Based Carbon Capture Technology: From Fundamentals to Deployment',
-      pubJournal: 'The Chemical Record',
-      pubJournalLink: 'https://onlinelibrary.wiley.com/journal/15280691',
-      pubType: 'Literature Review',
-      pubDescription: (
-        <>
-          <p className="mb-1.5">
-            Review of solid materials used to capture CO
-            <span
-              style={{
-                verticalAlign: 'sub',
-                fontSize: 7.25,
-                lineHeight: '1',
-                fontWeight: 'bold',
-              }}
-            >
-              2
-            </span>{' '}
-            from industrial sources, covering lab research to implementation.
-            Discusses cost and engineering challenges for scaling up these
-            technologies.
-          </p>
-          <p>
-            I wrote the materials science sections and analyzed adsorbent
-            performance data.
-          </p>
-        </>
-      ),
-      pubLink: 'https://doi.org/10.1002/tcr.202400188',
-      pubCategory: [
-        {
-          name: 'Carbon Capture',
-          icon: 'carbon:chemistry',
-        },
-        {
-          name: 'Climate Mitigation',
-          icon: 'mdi:leaf',
-        },
-        {
-          name: 'Materials Science',
-          icon: 'mdi:pipe-disconnected',
-        },
-      ],
-    },
-    {
-      pubDate: 'Dec. 2023',
+      pubDate: 'Dec 2023',
       pubAuthors: (
         <>
           Mahmoud Abdelnaby,{' '}
@@ -133,7 +132,7 @@ export const Publications = () => {
           Mohammed, Sagheer Onaizi
         </>
       ),
-      pubImpact: 'Impact Factor: 7.2',
+      pubImpact: 'Impact Factor: 8.4',
       pubTitle:
         'Post-synthetic Modification of UiO-66 Analogue Metal-Organic Framework as Potential Solid Sorbent for Direct Air Capture',
       pubJournal: (
