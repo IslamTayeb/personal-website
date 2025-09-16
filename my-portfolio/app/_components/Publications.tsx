@@ -63,7 +63,7 @@ export const Publications = () => {
           </p>
         </>
       ),
-      pubLink: 'https://doi.org/10.1016/j.jece.2025.119315',
+      pubLink: 'https://authors.elsevier.com/c/1lnQz7tGO~Vp7o',
       pubCategory: [
         {
           name: 'Python',
