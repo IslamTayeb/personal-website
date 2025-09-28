@@ -244,10 +244,10 @@ export const Contact = () => {
           </Form>
         </div>
 
-        <div className="flex flex-col h-min font-sans font-medium flex-[2] w-full gap-2">
+        <div className="flex flex-col h-min font-sans font-medium flex-[2] w-full divide-y divide-border">
           {contactsData.map((contact, index) => (
             <React.Fragment key={contact.id}>
-              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 px-1.5 rounded w-full">
+              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 px-2 w-full">
                 <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
                   <Icon
                     icon={contact.icon}
@@ -259,7 +259,7 @@ export const Contact = () => {
                   <div className="text-base font-medium">{contact.label}</div>
                 </div>
 
-                <div className="ml-auto flex flex-row gap-2">
+                <div className="ml-auto flex flex-row gap-1.5">
                   {contact.isCopyable && (
                     <TooltipProvider delayDuration={50}>
                       <Tooltip>
@@ -319,7 +319,7 @@ export const Contact = () => {
                   </Link>
                 </div>
               </div>
-              {index < contactsData.length - 1 && <Separator />}
+              {/* separators handled by divide utilities */}
             </React.Fragment>
           ))}
         </div>

@@ -12,36 +12,36 @@ import { useState } from 'react';
 const logoComponentRegistry = {
   'Duke Health': dynamic(
     () => import('./Icons/Duke Health').then((mod) => mod.DukeHealth),
-    { ssr: false }
+    { ssr: true }
   ),
   DIHI: dynamic(() => import('./Icons/DIHI').then((mod) => mod.DIHI), {
-    ssr: false,
+    ssr: true,
   }),
   Aramco: dynamic(() => import('./Icons/Aramco').then((mod) => mod.Aramco), {
-    ssr: false,
+    ssr: true,
   }),
   Helian: dynamic(() => import('./Icons/Helian').then((mod) => mod.Helian), {
-    ssr: false,
+    ssr: true,
   }),
   Lifeedit: dynamic(
     () => import('./Icons/Lifeedit').then((mod) => mod.Lifeedit),
-    { ssr: false }
+    { ssr: true }
   ),
   Sapien: dynamic(() => import('./Icons/Sapien').then((mod) => mod.Sapien), {
-    ssr: false,
+    ssr: true,
   }),
   Reveal: dynamic(() => import('./Icons/Reveal').then((mod) => mod.Reveal), {
-    ssr: false,
+    ssr: true,
   }),
   Soff: dynamic(() => import('./Icons/Soff').then((mod) => mod.Soff), {
-    ssr: false,
+    ssr: true,
   }),
   DukeUni: dynamic(() => import('./Icons/DukeUni').then((mod) => mod.DukeUni), {
-    ssr: false,
+    ssr: true,
   }),
   DukeUni2: dynamic(
     () => import('./Icons/DukeUni2').then((mod) => mod.DukeUni2),
-    { ssr: false }
+    { ssr: true }
   ),
 };
 

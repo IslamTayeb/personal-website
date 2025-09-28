@@ -166,7 +166,7 @@ export const Hero = () => {
             Feel free to reach out at{' '}
             <a
               href="mailto:islam.moh.islamm@gmail.com"
-              className="text-primary underline hover:no-underline"
+              className="underline hover:no-underline"
             >
               islam.moh.islamm@gmail.com
             </a>

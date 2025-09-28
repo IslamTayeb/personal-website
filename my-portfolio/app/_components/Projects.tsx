@@ -83,7 +83,7 @@ export const Projects = () => {
   return (
     <Section className="font-sans flex-col gap-4">
       <Badge variant={'outline'} className="mb-4" id="projects">
-        Selected Projects
+        Projects
       </Badge>
 
       <div className="projects-container">
@@ -148,7 +148,7 @@ export const Projects = () => {
                         )}
                         {isWip && (
                           <Badge
-                            variant="default"
+                            variant="secondary"
                             className="rounded-full text-center font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
                           >
                             In Progress
@@ -157,7 +157,7 @@ export const Projects = () => {
                       </>
                     )}
                   </h3>
-                  <div className="project-info-description border max-md:border-0 bg-card hover:bg-[#22262D]">
+                  <div className="project-info-description border max-md:border-0 bg-card hover:bg-[#22262D] transition-all">
                     <p>{projectDescription}</p>
                   </div>
                   <ul className="project-info-tech-list">

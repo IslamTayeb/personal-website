@@ -74,8 +74,8 @@ export const Publications = () => {
           icon: 'carbon:chemistry',
         },
         {
-          name: 'Materials Science',
-          icon: 'mdi:pipe-disconnected',
+          name: 'Traditional ML',
+          icon: 'icon-park-outline:tree-diagram',
         },
       ],
     },
@@ -121,7 +121,7 @@ export const Publications = () => {
           icon: 'mdi:brain',
         },
       ],
-    }
+    },
   ];
 
   return (
@@ -130,129 +130,128 @@ export const Publications = () => {
         Selected Publications
       </Badge>
 
-      {publicationsData.map(
-        ({
-          pubDate,
-          pubAuthors,
-          pubTitle,
-          pubJournal,
-          pubJournalLink,
-          pubDescription,
-          pubLink,
-          pubImpact,
-          pubType,
-          pubCategory,
-        }) => {
-          return (
-            <div
-              className="project max-md:w-full text-primary w-full"
-              key={pubTitle}
-            >
-              <div className="w-full mx-2">
-                <Accordion
-                  type="single"
-                  collapsible
-                  className="w-full font-sans"
-                >
-                  <AccordionItem
-                    value="item-1"
-                    className="pb-4 text-pretty flex flex-row transition gap-4 w-full"
+      <div className="w-full divide-y divide-border">
+        {publicationsData.map(
+          ({
+            pubDate,
+            pubAuthors,
+            pubTitle,
+            pubJournal,
+            pubJournalLink,
+            pubDescription,
+            pubLink,
+            pubImpact,
+            pubType,
+            pubCategory,
+          }) => {
+            return (
+              <div
+                className="project max-md:w-full text-primary w-full last:border-t-0"
+                key={pubTitle}
+              >
+                <div className="w-full">
+                  <Accordion
+                    type="single"
+                    collapsible
+                    className="w-full font-sans"
                   >
-                    <div className="flex items-center text-muted-foreground text-sm w-min text-left font-mono shrink-0">
-                      <p className="">{pubDate}</p>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-row w-full">
-                        <div className="text-primary flex flex-col w-full">
-                          <div className="text-base font-medium text-foreground w-full">
-                            <span className="transition text-primary block">
-                              {pubTitle}
-                            </span>
-                          </div>
-                          <div className="text-muted-foreground text-sm font-normal text-[0.925em] ">
-                            <Link
-                              href={pubLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="group"
-                            >
-                              <span className="underline group-hover:no-underline">
-                                Full-text
+                    <AccordionItem
+                      value="item-1"
+                      className="py-3.5 px-2.5 text-pretty flex flex-row transition gap-4 w-full hover:bg-muted/50 border-b-0"
+                    >
+                      <div className="flex items-center text-muted-foreground text-sm w-min text-left font-mono shrink-0">
+                        <p className="">{pubDate}</p>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-row w-full">
+                          <div className="text-primary flex flex-col w-full">
+                            <div className="text-base font-medium text-foreground w-full">
+                              <span className="leading-tight transition text-primary block mb-0.5">
+                                {pubTitle}
                               </span>
-                            </Link>
-                            {pubJournal && (
-                              <span className="font-normal"> – </span>
-                            )}
-                            <TooltipProvider delayDuration={50}>
-                              <Tooltip>
-                                <TooltipTrigger className="font-normal">
-                                  {pubJournalLink ? (
-                                    <div className="flex items-center gap-0">
-                                      <div className="group">
-                                        <Link
-                                          href={pubJournalLink}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                          className="group"
-                                        >
-                                          <span className="underline group-hover:no-underline">
-                                            {pubJournal}
-                                          </span>
-                                        </Link>
+                            </div>
+                            <div className="text-muted-foreground text-sm font-normal text-[0.925em] ">
+                              <Link
+                                href={pubLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="group"
+                              >
+                                <span className="underline group-hover:no-underline">
+                                  Full-text
+                                </span>
+                              </Link>
+                              {pubJournal && (
+                                <span className="font-normal"> – </span>
+                              )}
+                              <TooltipProvider delayDuration={50}>
+                                <Tooltip>
+                                  <TooltipTrigger className="font-normal">
+                                    {pubJournalLink ? (
+                                      <div className="flex items-center gap-0">
+                                        <div className="group">
+                                          <Link
+                                            href={pubJournalLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group"
+                                          >
+                                            <span className="underline group-hover:no-underline">
+                                              {pubJournal}
+                                            </span>
+                                          </Link>
+                                        </div>
                                       </div>
-                                    </div>
-                                  ) : (
-                                    pubJournal
-                                  )}
-                                </TooltipTrigger>
-                                <TooltipContent className="shadow-md shadow-card transition-all">
-                                  <p>{pubImpact}</p>
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                            <span className="font-normal"> –</span>
-                            <span className="font-light ml-0.5">
-                              {' '}
-                              {pubType}
-                            </span>
-                          </div>
-                          <div className="text-muted-foreground  text-xs font-light py-1.5">
-                            {typeof pubAuthors === 'string' ? (
-                              `- ${pubAuthors}`
-                            ) : (
-                              <>{pubAuthors}</>
-                            )}
+                                    ) : (
+                                      pubJournal
+                                    )}
+                                  </TooltipTrigger>
+                                  <TooltipContent className="shadow-md shadow-card transition-all">
+                                    <p>{pubImpact}</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                              <span className="font-normal"> –</span>
+                              <span className="font-light ml-0.5">
+                                {' '}
+                                {pubType}
+                              </span>
+                            </div>
+                            <div className="text-muted-foreground  text-xs font-light py-1.5">
+                              {typeof pubAuthors === 'string' ? (
+                                `- ${pubAuthors}`
+                              ) : (
+                                <>{pubAuthors}</>
+                              )}
+                            </div>
                           </div>
                         </div>
+                        <AccordionContent className="mr-8 pb-3 pt-1 font-light">
+                          {pubDescription}
+                        </AccordionContent>
+                        <div className="flex flex-wrap gap-2">
+                          {pubCategory.map((category) => (
+                            // consider using max-md:text-nowrap
+                            <Code key={category.name} className="leading-4">
+                              <DefaultIcon
+                                icon={category.icon}
+                                className="inline text-current"
+                                height="14px"
+                              />{' '}
+                              {category.name}
+                            </Code>
+                          ))}
+                        </div>
                       </div>
-                      <AccordionContent className="mr-8 pb-3 pt-1 font-light">
-                        {pubDescription}
-                      </AccordionContent>
-                      <div className="flex flex-wrap gap-2 text-xs leading-none">
-                        {pubCategory.map((category) => (
-                          // consider using max-md:text-nowrap
-                          <Code
-                            key={category.name}
-                            className="inline-flex items-center"
-                          >
-                            <DefaultIcon
-                              icon={category.icon}
-                              className="text-current -mt-0"
-                              height="14"
-                            />
-                            <span className="ml-2">{category.name}</span>
-                          </Code>
-                        ))}
-                      </div>
-                    </div>
-                    <AccordionTrigger className="pb-0 p-1 flex-none" />
-                  </AccordionItem>
-                </Accordion>
+                      <AccordionTrigger className="p-0 flex-none" />
+                    </AccordionItem>
+                  </Accordion>
+                </div>
               </div>
-            </div>
-          );
-        }
-      )}
+            );
+          }
+        )}
+      </div>
       <Link
         href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
         target="_blank"

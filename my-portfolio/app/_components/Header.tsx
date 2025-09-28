@@ -5,10 +5,12 @@ import { cn } from '@/lib/utils';
 import { LinkedInIcon } from './Icons/LinkedInIcon';
 import { GithubIcon } from './Icons/GithubIcon';
 import { ResearchGateIcon } from './Icons/ResearchGateIcon';
-import { ArrowBigDown, Layers2, Scroll, ScrollText } from 'lucide-react';
+import { ArrowBigDown, Layers2, Scroll, ScrollText, Mail } from 'lucide-react';
 import { Code, DefaultIcon } from './sharedComponents';
 import { Icon } from '@iconify/react/dist/iconify.js';
 export const Header = () => {
+  const email = 'islam.tayeb@duke.edu';
+
   return (
     <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80 h-12 border-b border-dashed">
       <div className="flex max-w-3xl m-auto px-4">
@@ -19,6 +21,21 @@ export const Header = () => {
         </h1>
         <div className="flex-1" />
         <ul className="flex gap-2">
+          <Link
+            href={`mailto:${email}`}
+            className={cn(
+              buttonVariants({ variant: 'outline' }),
+              'border-dashed p-0 flex items-center justify-center h-6 group'
+            )}
+            title="Send email"
+          >
+            <span className="flex items-center justify-center px-1 py-0">
+              <Mail size={12} className="text-foreground -mt-[0.1em]" />
+              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
+                Email
+              </p>
+            </span>
+          </Link>
           <Link
             href="https://linkedin.com/in/islam-tayeb"
             target="_blank"
