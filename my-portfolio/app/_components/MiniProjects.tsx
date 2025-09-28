@@ -65,7 +65,7 @@ export const MiniProjects = () => {
         {displayedProjects.map((project) => (
           <div
             key={project.name}
-            className="py-2 px-2 hover:bg-muted/50 transition-colors"
+            className="py-2.5 px-2.5 hover:bg-muted/50 transition-colors"
           >
             <div className="flex items-center gap-2">
               <span className="font-medium text-primary leading-tight">

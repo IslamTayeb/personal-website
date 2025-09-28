@@ -247,7 +247,7 @@ export const Contact = () => {
         <div className="flex flex-col h-min font-sans font-medium flex-[2] w-full divide-y divide-border">
           {contactsData.map((contact, index) => (
             <React.Fragment key={contact.id}>
-              <div className="inline-flex items-center gap-4 hover:bg-accent/25 transition-colors py-1 px-2 w-full">
+              <div className="inline-flex items-center gap-4 hover:bg-muted/50 transition-colors py-2 px-2 w-full">
                 <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
                   <Icon
                     icon={contact.icon}
