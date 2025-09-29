@@ -1,8 +1,14 @@
 'use client';
 import Link from 'next/link';
-import { LucideGithub, Link2 } from 'lucide-react';
+import { LucideGithub, Link2, Info } from 'lucide-react';
 import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { Section } from './Misc/Section';
 
 export const MiniProjects = () => {
@@ -10,7 +16,7 @@ export const MiniProjects = () => {
 
   const miniProjectsData = [
     {
-      name: 'Solve Log',
+      name: 'Interview Solve Log',
       description:
         'Centralize all my leetcode/neetcode prep into a repository with a simple interface',
       links: {
@@ -21,7 +27,7 @@ export const MiniProjects = () => {
     {
       name: 'HyperX DuoCast RGB Override',
       description:
-        "RGB mic clashed with my setup, so I learned USB control to customize it. Fuck HyperX doesn't support NGenuity on Mac.",
+        'RGB mic clashed with my setup, so I learned USB control to customize it. Fuck HyperX.',
       links: {
         github: 'https://github.com/IslamTayeb/QuadcastRGB',
       },
@@ -29,7 +35,7 @@ export const MiniProjects = () => {
     {
       name: 'Instagram Non-Mutual Unfollower',
       description:
-        'Had 2x the amount of following than followers on Instagram. Too much aura loss, so I made a bot to unfollow non-moots.',
+        'Had twice as many following as followers on Instagram, so I made a bot to unfollow non-mutuals.',
       links: {
         github: 'https://github.com/IslamTayeb/instagram-unfollower',
       },
@@ -57,9 +63,25 @@ export const MiniProjects = () => {
 
   return (
     <Section className="font-sans flex-col gap-4">
-      <Badge variant={'outline'} className="mb-4" id="mini-projects">
-        Mini Projects
-      </Badge>
+      <div className="mb-4 inline-flex items-center gap-2">
+        <Badge variant={'outline'} id="mini-projects">
+          Applets
+        </Badge>
+        <TooltipProvider delayDuration={0}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Info
+                size={14}
+                className="text-muted-foreground/70 hover:text-primary/80 transition-colors"
+                aria-label="About mini projects"
+              />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-xs mb-1 text-center">
+              Compilation of vibe-coded apps I made & use daily.
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </div>
 
       <div className="w-full divide-y divide-border">
         {displayedProjects.map((project) => (
@@ -68,7 +90,7 @@ export const MiniProjects = () => {
             className="py-2.5 px-2.5 hover:bg-muted/50 transition-colors"
           >
             <div className="flex items-center gap-2">
-              <span className="font-medium text-primary leading-tight">
+              <span className="font-medium text-primary leading-tight text-md">
                 {project.name}
               </span>
               {project.wip && (
@@ -79,36 +101,36 @@ export const MiniProjects = () => {
                   WIP
                 </Badge>
               )}
+              {(project.links.github || project.links.externalLink) && (
+                <div className="ml-auto flex gap-3">
+                  {project.links.externalLink && (
+                    <Link
+                      href={project.links.externalLink}
+                      className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary underline hover:no-underline transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Link2 size={12} />
+                      Link
+                    </Link>
+                  )}
+                  {project.links.github && (
+                    <Link
+                      href={project.links.github}
+                      className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary underline hover:no-underline transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <LucideGithub size={12} />
+                      GitHub
+                    </Link>
+                  )}
+                </div>
+              )}
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed mt-0.5">
+            <p className="text-sm text-muted-foreground leading-relaxed mt-0.5">
               {project.description}
             </p>
-            {(project.links.github || project.links.externalLink) && (
-              <div className="mt-0.5 flex gap-3">
-                {project.links.github && (
-                  <Link
-                    href={project.links.github}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground hover:text-primary underline hover:no-underline transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <LucideGithub size={12} />
-                    GitHub
-                  </Link>
-                )}
-                {project.links.externalLink && (
-                  <Link
-                    href={project.links.externalLink}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground hover:text-primary underline hover:no-underline transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Link2 size={12} />
-                    Link
-                  </Link>
-                )}
-              </div>
-            )}
           </div>
         ))}
       </div>
@@ -117,7 +139,7 @@ export const MiniProjects = () => {
         onClick={() => setShowAll(!showAll)}
         className="text-xs leading-none ml-auto text-muted-foreground/80 mt-3 justify-end flex items-center underline hover:no-underline font-mono tracking-wide hover:text-primary transition-colors"
       >
-        {showAll ? 'Show less...' : 'See more...'}
+        {showAll ? 'See less...' : 'See more...'}
       </button>
     </Section>
   );
