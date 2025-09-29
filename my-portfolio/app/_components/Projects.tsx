@@ -25,7 +25,6 @@ export const Projects = () => {
       projectTech: [
         'Next.js',
         'Node.js',
-        'Express',
         'PostgreSQL',
         'Gemini',
         'GitHub API',
@@ -34,7 +33,6 @@ export const Projects = () => {
       projectTechLogo: [
         'simple-icons:nextdotjs',
         'simple-icons:nodedotjs',
-        'simple-icons:express',
         'simple-icons:postgresql',
         'simple-icons:google',
         'simple-icons:github',
@@ -157,7 +155,7 @@ export const Projects = () => {
                       </>
                     )}
                   </h3>
-                  <div className="project-info-description border max-md:border-0 bg-card hover:bg-[#22262D] transition-all">
+                  <div className="project-info-description border max-md:border-0 max-md:bg-transparent max-md:hover:bg-transparent bg-card hover:bg-[#22262D] transition-all">
                     <p>{projectDescription}</p>
                   </div>
                   <ul className="project-info-tech-list">
@@ -185,7 +183,7 @@ export const Projects = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <LucideGithub size={16} /> GitHub
+                            <LucideGithub size={14} /> GitHub
                           </Link>
                         </li>
                       )}
@@ -197,7 +195,7 @@ export const Projects = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <Link2 size={16} /> Link
+                            <Link2 size={14} /> Link
                           </Link>
                         </li>
                       )}
@@ -213,10 +211,10 @@ export const Projects = () => {
                       loop
                       muted
                       playsInline
-                      className="object-cover project-image-container opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 saturate-0 hover:saturate-100"
+                      className="object-cover project-image-container opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100"
                     />
                   ) : (
-                    <div className="project-image-container opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 scale-110 saturate-0 hover:saturate-100">
+                    <div className="project-image-container opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 scale-110 saturate-0 hover:saturate-100">
                       <Image
                         src={image}
                         fill

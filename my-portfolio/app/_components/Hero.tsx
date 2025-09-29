@@ -73,15 +73,7 @@ export const Hero = () => {
             <ExternalLink href="https://corecursive.com/066-sqlite-with-richard-hipp/">
               <UnderlineSpan>stories</UnderlineSpan>
             </ExternalLink>{' '}
-            and over-optimizing{' '}
-            <Code>
-              <DefaultIcon icon="simple-icons:raycast" /> Raycast
-            </Code>{' '}
-            and{' '}
-            <Code>
-              <DefaultIcon icon="simple-icons:yabai" /> Yabai
-            </Code>{' '}
-            configs. Currently based in{' '}
+            and over-optimizing configs. Currently based in{' '}
             <Code>
               <DefaultIcon icon="flag:us-1x1" className="rounded-[1.5px]" />{' '}
               Durham, NC
@@ -154,12 +146,9 @@ export const Hero = () => {
             (<span>500K+ downloads</span>).
           </p>
           <p className="font-sans text-muted-foreground text-pretty">
-            I initially came to{' '}
-            <Code>
-              <Duke size={14} className="-mt-[0.07em]" /> Duke
-            </Code>{' '}
-            as a pre-med computational chemist, but kept gravitating toward the
-            &quot;computational&quot; part until I started building.
+            I initially came to Duke as a pre-med computational chemist, but
+            kept gravitating toward the &quot;computational&quot; part until I
+            started building.
           </p>
 
           <p className="font-sans text-muted-foreground text-pretty">

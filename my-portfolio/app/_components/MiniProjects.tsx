@@ -110,7 +110,7 @@ export const MiniProjects = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <Link2 size={12} />
+                      <Link2 size={14} />
                       Link
                     </Link>
                   )}
@@ -121,7 +121,7 @@ export const MiniProjects = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <LucideGithub size={12} />
+                      <LucideGithub size={14} />
                       GitHub
                     </Link>
                   )}
