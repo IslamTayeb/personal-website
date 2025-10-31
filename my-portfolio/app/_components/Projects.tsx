@@ -148,7 +148,7 @@ export const Projects = () => {
                       </>
                     )}
                   </h3>
-                  <div className="project-info-description border border-dashed max-md:border-0 max-md:bg-transparent max-md:hover:bg-transparent bg-card hover:bg-[#22262D] transition-all">
+                  <div className="project-info-description border border-dashed max-md:border-0 max-md:bg-transparent max-md:hover:bg-transparent bg-card hover:bg-[#1E2229] transition-all">
                     <p>{projectDescription}</p>
                   </div>
                   <ul className="project-info-tech-list">
@@ -196,7 +196,7 @@ export const Projects = () => {
                   )}
                 </div>
 
-                <div className="project-image overflow-hidden scale-95 rounded-sm border-dashed-main max-md:rounded-lg">
+                <div className="project-image overflow-hidden scale-95 rounded-sm border border-border/50 max-md:rounded-lg">
                   {image.endsWith('.mp4') ? (
                     <div className="project-image-container opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100">
                       <video

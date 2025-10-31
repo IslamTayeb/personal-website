@@ -94,7 +94,7 @@ export function Experience() {
       {visibleExperiences.map((experience, index) => (
         <div
           key={index}
-          className="border border-dashed rounded-lg p-4 bg-card hover:bg-muted/15 transition-colors"
+          className="border border-dashed rounded-lg p-4 bg-card hover:bg-card/50 transition-colors"
         >
           <div className="flex flex-col gap-2">
             {/* Header with logo, role, company */}

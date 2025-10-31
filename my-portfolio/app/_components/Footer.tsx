@@ -7,7 +7,7 @@ import { HeartFilledIcon } from '@radix-ui/react-icons';
 export const Footer = () => {
   return (
     <footer className="bg-card border-border border-t border-dashed">
-      <p className="py-3.5 text-muted-foreground text-sm flex gap-x-1 max-w-3xl m-auto px-4">
+      <div className="py-3.5 text-muted-foreground text-sm flex gap-x-1 max-w-3xl m-auto px-4">
         <span className="">
           Last Updated 10/30/2025
         </span>
@@ -15,7 +15,7 @@ export const Footer = () => {
           Made with <HeartFilledIcon className="inline -mt-1" width={11.5} /> in{' '}
           <span className="font-semibold">Durham, NC</span>
         </div>
-      </p>
+      </div>
     </footer>
   );
 };

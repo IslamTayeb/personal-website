@@ -17,6 +17,7 @@ const anekTelugu = Anek_Telugu({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: 'Islam Tayeb',
   description: "Islam Tayeb's Portfolio",
   icons: {

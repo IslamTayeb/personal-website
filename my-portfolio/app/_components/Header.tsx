@@ -22,7 +22,7 @@ export const Header = () => {
             rel="noopener noreferrer"
             className={cn(
               buttonVariants({ variant: 'outline' }),
-              'border-dashed p-0 flex items-center justify-center h-6 group hover:bg-muted/65 transition-colors'
+              'border-dashed p-0 flex items-center justify-center h-6 group hover:bg-muted transition-colors'
             )}
           >
             <span className="flex items-center justify-center px-1 py-0">
@@ -36,7 +36,7 @@ export const Header = () => {
             href={`mailto:${email}`}
             className={cn(
               buttonVariants({ variant: 'outline' }),
-              'border-dashed p-0 flex items-center justify-center h-6 group hover:bg-muted/65 transition-colors'
+              'border-dashed p-0 flex items-center justify-center h-6 group hover:bg-muted transition-colors'
             )}
             title="Send email"
           >
