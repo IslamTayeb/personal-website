@@ -11,6 +11,36 @@ import { Code, DefaultIcon } from './sharedComponents';
 export const Projects = () => {
   const projectsData = [
     {
+      image: '/HeliumRaycast.mp4',
+      projectName: 'Helium Browser Extension for Raycast',
+      new: true,
+      wip: false,
+      projectDescription: (
+        <>
+          Raycast extension that enables keyboard-driven browser control by
+          searching through open tabs, bookmarks, browsing history, and the web
+          directly from Raycast&apos;s command palette, eliminating the need to
+          switch contexts.
+        </>
+      ),
+      projectTech: [
+        'TypeScript',
+        'Raycast API',
+        'AppleScript',
+        'SQLite',
+      ],
+      projectTechLogo: [
+        'simple-icons:typescript',
+        'simple-icons:raycast',
+        'mdi:apple',
+        'simple-icons:sqlite',
+      ],
+      projectExternalLinks: {
+        github: 'https://github.com/raycast/extensions/pull/22290',
+        externalLink: 'https://www.raycast.com/islamtayeb/helium',
+      },
+    },
+    {
       image: '/Etchr.mp4',
       projectName: 'Etchr – GitHub README Generator',
       new: false,
@@ -26,54 +56,17 @@ export const Projects = () => {
         'Next.js',
         'Node.js',
         'PostgreSQL',
-        'Gemini',
-        'GitHub API',
         'GCP',
       ],
       projectTechLogo: [
         'simple-icons:nextdotjs',
         'simple-icons:nodedotjs',
         'simple-icons:postgresql',
-        'simple-icons:google',
-        'simple-icons:github',
         'simple-icons:googlecloud',
       ],
       projectExternalLinks: {
         github: 'https://github.com/IslamTayeb/etchr',
         externalLink: 'https://www.etchr.dev/',
-      },
-    },
-    {
-      image: '/Jobtrack.mp4',
-      projectName: 'Job Track – CLI Job Tracker',
-      new: false,
-      wip: false,
-      projectDescription: (
-        <>
-          CLI tool that automates the tracking of job applications by extracting
-          information from Gmail emails using Google Gemini AI and updating a
-          Google Sheet, eliminating manual data entry.
-        </>
-      ),
-      projectTech: [
-        'Python',
-        'Google Gmail API',
-        'Google Sheets API',
-        'Google Gemini',
-        // "OAuth",
-        'CLI',
-      ],
-      projectTechLogo: [
-        'simple-icons:python',
-        'simple-icons:gmail',
-        'simple-icons:googlesheets',
-        'simple-icons:google',
-        // "mdi:key-chain",
-        'mdi:console-line',
-      ],
-      projectExternalLinks: {
-        github: 'https://github.com/IslamTayeb/job-sheet-tracker',
-        externalLink: '',
       },
     },
   ];
@@ -116,15 +109,15 @@ export const Projects = () => {
                         {isNew && (
                           <Badge
                             variant="default"
-                            className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
+                            className="rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono"
                           >
-                            New!
+                            New
                           </Badge>
                         )}
                         {isWip && (
                           <Badge
                             variant="secondary"
-                            className="rounded-full text-center font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
+                            className="rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono"
                           >
                             In Progress
                           </Badge>
@@ -139,15 +132,15 @@ export const Projects = () => {
                         {isNew && (
                           <Badge
                             variant="default"
-                            className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
+                            className="rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono"
                           >
-                            New!
+                            New
                           </Badge>
                         )}
                         {isWip && (
                           <Badge
                             variant="secondary"
-                            className="rounded-full text-center font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
+                            className="rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono"
                           >
                             In Progress
                           </Badge>
@@ -155,7 +148,7 @@ export const Projects = () => {
                       </>
                     )}
                   </h3>
-                  <div className="project-info-description border max-md:border-0 max-md:bg-transparent max-md:hover:bg-transparent bg-card hover:bg-[#22262D] transition-all">
+                  <div className="project-info-description border border-dashed max-md:border-0 max-md:bg-transparent max-md:hover:bg-transparent bg-card hover:bg-[#22262D] transition-all">
                     <p>{projectDescription}</p>
                   </div>
                   <ul className="project-info-tech-list">
@@ -203,16 +196,18 @@ export const Projects = () => {
                   )}
                 </div>
 
-                <div className="project-image overflow-hidden scale-95 rounded-sm border-accent border max-md:rounded-lg">
+                <div className="project-image overflow-hidden scale-95 rounded-sm border-dashed-main max-md:rounded-lg">
                   {image.endsWith('.mp4') ? (
-                    <video
-                      src={image}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="object-cover project-image-container opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100"
-                    />
+                    <div className="project-image-container opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100">
+                      <video
+                        src={image}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    </div>
                   ) : (
                     <div className="project-image-container opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 scale-110 saturate-0 hover:saturate-100">
                       <Image

@@ -1,12 +1,7 @@
 import Link from 'next/link';
-import { Section } from './Misc/Section';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { LinkedInIcon } from './Icons/LinkedInIcon';
-import { GithubIcon } from './Icons/GithubIcon';
-import { ResearchGateIcon } from './Icons/ResearchGateIcon';
-import { ArrowBigDown, Layers2, Scroll, ScrollText, Mail } from 'lucide-react';
-import { Code, DefaultIcon } from './sharedComponents';
+import { Mail } from 'lucide-react';
 import { Icon } from '@iconify/react/dist/iconify.js';
 export const Header = () => {
   const email = 'islam.tayeb@duke.edu';
@@ -22,10 +17,26 @@ export const Header = () => {
         <div className="flex-1" />
         <ul className="flex gap-2">
           <Link
+            href="https://apmoverflow.xyz/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              buttonVariants({ variant: 'outline' }),
+              'border-dashed p-0 flex items-center justify-center h-6 group hover:bg-muted/65 transition-colors'
+            )}
+          >
+            <span className="flex items-center justify-center px-1 py-0">
+              <span className="text-foreground text-[18px] font-medium w-4 p-0 h-4 flex items-center justify-center leading-none mt-[0.1em]">⌘</span>
+              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
+                Blog
+              </p>
+            </span>
+          </Link>
+          <Link
             href={`mailto:${email}`}
             className={cn(
               buttonVariants({ variant: 'outline' }),
-              'border-dashed p-0 flex items-center justify-center h-6 group'
+              'border-dashed p-0 flex items-center justify-center h-6 group hover:bg-muted/65 transition-colors'
             )}
             title="Send email"
           >
@@ -33,86 +44,6 @@ export const Header = () => {
               <Mail size={12} className="text-foreground -mt-[0.1em]" />
               <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
                 Email
-              </p>
-            </span>
-          </Link>
-          <Link
-            href="https://linkedin.com/in/islam-tayeb"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              buttonVariants({ variant: 'outline' }),
-              'border-dashed p-0 flex items-center justify-center h-6 group'
-            )}
-          >
-            <span className="flex items-center justify-center px-1 py-0">
-              <DefaultIcon
-                fontSize={12.7}
-                className="text-foreground rounded-[2.5px] -mt-[0.04em]"
-                icon={'bi:linkedin'}
-              />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
-                LinkedIn
-              </p>
-            </span>
-          </Link>
-          <Link
-            href="https://github.com/IslamTayeb"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              buttonVariants({ variant: 'outline' }),
-              'border-dashed p-0 flex items-center justify-center h-6 group'
-            )}
-          >
-            <span className="flex items-center justify-center px-1 py-0">
-              <DefaultIcon
-                fontSize={15.25}
-                className="text-foreground -mt-[0.5px]"
-                icon={'jam:github'}
-              />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
-                GitHub
-              </p>
-            </span>
-          </Link>
-          <Link
-            href="https://x.com/IslamTyb"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              buttonVariants({ variant: 'outline' }),
-              'border-dashed p-0 flex items-center justify-center h-6 group'
-            )}
-          >
-            <span className="flex items-center justify-center px-1">
-              <Icon
-                icon={'prime:twitter'}
-                fontSize={12}
-                className="text-foreground -mt-[0.1em]"
-              />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
-                X
-              </p>
-            </span>
-          </Link>
-          <Link
-            href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              buttonVariants({ variant: 'outline' }),
-              'border-dashed p-0 flex items-center justify-center h-6 group'
-            )}
-          >
-            <span className="flex items-center justify-center px-1 py-0">
-              <Icon
-                icon={'fa6-brands:google-scholar'}
-                fontSize={12}
-                className="rounded-[4px] text-foreground -mt-[0.1em]"
-              />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
-                Scholar
               </p>
             </span>
           </Link>

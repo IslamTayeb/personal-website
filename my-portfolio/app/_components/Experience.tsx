@@ -94,7 +94,7 @@ export function Experience() {
       {visibleExperiences.map((experience, index) => (
         <div
           key={index}
-          className="border border-secondary rounded-lg p-4 bg-card hover:bg-muted/15 transition-colors"
+          className="border border-dashed rounded-lg p-4 bg-card hover:bg-muted/15 transition-colors"
         >
           <div className="flex flex-col gap-2">
             {/* Header with logo, role, company */}
@@ -202,7 +202,7 @@ export function Experience() {
 
 const experiences = [
   {
-    role: 'Software Engineer',
+    role: 'ML Research Assistant',
     company: 'Duke University',
     logo: 'Icons/DukeUni2.tsx',
     period: 'Aug 2025 – Present',
@@ -210,7 +210,7 @@ const experiences = [
     status: 'present',
     website: 'https://www.romerolab.org/',
     responsibilities: [
-      'Building assay discovery platform for enzyme design using NLP and chemical similarity',
+      'Protocol mining and similarity search for enzyme assays',
     ],
     skills: [
       {
@@ -222,15 +222,14 @@ const experiences = [
     ],
   },
   {
-    role: 'Software Engineer',
+    role: 'Software Engineer Intern',
     company: 'Soff (YC S24)',
     website: 'https://soff.ai/',
     logo: 'Icons/Soff.tsx',
-    period: 'May 2025 – Present',
+    period: 'May 2025 – Oct 2025',
     location: 'San Francisco, CA',
-    status: 'present',
     responsibilities: [
-      'Building sales automation and procurement tools for supply chain intelligence platform as employee #2',
+      'Building sales and procurement automation tools for manufacturers as employee #2',
     ],
     skills: [
       { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
@@ -277,7 +276,7 @@ const experiences = [
     location: 'Durham, NC',
     website: 'https://sites.duke.edu/navid/',
     responsibilities: [
-      'Developed continual learning frameworks and antibody screening tools for therapeutic protein design',
+      <>Developed continual learning model for antibody-antibody affinity prediction (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">1 pre-print</a>)</>,
     ],
     skills: [
       { name: 'Python', icon: 'simple-icons:python' },
@@ -323,7 +322,7 @@ const experiences = [
     period: 'Jul 2022 – Sep 2023',
     location: 'Dhahran, Saudi Arabia',
     responsibilities: [
-      'Developed ML models and simulations for CO₂ capture with polymers at HTCM + Aramco (3 publications)',
+      <>Developed models and performed synthesis for CO₂ capture with polymers (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">3 publications</a>)</>,
     ],
     skills: [
       { name: 'Python', icon: 'simple-icons:python' },

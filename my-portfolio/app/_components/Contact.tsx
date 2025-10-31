@@ -51,10 +51,10 @@ const contactsData: ContactItem[] = [
     isCopyable: true,
   },
   {
-    id: 'linkedin',
-    label: 'LinkedIn',
-    icon: 'mdi:linkedin',
-    href: 'https://www.linkedin.com/in/islam-tayeb/',
+    id: 'blog',
+    label: 'Blog',
+    icon: '⌘',
+    href: 'https://apmoverflow.xyz/',
     isCopyable: false,
   },
   {
@@ -69,6 +69,13 @@ const contactsData: ContactItem[] = [
     label: 'X',
     icon: 'prime:twitter',
     href: 'https://x.com/IslamTyb',
+    isCopyable: false,
+  },
+  {
+    id: 'linkedin',
+    label: 'LinkedIn',
+    icon: 'mdi:linkedin',
+    href: 'https://www.linkedin.com/in/islam-tayeb/',
     isCopyable: false,
   },
   {
@@ -172,7 +179,7 @@ export const Contact = () => {
                         <Input
                           required
                           placeholder="John Doe"
-                          className="transition bg-card"
+                          className="transition bg-card border-dashed focus:border-border/0"
                           {...field}
                         />
                       </FormControl>
@@ -190,7 +197,7 @@ export const Contact = () => {
                         <Input
                           required
                           placeholder="johndoe@example.com"
-                          className="transition bg-card"
+                          className="transition bg-card border-dashed focus:border-border/0"
                           {...field}
                         />
                       </FormControl>
@@ -209,7 +216,7 @@ export const Contact = () => {
                       <Input
                         required
                         placeholder="Your subject must be 250 characters or fewer."
-                        className="transition bg-card"
+                        className="transition bg-card border-dashed focus:border-border/0"
                         {...field}
                       />
                     </FormControl>
@@ -227,7 +234,7 @@ export const Contact = () => {
                       <Textarea
                         required
                         placeholder="Your message must be 2500 characters or fewer."
-                        className="resize-none h-36 transition bg-card"
+                        className="resize-none h-36 transition bg-card border-dashed focus:border-border/0"
                         {...field}
                       />
                     </FormControl>
@@ -248,11 +255,15 @@ export const Contact = () => {
           {contactsData.map((contact, index) => (
             <React.Fragment key={contact.id}>
               <div className="inline-flex items-center gap-4 hover:bg-muted/50 transition-colors py-2 px-2 w-full">
-                <span className="bg-accent text-accent-foreground p-2.5 rounded-sm">
-                  <Icon
-                    icon={contact.icon}
-                    className={`w-4 h-4 ${contact.iconClass || ''}`}
-                  />
+                <span className="bg-accent text-accent-foreground p-2.5 rounded-sm flex items-center justify-center">
+                  {contact.icon === '⌘' ? (
+                    <span className="w-4 h-4 flex items-center justify-center text-base font-medium leading-none">{contact.icon}</span>
+                  ) : (
+                    <Icon
+                      icon={contact.icon}
+                      className={`w-4 h-4 ${contact.iconClass || ''}`}
+                    />
+                  )}
                 </span>
 
                 <div>

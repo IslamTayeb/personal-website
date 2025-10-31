@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/tooltip';
 import { Section } from './Misc/Section';
 
-export const MiniProjects = () => {
+export const Applets = () => {
   const [showAll, setShowAll] = useState(false);
 
   const miniProjectsData = [
@@ -46,6 +46,14 @@ export const MiniProjects = () => {
         'CLI tool that checks my Google Calendar to see my availability and copies it to my clipboard.',
       links: {
         github: 'https://github.com/IslamTayeb/availability-checker',
+      },
+    },
+    {
+      name: 'Job Sheet Tracker',
+      description:
+        'CLI tool that reads Gmail emails, uses Gemini AI to extract job details, and auto-updates my Google Sheet.',
+      links: {
+        github: 'https://github.com/IslamTayeb/job-sheet-tracker',
       },
     },
     {
@@ -93,6 +101,14 @@ export const MiniProjects = () => {
               <span className="font-medium text-primary leading-tight text-md">
                 {project.name}
               </span>
+              {'new' in project && (project as { new?: boolean }).new && (
+                <Badge
+                  variant="default"
+                  className="rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono"
+                >
+                  New
+                </Badge>
+              )}
               {project.wip && (
                 <Badge
                   variant="secondary"
