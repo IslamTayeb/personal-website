@@ -53,7 +53,7 @@ const contactsData: ContactItem[] = [
   {
     id: 'blog',
     label: 'Blog',
-    icon: '⌘',
+    icon: 'lucide:command',
     href: 'https://apmoverflow.xyz/',
     isCopyable: false,
   },
@@ -256,14 +256,10 @@ export const Contact = () => {
             <React.Fragment key={contact.id}>
               <div className="inline-flex items-center gap-4 hover:bg-muted/50 transition-colors py-2 px-2 w-full">
                 <span className="bg-accent text-accent-foreground p-2.5 rounded-sm flex items-center justify-center">
-                  {contact.icon === '⌘' ? (
-                    <span className="w-4 h-4 flex items-center justify-center text-base font-medium leading-none">{contact.icon}</span>
-                  ) : (
-                    <Icon
-                      icon={contact.icon}
-                      className={`w-4 h-4 ${contact.iconClass || ''}`}
-                    />
-                  )}
+                  <Icon
+                    icon={contact.icon}
+                    className={`w-4 h-4 ${contact.iconClass || ''}`}
+                  />
                 </span>
 
                 <div>

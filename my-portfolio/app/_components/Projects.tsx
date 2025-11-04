@@ -17,10 +17,7 @@ export const Projects = () => {
       wip: false,
       projectDescription: (
         <>
-          Raycast extension that enables keyboard-driven browser control by
-          searching through open tabs, bookmarks, browsing history, and the web
-          directly from Raycast&apos;s command palette, eliminating the need to
-          switch contexts.
+          Raycast extension for keyboard-driven browser control, enabling seamless tab, bookmark, history, and web searches directly
         </>
       ),
       projectTech: [
@@ -42,27 +39,23 @@ export const Projects = () => {
     },
     {
       image: '/Etchr.mp4',
-      projectName: 'Etchr – GitHub README Generator',
+      projectName: 'GitHub README Generator',
       new: false,
       wip: false,
       projectDescription: (
         <>
-          Web application that uses Google&apos;s Gemini AI to automatically
-          generate comprehensive GitHub README files by analyzing codebases,
-          with a sliding window approach to handle large repositories.
+          Web app using LLMs to generate GitHub README files through codebase analysis with a sliding window technique
         </>
       ),
       projectTech: [
         'Next.js',
         'Node.js',
         'PostgreSQL',
-        'GCP',
       ],
       projectTechLogo: [
         'simple-icons:nextdotjs',
         'simple-icons:nodedotjs',
         'simple-icons:postgresql',
-        'simple-icons:googlecloud',
       ],
       projectExternalLinks: {
         github: 'https://github.com/IslamTayeb/etchr',
@@ -149,7 +142,7 @@ export const Projects = () => {
                     )}
                   </h3>
                   <div className="project-info-description border border-dashed max-md:border-0 max-md:bg-transparent max-md:hover:bg-transparent bg-card hover:bg-[#1E2229] transition-all">
-                    <p>{projectDescription}</p>
+                    <p className="text-base">{projectDescription}</p>
                   </div>
                   <ul className="project-info-tech-list">
                     {projectTech.map((tech, index) => (

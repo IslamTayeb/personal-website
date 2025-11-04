@@ -35,7 +35,7 @@ export const Applets = () => {
     {
       name: 'Instagram Non-Mutual Unfollower',
       description:
-        'Had twice as many following as followers on Instagram, so I made a bot to unfollow non-mutuals.',
+        'Had twice as many following as followers, so I made a bot to unfollow non-mutuals.',
       links: {
         github: 'https://github.com/IslamTayeb/instagram-unfollower',
       },
@@ -51,7 +51,7 @@ export const Applets = () => {
     {
       name: 'Job Sheet Tracker',
       description:
-        'CLI tool that reads Gmail emails, uses Gemini AI to extract job details, and auto-updates my Google Sheet.',
+        'CLI tool that reads emails, uses Gemini to extract job details, and updates my Google Sheet.',
       links: {
         github: 'https://github.com/IslamTayeb/job-sheet-tracker',
       },
@@ -144,7 +144,7 @@ export const Applets = () => {
                 </div>
               )}
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed mt-0.5">
+            <p className="text-base text-muted-foreground leading-relaxed mt-0.5">
               {project.description}
             </p>
           </div>

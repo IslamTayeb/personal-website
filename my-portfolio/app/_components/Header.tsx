@@ -26,7 +26,7 @@ export const Header = () => {
             )}
           >
             <span className="flex items-center justify-center px-1 py-0">
-              <span className="text-foreground text-[18px] font-medium w-4 p-0 h-4 flex items-center justify-center leading-none mt-[0.1em]">⌘</span>
+              <Icon icon="lucide:command" className="text-foreground w-3 h-3" />
               <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
                 Blog
               </p>

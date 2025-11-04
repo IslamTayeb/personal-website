@@ -134,7 +134,7 @@ const SideProject = (props: SideProjectProps) => {
 
       <div>
         <div className="text-lg font-semibold">{props.title}</div>
-        <p className="text-sm text-muted-foreground">{props.description}</p>
+        <p className="text-base text-muted-foreground">{props.description}</p>
       </div>
     </Link>
   );
@@ -249,7 +249,7 @@ const Contact = (props: ContactProps) => {
 
       <div>
         <div className="text-lg font-semibold">{props.title}</div>
-        <p className="text-sm text-muted-foreground">{props.description}</p>
+        <p className="text-base text-muted-foreground">{props.description}</p>
       </div>
 
       <div className="ml-auto">

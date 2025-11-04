@@ -170,7 +170,7 @@ export const Publications = () => {
                                 {pubTitle}
                               </span>
                             </div>
-                            <div className="text-muted-foreground text-sm font-normal text-[0.925em] ">
+                            <div className="text-muted-foreground text-md font-normal ">
                               <Link
                                 href={pubLink}
                                 target="_blank"
@@ -217,7 +217,7 @@ export const Publications = () => {
                                 {pubType}
                               </span>
                             </div>
-                            <div className="text-muted-foreground  text-xs font-light py-1.5">
+                            <div className="text-muted-foreground  text-md font-light py-1.5">
                               {typeof pubAuthors === 'string' ? (
                                 `- ${pubAuthors}`
                               ) : (
@@ -226,10 +226,10 @@ export const Publications = () => {
                             </div>
                           </div>
                         </div>
-                        <AccordionContent className="mr-8 pb-3 pt-1 font-light">
+                        <AccordionContent className="mr-8 pb-3 pt-1 font-light text-base">
                           {pubDescription}
                         </AccordionContent>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap gap-2 mt-0.5">
                           {pubCategory.map((category) => (
                             // consider using max-md:text-nowrap
                             <Code key={category.name} className="leading-4">

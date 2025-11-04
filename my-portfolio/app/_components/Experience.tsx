@@ -94,77 +94,75 @@ export function Experience() {
       {visibleExperiences.map((experience, index) => (
         <div
           key={index}
-          className="border border-dashed rounded-lg p-4 bg-card hover:bg-card/50 transition-colors"
+          className="border border-dashed rounded-lg p-3 bg-card hover:bg-card/50 transition-colors"
         >
           <div className="flex flex-col gap-2">
-            {/* Header with logo, role, company */}
+            {/* Logo + Role + Company + Date on same line */}
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-center w-12 h-12 min-w-12 min-h-12 text-primary">
                 {renderLogo(experience.logo, experience.company)}
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="font-medium text-lg leading-snug font-sans text-primary">
-                    {experience.role}
-                  </h3>
-                  {experience.status === 'present' && (
-                    <Badge
-                      variant="default"
-                      className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
-                    >
-                      Present
-                    </Badge>
-                  )}
-                  {experience.status === 'incoming' && (
-                    <Badge
-                      variant="secondary"
-                      className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
-                    >
-                      Incoming
-                    </Badge>
-                  )}
-                  {experience.company === 'Soff' && (
-                    <Badge
-                      variant="outline"
-                      className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono leading-none"
-                    >
-                      Employee #2
-                    </Badge>
-                  )}
-                </div>
-                <div className="text-muted-foreground font-normal text-sm space-x-1.5">
-                  {experience.website ? (
-                    <span className="inline-flex items-center">
-                      <a
-                        href={experience.website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-normal font-sans inline-flex items-center text-foreground underline-2 hover:no-underline gap-0.5 underline"
+              <div className="flex-1 flex flex-col gap-1">
+                {/* Role + Company + Date */}
+                <div className="flex items-center gap-2 justify-between leading-tight">
+                  <div className="flex items-center gap-2 flex-wrap leading-tight">
+                    <h3 className="font-medium text-base leading-tight font-sans text-primary">
+                      {experience.role}
+                    </h3>
+                    {experience.status === 'present' && (
+                      <Badge
+                        variant="default"
+                        className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
                       >
-                        {experience.company}
-                      </a>
+                        Present
+                      </Badge>
+                    )}
+                    {experience.status === 'incoming' && (
+                      <Badge
+                        variant="secondary"
+                        className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
+                      >
+                        Incoming
+                      </Badge>
+                    )}
+                    {experience.company === 'Soff' && (
+                      <Badge
+                        variant="outline"
+                        className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono leading-none"
+                      >
+                        Employee #2
+                      </Badge>
+                    )}
+                    <span className="text-muted-foreground font-normal text-base leading-tight -ml-2">,</span>
+                    <span className="text-muted-foreground font-normal text-base font-sans leading-tight">
+                      {experience.website ? (
+                        <a
+                          href={experience.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-normal font-sans inline-flex items-center text-muted-foreground underline-2 hover:no-underline gap-0.5 underline leading-tight"
+                        >
+                          {experience.company}
+                        </a>
+                      ) : (
+                        <span className="font-normal font-sans text-muted-foreground/80 leading-tight">
+                          {experience.company}
+                        </span>
+                      )}
                     </span>
-                  ) : (
-                    <span className="font-normal font-sans text-foreground">
-                      {experience.company}
-                    </span>
-                  )}
+                  </div>
                   {experience.period && (
-                    <>
-                      <span>•</span>
-                      <span className="font-light text-muted-foreground">
-                        {experience.period}
-                      </span>
-                    </>
+                    <span className="font-light text-muted-foreground text-sm whitespace-nowrap leading-tight">
+                      {experience.period}
+                    </span>
                   )}
                 </div>
+                {/* Description */}
+                <p className="text-muted-foreground font-normal text-base font-sans leading-tight">
+                  {experience.responsibilities[0]}
+                </p>
               </div>
             </div>
-
-            {/* Description */}
-            <p className="text-muted-foreground font-light text-sm font-sans">
-              {experience.responsibilities[0]}
-            </p>
 
             {/* Skills */}
             {experience.skills && experience.skills.length > 0 && (
@@ -207,18 +205,13 @@ const experiences = [
     logo: 'Icons/DukeUni2.tsx',
     period: 'Aug 2025 – Present',
     location: 'Durham, NC',
-    status: 'present',
     website: 'https://www.romerolab.org/',
     responsibilities: [
       'Protocol mining and similarity search for enzyme assays',
     ],
     skills: [
-      {
-        name: 'Next.js',
-        icon: 'simple-icons:nextdotjs',
-      },
-      { name: 'FastAPI', icon: 'simple-icons:fastapi' },
-      { name: 'PyTorch', icon: 'simple-icons:pytorch' },
+      // { name: 'PyTorch', icon: 'simple-icons:pytorch' },
+      // { name: 'FastAPI', icon: 'simple-icons:fastapi' },
     ],
   },
   {
@@ -229,12 +222,11 @@ const experiences = [
     period: 'May 2025 – Oct 2025',
     location: 'San Francisco, CA',
     responsibilities: [
-      'Building sales and procurement automation tools for manufacturers as employee #2',
+      'Sales and procurement automation tools for manufacturers as employee #2',
     ],
     skills: [
-      { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
-      { name: 'Node.js', icon: 'simple-icons:nodedotjs' },
-      { name: 'AWS', icon: 'simple-icons:amazonaws' },
+      // { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
+      // { name: 'Node.js', icon: 'simple-icons:nodedotjs' },
     ],
   },
   {
@@ -245,27 +237,25 @@ const experiences = [
     period: 'Dec 2024 – May 2025',
     location: 'Durham, NC',
     responsibilities: [
-      'Developed AI-powered document analysis tools for medical research workflows',
+      'Literature and news analysis tools for medical research workflows',
     ],
     skills: [
-      { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
-      { name: 'FastAPI', icon: 'simple-icons:fastapi' },
-      { name: 'AWS', icon: 'simple-icons:amazonaws' },
+      // { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
+      // { name: 'FastAPI', icon: 'simple-icons:fastapi' },
     ],
   },
   {
     role: 'Software Engineer Intern',
-    company: 'Life Edit Therapeutics',
+    company: 'Life Edit',
     website: 'https://lifeeditinc.com/',
     logo: 'Icons/Lifeedit.tsx',
     period: 'Sep 2024 – May 2025',
     location: 'Durham, NC',
     responsibilities: [
-      'Built RNA-seq analysis dashboard and validation pipeline for CRISPR experiments',
+      'RNA-seq analysis dashboard and validation pipeline for CRISPR experiments',
     ],
     skills: [
-      { name: 'Python', icon: 'simple-icons:python' },
-      { name: 'Dash', icon: 'simple-icons:plotly' },
+      // { name: 'LangGraph', icon: 'simple-icons:langchain' },
     ],
   },
   {
@@ -276,26 +266,25 @@ const experiences = [
     location: 'Durham, NC',
     website: 'https://sites.duke.edu/navid/',
     responsibilities: [
-      <>Developed continual learning model for antibody-antibody affinity prediction (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">1 pre-print</a>)</>,
+      <>Continual learning model for antibody-antibody affinity prediction (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">1 pre-print</a>)</>,
     ],
     skills: [
-      { name: 'Python', icon: 'simple-icons:python' },
-      { name: 'PyTorch', icon: 'simple-icons:pytorch' },
+      // { name: 'PyTorch', icon: 'simple-icons:pytorch' },
     ],
   },
   {
     role: 'Software Engineer Intern',
-    company: 'Duke Institute for Health Innovation',
+    company: 'DIHI',
     website: 'https://dihi.org/',
     logo: 'Icons/DIHI.tsx',
     period: 'Jun 2024 – Aug 2024',
     location: 'Durham, NC',
     responsibilities: [
-      'Built automated literature review systems and medical record analysis tools for health innovation',
+      'Automated literature review system and medical record analysis tools',
     ],
     skills: [
-      { name: 'Python', icon: 'simple-icons:python' },
-      { name: 'Docker', icon: 'simple-icons:docker' },
+      // { name: 'React', icon: 'simple-icons:react' },
+      // { name: 'FastAPI', icon: 'simple-icons:fastapi' },
     ],
   },
   {
@@ -306,28 +295,26 @@ const experiences = [
     period: 'Nov 2023 – Feb 2024',
     location: 'Princeton, NJ',
     responsibilities: [
-      'Built survey platform and NLP classification tools for population health research studies',
+      'Survey platform with NLP tools for population health researchers',
     ],
     skills: [
-      { name: 'React', icon: 'simple-icons:react' },
-      { name: 'Node.js', icon: 'simple-icons:nodedotjs' },
-      { name: 'AWS', icon: 'simple-icons:amazonaws' },
+      // { name: 'React', icon: 'simple-icons:react' },
+      // { name: 'Node.js', icon: 'simple-icons:nodedotjs' },
     ],
   },
   {
     role: 'ML Research Assistant',
-    company: 'Saudi Aramco + KFUPM',
+    company: 'Saudi Aramco',
     website: 'https://www.aramco.com/',
     logo: 'Icons/Aramco.tsx',
     period: 'Jul 2022 – Sep 2023',
     location: 'Dhahran, Saudi Arabia',
     responsibilities: [
-      <>Developed models and performed synthesis for CO₂ capture with polymers (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">3 publications</a>)</>,
+      <>ML and polymer synthesis for CO₂ capture (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">3 publications</a>)</>,
     ],
     skills: [
-      { name: 'Python', icon: 'simple-icons:python' },
-      { name: 'LAMMPS', icon: 'simple-icons:moleculer' },
-      { name: 'Materials Science', icon: 'mdi:molecule' },
+      // { name: 'Python', icon: 'simple-icons:python' },
+      // { name: 'Materials Science', icon: 'mdi:molecule' },
     ],
   },
 ];

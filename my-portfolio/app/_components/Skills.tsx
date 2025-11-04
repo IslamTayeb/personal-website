@@ -85,10 +85,10 @@ export const Skills = () => {
         <Table className="">
           <TableHeader>
             <TableRow>
-              <TableHead className="text-left w-1/6 font-extrabold text-foreground">
+              <TableHead className="text-left w-1/6 font-medium text-foreground">
                 Category
               </TableHead>
-              <TableHead className="text-left w-5/6 font-extrabold text-foreground">
+              <TableHead className="text-left w-5/6 font-medium text-foreground">
                 Technologies
               </TableHead>
             </TableRow>

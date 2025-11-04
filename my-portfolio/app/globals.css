@@ -256,7 +256,7 @@
   }
   .project-info {
     z-index: 5;
-    width: 550px;
+    width: 520px;
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -279,6 +279,8 @@
   .project-info-description {
     background-color: hsl(var(--card));
     border-radius: 0.25rem;
+    display: inline-block;
+    width: fit-content;
   }
   .project-info-description p {
     color: hsl(var(--muted-foreground));
