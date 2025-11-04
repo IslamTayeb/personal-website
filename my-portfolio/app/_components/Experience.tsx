@@ -109,22 +109,6 @@ export function Experience() {
                     <h3 className="font-medium text-base leading-tight font-sans text-primary">
                       {experience.role}
                     </h3>
-                    {experience.status === 'present' && (
-                      <Badge
-                        variant="default"
-                        className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
-                      >
-                        Present
-                      </Badge>
-                    )}
-                    {experience.status === 'incoming' && (
-                      <Badge
-                        variant="secondary"
-                        className="rounded-full font-semibold text-[0.4em] p-[0.165rem] h-fit text-nowrap font-mono leading-none px-1"
-                      >
-                        Incoming
-                      </Badge>
-                    )}
                     {experience.company === 'Soff' && (
                       <Badge
                         variant="outline"
@@ -165,7 +149,7 @@ export function Experience() {
             </div>
 
             {/* Skills */}
-            {experience.skills && experience.skills.length > 0 && (
+            {/* {experience.skills && experience.skills.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 {experience.skills.map((skill, skillIndex) => (
                   <Code key={skillIndex}>
@@ -180,7 +164,7 @@ export function Experience() {
                   </Code>
                 ))}
               </div>
-            )}
+            )} */}
           </div>
         </div>
       ))}
