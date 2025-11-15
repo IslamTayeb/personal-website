@@ -59,9 +59,10 @@ export const Applets = () => {
     {
       name: 'Config Files',
       description:
-        'Working on centralizing all my dotfiles and common CLI/Raycast tools into one repository.',
-      links: {},
-      wip: true,
+        'Nix-managed dotfiles for shell/editor config. Includes Neovim, Zsh, Tmux.',
+      links: {
+        github: 'https://github.com/IslamTayeb/dotfiles',
+      },
     },
   ];
 
