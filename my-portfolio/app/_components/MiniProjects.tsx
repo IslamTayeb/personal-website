@@ -11,10 +11,21 @@ import {
 } from '@/components/ui/tooltip';
 import { Section } from './Misc/Section';
 
+type MiniProject = {
+  name: string;
+  description: string;
+  links: {
+    github: string;
+    externalLink?: string;
+  };
+  new?: boolean;
+  wip?: boolean;
+};
+
 export const Applets = () => {
   const [showAll, setShowAll] = useState(false);
 
-  const miniProjectsData = [
+  const miniProjectsData: MiniProject[] = [
     {
       name: 'Interview Solve Log',
       description:
@@ -102,7 +113,7 @@ export const Applets = () => {
               <span className="font-medium text-primary leading-tight text-md">
                 {project.name}
               </span>
-              {'new' in project && (project as { new?: boolean }).new && (
+              {project.new && (
                 <Badge
                   variant="default"
                   className="rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono"
