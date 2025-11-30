@@ -49,9 +49,9 @@ export default function Home() {
 
       <Applets />
 
-      <Spacing height={height} />
+      {/* <Spacing height={height} /> */}
 
-      <Skills />
+      {/* <Skills /> */}
 
       <Spacing height={height} />
 
