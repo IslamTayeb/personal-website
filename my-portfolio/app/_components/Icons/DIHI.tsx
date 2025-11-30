@@ -6,11 +6,11 @@ export const DIHI = (
   return (
     <svg
       xmlns="http://www.w3.org/2000/ svg"
-      viewBox="0 0 339.13 373.31"
+      viewBox="0 0 339 373"
       height={props.size}
       {...props}
       fill="currentColor"
-      className="p-0.5"
+      className="p-1"
     >
       <defs></defs>
       <title>DIHI-Logo</title>

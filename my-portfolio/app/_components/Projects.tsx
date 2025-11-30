@@ -12,7 +12,7 @@ export const Projects = () => {
   const projectsData = [
     {
       image: '/HeliumRaycast.mp4',
-      projectName: 'Helium Browser Extension for Raycast',
+      projectName: 'Helium Browser Raycast Extension',
       new: true,
       wip: false,
       projectDescription: (

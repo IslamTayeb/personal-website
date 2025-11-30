@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { Mail } from 'lucide-react';
 import { Icon } from '@iconify/react/dist/iconify.js';
+import { DefaultIcon } from './sharedComponents';
 export const Header = () => {
   const email = 'islam.tayeb@duke.edu';
 
@@ -10,9 +10,7 @@ export const Header = () => {
     <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80 h-12 border-b border-dashed">
       <div className="flex max-w-3xl m-auto px-4">
         <h1 className="text-lg font-normal text-primary leading-none my-auto">
-          <Link href="#hero" className="leading-none">
-            (Islam M)<sup className="ml-0.5">2</sup> Tayeb
-          </Link>
+            (Islam M)<sup>2</sup> Tayeb
         </h1>
         <div className="flex-1" />
         <ul className="flex gap-2">
@@ -26,8 +24,8 @@ export const Header = () => {
             )}
           >
             <span className="flex items-center justify-center px-1 py-0">
-              <Icon icon="lucide:command" className="text-foreground w-3 h-3" />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
+              <DefaultIcon icon="lucide:command" className="inline text-current mt-0" />
+              <p className="text-foreground m-0 leading-none inline max-sm:hidden underline group-hover:no-underline ml-[0.4em]">
                 Blog
               </p>
             </span>
@@ -41,8 +39,8 @@ export const Header = () => {
             title="Send email"
           >
             <span className="flex items-center justify-center px-1 py-0">
-              <Mail size={12} className="text-foreground -mt-[0.1em]" />
-              <p className="text-foreground m-0 leading-none text-xs inline max-sm:hidden ml-[0.35em] underline group-hover:no-underline">
+              <DefaultIcon icon="lucide:mail" className="inline text-current mt-0" />
+              <p className="text-foreground m-0 leading-none inline max-sm:hidden underline group-hover:no-underline ml-[0.4em]">
                 Email
               </p>
             </span>

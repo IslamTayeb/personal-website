@@ -106,7 +106,14 @@ export const Hero = () => {
                 <UnderlineSpan>Monkeytype</UnderlineSpan>
               </Code>
             </ExternalLink>{' '}
-            in my free time.
+            in my free time. I&apos;ve also been writing a bit, check out{' '}
+            <ExternalLink href="https://apmoverflow.xyz/">
+              <Code>
+                <DefaultIcon icon="lucide:command" />{' '}
+                <UnderlineSpan>APM Overflow</UnderlineSpan>
+              </Code>
+            </ExternalLink>
+            .
           </p>
 
           <p className="font-sans text-muted-foreground text-pretty">
@@ -147,8 +154,7 @@ export const Hero = () => {
           </p>
           <p className="font-sans text-muted-foreground text-pretty">
             I initially came to Duke as a pre-med computational chemist, but
-            kept gravitating toward the &quot;computational&quot; part until I
-            started building.
+            kept gravitating toward the &quot;computational&quot; part.
           </p>
 
           <p className="font-sans text-muted-foreground text-pretty">

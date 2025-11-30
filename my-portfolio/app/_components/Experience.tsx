@@ -58,7 +58,7 @@ export function Experience() {
       if (componentName && componentName in logoComponentRegistry) {
         const LogoComponent =
           logoComponentRegistry[
-            componentName as keyof typeof logoComponentRegistry
+          componentName as keyof typeof logoComponentRegistry
           ];
         return <LogoComponent className="w-full h-full" />;
       }
@@ -74,7 +74,7 @@ export function Experience() {
     return (
       <Avatar className="w-12 h-12 flex items-center justify-center rounded-md min-w-12 min-h-12">
         {typeof logo === 'string' &&
-        (logo.startsWith('http') || logo.startsWith('/')) ? (
+          (logo.startsWith('http') || logo.startsWith('/')) ? (
           <AvatarImage src={logo} className="object-contain" />
         ) : (
           <DefaultIcon icon={logo} className="w-6 h-6" />
@@ -92,39 +92,38 @@ export function Experience() {
         Experience
       </Badge>
       {visibleExperiences.map((experience, index) => (
-        <div
-          key={index}
-          className="border border-dashed rounded-lg p-3 bg-card hover:bg-card/50 transition-colors"
-        >
-          <div className="flex flex-col gap-2">
-            {/* Logo + Role + Company + Date on same line */}
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-12 h-12 min-w-12 min-h-12 text-primary">
-                {renderLogo(experience.logo, experience.company)}
-              </div>
-              <div className="flex-1 flex flex-col gap-1">
-                {/* Role + Company + Date */}
-                <div className="flex items-center gap-2 justify-between leading-tight">
-                  <div className="flex items-center gap-2 flex-wrap leading-tight">
-                    <h3 className="font-medium text-base leading-tight font-sans text-primary">
-                      {experience.role}
-                    </h3>
-                    {experience.company === 'Soff' && (
-                      <Badge
-                        variant="outline"
-                        className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono leading-none"
-                      >
-                        Employee #2
-                      </Badge>
-                    )}
-                    <span className="text-muted-foreground font-normal text-base leading-tight -ml-2">,</span>
-                    <span className="text-muted-foreground font-normal text-base font-sans leading-tight">
+        <div key={index}>
+          <div
+            className="border border-dashed rounded-lg p-3 bg-card hover:bg-card/50 transition-colors"
+          >
+            {/* Main Content Section */}
+            <div className="flex flex-col gap-2 flex-1">
+              {/* Logo + Role + Company + Date on same line */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-12 h-12 min-w-12 min-h-12 text-primary">
+                  {renderLogo(experience.logo, experience.company)}
+                </div>
+                <div className="flex-1 flex flex-col gap-1">
+                  {/* Role + Company + Date */}
+                  <div className="flex items-center gap-2 justify-between leading-tight flex-wrap">
+                    <span className="flex items-center leading-tight">
+                      <span className="font-medium text-base leading-tight font-sans text-primary">
+                        {experience.role}<span className="text-muted-foreground font-normal text-base leading-tight ">,{'\u00A0'}</span>
+                      </span>
+                      {experience.company === 'Soff' && (
+                        <Badge
+                          variant="outline"
+                          className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono leading-none"
+                        >
+                          Employee #2
+                        </Badge>
+                      )}
                       {experience.website ? (
                         <a
                           href={experience.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-normal font-sans inline-flex items-center text-muted-foreground underline-2 hover:no-underline gap-0.5 underline leading-tight"
+                          className="font-normal font-sans text-muted-foreground underline hover:no-underline leading-tight"
                         >
                           {experience.company}
                         </a>
@@ -134,37 +133,19 @@ export function Experience() {
                         </span>
                       )}
                     </span>
+                    {experience.period && (
+                      <span className="font-light text-muted-foreground text-sm whitespace-nowrap leading-tight">
+                        {experience.period}
+                      </span>
+                    )}
                   </div>
-                  {experience.period && (
-                    <span className="font-light text-muted-foreground text-sm whitespace-nowrap leading-tight">
-                      {experience.period}
-                    </span>
-                  )}
+                  {/* Description with integrated skills */}
+                  <p className="text-muted-foreground font-normal text-base font-sans leading-tight">
+                    {experience.responsibilities[0]}
+                  </p>
                 </div>
-                {/* Description */}
-                <p className="text-muted-foreground font-normal text-base font-sans leading-tight">
-                  {experience.responsibilities[0]}
-                </p>
               </div>
             </div>
-
-            {/* Skills */}
-            {/* {experience.skills && experience.skills.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {experience.skills.map((skill, skillIndex) => (
-                  <Code key={skillIndex}>
-                    <span className="flex items-center gap-1.5 h-4 text-sm">
-                      <DefaultIcon
-                        icon={skill.icon}
-                        className="inline text-current mt-[0.75px]"
-                        height="14px"
-                      />
-                      {skill.name}
-                    </span>
-                  </Code>
-                ))}
-              </div>
-            )} */}
           </div>
         </div>
       ))}
@@ -191,12 +172,18 @@ const experiences = [
     location: 'Durham, NC',
     website: 'https://www.romerolab.org/',
     responsibilities: [
-      'Protocol mining and similarity search for enzyme assays',
+      <>
+        Enzyme protocol mining tools using{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:pytorch" className="inline text-current" height="14px" /> PyTorch
+        </Code>{' '}
+        and services in{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
+        </Code>
+      </>,
     ],
-    skills: [
-      // { name: 'PyTorch', icon: 'simple-icons:pytorch' },
-      // { name: 'FastAPI', icon: 'simple-icons:fastapi' },
-    ],
+    skills: [],
   },
   {
     role: 'Software Engineer Intern',
@@ -206,12 +193,19 @@ const experiences = [
     period: 'May 2025 – Oct 2025',
     location: 'San Francisco, CA',
     responsibilities: [
-      'Sales and procurement automation tools for manufacturers as employee #2',
+      <>
+        Sales intelligence for manufacturers using{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:nextdotjs" className="inline text-current" height="14px" /> Next.js
+        </Code>{' '}
+        and{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:trpc" className="inline text-current" height="14px" /> tRPC
+        </Code>{' '}
+        as employee #2
+      </>,
     ],
-    skills: [
-      // { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
-      // { name: 'Node.js', icon: 'simple-icons:nodedotjs' },
-    ],
+    skills: [],
   },
   {
     role: 'Software Engineer Intern',
@@ -221,12 +215,18 @@ const experiences = [
     period: 'Dec 2024 – May 2025',
     location: 'Durham, NC',
     responsibilities: [
-      'Literature and news analysis tools for medical research workflows',
+      <>
+        Literature analysis tools for medical research using{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:nextdotjs" className="inline text-current" height="14px" /> Next.js
+        </Code>{' '}
+        and{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
+        </Code>
+      </>,
     ],
-    skills: [
-      // { name: 'Next.js', icon: 'simple-icons:nextdotjs' },
-      // { name: 'FastAPI', icon: 'simple-icons:fastapi' },
-    ],
+    skills: [],
   },
   {
     role: 'Software Engineer Intern',
@@ -236,11 +236,14 @@ const experiences = [
     period: 'Sep 2024 – May 2025',
     location: 'Durham, NC',
     responsibilities: [
-      'RNA-seq analysis dashboard and validation pipeline for CRISPR experiments',
+      <>
+        Built RNA-seq analysis dashboard for CRISPR experiments using{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:langchain" className="inline text-current" height="14px" /> LangGraph
+        </Code>
+      </>,
     ],
-    skills: [
-      // { name: 'LangGraph', icon: 'simple-icons:langchain' },
-    ],
+    skills: [],
   },
   {
     role: 'ML Research Assistant',
@@ -250,11 +253,15 @@ const experiences = [
     location: 'Durham, NC',
     website: 'https://sites.duke.edu/navid/',
     responsibilities: [
-      <>Continual learning model for antibody-antibody affinity prediction (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">1 pre-print</a>)</>,
+      <>
+        Continual learning model for antibody affinity prediction using{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:pytorch" className="inline text-current" height="14px" /> PyTorch
+        </Code>{' '}
+        (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">1 pre-print</a>)
+      </>,
     ],
-    skills: [
-      // { name: 'PyTorch', icon: 'simple-icons:pytorch' },
-    ],
+    skills: [],
   },
   {
     role: 'Software Engineer Intern',
@@ -264,12 +271,18 @@ const experiences = [
     period: 'Jun 2024 – Aug 2024',
     location: 'Durham, NC',
     responsibilities: [
-      'Automated literature review system and medical record analysis tools',
+      <>
+        Automated literature review system using{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:react" className="inline text-current" height="14px" /> React
+        </Code>{' '}
+        and {' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
+        </Code>
+      </>,
     ],
-    skills: [
-      // { name: 'React', icon: 'simple-icons:react' },
-      // { name: 'FastAPI', icon: 'simple-icons:fastapi' },
-    ],
+    skills: [],
   },
   {
     role: 'Software Engineer Intern',
@@ -279,12 +292,18 @@ const experiences = [
     period: 'Nov 2023 – Feb 2024',
     location: 'Princeton, NJ',
     responsibilities: [
-      'Survey platform with NLP tools for population health researchers',
+      <>
+        Survey platform with NLP tools using{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:react" className="inline text-current" height="14px" /> React
+        </Code>{' '}
+        and{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:nodedotjs" className="inline text-current" height="14px" /> Node.js
+        </Code>
+      </>,
     ],
-    skills: [
-      // { name: 'React', icon: 'simple-icons:react' },
-      // { name: 'Node.js', icon: 'simple-icons:nodedotjs' },
-    ],
+    skills: [],
   },
   {
     role: 'ML Research Assistant',
@@ -294,11 +313,15 @@ const experiences = [
     period: 'Jul 2022 – Sep 2023',
     location: 'Dhahran, Saudi Arabia',
     responsibilities: [
-      <>ML and polymer synthesis for CO₂ capture (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">3 publications</a>)</>,
+      <>
+        Traditional ML polymer synthesis for CO₂ capture using{' '}
+        <Code>
+          <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
+        </Code>
+        {' '}
+        (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">3 publications</a>)
+      </>,
     ],
-    skills: [
-      // { name: 'Python', icon: 'simple-icons:python' },
-      // { name: 'Materials Science', icon: 'mdi:molecule' },
-    ],
+    skills: [],
   },
 ];

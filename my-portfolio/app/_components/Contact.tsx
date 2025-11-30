@@ -80,7 +80,7 @@ const contactsData: ContactItem[] = [
   },
   {
     id: 'scholar',
-    label: 'Google Scholar',
+    label: 'Scholar',
     icon: 'fa6-brands:google-scholar',
     href: 'https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ',
     isCopyable: false,

@@ -92,7 +92,7 @@ export const Applets = () => {
             <TooltipTrigger asChild>
               <Info
                 size={14}
-                className="text-muted-foreground/70 hover:text-primary/80 transition-colors"
+                className="text-muted-foreground/70 transition-colors"
                 aria-label="About mini projects"
               />
             </TooltipTrigger>
@@ -134,7 +134,7 @@ export const Applets = () => {
                   {project.links.externalLink && (
                     <Link
                       href={project.links.externalLink}
-                      className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary underline hover:no-underline transition-colors"
+                      className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground underline hover:no-underline transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -145,7 +145,7 @@ export const Applets = () => {
                   {project.links.github && (
                     <Link
                       href={project.links.github}
-                      className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground hover:text-primary underline hover:no-underline transition-colors"
+                      className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground underline hover:no-underline transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -165,7 +165,7 @@ export const Applets = () => {
 
       <button
         onClick={() => setShowAll(!showAll)}
-        className="text-xs leading-none ml-auto text-muted-foreground/80 mt-3 justify-end flex items-center underline hover:no-underline font-mono tracking-wide hover:text-primary transition-colors"
+        className="text-xs leading-none ml-auto text-muted-foreground/80 mt-3 justify-end flex items-center underline hover:no-underline font-mono tracking-wide transition-colors"
       >
         {showAll ? 'See less...' : 'See more...'}
       </button>
