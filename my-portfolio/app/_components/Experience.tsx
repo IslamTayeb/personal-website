@@ -237,9 +237,9 @@ const experiences = [
     location: 'Durham, NC',
     responsibilities: [
       <>
-        Built RNA-seq analysis dashboard for CRISPR experiments using{' '}
+        Non-linear RNA-seq analysis and dashboard for CRISPR experiments using{' '}
         <Code>
-          <DefaultIcon icon="simple-icons:langchain" className="inline text-current" height="14px" /> LangGraph
+          <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
         </Code>
       </>,
     ],
