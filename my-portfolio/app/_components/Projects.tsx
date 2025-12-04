@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { LucideGithub, Link2 } from 'lucide-react';
-import React, { useState } from 'react';
+import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Section } from './Misc/Section';
 import { Icon } from '@iconify/react';
@@ -16,36 +16,25 @@ const VideoWithPlaceholder = ({
   videoSrc: string;
   placeholderSrc: string;
   projectName: string;
-}) => {
-  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
-
-  return (
-    <div className="group project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100 relative border border-border/50 rounded-sm max-md:rounded-lg">
-      {!isVideoLoaded && (
-        <div className="absolute inset-0 w-full h-full animate-pulse-opacity group-hover:[animation-play-state:paused]">
-          <Image
-            src={placeholderSrc}
-            fill
-            alt={projectName}
-            quality={100}
-            className="object-cover"
-          />
-        </div>
-      )}
-      <video
-        src={videoSrc}
-        autoPlay
-        loop
-        muted
-        playsInline
-        onCanPlay={() => setIsVideoLoaded(true)}
-        className={`absolute inset-0 w-full h-full object-cover transition-opacity ${
-          isVideoLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-      />
-    </div>
-  );
-};
+}) => (
+  <div className="project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100 relative">
+    <Image
+      src={placeholderSrc}
+      fill
+      alt={projectName}
+      quality={100}
+      className="object-cover"
+    />
+    <video
+      src={videoSrc}
+      autoPlay
+      loop
+      muted
+      playsInline
+      className="absolute inset-0 w-full h-full object-cover"
+    />
+  </div>
+);
 
 export const Projects = () => {
   const projectsData = [
