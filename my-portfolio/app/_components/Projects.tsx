@@ -2,16 +2,56 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { LucideGithub, Link2 } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Section } from './Misc/Section';
 import { Icon } from '@iconify/react';
 import { Code, DefaultIcon } from './sharedComponents';
 
+const VideoWithPlaceholder = ({
+  videoSrc,
+  placeholderSrc,
+  projectName,
+}: {
+  videoSrc: string;
+  placeholderSrc: string;
+  projectName: string;
+}) => {
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+  return (
+    <div className="group project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100 relative border border-border/50 rounded-sm max-md:rounded-lg">
+      {!isVideoLoaded && (
+        <div className="absolute inset-0 w-full h-full animate-pulse-opacity group-hover:[animation-play-state:paused]">
+          <Image
+            src={placeholderSrc}
+            fill
+            alt={projectName}
+            quality={100}
+            className="object-cover"
+          />
+        </div>
+      )}
+      <video
+        src={videoSrc}
+        autoPlay
+        loop
+        muted
+        playsInline
+        onCanPlay={() => setIsVideoLoaded(true)}
+        className={`absolute inset-0 w-full h-full object-cover transition-opacity ${
+          isVideoLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+      />
+    </div>
+  );
+};
+
 export const Projects = () => {
   const projectsData = [
     {
       image: '/HeliumRaycast.mp4',
+      lockImage: '/HeliumRaycastLock.webp',
       projectName: 'Helium Browser Raycast Extension',
       new: true,
       wip: false,
@@ -30,7 +70,7 @@ export const Projects = () => {
         'simple-icons:typescript',
         'simple-icons:raycast',
         'mdi:apple',
-        'simple-icons:sqlite',
+        'file-icons:sqlite',
       ],
       projectExternalLinks: {
         github: 'https://github.com/raycast/extensions/pull/22290',
@@ -39,6 +79,7 @@ export const Projects = () => {
     },
     {
       image: '/Etchr.mp4',
+      lockImage: '/EtchrLock.webp',
       projectName: 'GitHub README Generator',
       new: false,
       wip: false,
@@ -75,6 +116,7 @@ export const Projects = () => {
           (
             {
               image,
+              lockImage,
               projectDescription,
               projectExternalLinks,
               projectName,
@@ -190,8 +232,14 @@ export const Projects = () => {
                 </div>
 
                 <div className="project-image overflow-hidden scale-95 rounded-sm border border-border/50 max-md:rounded-lg">
-                  {image.endsWith('.mp4') ? (
-                    <div className="project-image-container opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100">
+                  {image.endsWith('.mp4') && lockImage ? (
+                    <VideoWithPlaceholder
+                      videoSrc={image}
+                      placeholderSrc={lockImage}
+                      projectName={projectName}
+                    />
+                  ) : image.endsWith('.mp4') ? (
+                    <div className="project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100">
                       <video
                         src={image}
                         autoPlay

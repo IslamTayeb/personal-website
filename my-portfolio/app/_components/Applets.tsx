@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/tooltip';
 import { Section } from './Misc/Section';
 
-type MiniProject = {
+type Applet = {
   name: string;
   description: string;
   links: {
@@ -25,11 +25,11 @@ type MiniProject = {
 export const Applets = () => {
   const [showAll, setShowAll] = useState(false);
 
-  const miniProjectsData: MiniProject[] = [
+  const appletsData: Applet[] = [
     {
       name: 'Interview Solve Log',
       description:
-        'Centralize all my leetcode/neetcode prep into a repository with a simple interface',
+        'Centralize all my leetcode/neetcode prep into a repository with a simple interface.',
       links: {
         github: 'https://github.com/IslamTayeb/solve-log',
         externalLink: 'https://solve-log.lovable.app/',
@@ -77,9 +77,9 @@ export const Applets = () => {
     },
   ];
 
-  const displayedProjects = showAll
-    ? miniProjectsData
-    : miniProjectsData.slice(0, 3);
+  const displayedApplets = showAll
+    ? appletsData
+    : appletsData.slice(0, 3);
 
   return (
     <Section className="font-sans flex-col gap-4">
@@ -104,16 +104,16 @@ export const Applets = () => {
       </div>
 
       <div className="w-full divide-y divide-border">
-        {displayedProjects.map((project) => (
+        {displayedApplets.map((applet) => (
           <div
-            key={project.name}
+            key={applet.name}
             className="py-2.5 px-2.5 hover:bg-muted/50 transition-colors"
           >
             <div className="flex items-center gap-2">
               <span className="font-medium text-primary leading-tight text-md">
-                {project.name}
+                {applet.name}
               </span>
-              {project.new && (
+              {applet.new && (
                 <Badge
                   variant="default"
                   className="rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono"
@@ -121,7 +121,7 @@ export const Applets = () => {
                   New
                 </Badge>
               )}
-              {project.wip && (
+              {applet.wip && (
                 <Badge
                   variant="secondary"
                   className="rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono"
@@ -129,11 +129,11 @@ export const Applets = () => {
                   WIP
                 </Badge>
               )}
-              {(project.links.github || project.links.externalLink) && (
+              {(applet.links.github || applet.links.externalLink) && (
                 <div className="ml-auto flex gap-3">
-                  {project.links.externalLink && (
+                  {applet.links.externalLink && (
                     <Link
-                      href={project.links.externalLink}
+                      href={applet.links.externalLink}
                       className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground underline hover:no-underline transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -142,9 +142,9 @@ export const Applets = () => {
                       Link
                     </Link>
                   )}
-                  {project.links.github && (
+                  {applet.links.github && (
                     <Link
-                      href={project.links.github}
+                      href={applet.links.github}
                       className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground underline hover:no-underline transition-colors"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -157,7 +157,7 @@ export const Applets = () => {
               )}
             </div>
             <p className="text-base text-muted-foreground leading-relaxed mt-0.5">
-              {project.description}
+              {applet.description}
             </p>
           </div>
         ))}

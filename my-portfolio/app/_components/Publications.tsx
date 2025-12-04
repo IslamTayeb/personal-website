@@ -1,6 +1,5 @@
-import React, { ComponentPropsWithoutRef } from 'react';
+import React from 'react';
 import { Section } from './Misc/Section';
-import { motion } from 'framer-motion';
 import { Badge } from '@/components/ui/badge';
 import {
   Accordion,
@@ -8,8 +7,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordionv3';
-import { cn } from '@/lib/utils';
-import { Icon } from '@iconify/react';
 import {
   Tooltip,
   TooltipContent,
@@ -17,9 +14,6 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import Link from 'next/link';
-import { ArrowUpRight, Link as Link2, LucideGithub } from 'lucide-react';
-import { Separator } from '@/components/ui/separator';
-import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { Code, DefaultIcon } from './sharedComponents';
 
 export const Publications = () => {
@@ -226,7 +220,7 @@ export const Publications = () => {
                             </div>
                           </div>
                         </div>
-                        <AccordionContent className="mr-8 pb-3 pt-1 font-light text-base">
+                        <AccordionContent className="mr-8 pb-3 pt-1 font-normal text-base text-muted-foreground">
                           {pubDescription}
                         </AccordionContent>
                         <div className="flex flex-wrap gap-2 mt-0.5">

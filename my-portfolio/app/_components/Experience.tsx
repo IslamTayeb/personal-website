@@ -7,6 +7,7 @@ import { Section } from './Misc/Section';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import dynamic from 'next/dynamic';
 import { useState } from 'react';
+import Link from 'next/link';
 
 // Create a component registry object
 const logoComponentRegistry = {
@@ -119,14 +120,14 @@ export function Experience() {
                         </Badge>
                       )}
                       {experience.website ? (
-                        <a
+                        <Link
                           href={experience.website}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="font-normal font-sans text-muted-foreground underline hover:no-underline leading-tight"
                         >
                           {experience.company}
-                        </a>
+                        </Link>
                       ) : (
                         <span className="font-normal font-sans text-muted-foreground/80 leading-tight">
                           {experience.company}
@@ -200,7 +201,7 @@ const experiences = [
         </Code>{' '}
         and{' '}
         <Code>
-          <DefaultIcon icon="simple-icons:trpc" className="inline text-current" height="14px" /> tRPC
+          <DefaultIcon icon="devicon-plain:trpc" className="inline text-current" height="14px" /> tRPC
         </Code>{' '}
         as employee #2
       </>,
