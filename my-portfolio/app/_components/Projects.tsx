@@ -39,7 +39,7 @@ const VideoWithPlaceholder = ({
 export const Projects = () => {
   const projectsData = [
     {
-      image: '/HeliumRaycast.mp4',
+      image: '/HeliumRaycast.webm',
       lockImage: '/HeliumRaycastLock.webp',
       projectName: 'Helium Browser Raycast Extension',
       new: true,
@@ -67,7 +67,7 @@ export const Projects = () => {
       },
     },
     {
-      image: '/Etchr.mp4',
+      image: '/Etchr.webm',
       lockImage: '/EtchrLock.webp',
       projectName: 'GitHub README Generator',
       new: false,
@@ -221,13 +221,13 @@ export const Projects = () => {
                 </div>
 
                 <div className="project-image overflow-hidden scale-95 rounded-sm border border-border/50 max-md:rounded-lg">
-                  {image.endsWith('.mp4') && lockImage ? (
+                  {image.endsWith('.webm') && lockImage ? (
                     <VideoWithPlaceholder
                       videoSrc={image}
                       placeholderSrc={lockImage}
                       projectName={projectName}
                     />
-                  ) : image.endsWith('.mp4') ? (
+                  ) : image.endsWith('.webm') ? (
                     <div className="project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100">
                       <video
                         src={image}
