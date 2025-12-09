@@ -48,8 +48,8 @@ export const Publications = () => {
             >
               2
             </span>{' '}
-            adsorption capacity in porous organic polymers. Using gradient
-            boosting and genetic algorithms, achieved R² = 0.963 accuracy.
+            adsorption capacity in porous organic polymers. Used gradient
+            boosting and genetic algorithms.
           </p>
           <p>
             I helped develop the ML framework, performed data curation and
@@ -57,19 +57,19 @@ export const Publications = () => {
           </p>
         </>
       ),
-      pubLink: 'https://authors.elsevier.com/c/1lnQz7tGO~Vp7o',
+      pubLink: 'https://doi.org/10.1016/j.jece.2025.119315',
       pubCategory: [
         {
           name: 'Python',
           icon: 'simple-icons:python',
         },
         {
-          name: 'Carbon Capture',
-          icon: 'carbon:chemistry',
-        },
-        {
           name: 'Traditional ML',
           icon: 'icon-park-outline:tree-diagram',
+        },
+        {
+          name: 'Carbon Capture',
+          icon: 'mdi:leaf',
         },
       ],
     },
@@ -108,11 +108,91 @@ export const Publications = () => {
         },
         {
           name: 'Protein Design',
-          icon: 'fluent:molecule-16-filled',
+          icon: 'mdi:dna',
         },
         {
           name: 'Continual Learning',
           icon: 'mdi:brain',
+        },
+      ],
+    },
+    {
+      pubDate: 'Jan 2024',
+      pubAuthors: (
+        <>
+          Mahmoud Abdelnaby,{' '}
+          <span className="font-semibold text-primary">Islam Tayeb</span>, Ahmed
+          Alloush, Hussain Alyosef, Aljazi Alnoaimi, Mostafa Zeama, Mohammed
+          Mohammed, Sagheer Onaizi
+        </>
+      ),
+      pubImpact: 'Impact Factor: 8.4',
+      pubTitle:
+        'Post-synthetic Modification of UiO-66 Analogue Metal-Organic Framework as Potential Solid Sorbent for Direct Air Capture',
+      pubJournal: (
+        <>
+          Journal of CO
+          <span
+            style={{
+              verticalAlign: 'sub',
+              fontSize: 8,
+              lineHeight: '1',
+            }}
+          >
+            2
+          </span>{' '}
+          Utilization
+        </>
+      ),
+      pubJournalLink:
+        'https://www.journals.elsevier.com/journal-of-co2-utilization',
+      pubType: 'Research Article',
+      pubDescription: (
+        <>
+          <p className="mb-1.5">
+            Modified a metal-organic framework polymer to better capture CO
+            <span
+              style={{
+                verticalAlign: 'sub',
+                fontSize: 7.25,
+                lineHeight: '1',
+                fontWeight: 'bold',
+              }}
+            >
+              2
+            </span>{' '}
+            directly from air. The modified version captured 15% more CO
+            <span
+              style={{
+                verticalAlign: 'sub',
+                fontSize: 7.25,
+                lineHeight: '1',
+                fontWeight: 'bold',
+              }}
+            >
+              2
+            </span>{' '}
+            than the original material.
+          </p>
+          <p>
+            I designed and synthesized the materials in the lab, characterized
+            their properties, and helped write the paper.
+          </p>
+        </>
+      ),
+      pubLink: 'https://doi.org/10.1016/j.jcou.2023.102647',
+      pubCategory: [
+        {
+          name: 'Wet Lab',
+          icon: 'mdi:flask-outline',
+        },
+        {
+          name: 'Materials Synthesis',
+          icon: 'mdi:atom',
+        },
+        {
+          name: 'Carbon Capture',
+          icon: 'mdi:leaf',
         },
       ],
     },

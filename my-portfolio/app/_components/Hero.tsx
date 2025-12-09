@@ -106,11 +106,11 @@ export const Hero = () => {
                 <UnderlineSpan>Monkeytype</UnderlineSpan>
               </Code>
             </ExternalLink>{' '}
-            in my free time. I&apos;ve also been writing a bit, check out{' '}
+            in my free time. I&apos;ve also been writing a bit, check out my{' '}
             <ExternalLink href="https://apmoverflow.xyz/">
               <Code>
                 <DefaultIcon icon="lucide:command" />{' '}
-                <UnderlineSpan>APM Overflow</UnderlineSpan>
+                <UnderlineSpan>blog</UnderlineSpan>
               </Code>
             </ExternalLink>
             .

@@ -243,8 +243,8 @@ export const Contact = () => {
                 )}
               />
               <div className="pt-2">
-                <Button type="submit" className="w-full " disabled={isSending}>
-                  {isSending ? 'Sending...' : 'Submit'}
+                <Button type="submit" className="w-full font-mono" disabled={isSending}>
+                  {isSending ? 'Sending...' : 'Send'}
                 </Button>
               </div>
             </form>
