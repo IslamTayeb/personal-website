@@ -95,7 +95,7 @@ export function Experience() {
       {visibleExperiences.map((experience, index) => (
         <div key={index}>
           <div
-            className="border border-dashed rounded-lg p-3 bg-card hover:bg-card/50 transition-colors"
+            className="border border-border/80 hover:border-border border-dashed rounded-lg p-3 bg-card hover:bg-card/50 transition-colors"
           >
             {/* Main Content Section */}
             <div className="flex flex-col gap-2 flex-1">
@@ -104,17 +104,17 @@ export function Experience() {
                 <div className="flex items-center justify-center w-12 h-12 min-w-12 min-h-12 text-primary">
                   {renderLogo(experience.logo, experience.company)}
                 </div>
-                <div className="flex-1 flex flex-col gap-1">
+                <div className="flex-1 flex flex-col ">
                   {/* Role + Company + Date */}
-                  <div className="flex items-center gap-2 justify-between leading-tight flex-wrap">
-                    <span className="flex items-center leading-tight">
-                      <span className="font-medium text-base leading-tight font-sans text-primary">
-                        {experience.role}<span className="text-muted-foreground font-normal text-base leading-tight ">,{'\u00A0'}</span>
+                  <div className="flex items-center gap-2 justify-between flex-wrap">
+                    <span className="flex items-center">
+                      <span className="font-medium text-base font-sans text-primary">
+                        {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
                       </span>
                       {experience.company === 'Soff' && (
                         <Badge
                           variant="outline"
-                          className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono leading-none"
+                          className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
                         >
                           Employee #2
                         </Badge>
@@ -124,24 +124,24 @@ export function Experience() {
                           href={experience.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-normal font-sans text-muted-foreground underline hover:no-underline leading-tight"
+                          className="font-normal font-sans text-muted-foreground underline hover:no-underline "
                         >
                           {experience.company}
                         </Link>
                       ) : (
-                        <span className="font-normal font-sans text-muted-foreground/80 leading-tight">
+                        <span className="font-normal font-sans text-muted-foreground/80 ">
                           {experience.company}
                         </span>
                       )}
                     </span>
                     {experience.period && (
-                      <span className="font-light text-muted-foreground text-sm whitespace-nowrap leading-tight">
+                      <span className="font-light text-muted-foreground text-sm whitespace-nowrap ">
                         {experience.period}
                       </span>
                     )}
                   </div>
                   {/* Description with integrated skills */}
-                  <p className="text-muted-foreground font-normal text-base font-sans leading-tight">
+                  <p className="text-muted-foreground font-normal text-base font-sans">
                     {experience.responsibilities[0]}
                   </p>
                 </div>

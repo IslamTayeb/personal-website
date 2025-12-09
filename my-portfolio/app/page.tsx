@@ -7,6 +7,7 @@ import { Projects } from './_components/Projects';
 import { Applets } from './_components/Applets';
 import { Contact } from './_components/Contact';
 import { Publications } from './_components/Publications';
+import { Courses } from './_components/Courses';
 
 const height = 32;
 
@@ -34,6 +35,10 @@ export default function Home() {
       <Spacing height={height} />
 
       <Publications />
+
+      <Spacing height={height} />
+
+      <Courses />
 
       <Spacing height={height} />
 

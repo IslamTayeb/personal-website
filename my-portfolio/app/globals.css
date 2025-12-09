@@ -19,7 +19,7 @@
     --primary-foreground: 219 18% 21%;
     --secondary: 219 8% 25%;
     --secondary-foreground: 219 8% 85%;
-    --accent: 216 13% 30%;
+    --accent: 216 13% 32%;
     --accent-foreground: 216 13% 90%;
     --accent-foreground-special: 212 77% 57%;
     --destructive: 3 95% 48%;
@@ -284,7 +284,10 @@
   }
   .project-info-description p {
     color: hsl(var(--muted-foreground));
-    padding: 0.75rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
     text-align: end;
   }
   .project-info-tech-list {

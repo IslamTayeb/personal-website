@@ -179,7 +179,7 @@ export const Contact = () => {
                         <Input
                           required
                           placeholder="John Doe"
-                          className="transition bg-card border-dashed focus:border-border/0"
+                          className="transition bg-card border-border/80 border-dashed focus:border-border/0"
                           {...field}
                         />
                       </FormControl>
@@ -197,7 +197,7 @@ export const Contact = () => {
                         <Input
                           required
                           placeholder="johndoe@example.com"
-                          className="transition bg-card border-dashed focus:border-border/0"
+                          className="transition bg-card border-border/80 border-dashed focus:border-border/0"
                           {...field}
                         />
                       </FormControl>
@@ -216,7 +216,7 @@ export const Contact = () => {
                       <Input
                         required
                         placeholder="Your subject must be 250 characters or fewer."
-                        className="transition bg-card border-dashed focus:border-border/0"
+                        className="transition bg-card border-border/80 border-dashed focus:border-border/0"
                         {...field}
                       />
                     </FormControl>
@@ -234,7 +234,7 @@ export const Contact = () => {
                       <Textarea
                         required
                         placeholder="Your message must be 2500 characters or fewer."
-                        className="resize-none h-36 transition bg-card border-dashed focus:border-border/0"
+                        className="resize-none h-36 transition bg-card border-border/80 border-dashed focus:border-border/0"
                         {...field}
                       />
                     </FormControl>

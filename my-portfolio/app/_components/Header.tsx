@@ -20,11 +20,11 @@ export const Header = () => {
             rel="noopener noreferrer"
             className={cn(
               buttonVariants({ variant: 'outline' }),
-              'border-dashed p-0 flex items-center justify-center h-6 group hover:bg-muted transition-colors'
+              'border-dashed border-border/80 hover:border-border p-0 flex items-center justify-center h-6 group hover:bg-muted transition-colors'
             )}
           >
             <span className="flex items-center justify-center px-1 py-0">
-              <DefaultIcon icon="lucide:command" className="inline text-current mt-0" />
+              <DefaultIcon icon="lucide:command" className="inline text-foreground mt-0" />
               <p className="text-foreground m-0 leading-none inline max-sm:hidden underline group-hover:no-underline ml-[0.4em]">
                 Blog
               </p>
@@ -34,12 +34,12 @@ export const Header = () => {
             href={`mailto:${email}`}
             className={cn(
               buttonVariants({ variant: 'outline' }),
-              'border-dashed p-0 flex items-center justify-center h-6 group hover:bg-muted transition-colors'
+              'border-dashed border-border/80 hover:border-border p-0 flex items-center justify-center h-6 group hover:bg-muted transition-colors'
             )}
             title="Send email"
           >
             <span className="flex items-center justify-center px-1 py-0">
-              <DefaultIcon icon="lucide:mail" className="inline text-current mt-0" />
+              <DefaultIcon icon="lucide:mail" className="inline text-foreground mt-0" />
               <p className="text-foreground m-0 leading-none inline max-sm:hidden underline group-hover:no-underline ml-[0.4em]">
                 Email
               </p>

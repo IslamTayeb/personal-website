@@ -10,7 +10,7 @@ export const Code = ({
   return (
     <span
       className={cn(
-        'bg-accent/30 hover:bg-accent/50 transition-colors border border-dashed border-accent px-1 py-0.5 rounded-sm text-primary !font-mono text-sm text-nowrap tracking-[-0.015em]',
+        'bg-accent/20 hover:bg-accent/40 transition-colors border border-dashed border-accent/80 hover:border-accent px-1 py-0.5 rounded-sm text-primary !font-mono text-sm text-nowrap tracking-[-0.015em]',
         className
       )}
       {...props}
