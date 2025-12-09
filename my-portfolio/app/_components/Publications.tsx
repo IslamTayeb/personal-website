@@ -187,7 +187,7 @@ export const Publications = () => {
           icon: 'mdi:flask-outline',
         },
         {
-          name: 'Materials Synthesis',
+          name: 'Polymer Synthesis',
           icon: 'mdi:atom',
         },
         {

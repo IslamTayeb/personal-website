@@ -117,7 +117,7 @@ export const Hero = () => {
           </p>
 
           <p className="font-sans text-muted-foreground text-pretty">
-            In high school, I worked full-time as a graphic designer for an{' '}
+            In high school, I worked as a graphic designer for an{' '}
             <a
               href="https://yuki.gg/"
               className="underline hover:no-underline"
@@ -133,7 +133,7 @@ export const Hero = () => {
                 <UnderlineSpan>osu!</UnderlineSpan>
               </Code>
             </ExternalLink>{' '}
-            professionally and designed a{' '}
+            competitively and designed a{' '}
             <a
               href="https://skins.osuck.net/skins/1762?v=0"
               className="underline hover:no-underline"

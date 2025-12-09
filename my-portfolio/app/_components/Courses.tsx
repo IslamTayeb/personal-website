@@ -1,137 +1,129 @@
 'use client';
 
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState } from 'react';
 import { Section } from './Misc/Section';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { Lock } from 'lucide-react';
 
 const courses = [
-  {
-    name: 'Operating Systems',
-    code: 'CS 510',
-    category: 'Systems',
-    desc: 'Process scheduling, memory management, file systems.',
-  },
   {
     name: 'Computer Architecture',
     code: 'CS 250',
     category: 'Systems',
-    desc: 'Pipelining, caches, RISC-V assembly.',
+    desc: "CPUs, caches, RISC-V assembly. Wish I'd gone deeper since it underpins so much of what I'm interested in now. Caching got really interesting toward the end. Started thinking about systems performance optimization.",
+    locked: false,
+  },
+  {
+    name: 'Operating Systems',
+    code: 'CS 510',
+    category: 'Systems',
+    desc: "Memory management, synchronization, file systems. Fun implementing threads and network drivers from scratch. Hammered in that the 'magic' under your code is just more code I haven't read yet.",
+    locked: false,
   },
   {
     name: 'Network Architecture',
     code: 'CS 514',
     category: 'Systems',
-    desc: 'TCP/IP, routing protocols, sockets.',
+    desc: 'TCP/IP, routing, data centers. Finally understood how P2P works (long time BitTorrent user). Also learned how datacenter routing differs from the public internet. 1st time thinking about distributed systems this systematically.',
+    locked: false,
   },
   {
     name: 'Database Systems',
     code: 'CS 516',
     category: 'Systems',
-    desc: 'Query optimization, B+ trees, transactions.',
+    desc: '',
+    locked: true,
   },
   {
     name: 'Compiler Construction',
     code: 'CS 553',
     category: 'Systems',
-    desc: 'Lexing, parsing, code generation.',
+    desc: '',
+    locked: true,
   },
   {
     name: 'Data Structures & Algorithms',
     code: 'CS 201',
     category: 'Theory',
-    desc: 'Core DSA: graphs, trees, DP.',
+    desc: 'Hashing, graphs, trees. Loved weighted digraphs and their applications: GPS, routing, PageRank. Met some of my best friends here, so the best memories.',
+    locked: false,
   },
   {
     name: 'Discrete Math',
     code: 'CS 230',
     category: 'Theory',
-    desc: 'Proofs, combinatorics, graph theory.',
+    desc: '',
+    locked: true,
   },
   {
     name: 'Linear Algebra',
     code: 'MATH 218',
     category: 'Theory',
-    desc: 'Matrix ops, eigenvalues, SVD for ML.',
+    desc: 'Matrix ops, eigenvalues, SVD. Factorizations led me back to compression algorithms from my design days. Turns out DCT (JPEG) and DEFLATE (PNG) are factorizations too. Made me think about formats more too.',
+    locked: false,
   },
   {
     name: 'Probability',
     code: 'STA 240L',
     category: 'Theory',
-    desc: 'Distributions, Bayes, inference.',
+    desc: "Distributions, Bayes, inference. Took it for ML foundations, learned I don't actually love math. Poker probabilities  and combinations were kinda fun, but I learned quant trading wasn't for me here.",
+    locked: false,
   },
   {
     name: 'Molecular Biology',
     code: 'BIO 201L',
     category: 'Biochemistry',
-    desc: 'Gene expression, CRISPR.',
+    desc: 'Gene expression, transcription factors, CRISPR. Too much memorization and hand holding (kinda hated the professor), but a useful refresher that pays off when reading enzyme research.',
+    locked: false,
   },
   {
     name: 'General Chemistry I & II',
     code: 'CHEM 101/210L',
     category: 'Biochemistry',
-    desc: 'Atomic structure, thermodynamics, kinetics, equilibria.',
+    desc: "Atomic structure, thermodynamics, kinetics. Felt too formulaic, though the early quantum bits and later experiments were cool. Wish I'd taken physical chem to remove the black boxes in my understanding.",
+    locked: false,
   },
   {
     name: 'Organic Chemistry I & II',
     code: 'CHEM 201L/202L',
     category: 'Biochemistry',
-    desc: 'Functional groups, stereochemistry, mechanisms, synthesis.',
+    desc: 'Functional groups, stereochemistry, mechanisms, synthesis. Loved seeing lab reactions taught systematically. Orgo felt like its own language, and these courses gave me a real toolkit.',
+    locked: false,
+  },
+  {
+    name: 'Biochemistry I',
+    code: 'BIOCHEM 301',
+    category: 'Biochemistry',
+    desc: "Protein structure, enzyme kinetics, metabolism. Nail in the coffin for premed. Too much memorization, lost the 'toolkit' feeling I had in orgo. It further gave me context for discussions with biologists, though not essential.",
+    locked: false,
   },
 ];
 
-const categoryStyles: Record<string, { pill: string; dot: string }> = {
+const categoryStyles: Record<string, { pill: string; activePill: string; lockedPill: string; dot: string }> = {
   Systems: {
     pill: 'bg-orange-300/10 border-orange-300/20 hover:bg-orange-300/20 hover:border-orange-300/30 text-orange-200/80',
+    activePill: 'bg-orange-300/20 border-orange-300/50 text-orange-200 ring-1 ring-orange-300/30',
+    lockedPill: 'bg-orange-900/10 border-orange-800/15 text-orange-300/35 saturate-50 brightness-75',
     dot: 'bg-orange-300/50',
   },
   Theory: {
     pill: 'bg-blue-300/10 border-blue-300/20 hover:bg-blue-300/20 hover:border-blue-300/30 text-blue-200/80',
+    activePill: 'bg-blue-300/20 border-blue-300/50 text-blue-200 ring-1 ring-blue-300/30',
+    lockedPill: 'bg-blue-900/10 border-blue-800/15 text-blue-300/35 saturate-50 brightness-75',
     dot: 'bg-blue-300/50',
   },
   Biochemistry: {
     pill: 'bg-teal-300/10 border-teal-300/20 hover:bg-teal-300/20 hover:border-teal-300/30 text-teal-200/80',
+    activePill: 'bg-teal-300/20 border-teal-300/50 text-teal-200 ring-1 ring-teal-300/30',
+    lockedPill: 'bg-teal-900/10 border-teal-800/15 text-teal-300/35 saturate-50 brightness-75',
     dot: 'bg-teal-300/50',
   },
 };
 
-const HOVER_THRESHOLD = 10;
-
 export const Courses = () => {
   const [active, setActive] = useState<string | null>(null);
-  const [isInsidePill, setIsInsidePill] = useState(false);
   const activeCourse = courses.find((c) => c.code === active);
-  const pillRefs = useRef<Map<string, HTMLSpanElement>>(new Map());
-  const rafRef = useRef<number | null>(null);
-
-  const getDistanceFromElement = useCallback(
-    (element: HTMLElement, mouseX: number, mouseY: number) => {
-      const rect = element.getBoundingClientRect();
-      const closestX = Math.max(rect.left, Math.min(mouseX, rect.right));
-      const closestY = Math.max(rect.top, Math.min(mouseY, rect.bottom));
-      return Math.sqrt((mouseX - closestX) ** 2 + (mouseY - closestY) ** 2);
-    },
-    []
-  );
-
-  const handleMouseMove = useCallback(
-    (e: React.MouseEvent) => {
-      if (!active || isInsidePill) return;
-      if (rafRef.current) return;
-
-      rafRef.current = requestAnimationFrame(() => {
-        rafRef.current = null;
-        const activePill = pillRefs.current.get(active);
-        if (!activePill) return;
-
-        const distance = getDistanceFromElement(activePill, e.clientX, e.clientY);
-        if (distance > HOVER_THRESHOLD) {
-          setActive(null);
-        }
-      });
-    },
-    [active, isInsidePill, getDistanceFromElement]
-  );
 
   return (
     <Section className="flex flex-col items-start gap-4">
@@ -149,39 +141,52 @@ export const Courses = () => {
         </div>
       </div>
 
-      <div
-        className="flex flex-wrap w-full -m-0.5"
-        onMouseMove={handleMouseMove}
-        onMouseLeave={() => setActive(null)}
-      >
-        {courses.map((course) => (
-          <div key={course.code} className="p-0.5 cursor-default">
-            <span
-              ref={(el) => {
-                if (el) pillRefs.current.set(course.code, el);
-              }}
-              onMouseEnter={() => {
-                setActive(course.code);
-                setIsInsidePill(true);
-              }}
-              onMouseLeave={() => setIsInsidePill(false)}
-              className={cn(
-                'px-1 py-0.5 text-xs rounded-md border border-dashed transition-all font-mono block',
-                categoryStyles[course.category].pill
-              )}
+      <div className="flex flex-wrap w-full -m-0.5">
+        {courses.map((course) => {
+          const isActive = active === course.code;
+          const styles = categoryStyles[course.category];
+
+          return (
+            <div
+              key={course.code}
+              className={cn('p-0.5 relative group', course.locked ? 'cursor-not-allowed' : 'cursor-pointer')}
+              onClick={() => !course.locked && setActive(isActive ? null : course.code)}
             >
-              {course.name}
-            </span>
-          </div>
-        ))}
+              <span
+                className={cn(
+                  'px-1 py-0.5 text-xs rounded-md border transition-all font-mono block relative',
+                  course.locked
+                    ? cn(styles.lockedPill, 'border-dashed')
+                    : isActive
+                      ? cn(styles.activePill, 'border-solid')
+                      : cn(styles.pill, 'border-dashed')
+                )}
+              >
+                {course.name}
+                {course.locked && (
+                  <span className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-md">
+                    <Lock className="w-3 h-3 text-white/30" />
+                  </span>
+                )}
+              </span>
+              {course.locked && (
+                <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 px-1.5 py-1 text-xs font-sans font-normal rounded-md bg-primary text-primary-foreground whitespace-nowrap opacity-0 scale-95 translate-y-1 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 transition-all duration-150 ease-out pointer-events-none z-50">
+                  Unlocks Spring &apos;26
+                </span>
+              )}
+            </div>
+          );
+        })}
       </div>
 
-      <div className="w-full p-3 rounded-md border border-dashed bg-card text-sm flex items-center">
+      <div className="w-full text-sm flex items-start font-sans transition-all duration-200 ease-out">
         {activeCourse ? (
-          <span className="text-muted-foreground">{activeCourse.desc}</span>
+          <span key={activeCourse.code} className="text-muted-foreground animate-in fade-in duration-150">
+            {activeCourse.desc}
+          </span>
         ) : (
-          <span className="text-muted-foreground/60 italic">
-            Hover over a course to see details
+          <span className="text-muted-foreground/60 italic animate-in fade-in duration-150">
+            Click a course to see details
           </span>
         )}
       </div>
