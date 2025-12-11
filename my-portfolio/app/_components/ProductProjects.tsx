@@ -36,13 +36,13 @@ const VideoWithPlaceholder = ({
   </div>
 );
 
-export const Projects = () => {
+export const ProductProjects = () => {
   const projectsData = [
     {
       image: '/HeliumRaycast.webm',
       lockImage: '/HeliumRaycastLock.webp',
       projectName: 'Helium Browser Raycast Extension',
-      new: true,
+      new: false,
       wip: false,
       projectDescription: (
         <>
@@ -96,8 +96,8 @@ export const Projects = () => {
 
   return (
     <Section className="font-sans flex-col gap-4">
-      <Badge variant={'outline'} className="mb-4" id="projects">
-        Projects
+      <Badge variant={'outline'} className="mb-4" id="product-projects">
+        Product Projects
       </Badge>
 
       <div className="projects-container">

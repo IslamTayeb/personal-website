@@ -104,19 +104,19 @@ const categoryStyles: Record<string, { pill: string; activePill: string; lockedP
   Systems: {
     pill: 'bg-orange-300/10 border-orange-300/20 hover:bg-orange-300/20 hover:border-orange-300/30 text-orange-200/80',
     activePill: 'bg-orange-300/20 border-orange-300/50 text-orange-200 ring-1 ring-orange-300/30',
-    lockedPill: 'bg-orange-900/10 border-orange-800/15 text-orange-300/35 saturate-50 brightness-75',
+    lockedPill: 'bg-orange-900/10 border-orange-800/15 text-orange-300/35 saturate-50 brightness-75 hover:bg-orange-900/15 hover:border-orange-800/25 hover:brightness-90',
     dot: 'bg-orange-300/50',
   },
   Theory: {
     pill: 'bg-blue-300/10 border-blue-300/20 hover:bg-blue-300/20 hover:border-blue-300/30 text-blue-200/80',
     activePill: 'bg-blue-300/20 border-blue-300/50 text-blue-200 ring-1 ring-blue-300/30',
-    lockedPill: 'bg-blue-900/10 border-blue-800/15 text-blue-300/35 saturate-50 brightness-75',
+    lockedPill: 'bg-blue-900/10 border-blue-800/15 text-blue-300/35 saturate-50 brightness-75 hover:bg-blue-900/15 hover:border-blue-800/25 hover:brightness-90',
     dot: 'bg-blue-300/50',
   },
   Biochemistry: {
     pill: 'bg-teal-300/10 border-teal-300/20 hover:bg-teal-300/20 hover:border-teal-300/30 text-teal-200/80',
     activePill: 'bg-teal-300/20 border-teal-300/50 text-teal-200 ring-1 ring-teal-300/30',
-    lockedPill: 'bg-teal-900/10 border-teal-800/15 text-teal-300/35 saturate-50 brightness-75',
+    lockedPill: 'bg-teal-900/10 border-teal-800/15 text-teal-300/35 saturate-50 brightness-75 hover:bg-teal-900/15 hover:border-teal-800/25 hover:brightness-90',
     dot: 'bg-teal-300/50',
   },
 };
@@ -185,9 +185,11 @@ export const Courses = () => {
             {activeCourse.desc}
           </span>
         ) : (
-          <span className="text-muted-foreground/60 italic animate-in fade-in duration-150">
+          <div className="text-muted-foreground/60 italic animate-in fade-in duration-150">
             Click a course to see details
-          </span>
+            <br />
+            P.S. All courses taken @ Duke University
+          </div>
         )}
       </div>
     </Section>

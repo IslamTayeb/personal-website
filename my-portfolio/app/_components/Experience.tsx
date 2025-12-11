@@ -95,7 +95,7 @@ export function Experience() {
       {visibleExperiences.map((experience, index) => (
         <div key={index}>
           <div
-            className="border border-border/80 hover:border-border border-dashed rounded-lg p-3 bg-card hover:bg-card/50 transition-colors"
+            className="border border-border/80 hover:border-border border-dashed rounded-lg p-3 py-2 bg-card hover:bg-card/50 transition-colors"
           >
             {/* Main Content Section */}
             <div className="flex flex-col gap-2 flex-1">

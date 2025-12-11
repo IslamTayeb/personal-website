@@ -3,7 +3,8 @@ import { Hero } from './_components/Hero';
 import { Spacing } from './_components/Misc/Spacing';
 import { Footer } from './_components/Footer';
 import { Experience } from './_components/Experience';
-import { Projects } from './_components/Projects';
+import { ProductProjects } from './_components/ProductProjects';
+import { SystemsProjects } from './_components/SystemsProjects';
 import { Applets } from './_components/Applets';
 import { Contact } from './_components/Contact';
 import { Publications } from './_components/Publications';
@@ -26,7 +27,11 @@ export default function Home() {
 
       <Spacing height={height} />
 
-      <Projects />
+      <ProductProjects />
+
+      <Spacing height={height} />
+
+      <SystemsProjects />
 
       <Spacing height={height} />
 
