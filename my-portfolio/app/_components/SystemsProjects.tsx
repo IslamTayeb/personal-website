@@ -51,7 +51,7 @@ export const SystemsProjects = () => {
       ),
       projectExternalLinks: {
         github: 'https://github.com/IslamTayeb/mosh-lite',
-        paper: '/mosh-lite-paper.pdf',
+        paper: 'https://github.com/IslamTayeb/mosh-lite/blob/main/final_report.pdf',
       },
       category: categories[0],
     },
@@ -84,7 +84,7 @@ export const SystemsProjects = () => {
       ),
       projectExternalLinks: {
         github: 'https://github.com/IslamTayeb/xv6-network-stack',
-        paper: '/xv6-network-stack-paper.pdf',
+        paper: 'https://github.com/IRSMsoso/xv6-networking-project/blob/main/final_report.pdf',
       },
       category: categories[1],
     },
@@ -103,7 +103,7 @@ export const SystemsProjects = () => {
             <div
               className={`w-7 rounded-l-lg flex items-center justify-center shrink-0 ${project.category.color}`}
             >
-              <span className="text-[10px] font-semibold text-white/90 [writing-mode:vertical-lr] rotate-180 tracking-wider">
+              <span className="text-[10px] font-semibold text-white/90 [writing-mode:vertical-lr] rotate-180 tracking-wider font-mono">
                 {project.category.name}
               </span>
             </div>
