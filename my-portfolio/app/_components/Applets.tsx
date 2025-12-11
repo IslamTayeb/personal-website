@@ -92,7 +92,7 @@ export const Applets = () => {
             <TooltipTrigger asChild>
               <Info
                 size={14}
-                className="text-muted-foreground/70 transition-colors"
+                className="text-muted-foreground/70 transition-colors cursor-help"
                 aria-label="About mini projects"
               />
             </TooltipTrigger>

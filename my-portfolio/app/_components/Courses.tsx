@@ -4,7 +4,30 @@ import React, { useState } from 'react';
 import { Section } from './Misc/Section';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { Lock } from 'lucide-react';
+import { Lock, Info } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+
+const teaching = [
+  {
+    name: 'Computer Systems, Prof. Lentz',
+    code: 'CS 310',
+    category: 'Systems',
+    desc: 'Assisted in discussions, office hours, and grading',
+    locked: true,
+  },
+  {
+    name: 'Organic Chemistry II, SAGE',
+    code: 'SAGE',
+    category: 'Biochemistry',
+    desc: 'Led study groups. Was impressed at how good chem majors started getting at this point. Made me think like a teacher for the first time to predict what will come up. Began noticing the craft behind designing good exams.',
+    locked: false,
+  },
+];
 
 const courses = [
   {
@@ -123,7 +146,8 @@ const categoryStyles: Record<string, { pill: string; activePill: string; lockedP
 
 export const Courses = () => {
   const [active, setActive] = useState<string | null>(null);
-  const activeCourse = courses.find((c) => c.code === active);
+  const allItems = [...teaching, ...courses];
+  const activeItem = allItems.find((c) => c.code === active);
 
   return (
     <Section className="flex flex-col items-start gap-4">
@@ -141,48 +165,106 @@ export const Courses = () => {
         </div>
       </div>
 
-      <div className="flex flex-wrap w-full -m-0.5">
-        {courses.map((course) => {
-          const isActive = active === course.code;
-          const styles = categoryStyles[course.category];
+      {/* Teaching Section */}
+      <div className="w-full flex flex-col gap-2">
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm text-muted-foreground font-medium font-sans">Teaching</span>
+          <TooltipProvider delayDuration={50}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="w-3.5 h-3.5 text-muted-foreground/60 cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="font-sans">
+                <p className="text-xs">Assisted in discussions, office hours, and grading</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+        <div className="flex flex-wrap w-full -m-0.5">
+          {teaching.map((course) => {
+            const isActive = active === course.code;
+            const styles = categoryStyles[course.category];
 
-          return (
-            <div
-              key={course.code}
-              className={cn('p-0.5 relative group', course.locked ? 'cursor-not-allowed' : 'cursor-pointer')}
-              onClick={() => !course.locked && setActive(isActive ? null : course.code)}
-            >
-              <span
-                className={cn(
-                  'px-1 py-0.5 text-xs rounded-md border transition-all font-mono block relative',
-                  course.locked
-                    ? cn(styles.lockedPill, 'border-dashed')
-                    : isActive
-                      ? cn(styles.activePill, 'border-solid')
-                      : cn(styles.pill, 'border-dashed')
-                )}
+            return (
+              <div
+                key={course.code}
+                className={cn('p-0.5 relative group', course.locked ? 'cursor-not-allowed' : 'cursor-pointer')}
+                onClick={() => !course.locked && setActive(isActive ? null : course.code)}
               >
-                {course.name}
+                <span
+                  className={cn(
+                    'px-1 py-0.5 text-xs rounded-md border transition-all font-mono block relative',
+                    course.locked
+                      ? cn(styles.lockedPill, 'border-dashed')
+                      : isActive
+                        ? cn(styles.activePill, 'border-solid')
+                        : cn(styles.pill, 'border-dashed')
+                  )}
+                >
+                  {course.name}
+                  {course.locked && (
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-md">
+                      <Lock className="w-3 h-3 text-white/30" />
+                    </span>
+                  )}
+                </span>
                 {course.locked && (
-                  <span className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-md">
-                    <Lock className="w-3 h-3 text-white/30" />
+                  <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 px-1.5 py-1 text-xs font-sans font-normal rounded-md bg-primary text-primary-foreground whitespace-nowrap opacity-0 scale-95 translate-y-1 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 transition-all duration-150 ease-out pointer-events-none z-50">
+                    Unlocks Spring &apos;26
                   </span>
                 )}
-              </span>
-              {course.locked && (
-                <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 px-1.5 py-1 text-xs font-sans font-normal rounded-md bg-primary text-primary-foreground whitespace-nowrap opacity-0 scale-95 translate-y-1 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 transition-all duration-150 ease-out pointer-events-none z-50">
-                  Unlocks Spring &apos;26
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Coursework Section */}
+      <div className="w-full flex flex-col gap-2">
+        <span className="text-sm text-muted-foreground font-medium font-sans">Coursework</span>
+        <div className="flex flex-wrap w-full -m-0.5">
+          {courses.map((course) => {
+            const isActive = active === course.code;
+            const styles = categoryStyles[course.category];
+
+            return (
+              <div
+                key={course.code}
+                className={cn('p-0.5 relative group', course.locked ? 'cursor-not-allowed' : 'cursor-pointer')}
+                onClick={() => !course.locked && setActive(isActive ? null : course.code)}
+              >
+                <span
+                  className={cn(
+                    'px-1 py-0.5 text-xs rounded-md border transition-all font-mono block relative',
+                    course.locked
+                      ? cn(styles.lockedPill, 'border-dashed')
+                      : isActive
+                        ? cn(styles.activePill, 'border-solid')
+                        : cn(styles.pill, 'border-dashed')
+                  )}
+                >
+                  {course.name}
+                  {course.locked && (
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/10 rounded-md">
+                      <Lock className="w-3 h-3 text-white/30" />
+                    </span>
+                  )}
                 </span>
-              )}
-            </div>
-          );
-        })}
+                {course.locked && (
+                  <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-1.5 px-1.5 py-1 text-xs font-sans font-normal rounded-md bg-primary text-primary-foreground whitespace-nowrap opacity-0 scale-95 translate-y-1 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-y-0 transition-all duration-150 ease-out pointer-events-none z-50">
+                    Unlocks Spring &apos;26
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <div className="w-full text-sm flex items-start font-sans transition-all duration-200 ease-out">
-        {activeCourse ? (
-          <span key={activeCourse.code} className="text-muted-foreground animate-in fade-in duration-150">
-            {activeCourse.desc}
+        {activeItem ? (
+          <span key={activeItem.code} className="text-muted-foreground animate-in fade-in duration-150">
+            {activeItem.desc}
           </span>
         ) : (
           <div className="text-muted-foreground/60 italic animate-in fade-in duration-150">
