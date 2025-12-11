@@ -121,9 +121,8 @@ export const ProductProjects = () => {
               <div className="project max-md:w-full" key={projectName}>
                 <div className="project-info gap-2.5">
                   <h3
-                    className={`project-info-title antialiased max-md:w-full leading-tight flex flex-row items-center gap-2 text-primary  ${
-                      isOdd ? 'text-right' : 'text-left'
-                    }`}
+                    className={`project-info-title antialiased max-md:w-full leading-tight flex flex-row items-center gap-2 text-primary  ${isOdd ? 'text-right' : 'text-left'
+                      }`}
                   >
                     <div className="leading-none h-min invisible absolute max-md:visible max-md:relative text-left w-auto font-semibold">
                       {projectName}
@@ -191,33 +190,33 @@ export const ProductProjects = () => {
                   </ul>
                   {(projectExternalLinks?.github ||
                     projectExternalLinks?.externalLink) && (
-                    <ul className="project-info-links max-md:w-full max-md:justify-end">
-                      {projectExternalLinks?.github && (
-                        <li className="project-info-links-item">
-                          <Link
-                            href={projectExternalLinks.github}
-                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <LucideGithub size={14} /> GitHub
-                          </Link>
-                        </li>
-                      )}
-                      {projectExternalLinks?.externalLink && (
-                        <li className="project-info-links-item">
-                          <Link
-                            href={projectExternalLinks.externalLink}
-                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <Link2 size={14} /> Link
-                          </Link>
-                        </li>
-                      )}
-                    </ul>
-                  )}
+                      <ul className="project-info-links max-md:w-full max-md:justify-end">
+                        {projectExternalLinks?.externalLink && (
+                          <li className="project-info-links-item">
+                            <Link
+                              href={projectExternalLinks.externalLink}
+                              className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <Link2 size={14} /> Link
+                            </Link>
+                          </li>
+                        )}
+                        {projectExternalLinks?.github && (
+                          <li className="project-info-links-item">
+                            <Link
+                              href={projectExternalLinks.github}
+                              className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <LucideGithub size={14} /> GitHub
+                            </Link>
+                          </li>
+                        )}
+                      </ul>
+                    )}
                 </div>
 
                 <div className="project-image overflow-hidden scale-95 rounded-sm border border-border/50 max-md:rounded-lg">

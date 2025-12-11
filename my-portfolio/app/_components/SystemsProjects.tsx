@@ -40,9 +40,9 @@ export const SystemsProjects = () => {
           <Code>
             <DefaultIcon icon="simple-icons:linux" className="inline text-current" height="14px" /> tc/netem
           </Code>{' '}
-           to measure AoI under high packet loss.
+          to measure AoI under high packet loss.
 
-           {/* Built with{' '}
+          {/* Built with{' '}
           <a href="https://www.linkedin.com/in/arvindh-manian/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">Arvindh</a>,{' '}
           <a href="https://www.linkedin.com/in/aaaronhsu/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">Aaron</a>,{' '}
           <a href="https://www.linkedin.com/in/john-schappert/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">John</a>, and{' '}
@@ -57,7 +57,7 @@ export const SystemsProjects = () => {
     },
     {
       projectName: 'xv6 Network Stack',
-    new: false,
+      new: false,
       wip: false,
       projectDescription: (
         <>
@@ -132,17 +132,6 @@ export const SystemsProjects = () => {
                   </Badge>
                 )}
                 <div className="ml-auto flex gap-3">
-                  {project.projectExternalLinks?.github && (
-                    <Link
-                      href={project.projectExternalLinks.github}
-                      className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground underline hover:no-underline transition-colors"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <LucideGithub size={14} />
-                      GitHub
-                    </Link>
-                  )}
                   {project.projectExternalLinks?.paper && (
                     <Link
                       href={project.projectExternalLinks.paper}
@@ -152,6 +141,17 @@ export const SystemsProjects = () => {
                     >
                       <FileText size={14} />
                       Report
+                    </Link>
+                  )}
+                  {project.projectExternalLinks?.github && (
+                    <Link
+                      href={project.projectExternalLinks.github}
+                      className="inline-flex items-center gap-1.5 text-sm font-mono text-muted-foreground underline hover:no-underline transition-colors"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <LucideGithub size={14} />
+                      GitHub
                     </Link>
                   )}
                 </div>
