@@ -34,14 +34,7 @@ const courses = [
     name: 'Computer Architecture',
     code: 'CS 250',
     category: 'Systems',
-    desc: "CPUs, caches, RISC-V assembly. Wish I'd gone deeper since it underpins so much of what I'm interested in now. Caching got really interesting toward the end. Started thinking about systems performance optimization.",
-    locked: false,
-  },
-  {
-    name: 'Operating Systems',
-    code: 'CS 510',
-    category: 'Systems',
-    desc: "Memory management, synchronization, file systems. Fun implementing threads and network drivers from scratch. Hammered in that the 'magic' under your code is just more code I haven't read yet.",
+    desc: "CPUs, caches, RISC-V assembly. Wish I'd gone deeper since it underpins so much of what I'm interested in now. Caching and paging got interesting toward the end. Started considering performance optimization since.",
     locked: false,
   },
   {
@@ -49,6 +42,13 @@ const courses = [
     code: 'CS 514',
     category: 'Systems',
     desc: 'TCP/IP, routing, data centers. Finally understood how P2P works (long time BitTorrent user). Also learned how datacenter routing differs from the public internet. 1st time thinking about distributed systems this systematically.',
+    locked: false,
+  },
+  {
+    name: 'Operating Systems',
+    code: 'CS 510',
+    category: 'Systems',
+    desc: "Memory management, synchronization, file systems. Fun implementing threads and network drivers from scratch. Hammered in that the 'magic' under your code is just more code I haven't read yet.",
     locked: false,
   },
   {
@@ -69,7 +69,7 @@ const courses = [
     name: 'Data Structures & Algorithms',
     code: 'CS 201',
     category: 'Theory',
-    desc: 'Hashing, graphs, trees. Loved weighted digraphs and their applications: GPS, routing, PageRank. Met some of my best friends here, so the best memories.',
+    desc: 'Hashing, graphs, trees. Loved weighted digraphs and their applications: GPS, routing, PageRank. Met some of my best friends here, so its the class I have the best memories from.',
     locked: false,
   },
   {
@@ -83,14 +83,14 @@ const courses = [
     name: 'Linear Algebra',
     code: 'MATH 218',
     category: 'Theory',
-    desc: 'Matrix ops, eigenvalues, SVD. Factorizations led me back to compression algorithms from my design days. Turns out DCT (JPEG) and DEFLATE (PNG) are factorizations too. Made me think about formats more too.',
+    desc: 'Matrix ops, eigenvalues, SVD. Factorizations led me back to compression algorithms from my design days. Turns out DCT (JPEG) and DEFLATE (PNG) are factorizations too. Made me nostalgic.',
     locked: false,
   },
   {
     name: 'Probability',
     code: 'STA 240L',
     category: 'Theory',
-    desc: "Distributions, Bayes, inference. Took it for ML foundations, learned I don't actually love math. Poker probabilities  and combinations were kinda fun, but I learned quant trading wasn't for me here.",
+    desc: "Distributions, Bayes, inference. Took it to build foundations for my ML research. Poker probabilities and combinations were fun, loved the discussion over 'schools of thought' and inference pieces towards the end.",
     locked: false,
   },
   {
@@ -118,7 +118,7 @@ const courses = [
     name: 'Biochemistry I',
     code: 'BIOCHEM 301',
     category: 'Biochemistry',
-    desc: "Protein structure, enzyme kinetics, metabolism. Nail in the coffin for premed. Too much memorization, lost the 'toolkit' feeling I had in orgo. It further gave me context for discussions with biologists, though not essential.",
+    desc: "Protein structure, enzyme kinetics, metabolism. Nail in the coffin for premed. Too much memorization. But really got me interested in applying physical and computational tooling in biochem.",
     locked: false,
   },
 ];
@@ -193,7 +193,7 @@ export const Courses = () => {
               >
                 <span
                   className={cn(
-                    'px-1 py-0.5 text-xs rounded-md border transition-all font-mono block relative',
+                    'px-1 py-0.5 text-xs rounded-md border transition-all font-mono block relative select-none',
                     course.locked
                       ? cn(styles.lockedPill, 'border-dashed')
                       : isActive
@@ -235,7 +235,7 @@ export const Courses = () => {
               >
                 <span
                   className={cn(
-                    'px-1 py-0.5 text-xs rounded-md border transition-all font-mono block relative',
+                    'px-1 py-0.5 text-xs rounded-md border transition-all font-mono block relative select-none',
                     course.locked
                       ? cn(styles.lockedPill, 'border-dashed')
                       : isActive
