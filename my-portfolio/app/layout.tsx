@@ -24,6 +24,19 @@ export const metadata: Metadata = {
     icon: ['/favicon.ico?v=4'],
     apple: ['/favicon.ico?v=4'],
   },
+  openGraph: {
+    title: 'Islam Tayeb',
+    description: "Islam Tayeb's Portfolio",
+    url: '/',
+    siteName: 'Islam Tayeb',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Islam Tayeb',
+    description: "Islam Tayeb's Portfolio",
+  },
 };
 
 export default function RootLayout({
