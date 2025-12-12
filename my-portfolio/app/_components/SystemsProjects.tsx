@@ -165,14 +165,16 @@ export const SystemsProjects = () => {
           </div>
         ))}
       </div>
-      <Link
-        href="https://github.com/IslamTayeb"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-xs leading-none ml-auto text-muted-foreground/80 mt-3 justify-end flex items-center underline hover:no-underline font-mono tracking-wide"
-      >
-        See more on GitHub...
-      </Link>
+      <div className="flex justify-end w-full">
+        <Link
+          href="https://github.com/IslamTayeb"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs leading-none text-muted-foreground/80 mt-3 flex items-center underline hover:no-underline font-mono tracking-wide"
+        >
+          See more on GitHub...
+        </Link>
+      </div>
     </Section>
   );
 };
