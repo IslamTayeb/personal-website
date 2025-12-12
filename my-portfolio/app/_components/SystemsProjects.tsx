@@ -83,7 +83,7 @@ export const SystemsProjects = () => {
         </>
       ),
       projectExternalLinks: {
-        github: 'https://github.com/IslamTayeb/xv6-network-stack',
+        github: 'https://github.com/islamtayeb/xv6-networking-project',
         paper: 'https://github.com/IRSMsoso/xv6-networking-project/blob/main/final_report.pdf',
       },
       category: categories[1],
