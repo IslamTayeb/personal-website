@@ -165,23 +165,11 @@ export const Courses = () => {
         </div>
       </div>
 
-      {/* Teaching Section */}
+      {/* Coursework Section */}
       <div className="w-full flex flex-col gap-2">
-        <div className="flex items-center gap-1.5">
-          <span className="text-sm text-muted-foreground font-medium font-sans">Teaching</span>
-          <TooltipProvider delayDuration={50}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Info className="w-3.5 h-3.5 text-muted-foreground/60 cursor-help" />
-              </TooltipTrigger>
-              <TooltipContent className="font-sans">
-                <p className="text-xs">Assisted in discussions, office hours, and grading</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
+        <span className="text-sm text-muted-foreground font-medium font-sans">Coursework</span>
         <div className="flex flex-wrap w-full -m-0.5">
-          {teaching.map((course) => {
+          {courses.map((course) => {
             const isActive = active === course.code;
             const styles = categoryStyles[course.category];
 
@@ -219,11 +207,23 @@ export const Courses = () => {
         </div>
       </div>
 
-      {/* Coursework Section */}
+      {/* Teaching Section */}
       <div className="w-full flex flex-col gap-2">
-        <span className="text-sm text-muted-foreground font-medium font-sans">Coursework</span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-sm text-muted-foreground font-medium font-sans">Teaching</span>
+          <TooltipProvider delayDuration={50}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Info className="w-3.5 h-3.5 text-muted-foreground/60 cursor-help" />
+              </TooltipTrigger>
+              <TooltipContent className="font-sans">
+                <p className="text-xs">Assisted in discussions, office hours, and grading</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
         <div className="flex flex-wrap w-full -m-0.5">
-          {courses.map((course) => {
+          {teaching.map((course) => {
             const isActive = active === course.code;
             const styles = categoryStyles[course.category];
 
