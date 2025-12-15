@@ -11,7 +11,9 @@ interface TrackerConfig {
 
 const defaultConfig: TrackerConfig = {
   apiUrl: process.env.NEXT_PUBLIC_ANALYTICS_API || 'http://localhost:3001',
-  enabled: process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== 'false',
+  enabled: process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== 'false' &&
+           !!process.env.NEXT_PUBLIC_ANALYTICS_API &&
+           !process.env.NEXT_PUBLIC_ANALYTICS_API.includes('localhost'),
   debug: process.env.NODE_ENV === 'development'
 };
 
