@@ -8,6 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Moon } from 'lucide-react';
 import { Toaster } from '@/components/ui/toaster';
 import { Analytics } from '@vercel/analytics/react';
+import VisitorTracker from './_components/VisitorTracker';
 
 const anekTelugu = Anek_Telugu({
   subsets: ['latin'],
@@ -57,6 +58,7 @@ export default function RootLayout({
         {children}
         <SpeedInsights />
         <Analytics />
+        <VisitorTracker />
         <Toaster />
       </body>
     </html>

@@ -33,6 +33,7 @@ import { useCopyToClipboard } from 'usehooks-ts';
 type ContactItem = {
   id: string;
   label: string;
+  description: string;
   icon: string;
   value?: string;
   href: string;
@@ -45,6 +46,7 @@ const contactsData: ContactItem[] = [
   {
     id: 'email',
     label: 'Email',
+    description: 'for more hefty requests',
     icon: 'lucide:mail',
     value: 'islam.tayeb@duke.edu',
     href: 'mailto:islam.tayeb@duke.edu',
@@ -53,6 +55,7 @@ const contactsData: ContactItem[] = [
   {
     id: 'blog',
     label: 'Blog',
+    description: 'for more technical + personal musings',
     icon: 'lucide:command',
     href: 'https://apmoverflow.xyz/',
     isCopyable: false,
@@ -60,6 +63,7 @@ const contactsData: ContactItem[] = [
   {
     id: 'github',
     label: 'GitHub',
+    description: 'for code and repos',
     icon: 'jam:github',
     href: 'https://github.com/IslamTayeb',
     isCopyable: false,
@@ -67,6 +71,7 @@ const contactsData: ContactItem[] = [
   {
     id: 'twitter',
     label: 'X',
+    description: 'for shower thoughts',
     icon: 'prime:twitter',
     href: 'https://x.com/IslamTyb',
     isCopyable: false,
@@ -74,6 +79,7 @@ const contactsData: ContactItem[] = [
   {
     id: 'linkedin',
     label: 'LinkedIn',
+    description: 'for a professional summary',
     icon: 'mdi:linkedin',
     href: 'https://www.linkedin.com/in/islam-tayeb/',
     isCopyable: false,
@@ -81,6 +87,7 @@ const contactsData: ContactItem[] = [
   {
     id: 'scholar',
     label: 'Scholar',
+    description: 'for my publications',
     icon: 'fa6-brands:google-scholar',
     href: 'https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ',
     isCopyable: false,
@@ -104,53 +111,53 @@ const formSchema = z.object({
 });
 
 export const Contact = () => {
-  const { toast } = useToast();
-  const [isSending, setIsSending] = useState(false);
+  // const { toast } = useToast();
+  // const [isSending, setIsSending] = useState(false);
   const [copiedButton, setCopiedButton] = useState('');
-
-  // Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      text: '',
-      subject: '',
-    },
-  });
-
-  // Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsSending(true);
-    try {
-      const formData = new FormData();
-      formData.append('name', values.name);
-      formData.append('email', values.email);
-      formData.append('subject', values.subject);
-      formData.append('text', values.text);
-
-      const { data, error } = await sendEmail(formData);
-
-      if (error) {
-        toast({
-          description: `An unexpected error occurred: ${error}`,
-          variant: 'destructive',
-        });
-      } else {
-        toast({
-          description: "Successfully sent! I'll get back to you soon.",
-        });
-      }
-    } catch (error) {
-      toast({
-        description: `An unexpected error occurred: ${error}`,
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSending(false);
-    }
-  }
-
+  //
+  // // Define your form.
+  // const form = useForm<z.infer<typeof formSchema>>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //     name: '',
+  //     email: '',
+  //     text: '',
+  //     subject: '',
+  //   },
+  // });
+  //
+  // // Define a submit handler.
+  // async function onSubmit(values: z.infer<typeof formSchema>) {
+  //   setIsSending(true);
+  //   try {
+  //     const formData = new FormData();
+  //     formData.append('name', values.name);
+  //     formData.append('email', values.email);
+  //     formData.append('subject', values.subject);
+  //     formData.append('text', values.text);
+  //
+  //     const { data, error } = await sendEmail(formData);
+  //
+  //     if (error) {
+  //       toast({
+  //         description: `An unexpected error occurred: ${error}`,
+  //         variant: 'destructive',
+  //       });
+  //     } else {
+  //       toast({
+  //         description: "Successfully sent! I'll get back to you soon.",
+  //       });
+  //     }
+  //   } catch (error) {
+  //     toast({
+  //       description: `An unexpected error occurred: ${error}`,
+  //       variant: 'destructive',
+  //     });
+  //   } finally {
+  //     setIsSending(false);
+  //   }
+  // }
+  //
   const [copiedText, copy] = useCopyToClipboard();
 
   const handleCopy = (value: string, buttonId: string) => {
@@ -164,172 +171,80 @@ export const Contact = () => {
         Contact
       </Badge>
 
-      <div className="flex max-md:flex-col flex-row gap-4 max-md:gap-8 w-full">
-        <div className="font-sans font-medium w-full flex-[3] gap-2">
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-              <div className="flex flex-row gap-4">
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input
-                          required
-                          placeholder="John Doe"
-                          className="transition bg-card border-border/80 border-dashed focus:border-border/0 font-mono font-light"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormLabel>Email Address</FormLabel>
-                      <FormControl>
-                        <Input
-                          required
-                          placeholder="johndoe@example.com"
-                          className="transition bg-card border-border/80 border-dashed focus:border-border/0 font-mono font-light"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <FormField
-                control={form.control}
-                name="subject"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subject</FormLabel>
-                    <FormControl>
-                      <Input
-                        required
-                        placeholder="Your subject must be 250 characters or fewer."
-                        className="transition bg-card border-border/80 border-dashed focus:border-border/0 font-mono font-light"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
+        {contactsData.map((contact) => (
+          <div
+            key={contact.id}
+            className="inline-flex items-center gap-3 bg-card hover:bg-card/50 transition-colors py-2.5 px-3 rounded-md border border-border/50"
+          >
+            <span className="bg-accent text-accent-foreground p-2 rounded-sm flex items-center justify-center shrink-0">
+              <Icon
+                icon={contact.icon}
+                className={`w-4 h-4 ${contact.iconClass || ''}`}
               />
-              <FormField
-                control={form.control}
-                name="text"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Message</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        required
-                        placeholder="Your message must be 2500 characters or fewer."
-                        className="resize-none h-36 transition bg-card border-border/80 border-dashed focus:border-border/0 font-mono font-light"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="pt-2">
-                <Button type="submit" className="w-full font-mono" disabled={isSending}>
-                  {isSending ? 'Sending...' : 'Send'}
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </div>
+            </span>
 
-        <div className="flex flex-col h-min font-sans font-medium flex-[2] w-full divide-y divide-border">
-          {contactsData.map((contact, index) => (
-            <React.Fragment key={contact.id}>
-              <div className="inline-flex items-center gap-4 hover:bg-muted/50 transition-colors py-2 px-2 w-full">
-                <span className="bg-accent text-accent-foreground p-2.5 rounded-sm flex items-center justify-center">
+            <div className="min-w-0 flex-1 gap-0.5 flex flex-col">
+              <div className="text-md font-medium leading-none">{contact.label}</div>
+              <div className="text-sm text-muted-foreground font-sans leading-none">{contact.description}</div>
+            </div>
+
+            <div className="flex flex-row gap-1 shrink-0">
+              {contact.isCopyable && (
+                <TooltipProvider delayDuration={50}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() =>
+                          handleCopy(contact.value || '', `${contact.id}Copy`)
+                        }
+                      >
+                        {copiedButton === `${contact.id}Copy` ? (
+                          <Icon
+                            icon="lucide:check"
+                            className="w-3.5 h-3.5 text-green-400"
+                          />
+                        ) : (
+                          <Icon
+                            icon="lucide:copy"
+                            className="w-3.5 h-3.5 text-muted-foreground"
+                          />
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent className='font-sans'>
+                      <p>
+                        {copiedButton === `${contact.id}Copy`
+                          ? 'Copied!'
+                          : `Copy ${contact.label.toLowerCase()}`}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+
+              <Link
+                href={contact.href}
+                target={contact.href.startsWith('mailto') ? undefined : '_blank'}
+                rel="noopener noreferrer"
+              >
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-7 w-7 rounded-sm"
+                >
                   <Icon
-                    icon={contact.icon}
-                    className={`w-4 h-4 ${contact.iconClass || ''}`}
+                    icon="lucide:arrow-up-right"
+                    className="w-3.5 h-3.5 text-muted-foreground"
                   />
-                </span>
-
-                <div>
-                  <div className="text-base font-medium">{contact.label}</div>
-                </div>
-
-                <div className="ml-auto flex flex-row gap-1.5">
-                  {contact.isCopyable && (
-                    <TooltipProvider delayDuration={50}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-6 w-6"
-                            onClick={() =>
-                              handleCopy(
-                                contact.value || '',
-                                `${contact.id}Copy`
-                              )
-                            }
-                          >
-                            {copiedButton === `${contact.id}Copy` ? (
-                              <Icon
-                                icon="lucide:check"
-                                className="w-4 h-4 text-green-400"
-                              />
-                            ) : (
-                              <Icon
-                                icon="lucide:copy"
-                                className="w-4 h-4 text-muted-foreground p-[1.5px]"
-                              />
-                            )}
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>
-                            {copiedButton === `${contact.id}Copy`
-                              ? 'Copied!'
-                              : `Copy ${contact.label.toLowerCase()}`}
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )}
-
-                  <Link
-                    href={contact.href}
-                    target={
-                      contact.href.startsWith('mailto') ? undefined : '_blank'
-                    }
-                    rel="noopener noreferrer"
-                  >
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-6 w-6 rounded-sm"
-                    >
-                      <Icon
-                        icon="lucide:arrow-up-right"
-                        className="w-4 h-4 text-muted-foreground group-hover:-translate-x-2 group-hover:-translate-y-2 transition-all"
-                      />
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-              {/* separators handled by divide utilities */}
-            </React.Fragment>
-          ))}
-        </div>
+                </Button>
+              </Link>
+            </div>
+          </div>
+        ))}
       </div>
     </Section>
   );

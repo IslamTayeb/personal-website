@@ -1,0 +1,29 @@
+services:
+  analytics-backend:
+    build: ./backend
+    container_name: visitor-analytics
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - analytics-data:/data
+    environment:
+      - PORT=3001
+      - NODE_ENV=production
+      - DISCORD_BOT_TOKEN=${DISCORD_BOT_TOKEN}
+      - DISCORD_CHANNEL_ID=${DISCORD_CHANNEL_ID}
+      - ANONYMIZE_IPS=${ANONYMIZE_IPS:-false}
+      - RESPECT_DNT=${RESPECT_DNT:-true}
+      - ADMIN_IPS=${ADMIN_IPS:-127.0.0.1,::1}
+      - DATABASE_PATH=/data/analytics.db
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:3000}
+    networks:
+      - analytics-network
+
+volumes:
+  analytics-data:
+    driver: local
+
+networks:
+  analytics-network:
+    driver: bridge
