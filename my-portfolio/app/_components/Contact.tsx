@@ -175,9 +175,9 @@ export const Contact = () => {
         {contactsData.map((contact) => (
           <div
             key={contact.id}
-            className="inline-flex items-center gap-3 bg-card hover:bg-card/50 transition-colors py-2.5 px-3 rounded-md border border-border/50"
+            className="inline-flex items-center gap-3 bg-card hover:bg-card/50 transition-colors py-2.5 px-3 rounded-md border border-border/80 hover:border-border border-dashed"
           >
-            <span className="bg-accent text-accent-foreground p-2 rounded-sm flex items-center justify-center shrink-0">
+            <span className="bg-slate-400/40 text-accent-foreground p-2 rounded-sm flex items-center justify-center shrink-0">
               <Icon
                 icon={contact.icon}
                 className={`w-4 h-4 ${contact.iconClass || ''}`}

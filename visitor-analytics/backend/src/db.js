@@ -22,7 +22,12 @@ db.exec(`
     country_code TEXT,
     region TEXT,
     city TEXT,
+    latitude REAL,
+    longitude REAL,
     isp TEXT,
+    organization TEXT,
+    asn TEXT,
+    asn_name TEXT,
     is_vpn BOOLEAN DEFAULT 0,
     timezone TEXT,
     language TEXT,
@@ -48,6 +53,15 @@ db.exec(`
     device_type TEXT,
     screen_resolution TEXT,
     viewport_size TEXT,
+    platform TEXT,
+    cpu_cores INTEGER,
+    device_memory REAL,
+    pixel_ratio REAL,
+    cookies_enabled BOOLEAN,
+    online BOOLEAN,
+    pdf_viewer BOOLEAN,
+    gpu_renderer TEXT,
+    gpu_vendor TEXT,
     time_spent INTEGER,
     scroll_depth INTEGER,
     is_new_visitor BOOLEAN DEFAULT 1,
@@ -68,17 +82,20 @@ const statements = {
   insertVisitor: db.prepare(`
     INSERT INTO visitors (
       visitor_fingerprint, ip_address, ip_hash, country, country_code,
-      region, city, isp, is_vpn, timezone, language, referrer,
+      region, city, latitude, longitude, isp, organization, asn, asn_name, is_vpn,
+      timezone, language, referrer,
       utm_source, utm_medium, utm_campaign, utm_term, utm_content
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `),
 
   insertSession: db.prepare(`
     INSERT INTO sessions (
       visitor_id, page_url, page_title, user_agent, browser, browser_version,
       os, os_version, device_type, screen_resolution, viewport_size,
+      platform, cpu_cores, device_memory, pixel_ratio,
+      cookies_enabled, online, pdf_viewer, gpu_renderer, gpu_vendor,
       time_spent, scroll_depth, is_new_visitor
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `),
 
   findVisitorByFingerprint: db.prepare(`

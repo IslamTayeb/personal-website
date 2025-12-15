@@ -67,7 +67,17 @@ app.post('/api/track', async (req, res) => {
       timezone,
       language,
       time_spent,
-      scroll_depth
+      scroll_depth,
+      // Extended device info
+      platform,
+      cpu_cores,
+      device_memory,
+      pixel_ratio,
+      cookies_enabled,
+      online,
+      pdf_viewer,
+      gpu_renderer,
+      gpu_vendor
     } = req.body;
 
     if (!fingerprint || !page_url) {
@@ -105,7 +115,12 @@ app.post('/api/track', async (req, res) => {
         geoData?.country_code || null,
         geoData?.region || null,
         geoData?.city || null,
+        geoData?.latitude || null,
+        geoData?.longitude || null,
         geoData?.isp || null,
+        geoData?.organization || null,
+        geoData?.asn || null,
+        geoData?.asn_name || null,
         geoData?.is_vpn ? 1 : 0,
         timezone || null,
         language || null,
@@ -134,6 +149,15 @@ app.post('/api/track', async (req, res) => {
       deviceInfo.device_type,
       screen_resolution || null,
       viewport_size || null,
+      platform || null,
+      cpu_cores || null,
+      device_memory || null,
+      pixel_ratio || null,
+      cookies_enabled !== undefined ? (cookies_enabled ? 1 : 0) : null,
+      online !== undefined ? (online ? 1 : 0) : null,
+      pdf_viewer !== undefined ? (pdf_viewer ? 1 : 0) : null,
+      gpu_renderer || null,
+      gpu_vendor || null,
       time_spent || 0,
       scroll_depth || 0,
       isNewVisitor ? 1 : 0
@@ -144,6 +168,7 @@ app.post('/api/track', async (req, res) => {
       {
         visitor_id: visitorId,
         referrer,
+        ip_address: ipToStore,
         ...utmParams
       },
       {
@@ -152,6 +177,16 @@ app.post('/api/track', async (req, res) => {
         browser: deviceInfo.browser,
         os: deviceInfo.os,
         device_type: deviceInfo.device_type,
+        screen_resolution,
+        platform,
+        cpu_cores,
+        device_memory,
+        pixel_ratio,
+        cookies_enabled,
+        online,
+        pdf_viewer,
+        gpu_renderer,
+        gpu_vendor,
         is_new_visitor: isNewVisitor
       },
       geoData

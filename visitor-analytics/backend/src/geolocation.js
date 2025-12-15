@@ -16,7 +16,8 @@ export async function getGeolocation(ip) {
 
   try {
     // Using ip-api.com - free, no API key required, 45 requests/minute
-    const response = await fetch(`http://ip-api.com/json/${ip}?fields=status,message,country,countryCode,region,regionName,city,isp,org,as,proxy,hosting`);
+    // Added lat, lon, as (ASN) fields
+    const response = await fetch(`http://ip-api.com/json/${ip}?fields=status,message,country,countryCode,region,regionName,city,lat,lon,isp,org,as,asname,proxy,hosting`);
     const data = await response.json();
 
     if (data.status === 'fail') {
@@ -37,7 +38,12 @@ export async function getGeolocation(ip) {
       country_code: data.countryCode,
       region: data.regionName,
       city: data.city,
+      latitude: data.lat,
+      longitude: data.lon,
       isp: data.isp,
+      organization: data.org,
+      asn: data.as,
+      asn_name: data.asname,
       is_vpn
     };
   } catch (error) {

@@ -73,10 +73,29 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
       }
     };
 
+    const getGPUInfo = (): { renderer: string | null; vendor: string | null } => {
+      try {
+        const canvas = document.createElement('canvas');
+        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        if (!gl) return { renderer: null, vendor: null };
+
+        const debugInfo = (gl as any).getExtension('WEBGL_debug_renderer_info');
+        if (!debugInfo) return { renderer: null, vendor: null };
+
+        return {
+          renderer: (gl as any).getParameter(debugInfo.UNMASKED_RENDERER_WEBGL),
+          vendor: (gl as any).getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)
+        };
+      } catch {
+        return { renderer: null, vendor: null };
+      }
+    };
+
     const sendTrackingData = async () => {
       if (sentRef.current) return;
 
       const timeSpent = Math.floor((Date.now() - startTimeRef.current) / 1000);
+      const gpu = getGPUInfo();
 
       const data = {
         fingerprint: getFingerprint(),
@@ -88,7 +107,19 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         language: navigator.language,
         time_spent: timeSpent,
-        scroll_depth: maxScrollDepthRef.current
+        scroll_depth: maxScrollDepthRef.current,
+        // Extended device info
+        platform: navigator.platform,
+        cpu_cores: (navigator as any).hardwareConcurrency || null,
+        device_memory: (navigator as any).deviceMemory || null,
+        pixel_ratio: window.devicePixelRatio || 1,
+        // Browser capabilities
+        cookies_enabled: navigator.cookieEnabled,
+        online: navigator.onLine,
+        pdf_viewer: navigator.pdfViewerEnabled || null,
+        // GPU info
+        gpu_renderer: gpu.renderer,
+        gpu_vendor: gpu.vendor
       };
 
       if (finalConfig.debug) {
@@ -131,6 +162,8 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
     const handleBeforeUnload = () => {
       if (!sentRef.current) {
         const timeSpent = Math.floor((Date.now() - startTimeRef.current) / 1000);
+        const gpu = getGPUInfo();
+
         const data = {
           fingerprint: getFingerprint(),
           page_url: window.location.href,
@@ -141,7 +174,19 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           language: navigator.language,
           time_spent: timeSpent,
-          scroll_depth: maxScrollDepthRef.current
+          scroll_depth: maxScrollDepthRef.current,
+          // Extended device info
+          platform: navigator.platform,
+          cpu_cores: (navigator as any).hardwareConcurrency || null,
+          device_memory: (navigator as any).deviceMemory || null,
+          pixel_ratio: window.devicePixelRatio || 1,
+          // Browser capabilities
+          cookies_enabled: navigator.cookieEnabled,
+          online: navigator.onLine,
+          pdf_viewer: navigator.pdfViewerEnabled || null,
+          // GPU info
+          gpu_renderer: gpu.renderer,
+          gpu_vendor: gpu.vendor
         };
 
         // Use sendBeacon for reliable tracking on page unload

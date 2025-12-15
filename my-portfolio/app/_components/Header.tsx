@@ -7,10 +7,10 @@ export const Header = () => {
   const email = 'islam.tayeb@duke.edu';
 
   return (
-    <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80 h-12 border-b border-dashed">
+    <header className="sticky top-0 py-3 z-50 bg-card bg-clip-padding bg-opacity-80 h-12 border-b border-border/80 border-dashed">
       <div className="flex max-w-3xl m-auto px-4">
         <h1 className="text-lg font-normal text-primary leading-none my-auto">
-            (Islam M)<sup>2</sup> Tayeb
+          (Islam M)<sup>2</sup> Tayeb
         </h1>
         <div className="flex-1" />
         <ul className="flex gap-2">
