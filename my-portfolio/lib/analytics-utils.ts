@@ -1,11 +1,11 @@
 import crypto from 'crypto';
-import UAParser from 'ua-parser-js';
+import { UAParser } from 'ua-parser-js';
 
-export function hashIP(ip) {
+export function hashIP(ip: string): string {
   return crypto.createHash('sha256').update(ip).digest('hex');
 }
 
-export function anonymizeIP(ip) {
+export function anonymizeIP(ip: string): string {
   if (ip.includes(':')) {
     // IPv6: Keep first 48 bits
     const parts = ip.split(':');
@@ -17,7 +17,7 @@ export function anonymizeIP(ip) {
   }
 }
 
-export function parseUserAgent(userAgent) {
+export function parseUserAgent(userAgent: string) {
   const parser = new UAParser(userAgent);
   const result = parser.getResult();
 
@@ -30,7 +30,7 @@ export function parseUserAgent(userAgent) {
   };
 }
 
-export function extractUTMParams(url) {
+export function extractUTMParams(url: string) {
   try {
     const urlObj = new URL(url);
     return {
@@ -51,13 +51,22 @@ export function extractUTMParams(url) {
   }
 }
 
-export function getClientIP(req) {
-  return req.headers['x-forwarded-for']?.split(',')[0].trim() ||
-         req.headers['x-real-ip'] ||
-         req.socket.remoteAddress;
+export function getClientIP(req: Request): string {
+  // Vercel-specific headers
+  const forwarded = req.headers.get('x-forwarded-for');
+  if (forwarded) {
+    return forwarded.split(',')[0].trim();
+  }
+
+  const realIP = req.headers.get('x-real-ip');
+  if (realIP) {
+    return realIP;
+  }
+
+  return '127.0.0.1';
 }
 
-export function getCountryFlag(countryCode) {
+export function getCountryFlag(countryCode: string | null): string {
   if (!countryCode || countryCode === 'LOCAL') return '🏠';
 
   const codePoints = countryCode
@@ -68,7 +77,7 @@ export function getCountryFlag(countryCode) {
   return String.fromCodePoint(...codePoints);
 }
 
-export function formatDuration(seconds) {
+export function formatDuration(seconds: number | null): string {
   if (!seconds || seconds < 0) return '0s';
 
   const hours = Math.floor(seconds / 3600);
@@ -83,7 +92,7 @@ export function formatDuration(seconds) {
   return parts.join(' ');
 }
 
-export function shouldTrack(req) {
+export function shouldTrack(req: Request): boolean {
   const adminIPs = process.env.ADMIN_IPS?.split(',') || [];
   const clientIP = getClientIP(req);
 
@@ -93,7 +102,7 @@ export function shouldTrack(req) {
   }
 
   // Respect Do Not Track header
-  if (process.env.RESPECT_DNT === 'true' && req.headers.dnt === '1') {
+  if (process.env.RESPECT_DNT === 'true' && req.headers.get('dnt') === '1') {
     return false;
   }
 

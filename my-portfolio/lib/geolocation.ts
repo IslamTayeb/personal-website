@@ -1,8 +1,20 @@
-import fetch from 'node-fetch';
-
 const VPN_INDICATORS = ['vpn', 'proxy', 'hosting', 'datacenter'];
 
-export async function getGeolocation(ip) {
+export interface GeolocationData {
+  country: string;
+  country_code: string;
+  region: string;
+  city: string;
+  latitude?: number;
+  longitude?: number;
+  isp: string;
+  organization?: string;
+  asn?: string;
+  asn_name?: string;
+  is_vpn: boolean;
+}
+
+export async function getGeolocation(ip: string): Promise<GeolocationData | null> {
   if (!ip || ip === '::1' || ip === '127.0.0.1' || ip.startsWith('192.168.') || ip.startsWith('10.')) {
     return {
       country: 'Local',
@@ -16,8 +28,10 @@ export async function getGeolocation(ip) {
 
   try {
     // Using ip-api.com - free, no API key required, 45 requests/minute
-    // Added lat, lon, as (ASN) fields
-    const response = await fetch(`http://ip-api.com/json/${ip}?fields=status,message,country,countryCode,region,regionName,city,lat,lon,isp,org,as,asname,proxy,hosting`);
+    const response = await fetch(
+      `http://ip-api.com/json/${ip}?fields=status,message,country,countryCode,region,regionName,city,lat,lon,isp,org,as,asname,proxy,hosting`,
+      { cache: 'no-store' }
+    );
     const data = await response.json();
 
     if (data.status === 'fail') {
@@ -48,35 +62,6 @@ export async function getGeolocation(ip) {
     };
   } catch (error) {
     console.error('Geolocation API error:', error);
-    return null;
-  }
-}
-
-// Alternative: ipapi.co (requires API key for higher limits)
-export async function getGeolocationIPAPI(ip, apiKey) {
-  try {
-    const url = apiKey
-      ? `https://ipapi.co/${ip}/json/?key=${apiKey}`
-      : `https://ipapi.co/${ip}/json/`;
-
-    const response = await fetch(url);
-    const data = await response.json();
-
-    if (data.error) {
-      console.error('IPAPI error:', data.reason);
-      return null;
-    }
-
-    return {
-      country: data.country_name,
-      country_code: data.country_code,
-      region: data.region,
-      city: data.city,
-      isp: data.org,
-      is_vpn: data.asn?.type === 'hosting'
-    };
-  } catch (error) {
-    console.error('IPAPI error:', error);
     return null;
   }
 }

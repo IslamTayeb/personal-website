@@ -10,10 +10,8 @@ interface TrackerConfig {
 }
 
 const defaultConfig: TrackerConfig = {
-  apiUrl: process.env.NEXT_PUBLIC_ANALYTICS_API || 'http://localhost:3001',
-  enabled: process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== 'false' &&
-           !!process.env.NEXT_PUBLIC_ANALYTICS_API &&
-           !process.env.NEXT_PUBLIC_ANALYTICS_API.includes('localhost'),
+  apiUrl: '/api/track',
+  enabled: process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== 'false',
   debug: process.env.NODE_ENV === 'development'
 };
 
@@ -129,7 +127,7 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
       }
 
       try {
-        const response = await fetch(`${finalConfig.apiUrl}/api/track`, {
+        const response = await fetch(finalConfig.apiUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -193,7 +191,7 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
 
         // Use sendBeacon for reliable tracking on page unload
         navigator.sendBeacon(
-          `${finalConfig.apiUrl}/api/track`,
+          finalConfig.apiUrl,
           JSON.stringify(data)
         );
       }
