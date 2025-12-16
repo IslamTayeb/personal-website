@@ -42,6 +42,10 @@ export async function sendVisitorNotification(
   }
 
   try {
+    // Detect environment (dev vs prod)
+    const isDev = sessionData.page_url.includes('localhost') || sessionData.page_url.includes('127.0.0.1');
+    const envBadge = isDev ? '🟡 **DEV**' : '🟢 **PROD**';
+
     const flag = getCountryFlag(geoData?.country_code || null);
     const location = geoData?.city
       ? `${flag} ${geoData.city}, ${geoData.region}, ${geoData.country}`
@@ -83,14 +87,18 @@ export async function sendVisitorNotification(
       ? `Renderer: ${sessionData.gpu_renderer}. Vendor: ${sessionData.gpu_vendor}.`
       : 'GPU: Unknown.';
 
+    const visitorType = sessionData.is_new_visitor ? '🔔 New Visitor' : '🔄 Returning Visitor';
+    const title = `${flag} ${visitorType} | ${envBadge}`;
+
     const embed = {
-      title: sessionData.is_new_visitor ? '🔔 New Visitor' : '🔄 Returning Visitor',
-      color: sessionData.is_new_visitor ? 0x57F287 : 0x5865F2,
+      title: title,
+      color: isDev ? 0xFEE75C : (sessionData.is_new_visitor ? 0x57F287 : 0x5865F2),
       fields: [
+        { name: '🌍 Location', value: location, inline: false },
         { name: '📱 Browser & Network', value: browserInfo, inline: false },
         { name: '🌐 ISP & Organization', value: ispInfo, inline: false },
         { name: '🔗 Network Information', value: networkInfo || 'N/A', inline: false },
-        { name: '📍 Location Details', value: locationDetails, inline: false },
+        { name: '📍 Coordinates', value: geoData?.latitude && geoData?.longitude ? `${geoData.latitude}, ${geoData.longitude}` : 'Unknown', inline: false },
         { name: '💻 System Resources', value: systemInfo || 'N/A', inline: false },
         { name: '🖥️ Device Hardware', value: deviceInfo || 'N/A', inline: false },
         { name: '🎨 GPU & Graphics', value: gpuInfo, inline: false },
