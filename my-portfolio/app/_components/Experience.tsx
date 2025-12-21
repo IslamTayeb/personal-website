@@ -89,7 +89,7 @@ export function Experience() {
 
   return (
     <Section className="mx-auto space-y-4">
-      <Badge variant="outline" className="" id="experience">
+    <Badge variant="outline" className="" id="experience">
         Experience
       </Badge>
       {visibleExperiences.map((experience, index) => (

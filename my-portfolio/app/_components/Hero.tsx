@@ -34,8 +34,8 @@ export const Hero = () => {
   );
 
   return (
-    <Section className="">
-      <Badge variant="outline" className="mb-4" id="hero">
+    <Section className="gap-4 flex flex-col items-start">
+      <Badge variant="outline" id="hero">
         Welcome!
       </Badge>
 

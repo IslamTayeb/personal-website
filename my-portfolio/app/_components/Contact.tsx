@@ -167,7 +167,7 @@ export const Contact = () => {
 
   return (
     <Section className="flex flex-col items-start gap-4">
-      <Badge variant={'outline'} className="mb-2" id="contact">
+      <Badge variant={'outline'} id="contact">
         Contact
       </Badge>
 
