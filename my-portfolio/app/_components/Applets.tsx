@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { LucideGithub, Link2, Info } from 'lucide-react';
-import React, { useState } from 'react';
+import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import {
   Tooltip,
@@ -23,8 +23,6 @@ type Applet = {
 };
 
 export const Applets = () => {
-  const [showAll, setShowAll] = useState(false);
-
   const appletsData: Applet[] = [
     {
       name: 'Interview Solve Log',
@@ -51,35 +49,7 @@ export const Applets = () => {
         github: 'https://github.com/IslamTayeb/instagram-unfollower',
       },
     },
-    {
-      name: 'Availability Checker',
-      description:
-        'CLI tool that checks my Google Calendar to see my availability and copies it to my clipboard.',
-      links: {
-        github: 'https://github.com/IslamTayeb/availability-checker',
-      },
-    },
-    {
-      name: 'Job Sheet Tracker',
-      description:
-        'CLI tool that reads emails, uses Gemini to extract job details, and updates my Google Sheet.',
-      links: {
-        github: 'https://github.com/IslamTayeb/job-sheet-tracker',
-      },
-    },
-    {
-      name: 'Config Files',
-      description:
-        'Nix-managed dotfiles for shell/editor config. Includes Neovim, Zsh, Tmux.',
-      links: {
-        github: 'https://github.com/IslamTayeb/dotfiles',
-      },
-    },
   ];
-
-  const displayedApplets = showAll
-    ? appletsData
-    : appletsData.slice(0, 3);
 
   return (
     <Section className="font-sans flex-col gap-4">
@@ -104,7 +74,7 @@ export const Applets = () => {
       </div>
 
       <div className="w-full divide-y divide-border">
-        {displayedApplets.map((applet) => (
+        {appletsData.map((applet) => (
           <div
             key={applet.name}
             className="py-2.5 px-2.5 hover:bg-muted/50 transition-colors"
@@ -163,12 +133,16 @@ export const Applets = () => {
         ))}
       </div>
 
-      <button
-        onClick={() => setShowAll(!showAll)}
-        className="text-xs leading-none ml-auto text-muted-foreground/80 mt-3 justify-end flex items-center underline hover:no-underline font-mono tracking-wide transition-colors"
-      >
-        {showAll ? 'See less...' : 'See more...'}
-      </button>
+      <div className="flex justify-end w-full">
+        <Link
+          href="https://github.com/IslamTayeb"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs leading-none text-muted-foreground/80 mt-3 flex items-center underline hover:no-underline font-mono tracking-wide"
+        >
+          See more on GitHub...
+        </Link>
+      </div>
     </Section>
   );
 };
