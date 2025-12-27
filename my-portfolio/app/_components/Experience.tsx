@@ -89,7 +89,7 @@ export function Experience() {
 
   return (
     <Section className="mx-auto space-y-4">
-    <Badge variant="outline" className="" id="experience">
+      <Badge variant="outline" className="" id="experience">
         Experience
       </Badge>
       {visibleExperiences.map((experience, index) => (
@@ -280,27 +280,6 @@ const experiences = [
         and {' '}
         <Code>
           <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
-        </Code>
-      </>,
-    ],
-    skills: [],
-  },
-  {
-    role: 'Software Engineer Intern',
-    company: 'Project: Sapien',
-    website: 'https://www.projectsapien.com/',
-    logo: 'Icons/Sapien.tsx',
-    period: 'Nov 2023 – Feb 2024',
-    location: 'Princeton, NJ',
-    responsibilities: [
-      <>
-        Survey platform with NLP tools using{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:react" className="inline text-current" height="14px" /> React
-        </Code>{' '}
-        and{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:nodedotjs" className="inline text-current" height="14px" /> Node.js
         </Code>
       </>,
     ],
