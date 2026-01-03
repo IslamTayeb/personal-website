@@ -108,9 +108,17 @@ export async function Blog() {
               className="group relative pt-10"
             >
               {/* Node */}
-              <div className="absolute top-0 left-0 w-8 h-8 rounded-full border-2 border-muted-foreground/50 bg-background flex items-center justify-center group-hover:border-foreground transition-colors">
+              <div className="absolute top-0 left-0 w-8 h-8 rounded-full border-2 border-muted-foreground/50 bg-background flex items-center justify-center group-hover:border-foreground transition-colors z-10">
                 <div className="w-3 h-3 rounded-full bg-muted-foreground/50 group-hover:bg-foreground transition-colors" />
               </div>
+
+              {/* Gradient line to next node on hover */}
+              {index < posts.length - 1 && (
+                <div
+                  className="absolute top-4 left-8 h-px bg-gradient-to-r from-foreground via-foreground/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  style={{ width: 'calc(100% + 1.5rem)' }}
+                />
+              )}
 
               {/* Content */}
               <div>

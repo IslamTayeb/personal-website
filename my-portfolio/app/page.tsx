@@ -36,10 +36,6 @@ export default function Home() {
 
       <Spacing height={height} />
 
-      <Applets />
-
-      <Spacing height={height} />
-
       <Publications />
 
       <Spacing height={height} />

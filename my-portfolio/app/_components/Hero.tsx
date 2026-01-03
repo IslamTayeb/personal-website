@@ -40,8 +40,8 @@ export const Hero = () => {
       </Badge>
 
       <div className="flex max-md:flex-col items-start gap-6">
-        <div className="flex-[1.4] flex my-auto max-md:mx-auto w-3/4">
-          <div className="w-full h-auto aspect-[0.8] max-w-xs mx-auto max-md:w-full max-md:mb-2 relative">
+        <div className="flex-[1.2] flex my-auto max-md:mx-auto w-3/4">
+          <div className="w-full h-auto aspect-[0.85] max-w-xs mx-auto max-md:w-full max-md:mb-2 relative">
             {!imagesLoaded && (
               <div className="absolute inset-0 rounded-lg z-10 bg-accent/20 animate-pulse" />
             )}
@@ -151,10 +151,6 @@ export const Hero = () => {
               skins
             </a>{' '}
             (<span>500K+ downloads</span>).
-          </p>
-          <p className="font-sans text-muted-foreground text-pretty">
-            I initially came to Duke as a pre-med computational chemist, but
-            kept gravitating toward the &quot;computational&quot; part.
           </p>
 
           <p className="font-sans text-muted-foreground text-pretty">
