@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
-import { LucideGithub, Link2 } from 'lucide-react';
+import { LucideGithub, Link2, FileText } from 'lucide-react';
 import React from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Section } from './Misc/Section';
@@ -66,8 +66,7 @@ export const ProductProjects = () => {
       ],
       projectExternalLinks: {
         github: 'https://github.com/IslamTayeb/spotify-clustering',
-        externalLink: 'https://apmoverflow.xyz/on-dimensions-of-taste/',
-        linkLabel: 'Writeup',
+        report: 'https://apmoverflow.xyz/on-dimensions-of-taste/',
       },
     },
     {
@@ -222,8 +221,21 @@ export const ProductProjects = () => {
                     ))}
                   </ul>
                   {(projectExternalLinks?.github ||
-                    projectExternalLinks?.externalLink) && (
+                    projectExternalLinks?.externalLink ||
+                    projectExternalLinks?.report) && (
                       <ul className="project-info-links max-md:w-full max-md:justify-end">
+                        {projectExternalLinks?.report && (
+                          <li className="project-info-links-item">
+                            <Link
+                              href={projectExternalLinks.report}
+                              className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <FileText size={14} /> Report
+                            </Link>
+                          </li>
+                        )}
                         {projectExternalLinks?.externalLink && (
                           <li className="project-info-links-item">
                             <Link
@@ -232,7 +244,7 @@ export const ProductProjects = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <Link2 size={14} /> {projectExternalLinks.linkLabel || 'Link'}
+                              <Link2 size={14} /> Link
                             </Link>
                           </li>
                         )}
