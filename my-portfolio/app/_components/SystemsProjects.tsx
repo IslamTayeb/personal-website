@@ -8,45 +8,27 @@ import { Code, DefaultIcon } from './sharedComponents';
 
 const categories = [
   { name: 'NETWORKING', color: 'bg-slate-400/40' },
-  { name: 'OPERATING SYSTEM', color: 'bg-slate-400/40' },
+  { name: 'OPERATING SYS', color: 'bg-slate-400/40' },
   { name: 'DISTRIBUTED', color: 'bg-slate-400/40' },
 ] as const;
+
+const Tech = ({ icon, children }: { icon: string; children: React.ReactNode }) => (
+  <Code><DefaultIcon icon={icon} className="inline text-current" height="14px" /> {children}</Code>
+);
+
+const ExtLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
+  <a href={href} target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">{children}</a>
+);
 
 export const SystemsProjects = () => {
   const systemsProjectsData = [
     {
       projectName: 'Evaluating Mosh\'s State Assumptions',
-      new: true,
+      new: false,
       wip: false,
       projectDescription: (
         <>
-          <a
-            href="https://mosh.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:no-underline"
-          >
-            Mobile Shell
-          </a>{' '}
-          (Mosh) uses &quot;assumed&quot; over &quot;known&quot; server states as reference for when to send packets. We tested whether this assumption holds under varying network conditions. Built a{' '}
-          <Code>
-            <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
-          </Code>{' '}
-          SSP implementation with λ-parameterized reference selection and a{' '}
-          <Code>
-            <DefaultIcon icon="simple-icons:docker" className="inline text-current" height="14px" /> Docker
-          </Code>{' '}
-          testbed with{' '}
-          <Code>
-            <DefaultIcon icon="simple-icons:linux" className="inline text-current" height="14px" /> tc/netem
-          </Code>{' '}
-          to measure AoI under high packet loss.
-
-          {/* Built with{' '}
-          <a href="https://www.linkedin.com/in/arvindh-manian/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">Arvindh</a>,{' '}
-          <a href="https://www.linkedin.com/in/aaaronhsu/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">Aaron</a>,{' '}
-          <a href="https://www.linkedin.com/in/john-schappert/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">John</a>, and{' '}
-          <a href="https://www.linkedin.com/in/mimi-liao/" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">Mimi</a>! */}
+          Tested whether <ExtLink href="https://mosh.org/">Mosh</ExtLink>&apos;s use of &quot;assumed&quot; vs &quot;known&quot; server states holds under high packet loss. Built a <Tech icon="simple-icons:python">Python</Tech> SSP implementation with λ-parameterized reference selection and a <Tech icon="simple-icons:docker">Docker</Tech>/<Tech icon="simple-icons:linux">tc/netem</Tech> testbed to measure Age-of-Information.
         </>
       ),
       projectExternalLinks: {
@@ -61,25 +43,7 @@ export const SystemsProjects = () => {
       wip: false,
       projectDescription: (
         <>
-          Full UDP networking for{' '}
-          <a
-            href="https://github.com/mit-pdos/xv6-riscv"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:no-underline"
-          >
-            xv6
-          </a>
-          {' '}in{' '}
-          <Code>
-            <DefaultIcon icon="simple-icons:c" className="inline text-current" height="14px" /> C
-          </Code>
-
-          : E1000 NIC driver with DMA-based TX/RX descriptor rings and UDP protocol layer with per-port queues. Built a{' '}
-          <Code>
-            <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
-          </Code>{' '}
-          testbed with binary search for max throughput, queue depth monitoring across burst/sustained loads, and latency analysis.
+          UDP networking for <ExtLink href="https://github.com/mit-pdos/xv6-riscv">xv6</ExtLink> in <Tech icon="simple-icons:c">C</Tech>: E1000 NIC driver with DMA descriptor rings and per-port packet queues. <Tech icon="simple-icons:python">Python</Tech> testbed for throughput/latency benchmarking under burst and sustained loads.
         </>
       ),
       projectExternalLinks: {

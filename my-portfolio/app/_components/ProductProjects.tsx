@@ -12,12 +12,17 @@ const VideoWithPlaceholder = ({
   videoSrc,
   placeholderSrc,
   projectName,
+  scale = 1,
 }: {
   videoSrc: string;
   placeholderSrc: string;
   projectName: string;
+  scale?: number;
 }) => (
-  <div className="project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100 relative">
+  <div
+    className="project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100 relative"
+    style={{ transform: `scale(${scale})` }}
+  >
     <Image
       src={placeholderSrc}
       fill
@@ -38,6 +43,33 @@ const VideoWithPlaceholder = ({
 
 export const ProductProjects = () => {
   const projectsData = [
+    {
+      image: '/Spotify-Clustering.webm',
+      projectName: 'Spotify Clustering',
+      new: true,
+      wip: false,
+      videoScale: 1.6,
+      projectDescription: (
+        <>
+          ML pipeline clustering 1,400+ songs using 33 interpretable dimensions from audio classifiers and GPT-annotated lyrics
+        </>
+      ),
+      projectTech: [
+        'Python',
+        'OpenAI',
+        'Plotly',
+      ],
+      projectTechLogo: [
+        'simple-icons:python',
+        'simple-icons:openai',
+        'simple-icons:plotly',
+      ],
+      projectExternalLinks: {
+        github: 'https://github.com/IslamTayeb/spotify-clustering',
+        externalLink: 'https://apmoverflow.xyz/on-dimensions-of-taste/',
+        linkLabel: 'Writeup',
+      },
+    },
     {
       image: '/HeliumRaycast.webm',
       lockImage: '/HeliumRaycastLock.webp',
@@ -97,7 +129,7 @@ export const ProductProjects = () => {
   return (
     <Section className="font-sans flex-col gap-4">
       <Badge variant={'outline'} className="mb-4" id="product-projects">
-        Product Projects
+        Projects
       </Badge>
 
       <div className="projects-container">
@@ -113,6 +145,7 @@ export const ProductProjects = () => {
               projectTechLogo,
               new: isNew,
               wip: isWip,
+              videoScale,
             },
             index
           ) => {
@@ -199,7 +232,7 @@ export const ProductProjects = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <Link2 size={14} /> Link
+                              <Link2 size={14} /> {projectExternalLinks.linkLabel || 'Link'}
                             </Link>
                           </li>
                         )}
@@ -225,9 +258,13 @@ export const ProductProjects = () => {
                       videoSrc={image}
                       placeholderSrc={lockImage}
                       projectName={projectName}
+                      scale={videoScale}
                     />
                   ) : image.endsWith('.webm') ? (
-                    <div className="project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100">
+                    <div
+                      className="project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100"
+                      style={videoScale ? { transform: `scale(${videoScale})` } : undefined}
+                    >
                       <video
                         src={image}
                         autoPlay
