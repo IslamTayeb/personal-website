@@ -244,7 +244,7 @@ export const Publications = () => {
                                 {pubTitle}
                               </span>
                             </div>
-                            <div className="text-muted-foreground text-md font-normal ">
+                            <span className="text-muted-foreground text-md font-normal ">
                               <Link
                                 href={pubLink}
                                 target="_blank"
@@ -260,25 +260,23 @@ export const Publications = () => {
                               )}
                               <TooltipProvider delayDuration={50}>
                                 <Tooltip>
-                                  <TooltipTrigger className="font-normal">
-                                    {pubJournalLink ? (
-                                      <div className="flex items-center gap-0">
-                                        <div className="group">
-                                          <Link
-                                            href={pubJournalLink}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="group"
-                                          >
-                                            <span className="underline group-hover:no-underline">
-                                              {pubJournal}
-                                            </span>
-                                          </Link>
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      pubJournal
-                                    )}
+                                  <TooltipTrigger asChild>
+                                    <span className="font-normal">
+                                      {pubJournalLink ? (
+                                        <Link
+                                          href={pubJournalLink}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="group"
+                                        >
+                                          <span className="underline group-hover:no-underline">
+                                            {pubJournal}
+                                          </span>
+                                        </Link>
+                                      ) : (
+                                        pubJournal
+                                      )}
+                                    </span>
                                   </TooltipTrigger>
                                   <TooltipContent className="shadow-md shadow-card transition-all">
                                     <p>{pubImpact}</p>
@@ -290,7 +288,7 @@ export const Publications = () => {
                                 {' '}
                                 {pubType}
                               </span>
-                            </div>
+                            </span>
                             <div className="text-muted-foreground  text-md font-light py-1.5">
                               {typeof pubAuthors === 'string' ? (
                                 `- ${pubAuthors}`

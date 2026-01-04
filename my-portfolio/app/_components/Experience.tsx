@@ -106,32 +106,47 @@ export function Experience() {
                 </div>
                 <div className="flex-1 flex flex-col ">
                   {/* Role + Company + Date */}
-                  <div className="flex items-center gap-2 justify-between flex-wrap">
-                    <span className="flex items-center">
-                      <span className="font-medium text-base font-sans text-primary">
-                        {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
-                      </span>
-                      {experience.company === 'Soff' && (
-                        <Badge
-                          variant="outline"
-                          className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
-                        >
-                          Employee #2
-                        </Badge>
-                      )}
+                  <div className="flex items-center justify-between flex-wrap">
+                    <span className="inline-flex items-center">
                       {experience.website ? (
                         <Link
                           href={experience.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="font-normal font-sans text-muted-foreground underline hover:no-underline "
+                          className="inline"
                         >
-                          {experience.company}
+                          <span className="font-medium text-base font-sans text-primary">
+                            {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
+                          </span>
+                          {experience.company === 'Soff' && (
+                            <Badge
+                              variant="outline"
+                              className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
+                            >
+                              Employee #2
+                            </Badge>
+                          )}
+                          <span className="font-normal font-sans text-muted-foreground underline hover:no-underline ">
+                            {experience.company}
+                          </span>
                         </Link>
                       ) : (
-                        <span className="font-normal font-sans text-muted-foreground/80 ">
-                          {experience.company}
-                        </span>
+                        <>
+                          <span className="font-medium text-base font-sans text-primary">
+                            {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
+                          </span>
+                          {experience.company === 'Soff' && (
+                            <Badge
+                              variant="outline"
+                              className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
+                            >
+                              Employee #2
+                            </Badge>
+                          )}
+                          <span className="font-normal font-sans text-muted-foreground/80 ">
+                            {experience.company}
+                          </span>
+                        </>
                       )}
                     </span>
                     {experience.period && (
@@ -141,9 +156,9 @@ export function Experience() {
                     )}
                   </div>
                   {/* Description with integrated skills */}
-                  <p className="text-muted-foreground font-normal text-base font-sans">
+                  <span className="text-muted-foreground font-normal text-base font-sans">
                     {experience.responsibilities[0]}
-                  </p>
+                  </span>
                 </div>
               </div>
             </div>
@@ -174,14 +189,20 @@ const experiences = [
     website: 'https://www.romerolab.org/',
     responsibilities: [
       <>
-        Enzyme protocol mining tools using{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:pytorch" className="inline text-current" height="14px" /> PyTorch
-        </Code>{' '}
-        and services in{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
-        </Code>
+        Enzyme protocol mining tools{' '}
+        <span className="inline-block">
+          using{' '}
+          <Code>
+            <DefaultIcon icon="simple-icons:pytorch" className="inline text-current" height="14px" /> PyTorch
+          </Code>
+        </span>{' '}
+        and{' '}
+        <span className="inline-block">
+          services in{' '}
+          <Code>
+            <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
+          </Code>
+        </span>
       </>,
     ],
     skills: [],
@@ -195,15 +216,20 @@ const experiences = [
     location: 'San Francisco, CA',
     responsibilities: [
       <>
-        Sales intelligence for manufacturers using{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:nextdotjs" className="inline text-current" height="14px" /> Next.js
-        </Code>{' '}
+        Sales intelligence for manufacturers{' '}
+        <span className="inline-block">
+          using{' '}
+          <Code>
+            <DefaultIcon icon="simple-icons:nextdotjs" className="inline text-current" height="14px" /> Next.js
+          </Code>
+        </span>{' '}
         and{' '}
-        <Code>
-          <DefaultIcon icon="devicon-plain:trpc" className="inline text-current" height="14px" /> tRPC
-        </Code>{' '}
-        as employee #2
+        <span className="inline-block">
+          <Code>
+            <DefaultIcon icon="devicon-plain:trpc" className="inline text-current" height="14px" /> tRPC
+          </Code>{' '}
+          as employee #2
+        </span>
       </>,
     ],
     skills: [],
@@ -217,14 +243,19 @@ const experiences = [
     location: 'Durham, NC',
     responsibilities: [
       <>
-        Literature analysis tools for medical research using{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:nextdotjs" className="inline text-current" height="14px" /> Next.js
-        </Code>{' '}
+        Literature analysis tools for medical research{' '}
+        <span className="inline-block">
+          using{' '}
+          <Code>
+            <DefaultIcon icon="simple-icons:nextdotjs" className="inline text-current" height="14px" /> Next.js
+          </Code>
+        </span>{' '}
         and{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
-        </Code>
+        <span className="inline-block">
+          <Code>
+            <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
+          </Code>
+        </span>
       </>,
     ],
     skills: [],
@@ -238,10 +269,13 @@ const experiences = [
     location: 'Durham, NC',
     responsibilities: [
       <>
-        Non-linear RNA-seq analysis and dashboard for CRISPR experiments using{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
-        </Code>
+        Non-linear RNA-seq analysis and dashboard for CRISPR experiments{' '}
+        <span className="inline-block">
+          using{' '}
+          <Code>
+            <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
+          </Code>
+        </span>
       </>,
     ],
     skills: [],
@@ -255,11 +289,16 @@ const experiences = [
     website: 'https://sites.duke.edu/navid/',
     responsibilities: [
       <>
-        Continual learning model for antibody affinity prediction using{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:pytorch" className="inline text-current" height="14px" /> PyTorch
-        </Code>{' '}
-        (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">1 pre-print</a>)
+        Continual learning model for antibody affinity prediction{' '}
+        <span className="inline-block">
+          using{' '}
+          <Code>
+            <DefaultIcon icon="simple-icons:pytorch" className="inline text-current" height="14px" /> PyTorch
+          </Code>
+        </span>{' '}
+        <span className="inline-block">
+          (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">1 pre-print</a>)
+        </span>
       </>,
     ],
     skills: [],
@@ -273,14 +312,19 @@ const experiences = [
     location: 'Durham, NC',
     responsibilities: [
       <>
-        Automated literature review system using{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:react" className="inline text-current" height="14px" /> React
-        </Code>{' '}
-        and {' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
-        </Code>
+        Automated literature review system{' '}
+        <span className="inline-block">
+          using{' '}
+          <Code>
+            <DefaultIcon icon="simple-icons:react" className="inline text-current" height="14px" /> React
+          </Code>
+        </span>{' '}
+        and{' '}
+        <span className="inline-block">
+          <Code>
+            <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
+          </Code>
+        </span>
       </>,
     ],
     skills: [],
@@ -294,12 +338,16 @@ const experiences = [
     location: 'Dhahran, Saudi Arabia',
     responsibilities: [
       <>
-        Traditional ML polymer synthesis for CO₂ capture using{' '}
-        <Code>
-          <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
-        </Code>
-        {' '}
-        (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">3 publications</a>)
+        Traditional ML polymer synthesis for CO₂ capture{' '}
+        <span className="inline-block">
+          using{' '}
+          <Code>
+            <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
+          </Code>
+        </span>{' '}
+        <span className="inline-block">
+          (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">3 publications</a>)
+        </span>
       </>,
     ],
     skills: [],

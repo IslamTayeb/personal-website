@@ -75,7 +75,7 @@ export const SystemsProjects = () => {
             {/* Content */}
             <div className="flex-1 border-y border-r border-border/80 hover:border-border border-dashed rounded-r-lg p-3 py-2 bg-card hover:bg-card/50 transition-colors flex flex-col">
               {/* Title and badges */}
-              <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center flex-wrap">
                 <h3 className="text-base font-medium text-primary">
                   {project.projectName}
                 </h3>
@@ -95,7 +95,7 @@ export const SystemsProjects = () => {
                     WIP
                   </Badge>
                 )}
-                <div className="ml-auto flex gap-3">
+                <div className="flex gap-3 md:ml-auto">
                   {project.projectExternalLinks?.paper && (
                     <Link
                       href={project.projectExternalLinks.paper}
