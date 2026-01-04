@@ -112,14 +112,6 @@ export async function Blog() {
                 <div className="w-3 h-3 rounded-full bg-muted-foreground/50 group-hover:bg-foreground transition-colors" />
               </div>
 
-              {/* Gradient line to next node on hover */}
-              {index < posts.length - 1 && (
-                <div
-                  className="absolute top-4 left-8 h-px bg-gradient-to-r from-foreground via-foreground/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ width: 'calc(100% + 1.5rem)' }}
-                />
-              )}
-
               {/* Content */}
               <div>
                 <span className="text-sm text-muted-foreground/60 uppercase tracking-wider font-mono">
