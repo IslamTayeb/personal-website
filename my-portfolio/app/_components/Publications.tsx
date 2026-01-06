@@ -200,7 +200,7 @@ export const Publications = () => {
 
   return (
     <Section className="flex flex-col items-start gap-4">
-      <Badge variant={'outline'} className="mb-1" id="publications">
+      <Badge variant={'outline'} id="publications">
         Selected Publications
       </Badge>
 

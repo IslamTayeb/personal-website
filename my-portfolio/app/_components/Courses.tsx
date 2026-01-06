@@ -151,23 +151,23 @@ export const Courses = () => {
 
   return (
     <Section className="flex flex-col items-start gap-4">
-      <div className="flex items-center justify-between w-full flex-wrap gap-2">
-        <Badge variant={'outline'} className="" id="courses">
-          Courses
-        </Badge>
-        <div className="flex gap-3 text-[10px] font-mono text-muted-foreground">
-          {Object.entries(categoryStyles).map(([category, styles]) => (
-            <span key={category} className="flex items-center gap-1.5">
-              <span className={cn('w-2 h-2 rounded-full', styles.dot)} />
-              {category}
-            </span>
-          ))}
-        </div>
-      </div>
+      <Badge variant={'outline'} className="" id="courses">
+        Courses
+      </Badge>
 
       {/* Coursework Section */}
       <div className="w-full flex flex-col gap-2">
-        <span className="text-sm text-muted-foreground font-medium font-sans">Coursework</span>
+        <div className="flex items-center justify-between w-full flex-wrap gap-2">
+          <span className="text-sm text-muted-foreground font-medium font-sans">Coursework</span>
+          <div className="flex gap-3 text-[10px] font-mono text-muted-foreground">
+            {Object.entries(categoryStyles).map(([category, styles]) => (
+              <span key={category} className="flex items-center gap-1.5">
+                <span className={cn('w-2 h-2 rounded-full', styles.dot)} />
+                {category}
+              </span>
+            ))}
+          </div>
+        </div>
         <div className="flex flex-wrap w-full -m-0.5">
           {courses.map((course) => {
             const isActive = active === course.code;
