@@ -73,11 +73,8 @@ export const Hero = () => {
             <ExternalLink href="https://corecursive.com/066-sqlite-with-richard-hipp/">
               <UnderlineSpan>stories</UnderlineSpan>
             </ExternalLink>{' '}
-            and over-optimizing configs. Also interested in{' '}
-            <ExternalLink href="https://x.com/jrkelly/status/2028465376993189988?s=20">
-              <UnderlineSpan>solving science</UnderlineSpan>
-            </ExternalLink>
-            . Currently based in{' '}
+            and over-optimizing configs. Also interested in building for
+            science. Currently based in{' '}
             <Code>
               <DefaultIcon icon="flag:us-1x1" className="rounded-[1.5px]" />{' '}
               Durham, NC

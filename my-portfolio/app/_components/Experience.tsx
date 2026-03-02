@@ -6,6 +6,7 @@ import { Code, DefaultIcon } from './sharedComponents';
 import { Section } from './Misc/Section';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import dynamic from 'next/dynamic';
+import { useState } from 'react';
 import Link from 'next/link';
 
 // Create a component registry object
@@ -46,12 +47,8 @@ const logoComponentRegistry = {
 };
 
 export function Experience() {
-  const softwareExperiences = experiences.filter(
-    (experience) => experience.category === 'software'
-  );
-  const researchExperiences = experiences.filter(
-    (experience) => experience.category === 'research'
-  );
+  const [showAll, setShowAll] = useState(false);
+  const visibleExperiences = showAll ? experiences : experiences.slice(0, 3);
 
   const renderLogo = (logo: string, company: string) => {
     // Handle TSX components
@@ -95,26 +92,33 @@ export function Experience() {
       <Badge variant="outline" className="" id="experience">
         Experience
       </Badge>
-      <div className="space-y-2">
-        <Badge variant="outline" className="w-fit">
-          Research Experience
-        </Badge>
-        {researchExperiences.map((experience, index) => (
-          <div key={`research-${index}`}>
-            <div
-              className="border border-border/80 hover:border-border border-dashed rounded-lg p-3 py-2 bg-card hover:bg-card/50 transition-colors"
-            >
-              {/* Main Content Section */}
-              <div className="flex flex-col gap-2 flex-1">
-                {/* Logo + Role + Company + Date on same line */}
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-12 h-12 min-w-12 min-h-12 text-primary">
-                    {renderLogo(experience.logo, experience.company)}
-                  </div>
-                  <div className="flex-1 flex flex-col ">
+      {visibleExperiences.map((experience, index) => (
+        <div key={index}>
+          <div
+            className="border border-border/80 hover:border-border border-dashed rounded-lg p-3 py-2 bg-card hover:bg-card/50 transition-colors"
+          >
+            {/* Main Content Section */}
+            <div className="flex flex-col gap-2 flex-1">
+              {/* Logo + Role + Company + Date on same line */}
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center w-12 h-12 min-w-12 min-h-12 text-primary">
+                  {renderLogo(experience.logo, experience.company)}
+                </div>
+                <div className="flex-1 flex flex-col ">
                     {/* Role + Company + Date */}
                     <div className="flex items-center justify-between flex-wrap">
                       <span className="inline-flex items-center">
+                        <span className="font-medium text-base font-sans text-primary">
+                          {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
+                        </span>
+                        {experience.company === 'Soff' && (
+                          <Badge
+                            variant="outline"
+                            className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
+                          >
+                            Employee #2
+                          </Badge>
+                        )}
                         {experience.website ? (
                           <Link
                             href={experience.website}
@@ -122,136 +126,42 @@ export function Experience() {
                             rel="noopener noreferrer"
                             className="inline"
                           >
-                            <span className="font-medium text-base font-sans text-primary">
-                              {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
-                            </span>
-                            {experience.company === 'Soff' && (
-                              <Badge
-                                variant="outline"
-                                className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
-                              >
-                                Employee #2
-                              </Badge>
-                            )}
                             <span className="font-normal font-sans text-muted-foreground underline hover:no-underline ">
                               {experience.company}
                             </span>
                           </Link>
                         ) : (
-                          <>
-                            <span className="font-medium text-base font-sans text-primary">
-                              {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
-                            </span>
-                            {experience.company === 'Soff' && (
-                              <Badge
-                                variant="outline"
-                                className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
-                              >
-                                Employee #2
-                              </Badge>
-                            )}
-                            <span className="font-normal font-sans text-muted-foreground/80 ">
-                              {experience.company}
-                            </span>
-                          </>
+                          <span className="font-normal font-sans text-muted-foreground/80 ">
+                            {experience.company}
+                          </span>
                         )}
                       </span>
                       {experience.period && (
                         <span className="font-light text-muted-foreground text-sm whitespace-nowrap ">
                           {experience.period}
-                        </span>
-                      )}
-                    </div>
-                    {/* Description with integrated skills */}
-                    <span className="text-muted-foreground font-normal text-base font-sans">
-                      {experience.responsibilities[0]}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="space-y-2">
-        <Badge variant="outline" className="w-fit">
-          Software Experience
-        </Badge>
-        {softwareExperiences.map((experience, index) => (
-          <div key={`software-${index}`}>
-            <div
-              className="border border-border/80 hover:border-border border-dashed rounded-lg p-3 py-2 bg-card hover:bg-card/50 transition-colors"
-            >
-              {/* Main Content Section */}
-              <div className="flex flex-col gap-2 flex-1">
-                {/* Logo + Role + Company + Date on same line */}
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-12 h-12 min-w-12 min-h-12 text-primary">
-                    {renderLogo(experience.logo, experience.company)}
-                  </div>
-                  <div className="flex-1 flex flex-col ">
-                    {/* Role + Company + Date */}
-                    <div className="flex items-center justify-between flex-wrap">
-                      <span className="inline-flex items-center">
-                        {experience.website ? (
-                          <Link
-                            href={experience.website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline"
-                          >
-                            <span className="font-medium text-base font-sans text-primary">
-                              {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
-                            </span>
-                            {experience.company === 'Soff' && (
-                              <Badge
-                                variant="outline"
-                                className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
-                              >
-                                Employee #2
-                              </Badge>
-                            )}
-                            <span className="font-normal font-sans text-muted-foreground underline hover:no-underline ">
-                              {experience.company}
-                            </span>
-                          </Link>
-                        ) : (
-                          <>
-                            <span className="font-medium text-base font-sans text-primary">
-                              {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
-                            </span>
-                            {experience.company === 'Soff' && (
-                              <Badge
-                                variant="outline"
-                                className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
-                              >
-                                Employee #2
-                              </Badge>
-                            )}
-                            <span className="font-normal font-sans text-muted-foreground/80 ">
-                              {experience.company}
-                            </span>
-                          </>
-                        )}
                       </span>
-                      {experience.period && (
-                        <span className="font-light text-muted-foreground text-sm whitespace-nowrap ">
-                          {experience.period}
-                        </span>
-                      )}
-                    </div>
-                    {/* Description with integrated skills */}
-                    <span className="text-muted-foreground font-normal text-base font-sans">
-                      {experience.responsibilities[0]}
-                    </span>
+                    )}
                   </div>
+                  {/* Description with integrated skills */}
+                  <span className="text-muted-foreground font-normal text-base font-sans">
+                    {experience.responsibilities[0]}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
+      {experiences.length > 2 && (
+        <div className="flex justify-end w-full">
+          <button
+            onClick={() => setShowAll(!showAll)}
+            className="text-xs leading-none text-muted-foreground/80 -mt-0.5 flex items-center underline hover:no-underline tracking-wide"
+          >
+            {showAll ? 'See less...' : 'See more...'}
+          </button>
+        </div>
+      )}
     </Section>
   );
 }
@@ -261,7 +171,6 @@ const experiences = [
     role: 'ML Research Assistant',
     company: 'Duke University',
     logo: 'Icons/DukeUni2.tsx',
-    category: 'research',
     period: 'Aug 2025 – Present',
     location: 'Durham, NC',
     website: 'https://www.romerolab.org/',
@@ -290,7 +199,6 @@ const experiences = [
     company: 'Soff (YC S24)',
     website: 'https://soff.ai/',
     logo: 'Icons/Soff.tsx',
-    category: 'software',
     period: 'May 2025 – Oct 2025',
     location: 'San Francisco, CA',
     responsibilities: [
@@ -318,7 +226,6 @@ const experiences = [
     company: 'Life Edit',
     website: 'https://lifeeditinc.com/',
     logo: 'Icons/Lifeedit.tsx',
-    category: 'software',
     period: 'Sep 2024 – May 2025',
     location: 'Durham, NC',
     responsibilities: [
@@ -338,7 +245,6 @@ const experiences = [
     role: 'ML Research Assistant',
     company: 'Duke University',
     logo: 'Icons/DukeUni2.tsx',
-    category: 'research',
     period: 'Oct 2024 – Apr 2025',
     location: 'Durham, NC',
     website: 'https://sites.duke.edu/navid/',
@@ -363,7 +269,6 @@ const experiences = [
     company: 'DIHI',
     website: 'https://dihi.org/',
     logo: 'Icons/DIHI.tsx',
-    category: 'software',
     period: 'Jun 2024 – Aug 2024',
     location: 'Durham, NC',
     responsibilities: [
@@ -390,7 +295,6 @@ const experiences = [
     company: 'Saudi Aramco',
     website: 'https://www.aramco.com/',
     logo: 'Icons/Aramco.tsx',
-    category: 'research',
     period: 'Jul 2022 – Sep 2023',
     location: 'Dhahran, Saudi Arabia',
     responsibilities: [

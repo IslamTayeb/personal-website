@@ -66,7 +66,7 @@ export const ProductProjects = () => {
       ],
       projectExternalLinks: {
         github: 'https://github.com/IslamTayeb/spotify-clustering',
-        report: 'https://apmoverflow.xyz/on-dimensions-of-taste/',
+        blog: 'https://apmoverflow.xyz/on-dimensions-of-taste/',
       },
     },
     {
@@ -222,17 +222,17 @@ export const ProductProjects = () => {
                   </ul>
                   {(projectExternalLinks?.github ||
                     projectExternalLinks?.externalLink ||
-                    projectExternalLinks?.report) && (
+                    projectExternalLinks?.blog) && (
                       <ul className="project-info-links max-md:w-full max-md:justify-end">
-                        {projectExternalLinks?.report && (
+                        {projectExternalLinks?.blog && (
                           <li className="project-info-links-item">
                             <Link
-                              href={projectExternalLinks.report}
+                              href={projectExternalLinks.blog}
                               className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
                               target="_blank"
                               rel="noopener noreferrer"
                             >
-                              <FileText size={14} /> Report
+                              <FileText size={14} /> Blog
                             </Link>
                           </li>
                         )}
