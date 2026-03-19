@@ -108,10 +108,7 @@ export async function Blog() {
         {/* Posts */}
         <div className="grid grid-cols-3 gap-6 pb-4">
           {posts.map((post, index) => (
-            <div
-              key={post.id}
-              className="group relative pt-10"
-            >
+            <div key={post.id} className="group relative pt-10">
               {/* Node */}
               <div className="absolute top-0 left-0 w-8 h-8 rounded-full border-2 border-muted-foreground/50 bg-background flex items-center justify-center group-hover:border-foreground transition-colors z-10">
                 <div className="w-3 h-3 rounded-full bg-muted-foreground/50 group-hover:bg-foreground transition-colors" />

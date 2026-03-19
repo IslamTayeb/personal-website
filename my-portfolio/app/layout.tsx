@@ -5,7 +5,6 @@ import { GeistSans } from 'geist/font/sans';
 import { GeistMono } from 'geist/font/mono';
 import { cn } from '@/lib/utils';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import { Moon } from 'lucide-react';
 import { Toaster } from '@/components/ui/toaster';
 import { Analytics } from '@vercel/analytics/react';
 import VisitorTracker from './_components/VisitorTracker';
@@ -18,7 +17,9 @@ const anekTelugu = Anek_Telugu({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+  ),
   title: 'Islam Tayeb',
   description: "Islam Tayeb's Portfolio",
   icons: {
