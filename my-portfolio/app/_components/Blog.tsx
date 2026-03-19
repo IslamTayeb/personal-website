@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 interface BlogPost {
   id: string;
   title: string;
+  tag: string | null;
   date: string;
   excerpt: string;
   url: string;
@@ -62,12 +63,16 @@ async function getBlogPosts(): Promise<BlogPost[]> {
       );
 
       if (titleMatch && linkMatch) {
-        const title = titleMatch[1].trim();
+        const rawTitle = titleMatch[1].trim();
+        const tagMatch = rawTitle.match(/\(([^)]*)\)/);
+        const tag = tagMatch ? tagMatch[1] : null;
+        const title = rawTitle.replace(/\s*\([^)]*\)/g, '');
         const description = descMatch ? stripHtml(descMatch[1]) : '';
 
         items.push({
           id: generateHash(title),
           title,
+          tag,
           date: pubDateMatch ? formatDate(pubDateMatch[1]) : '',
           excerpt:
             description.slice(0, 100) + (description.length > 100 ? '...' : ''),
@@ -131,6 +136,14 @@ export async function Blog() {
                         className="ml-1.5 no-underline rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono leading-tight align-middle"
                       >
                         New
+                      </Badge>
+                    )}
+                    {post.tag && (
+                      <Badge
+                        variant="secondary"
+                        className="ml-1.5 no-underline rounded-md text-[0.6rem] px-1 py-[0.05rem] h-fit font-mono leading-tight align-middle"
+                      >
+                        {post.tag}
                       </Badge>
                     )}
                   </h3>
