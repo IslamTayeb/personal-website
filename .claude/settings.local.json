@@ -3,7 +3,7 @@
     "allow": [
       "WebFetch(domain:islamtayeb.bearblog.dev)",
       "Bash(npm run build:*)",
-      "Bash(builtin cd /Users/islamtayeb/Documents/GitHub/personal-website/my-portfolio)",
+      "Bash(builtin cd /Users/islamtayeb/Documents/GitHub/personal-website/islamtayeb)",
       "Bash(npx tsc:*)",
       "Bash(curl:*)"
     ]

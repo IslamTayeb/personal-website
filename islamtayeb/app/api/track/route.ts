@@ -7,14 +7,18 @@ import {
   parseUserAgent,
   extractUTMParams,
   getClientIP,
-  shouldTrack
+  shouldTrack,
 } from '@/lib/analytics-utils';
 
 export async function POST(req: NextRequest) {
   try {
     // Check if we should track this request
     if (!shouldTrack(req)) {
-      return NextResponse.json({ success: true, tracked: false, reason: 'excluded' });
+      return NextResponse.json({
+        success: true,
+        tracked: false,
+        reason: 'excluded',
+      });
     }
 
     const body = await req.json();
@@ -38,16 +42,20 @@ export async function POST(req: NextRequest) {
       online,
       pdf_viewer,
       gpu_renderer,
-      gpu_vendor
+      gpu_vendor,
     } = body;
 
     if (!fingerprint || !page_url) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
     }
 
     // Get client IP
     const clientIP = getClientIP(req);
-    const ipToStore = process.env.ANONYMIZE_IPS === 'true' ? anonymizeIP(clientIP) : clientIP;
+    const ipToStore =
+      process.env.ANONYMIZE_IPS === 'true' ? anonymizeIP(clientIP) : clientIP;
 
     // Parse user agent
     const userAgent = req.headers.get('user-agent') || '';
@@ -71,7 +79,7 @@ export async function POST(req: NextRequest) {
         ip_address: ipToStore,
         utm_source: utmParams.utm_source,
         utm_medium: utmParams.utm_medium,
-        utm_campaign: utmParams.utm_campaign
+        utm_campaign: utmParams.utm_campaign,
       },
       {
         page_url,
@@ -89,15 +97,17 @@ export async function POST(req: NextRequest) {
         pdf_viewer,
         gpu_renderer,
         gpu_vendor,
-        is_new_visitor: isNewVisitor
+        is_new_visitor: isNewVisitor,
       },
       geoData
     );
 
     return NextResponse.json({ success: true, tracked: true });
-
   } catch (error) {
     console.error('Error tracking visitor:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

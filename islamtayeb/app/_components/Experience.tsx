@@ -59,7 +59,7 @@ export function Experience() {
       if (componentName && componentName in logoComponentRegistry) {
         const LogoComponent =
           logoComponentRegistry[
-          componentName as keyof typeof logoComponentRegistry
+            componentName as keyof typeof logoComponentRegistry
           ];
         return <LogoComponent className="w-full h-full" />;
       }
@@ -75,7 +75,7 @@ export function Experience() {
     return (
       <Avatar className="w-12 h-12 flex items-center justify-center rounded-md min-w-12 min-h-12">
         {typeof logo === 'string' &&
-          (logo.startsWith('http') || logo.startsWith('/')) ? (
+        (logo.startsWith('http') || logo.startsWith('/')) ? (
           <AvatarImage src={logo} className="object-contain" />
         ) : (
           <DefaultIcon icon={logo} className="w-6 h-6" />
@@ -94,9 +94,7 @@ export function Experience() {
       </Badge>
       {visibleExperiences.map((experience, index) => (
         <div key={index}>
-          <div
-            className="border border-border/80 hover:border-border border-dashed rounded-lg p-3 py-2 bg-card hover:bg-card/50 transition-colors"
-          >
+          <div className="border border-border/80 hover:border-border border-dashed rounded-lg p-3 py-2 bg-card hover:bg-card/50 transition-colors">
             {/* Main Content Section */}
             <div className="flex flex-col gap-2 flex-1">
               {/* Logo + Role + Company + Date on same line */}
@@ -105,40 +103,43 @@ export function Experience() {
                   {renderLogo(experience.logo, experience.company)}
                 </div>
                 <div className="flex-1 flex flex-col ">
-                    {/* Role + Company + Date */}
-                    <div className="flex items-center justify-between flex-wrap">
-                      <span className="inline-flex items-center">
-                        <span className="font-medium text-base font-sans text-primary">
-                          {experience.role}<span className="text-muted-foreground font-normal text-base ">,{'\u00A0'}</span>
+                  {/* Role + Company + Date */}
+                  <div className="flex items-center justify-between flex-wrap">
+                    <span className="inline-flex items-center">
+                      <span className="font-medium text-base font-sans text-primary">
+                        {experience.role}
+                        <span className="text-muted-foreground font-normal text-base ">
+                          ,{'\u00A0'}
                         </span>
-                        {experience.company === 'Soff' && (
-                          <Badge
-                            variant="outline"
-                            className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
-                          >
-                            Employee #2
-                          </Badge>
-                        )}
-                        {experience.website ? (
-                          <Link
-                            href={experience.website}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline"
-                          >
-                            <span className="font-normal font-sans text-muted-foreground underline hover:no-underline ">
-                              {experience.company}
-                            </span>
-                          </Link>
-                        ) : (
-                          <span className="font-normal font-sans text-muted-foreground/80 ">
+                      </span>
+                      {experience.company === 'Soff' && (
+                        <Badge
+                          variant="outline"
+                          className="rounded-full font-semibold text-[0.4em] p-[0.2rem] px-1.5 h-fit text-nowrap font-mono "
+                        >
+                          Employee #2
+                        </Badge>
+                      )}
+                      {experience.website ? (
+                        <Link
+                          href={experience.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline"
+                        >
+                          <span className="font-normal font-sans text-muted-foreground underline hover:no-underline ">
                             {experience.company}
                           </span>
-                        )}
-                      </span>
-                      {experience.period && (
-                        <span className="font-light text-muted-foreground text-sm whitespace-nowrap ">
-                          {experience.period}
+                        </Link>
+                      ) : (
+                        <span className="font-normal font-sans text-muted-foreground/80 ">
+                          {experience.company}
+                        </span>
+                      )}
+                    </span>
+                    {experience.period && (
+                      <span className="font-light text-muted-foreground text-sm whitespace-nowrap ">
+                        {experience.period}
                       </span>
                     )}
                   </div>
@@ -180,14 +181,24 @@ const experiences = [
         <span className="inline-block">
           using{' '}
           <Code>
-            <DefaultIcon icon="simple-icons:pytorch" className="inline text-current" height="14px" /> PyTorch
+            <DefaultIcon
+              icon="simple-icons:pytorch"
+              className="inline text-current"
+              height="14px"
+            />{' '}
+            PyTorch
           </Code>
         </span>{' '}
         and{' '}
         <span className="inline-block">
           services in{' '}
           <Code>
-            <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
+            <DefaultIcon
+              icon="simple-icons:fastapi"
+              className="inline text-current"
+              height="14px"
+            />{' '}
+            FastAPI
           </Code>
         </span>
       </>,
@@ -207,13 +218,23 @@ const experiences = [
         <span className="inline-block">
           using{' '}
           <Code>
-            <DefaultIcon icon="simple-icons:nextdotjs" className="inline text-current" height="14px" /> Next.js
+            <DefaultIcon
+              icon="simple-icons:nextdotjs"
+              className="inline text-current"
+              height="14px"
+            />{' '}
+            Next.js
           </Code>
         </span>{' '}
         and{' '}
         <span className="inline-block">
           <Code>
-            <DefaultIcon icon="devicon-plain:trpc" className="inline text-current" height="14px" /> tRPC
+            <DefaultIcon
+              icon="devicon-plain:trpc"
+              className="inline text-current"
+              height="14px"
+            />{' '}
+            tRPC
           </Code>{' '}
           as employee #2
         </span>
@@ -234,7 +255,12 @@ const experiences = [
         <span className="inline-block">
           using{' '}
           <Code>
-            <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
+            <DefaultIcon
+              icon="simple-icons:python"
+              className="inline text-current"
+              height="14px"
+            />{' '}
+            Python
           </Code>
         </span>
       </>,
@@ -254,11 +280,25 @@ const experiences = [
         <span className="inline-block">
           using{' '}
           <Code>
-            <DefaultIcon icon="simple-icons:pytorch" className="inline text-current" height="14px" /> PyTorch
+            <DefaultIcon
+              icon="simple-icons:pytorch"
+              className="inline text-current"
+              height="14px"
+            />{' '}
+            PyTorch
           </Code>
         </span>{' '}
         <span className="inline-block">
-          (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">1 pre-print</a>)
+          (
+          <a
+            href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:no-underline"
+          >
+            1 pre-print
+          </a>
+          )
         </span>
       </>,
     ],
@@ -277,13 +317,23 @@ const experiences = [
         <span className="inline-block">
           using{' '}
           <Code>
-            <DefaultIcon icon="simple-icons:react" className="inline text-current" height="14px" /> React
+            <DefaultIcon
+              icon="simple-icons:react"
+              className="inline text-current"
+              height="14px"
+            />{' '}
+            React
           </Code>
         </span>{' '}
         and{' '}
         <span className="inline-block">
           <Code>
-            <DefaultIcon icon="simple-icons:fastapi" className="inline text-current" height="14px" /> FastAPI
+            <DefaultIcon
+              icon="simple-icons:fastapi"
+              className="inline text-current"
+              height="14px"
+            />{' '}
+            FastAPI
           </Code>
         </span>
       </>,
@@ -303,11 +353,25 @@ const experiences = [
         <span className="inline-block">
           using{' '}
           <Code>
-            <DefaultIcon icon="simple-icons:python" className="inline text-current" height="14px" /> Python
+            <DefaultIcon
+              icon="simple-icons:python"
+              className="inline text-current"
+              height="14px"
+            />{' '}
+            Python
           </Code>
         </span>{' '}
         <span className="inline-block">
-          (<a href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">3 publications</a>)
+          (
+          <a
+            href="https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:no-underline"
+          >
+            3 publications
+          </a>
+          )
         </span>
       </>,
     ],

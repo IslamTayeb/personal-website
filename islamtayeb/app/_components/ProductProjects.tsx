@@ -51,14 +51,11 @@ export const ProductProjects = () => {
       videoScale: 1.6,
       projectDescription: (
         <>
-          ML pipeline clustering 1,400+ songs using 33 interpretable dimensions from audio classifiers and GPT-annotated lyrics
+          ML pipeline clustering 1,400+ songs using 33 interpretable dimensions
+          from audio classifiers and GPT-annotated lyrics
         </>
       ),
-      projectTech: [
-        'Python',
-        'OpenAI',
-        'Plotly',
-      ],
+      projectTech: ['Python', 'OpenAI', 'Plotly'],
       projectTechLogo: [
         'simple-icons:python',
         'simple-icons:openai',
@@ -77,15 +74,11 @@ export const ProductProjects = () => {
       wip: false,
       projectDescription: (
         <>
-          Raycast extension for keyboard-driven browser control, enabling seamless tab, bookmark, history, and web searches directly
+          Raycast extension for keyboard-driven browser control, enabling
+          seamless tab, bookmark, history, and web searches directly
         </>
       ),
-      projectTech: [
-        'TypeScript',
-        'Raycast API',
-        'AppleScript',
-        'SQLite',
-      ],
+      projectTech: ['TypeScript', 'Raycast API', 'AppleScript', 'SQLite'],
       projectTechLogo: [
         'simple-icons:typescript',
         'simple-icons:raycast',
@@ -105,14 +98,11 @@ export const ProductProjects = () => {
       wip: false,
       projectDescription: (
         <>
-          Web app using LLMs to generate GitHub README files through codebase analysis with a sliding window technique
+          Web app using LLMs to generate GitHub README files through codebase
+          analysis with a sliding window technique
         </>
       ),
-      projectTech: [
-        'Next.js',
-        'Node.js',
-        'PostgreSQL',
-      ],
+      projectTech: ['Next.js', 'Node.js', 'PostgreSQL'],
       projectTechLogo: [
         'simple-icons:nextdotjs',
         'simple-icons:nodedotjs',
@@ -153,8 +143,9 @@ export const ProductProjects = () => {
               <div className="project max-md:w-full" key={projectName}>
                 <div className="project-info gap-2.5">
                   <h3
-                    className={`project-info-title antialiased max-md:w-full leading-tight flex flex-row items-center gap-2 text-primary  ${isOdd ? 'text-right' : 'text-left'
-                      }`}
+                    className={`project-info-title antialiased max-md:w-full leading-tight flex flex-row items-center gap-2 text-primary  ${
+                      isOdd ? 'text-right' : 'text-left'
+                    }`}
                   >
                     <div className="leading-none h-min invisible absolute max-md:visible max-md:relative text-left w-auto font-semibold">
                       {projectName}
@@ -223,45 +214,45 @@ export const ProductProjects = () => {
                   {(projectExternalLinks?.github ||
                     projectExternalLinks?.externalLink ||
                     projectExternalLinks?.blog) && (
-                      <ul className="project-info-links max-md:w-full max-md:justify-end">
-                        {projectExternalLinks?.blog && (
-                          <li className="project-info-links-item">
-                            <Link
-                              href={projectExternalLinks.blog}
-                              className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <FileText size={14} /> Blog
-                            </Link>
-                          </li>
-                        )}
-                        {projectExternalLinks?.externalLink && (
-                          <li className="project-info-links-item">
-                            <Link
-                              href={projectExternalLinks.externalLink}
-                              className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <Link2 size={14} /> Link
-                            </Link>
-                          </li>
-                        )}
-                        {projectExternalLinks?.github && (
-                          <li className="project-info-links-item">
-                            <Link
-                              href={projectExternalLinks.github}
-                              className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <LucideGithub size={14} /> GitHub
-                            </Link>
-                          </li>
-                        )}
-                      </ul>
-                    )}
+                    <ul className="project-info-links max-md:w-full max-md:justify-end">
+                      {projectExternalLinks?.blog && (
+                        <li className="project-info-links-item">
+                          <Link
+                            href={projectExternalLinks.blog}
+                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FileText size={14} /> Blog
+                          </Link>
+                        </li>
+                      )}
+                      {projectExternalLinks?.externalLink && (
+                        <li className="project-info-links-item">
+                          <Link
+                            href={projectExternalLinks.externalLink}
+                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Link2 size={14} /> Link
+                          </Link>
+                        </li>
+                      )}
+                      {projectExternalLinks?.github && (
+                        <li className="project-info-links-item">
+                          <Link
+                            href={projectExternalLinks.github}
+                            className="project-info-links-item-link flex flex-row items-center gap-2 font-mono text-sm font-medium underline hover:no-underline"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <LucideGithub size={14} /> GitHub
+                          </Link>
+                        </li>
+                      )}
+                    </ul>
+                  )}
                 </div>
 
                 <div className="project-image overflow-hidden scale-95 rounded-sm border border-border/50 max-md:rounded-lg">
@@ -275,7 +266,11 @@ export const ProductProjects = () => {
                   ) : image.endsWith('.webm') ? (
                     <div
                       className="project-image-container bg-card/50 opacity-[0.5] hover:blur-0 hover:opacity-100 transition-all max-md:blur-0 max-md:brightness-50 saturate-0 hover:saturate-100"
-                      style={videoScale ? { transform: `scale(${videoScale})` } : undefined}
+                      style={
+                        videoScale
+                          ? { transform: `scale(${videoScale})` }
+                          : undefined
+                      }
                     >
                       <video
                         src={image}

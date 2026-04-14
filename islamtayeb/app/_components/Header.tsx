@@ -24,7 +24,10 @@ export const Header = () => {
             )}
           >
             <span className="flex items-center justify-center px-1 py-0">
-              <DefaultIcon icon="lucide:command" className="inline text-foreground mt-0" />
+              <DefaultIcon
+                icon="lucide:command"
+                className="inline text-foreground mt-0"
+              />
               <p className="text-foreground m-0 leading-none inline max-sm:hidden underline group-hover:no-underline ml-[0.4em]">
                 Blog
               </p>
@@ -39,7 +42,10 @@ export const Header = () => {
             title="Send email"
           >
             <span className="flex items-center justify-center px-1 py-0">
-              <DefaultIcon icon="lucide:mail" className="inline text-foreground mt-0" />
+              <DefaultIcon
+                icon="lucide:mail"
+                className="inline text-foreground mt-0"
+              />
               <p className="text-foreground m-0 leading-none inline max-sm:hidden underline group-hover:no-underline ml-[0.4em]">
                 Email
               </p>

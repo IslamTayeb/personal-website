@@ -16,7 +16,7 @@ This project is a personal portfolio website built using Next.js, showcasing my 
 ## Usage
 
 1. Clone the repository: `git clone https://github.com/IslamTayeb/personal-website.git`
-2. Navigate to the project directory: `cd my-portfolio`
+2. Navigate to the project directory: `cd islamtayeb`
 3. Install dependencies: `npm install` or `yarn install` or `pnpm install` or `bun install`
 4. Start the development server: `npm run dev` or `yarn dev` or `pnpm dev` or `bun dev`
 5. Open [http://localhost:3000](http://localhost:3000) in your browser to run locally.

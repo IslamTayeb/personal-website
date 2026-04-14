@@ -8,9 +8,7 @@ export const Footer = () => {
   return (
     <footer className="bg-card border-border/80 border-t border-dashed">
       <div className="py-3.5 text-muted-foreground text-sm flex gap-x-1 max-w-3xl m-auto px-4">
-        <span className="">
-          Last Updated 01/03/2025
-        </span>
+        <span className="">Last Updated 01/03/2025</span>
         <div className="ml-auto text-right max-[375px]:hidden">
           Made with <HeartFilledIcon className="inline -mt-1" width={11.5} /> in{' '}
           <span className="font-semibold">Durham, NC</span>

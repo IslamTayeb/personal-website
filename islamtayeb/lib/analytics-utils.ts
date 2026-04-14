@@ -26,7 +26,7 @@ export function parseUserAgent(userAgent: string) {
     browser_version: result.browser.version || 'Unknown',
     os: result.os.name || 'Unknown',
     os_version: result.os.version || 'Unknown',
-    device_type: result.device.type || 'desktop'
+    device_type: result.device.type || 'desktop',
   };
 }
 
@@ -38,7 +38,7 @@ export function extractUTMParams(url: string) {
       utm_medium: urlObj.searchParams.get('utm_medium') || null,
       utm_campaign: urlObj.searchParams.get('utm_campaign') || null,
       utm_term: urlObj.searchParams.get('utm_term') || null,
-      utm_content: urlObj.searchParams.get('utm_content') || null
+      utm_content: urlObj.searchParams.get('utm_content') || null,
     };
   } catch {
     return {
@@ -46,7 +46,7 @@ export function extractUTMParams(url: string) {
       utm_medium: null,
       utm_campaign: null,
       utm_term: null,
-      utm_content: null
+      utm_content: null,
     };
   }
 }
@@ -72,7 +72,7 @@ export function getCountryFlag(countryCode: string | null): string {
   const codePoints = countryCode
     .toUpperCase()
     .split('')
-    .map(char => 127397 + char.charCodeAt(0));
+    .map((char) => 127397 + char.charCodeAt(0));
 
   return String.fromCodePoint(...codePoints);
 }
@@ -97,7 +97,7 @@ export function shouldTrack(req: Request): boolean {
   const clientIP = getClientIP(req);
 
   // Don't track admin IPs
-  if (adminIPs.some(ip => clientIP.includes(ip))) {
+  if (adminIPs.some((ip) => clientIP.includes(ip))) {
     return false;
   }
 

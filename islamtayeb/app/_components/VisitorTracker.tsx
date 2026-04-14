@@ -12,10 +12,14 @@ interface TrackerConfig {
 const defaultConfig: TrackerConfig = {
   apiUrl: '/api/track',
   enabled: process.env.NEXT_PUBLIC_ANALYTICS_ENABLED !== 'false',
-  debug: process.env.NODE_ENV === 'development'
+  debug: process.env.NODE_ENV === 'development',
 };
 
-export default function VisitorTracker({ config = defaultConfig }: { config?: Partial<TrackerConfig> }) {
+export default function VisitorTracker({
+  config = defaultConfig,
+}: {
+  config?: Partial<TrackerConfig>;
+}) {
   const pathname = usePathname();
   const startTimeRef = useRef<number>(Date.now());
   const maxScrollDepthRef = useRef<number>(0);
@@ -52,7 +56,7 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
         screen.width,
         screen.height,
         new Date().getTimezoneOffset(),
-        canvas.toDataURL()
+        canvas.toDataURL(),
       ];
 
       return btoa(components.join('|')).substring(0, 32);
@@ -73,10 +77,14 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
       }
     };
 
-    const getGPUInfo = (): { renderer: string | null; vendor: string | null } => {
+    const getGPUInfo = (): {
+      renderer: string | null;
+      vendor: string | null;
+    } => {
       try {
         const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+        const gl =
+          canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
         if (!gl) return { renderer: null, vendor: null };
 
         const debugInfo = (gl as any).getExtension('WEBGL_debug_renderer_info');
@@ -84,7 +92,7 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
 
         return {
           renderer: (gl as any).getParameter(debugInfo.UNMASKED_RENDERER_WEBGL),
-          vendor: (gl as any).getParameter(debugInfo.UNMASKED_VENDOR_WEBGL)
+          vendor: (gl as any).getParameter(debugInfo.UNMASKED_VENDOR_WEBGL),
         };
       } catch {
         return { renderer: null, vendor: null };
@@ -119,7 +127,7 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
         pdf_viewer: navigator.pdfViewerEnabled || null,
         // GPU info
         gpu_renderer: gpu.renderer,
-        gpu_vendor: gpu.vendor
+        gpu_vendor: gpu.vendor,
       };
 
       if (finalConfig.debug) {
@@ -132,7 +140,7 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
         });
 
         if (response.ok) {
@@ -161,7 +169,9 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
     // Send data before page unload
     const handleBeforeUnload = () => {
       if (!sentRef.current) {
-        const timeSpent = Math.floor((Date.now() - startTimeRef.current) / 1000);
+        const timeSpent = Math.floor(
+          (Date.now() - startTimeRef.current) / 1000
+        );
         const gpu = getGPUInfo();
 
         const data = {
@@ -186,14 +196,11 @@ export default function VisitorTracker({ config = defaultConfig }: { config?: Pa
           pdf_viewer: navigator.pdfViewerEnabled || null,
           // GPU info
           gpu_renderer: gpu.renderer,
-          gpu_vendor: gpu.vendor
+          gpu_vendor: gpu.vendor,
         };
 
         // Use sendBeacon for reliable tracking on page unload
-        navigator.sendBeacon(
-          finalConfig.apiUrl,
-          JSON.stringify(data)
-        );
+        navigator.sendBeacon(finalConfig.apiUrl, JSON.stringify(data));
       }
     };
 

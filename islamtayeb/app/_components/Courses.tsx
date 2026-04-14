@@ -97,7 +97,7 @@ const courses = [
     name: 'Biochemistry I',
     code: 'BIOCHEM 301',
     category: 'Biochemistry',
-    desc: "Protein structure, enzyme kinetics, metabolism. Nail in the coffin for premed. Too much memorization. But really got me interested in applying physical and computational tooling in biochem.",
+    desc: 'Protein structure, enzyme kinetics, metabolism. Nail in the coffin for premed. Too much memorization. But really got me interested in applying physical and computational tooling in biochem.',
     locked: false,
   },
   {
@@ -123,23 +123,32 @@ const courses = [
   },
 ];
 
-const categoryStyles: Record<string, { pill: string; activePill: string; lockedPill: string; dot: string }> = {
+const categoryStyles: Record<
+  string,
+  { pill: string; activePill: string; lockedPill: string; dot: string }
+> = {
   Systems: {
     pill: 'bg-orange-300/10 border-orange-300/20 hover:bg-orange-300/20 hover:border-orange-300/30 text-orange-200/80',
-    activePill: 'bg-orange-300/20 border-orange-300/50 text-orange-200 ring-1 ring-orange-300/30',
-    lockedPill: 'bg-orange-900/10 border-orange-800/15 text-orange-300/35 saturate-50 brightness-75 hover:bg-orange-900/15 hover:border-orange-800/25 hover:brightness-90',
+    activePill:
+      'bg-orange-300/20 border-orange-300/50 text-orange-200 ring-1 ring-orange-300/30',
+    lockedPill:
+      'bg-orange-900/10 border-orange-800/15 text-orange-300/35 saturate-50 brightness-75 hover:bg-orange-900/15 hover:border-orange-800/25 hover:brightness-90',
     dot: 'bg-orange-300/50',
   },
   Theory: {
     pill: 'bg-blue-300/10 border-blue-300/20 hover:bg-blue-300/20 hover:border-blue-300/30 text-blue-200/80',
-    activePill: 'bg-blue-300/20 border-blue-300/50 text-blue-200 ring-1 ring-blue-300/30',
-    lockedPill: 'bg-blue-900/10 border-blue-800/15 text-blue-300/35 saturate-50 brightness-75 hover:bg-blue-900/15 hover:border-blue-800/25 hover:brightness-90',
+    activePill:
+      'bg-blue-300/20 border-blue-300/50 text-blue-200 ring-1 ring-blue-300/30',
+    lockedPill:
+      'bg-blue-900/10 border-blue-800/15 text-blue-300/35 saturate-50 brightness-75 hover:bg-blue-900/15 hover:border-blue-800/25 hover:brightness-90',
     dot: 'bg-blue-300/50',
   },
   Biochemistry: {
     pill: 'bg-teal-300/10 border-teal-300/20 hover:bg-teal-300/20 hover:border-teal-300/30 text-teal-200/80',
-    activePill: 'bg-teal-300/20 border-teal-300/50 text-teal-200 ring-1 ring-teal-300/30',
-    lockedPill: 'bg-teal-900/10 border-teal-800/15 text-teal-300/35 saturate-50 brightness-75 hover:bg-teal-900/15 hover:border-teal-800/25 hover:brightness-90',
+    activePill:
+      'bg-teal-300/20 border-teal-300/50 text-teal-200 ring-1 ring-teal-300/30',
+    lockedPill:
+      'bg-teal-900/10 border-teal-800/15 text-teal-300/35 saturate-50 brightness-75 hover:bg-teal-900/15 hover:border-teal-800/25 hover:brightness-90',
     dot: 'bg-teal-300/50',
   },
 };
@@ -158,7 +167,9 @@ export const Courses = () => {
       {/* Coursework Section */}
       <div className="w-full flex flex-col gap-2">
         <div className="flex items-center justify-between w-full flex-wrap gap-2">
-          <span className="text-sm text-muted-foreground font-medium font-sans">Coursework</span>
+          <span className="text-sm text-muted-foreground font-medium font-sans">
+            Coursework
+          </span>
           <div className="flex gap-3 text-[10px] font-mono text-muted-foreground">
             {Object.entries(categoryStyles).map(([category, styles]) => (
               <span key={category} className="flex items-center gap-1.5">
@@ -176,8 +187,13 @@ export const Courses = () => {
             return (
               <div
                 key={course.code}
-                className={cn('p-0.5 relative group', course.locked ? 'cursor-not-allowed' : 'cursor-pointer')}
-                onClick={() => !course.locked && setActive(isActive ? null : course.code)}
+                className={cn(
+                  'p-0.5 relative group',
+                  course.locked ? 'cursor-not-allowed' : 'cursor-pointer'
+                )}
+                onClick={() =>
+                  !course.locked && setActive(isActive ? null : course.code)
+                }
               >
                 <span
                   className={cn(
@@ -210,14 +226,18 @@ export const Courses = () => {
       {/* Teaching Section */}
       <div className="w-full flex flex-col gap-2">
         <div className="flex items-center gap-1.5">
-          <span className="text-sm text-muted-foreground font-medium font-sans">Teaching</span>
+          <span className="text-sm text-muted-foreground font-medium font-sans">
+            Teaching
+          </span>
           <TooltipProvider delayDuration={50}>
             <Tooltip>
               <TooltipTrigger asChild>
                 <Info className="w-3.5 h-3.5 text-muted-foreground/60 cursor-help" />
               </TooltipTrigger>
               <TooltipContent className="font-sans">
-                <p className="text-xs">Assisted in discussions, office hours, and grading</p>
+                <p className="text-xs">
+                  Assisted in discussions, office hours, and grading
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -230,8 +250,13 @@ export const Courses = () => {
             return (
               <div
                 key={course.code}
-                className={cn('p-0.5 relative group', course.locked ? 'cursor-not-allowed' : 'cursor-pointer')}
-                onClick={() => !course.locked && setActive(isActive ? null : course.code)}
+                className={cn(
+                  'p-0.5 relative group',
+                  course.locked ? 'cursor-not-allowed' : 'cursor-pointer'
+                )}
+                onClick={() =>
+                  !course.locked && setActive(isActive ? null : course.code)
+                }
               >
                 <span
                   className={cn(
@@ -263,7 +288,10 @@ export const Courses = () => {
 
       <div className="w-full text-sm flex items-start font-sans transition-all duration-200 ease-out">
         {activeItem ? (
-          <span key={activeItem.code} className="text-muted-foreground animate-in fade-in duration-150">
+          <span
+            key={activeItem.code}
+            className="text-muted-foreground animate-in fade-in duration-150"
+          >
             {activeItem.desc}
           </span>
         ) : (

@@ -12,28 +12,58 @@ const categories = [
   { name: 'DISTRIBUTED', color: 'bg-slate-400/40' },
 ] as const;
 
-const Tech = ({ icon, children }: { icon: string; children: React.ReactNode }) => (
-  <Code><DefaultIcon icon={icon} className="inline text-current" height="14px" /> {children}</Code>
+const Tech = ({
+  icon,
+  children,
+}: {
+  icon: string;
+  children: React.ReactNode;
+}) => (
+  <Code>
+    <DefaultIcon icon={icon} className="inline text-current" height="14px" />{' '}
+    {children}
+  </Code>
 );
 
-const ExtLink = ({ href, children }: { href: string; children: React.ReactNode }) => (
-  <a href={href} target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">{children}</a>
+const ExtLink = ({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="underline hover:no-underline"
+  >
+    {children}
+  </a>
 );
 
 export const SystemsProjects = () => {
   const systemsProjectsData = [
     {
-      projectName: 'Evaluating Mosh\'s State Assumptions',
+      projectName: "Evaluating Mosh's State Assumptions",
       new: false,
       wip: false,
       projectDescription: (
         <>
-          Tested whether <ExtLink href="https://mosh.org/">Mosh</ExtLink>&apos;s use of &quot;assumed&quot; vs &quot;known&quot; server states holds under high packet loss. Built a <Tech icon="simple-icons:python">Python</Tech> SSP implementation with λ-parameterized reference selection and a <Tech icon="simple-icons:docker">Docker</Tech>/<Tech icon="simple-icons:linux">tc/netem</Tech> testbed to measure Age-of-Information.
+          Tested whether <ExtLink href="https://mosh.org/">Mosh</ExtLink>&apos;s
+          use of &quot;assumed&quot; vs &quot;known&quot; server states holds
+          under high packet loss. Built a{' '}
+          <Tech icon="simple-icons:python">Python</Tech> SSP implementation with
+          λ-parameterized reference selection and a{' '}
+          <Tech icon="simple-icons:docker">Docker</Tech>/
+          <Tech icon="simple-icons:linux">tc/netem</Tech> testbed to measure
+          Age-of-Information.
         </>
       ),
       projectExternalLinks: {
         github: 'https://github.com/IslamTayeb/mosh-lite',
-        paper: 'https://github.com/IslamTayeb/mosh-lite/blob/main/final_report.pdf',
+        paper:
+          'https://github.com/IslamTayeb/mosh-lite/blob/main/final_report.pdf',
       },
       category: categories[0],
     },
@@ -43,12 +73,18 @@ export const SystemsProjects = () => {
       wip: false,
       projectDescription: (
         <>
-          UDP networking for <ExtLink href="https://github.com/mit-pdos/xv6-riscv">xv6</ExtLink> in <Tech icon="simple-icons:c">C</Tech>: E1000 NIC driver with DMA descriptor rings and per-port packet queues. <Tech icon="simple-icons:python">Python</Tech> testbed for throughput/latency benchmarking under burst and sustained loads.
+          UDP networking for{' '}
+          <ExtLink href="https://github.com/mit-pdos/xv6-riscv">xv6</ExtLink> in{' '}
+          <Tech icon="simple-icons:c">C</Tech>: E1000 NIC driver with DMA
+          descriptor rings and per-port packet queues.{' '}
+          <Tech icon="simple-icons:python">Python</Tech> testbed for
+          throughput/latency benchmarking under burst and sustained loads.
         </>
       ),
       projectExternalLinks: {
         github: 'https://github.com/islamtayeb/xv6-networking-project',
-        paper: 'https://github.com/IRSMsoso/xv6-networking-project/blob/main/final_report.pdf',
+        paper:
+          'https://github.com/IRSMsoso/xv6-networking-project/blob/main/final_report.pdf',
       },
       category: categories[1],
     },

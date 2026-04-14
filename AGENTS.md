@@ -4,14 +4,14 @@
 
 Two independent projects live in one repo (no workspace manager):
 
-- **`my-portfolio/`** -- the main Next.js 14 App Router site (islamtayeb.dev). All dev work happens here.
-- **`apm-overflow/`** -- a static HTML blog deployed separately via its own `vercel.json`. Rarely touched.
+- **`islamtayeb/`** -- the main Next.js 14 App Router site (islamtayeb.dev). All dev work happens here.
+- **`apmoverflow/`** -- a static HTML blog deployed separately via its own `vercel.json`. Rarely touched.
 
 The repo root only holds `README.md`, `prettier.config.js`, and `.gitignore`. There is no root `package.json`.
 
 ## Commands
 
-All commands must run from `my-portfolio/`:
+All commands must run from `islamtayeb/`:
 
 ```sh
 npm run dev          # local dev server
@@ -27,7 +27,7 @@ There are no tests, no typecheck script, and no CI. `npm run build` is the singl
 
 Commit and push when you are confident the project is in good shape for a checkpoint. Before committing:
 
-1. Run `npm run build` from `my-portfolio/` and confirm it succeeds with no errors.
+1. Run `npm run build` from `islamtayeb/` and confirm it succeeds with no errors.
 2. Run `npm run lint` and `npm run format:check` to catch style issues.
 3. If formatting is off, run `npm run format` first, then re-verify with build.
 
@@ -36,7 +36,7 @@ Only commit when all three pass. Include meaningful commit messages that describ
 ## Key conventions
 
 - **Package manager:** npm (lockfile is `package-lock.json`).
-- **Path alias:** `@/*` maps to the `my-portfolio/` root (e.g., `@/lib/utils`, `@/components/ui/button`).
+- **Path alias:** `@/*` maps to the `islamtayeb/` root (e.g., `@/lib/utils`, `@/components/ui/button`).
 - **Styling:** Tailwind CSS 3 with HSL CSS variables. Dark mode is class-based via `next-themes`.
 - **Component library:** shadcn/ui (new-york style, slate base, RSC enabled). Config in `components.json`. UI primitives live in `components/ui/`.
 - **Fonts:** Geist Sans, Geist Mono, and Anek Telugu (as `--font-caption`). Default body font is `font-mono`.
@@ -53,10 +53,10 @@ Only commit when all three pass. Include meaningful commit messages that describ
 
 ## Environment
 
-`.env.local` in `my-portfolio/` is gitignored. It contains secrets for the visitor tracking webhook and geolocation API. The site builds and runs without it (tracking silently fails).
+`.env.local` in `islamtayeb/` is gitignored. It contains secrets for the visitor tracking webhook and geolocation API. The site builds and runs without it (tracking silently fails).
 
 `NEXT_PUBLIC_SITE_URL` controls the `metadataBase` in `layout.tsx`; defaults to `http://localhost:3000`.
 
 ## Deployment
 
-Both projects deploy to Vercel. The Next.js app uses zero-config detection. The blog (`apm-overflow/`) has its own `vercel.json`. No Dockerfiles or other deploy config.
+Both projects deploy to Vercel. The Next.js app uses zero-config detection. The blog (`apmoverflow/`) has its own `vercel.json`. No Dockerfiles or other deploy config.

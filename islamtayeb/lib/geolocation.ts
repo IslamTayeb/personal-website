@@ -14,15 +14,23 @@ export interface GeolocationData {
   is_vpn: boolean;
 }
 
-export async function getGeolocation(ip: string): Promise<GeolocationData | null> {
-  if (!ip || ip === '::1' || ip === '127.0.0.1' || ip.startsWith('192.168.') || ip.startsWith('10.')) {
+export async function getGeolocation(
+  ip: string
+): Promise<GeolocationData | null> {
+  if (
+    !ip ||
+    ip === '::1' ||
+    ip === '127.0.0.1' ||
+    ip.startsWith('192.168.') ||
+    ip.startsWith('10.')
+  ) {
     return {
       country: 'Local',
       country_code: 'LOCAL',
       region: 'Local',
       city: 'Local',
       isp: 'Local Network',
-      is_vpn: false
+      is_vpn: false,
     };
   }
 
@@ -40,12 +48,14 @@ export async function getGeolocation(ip: string): Promise<GeolocationData | null
     }
 
     // Detect VPN/Proxy
-    const is_vpn = data.proxy ||
-                   data.hosting ||
-                   VPN_INDICATORS.some(indicator =>
-                     (data.isp?.toLowerCase().includes(indicator) ||
-                      data.org?.toLowerCase().includes(indicator))
-                   );
+    const is_vpn =
+      data.proxy ||
+      data.hosting ||
+      VPN_INDICATORS.some(
+        (indicator) =>
+          data.isp?.toLowerCase().includes(indicator) ||
+          data.org?.toLowerCase().includes(indicator)
+      );
 
     return {
       country: data.country,
@@ -58,7 +68,7 @@ export async function getGeolocation(ip: string): Promise<GeolocationData | null
       organization: data.org,
       asn: data.as,
       asn_name: data.asname,
-      is_vpn
+      is_vpn,
     };
   } catch (error) {
     console.error('Geolocation API error:', error);

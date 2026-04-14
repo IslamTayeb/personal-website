@@ -41,25 +41,27 @@ function stripHtml(html: string): string {
 
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const res = await fetch('https://islamtayeb.bearblog.dev/feed/?type=rss', {
+    const res = await fetch('https://apmoverflow.xyz/feed/', {
       next: { revalidate: 3600 },
     });
     const xml = await res.text();
 
     const items: BlogPost[] = [];
-    const itemRegex = /<item>([\s\S]*?)<\/item>/g;
+    const entryRegex = /<entry>([\s\S]*?)<\/entry>/g;
     let match;
 
-    while ((match = itemRegex.exec(xml)) !== null) {
-      const item = match[1];
+    while ((match = entryRegex.exec(xml)) !== null) {
+      const entry = match[1];
 
-      const titleMatch = item.match(
+      const titleMatch = entry.match(
         /<title>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/
       );
-      const linkMatch = item.match(/<link>([\s\S]*?)<\/link>/);
-      const pubDateMatch = item.match(/<pubDate>([\s\S]*?)<\/pubDate>/);
-      const descMatch = item.match(
-        /<description>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/
+      const linkMatch = entry.match(
+        /<link[^>]+href=["']([^"']+)["'][^>]*rel=["']alternate["']/
+      );
+      const publishedMatch = entry.match(/<published>([\s\S]*?)<\/published>/);
+      const contentMatch = entry.match(
+        /<content[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/content>/
       );
 
       if (titleMatch && linkMatch) {
@@ -67,13 +69,13 @@ async function getBlogPosts(): Promise<BlogPost[]> {
         const tagMatch = rawTitle.match(/\(([^)]*)\)/);
         const tag = tagMatch ? tagMatch[1] : null;
         const title = rawTitle.replace(/\s*\([^)]*\)/g, '');
-        const description = descMatch ? stripHtml(descMatch[1]) : '';
+        const description = contentMatch ? stripHtml(contentMatch[1]) : '';
 
         items.push({
           id: generateHash(title),
           title,
           tag,
-          date: pubDateMatch ? formatDate(pubDateMatch[1]) : '',
+          date: publishedMatch ? formatDate(publishedMatch[1]) : '',
           excerpt:
             description.slice(0, 100) + (description.length > 100 ? '...' : ''),
           url: linkMatch[1].trim(),
