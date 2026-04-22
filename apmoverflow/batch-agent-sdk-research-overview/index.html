@@ -80,9 +80,7 @@
       </p>
 
       <!-- Your article content goes here (plain HTML) -->
-      <h1>Batch Agent SDK: Research Overview</h1>
-<p>Linked to: world-breaking-ideas.md → &quot;OpenCode SDK but for batch processing&quot;</p>
-<h2>The Problem</h2>
+      <h2>The Problem</h2>
 <p>You want to spawn 100+ coding agents concurrently (e.g. &quot;research 100 papers, give me 1-page reports each&quot;). Today you&#39;d do this by spawning 100 Claude Code instances manually or writing a script that fires off API calls. There&#39;s no SDK designed for this. The inefficiencies compound: redundant system prompts, no shared KV cache, no request scheduling, no centralized orchestration.</p>
 <h2>What Exists Today</h2>
 <h3>Orchestration Layer (spawning and managing agents)</h3>
