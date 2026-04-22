@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5"
+    />
+
+    <title>multi-agents | APM Overflow</title>
+    <link rel="canonical" href="https://apmoverflow.xyz/multi-agents/" />
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="multi-agents" />
+    <meta name="description" content="Linked to: world-breaking-ideas.md" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="APM Overflow" />
+    <meta property="og:title" content="multi-agents" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://apmoverflow.xyz/multi-agents/" />
+    <meta property="og:description" content="Linked to: world-breaking-ideas.md" />
+    <meta property="og:image" content="/static/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content="https://apmoverflow.xyz/multi-agents/" />
+    <meta property="twitter:title" content="multi-agents" />
+    <meta property="twitter:description" content="Linked to: world-breaking-ideas.md" />
+    <meta property="twitter:image" content="/static/og-image.png" />
+
+    <!-- Microdata -->
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "article",
+        "name": "multi-agents",
+        "headline": "multi-agents",
+        "url": "https://apmoverflow.xyz/multi-agents/",
+        "description": "Linked to: world-breaking-ideas.md",
+        "image": "/static/og-image.png"
+      }
+    </script>
+
+    <link
+      rel="alternate"
+      type="application/atom+xml"
+      href="/feed/"
+      title="APM Overflow"
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      href="/feed/?type=rss"
+      title="APM Overflow"
+    />
+
+    <link rel="icon" href="/static/favicon.svg" />
+    <link rel="apple-touch-icon" href="/static/favicon.svg" />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <!-- Uncomment if post has code blocks: -->
+    <!-- <link rel="stylesheet" href="/static/highlight.css"> -->
+  </head>
+
+  <body class="post">
+    <header>
+      <a class="title" href="/">
+        <h1>APM Overflow</h1>
+      </a>
+      <nav>
+        <p><a href="/">Home</a> <a href="/blog/">Blog</a></p>
+      </nav>
+    </header>
+
+    <main>
+      <h1>multi-agents</h1>
+
+      <p>
+        <i><time datetime="2026-04-22T21:42Z">Apr 22, 2026</time></i>
+      </p>
+
+      <!-- Your article content goes here (plain HTML) -->
+      <h1>Multi-Agent Inter-Communication for Task Decomposition: Research Overview</h1>
+<p>Linked to: world-breaking-ideas.md</p>
+<h2>The Problem</h2>
+<p>You have a complex task (e.g. extract all reactions from a research paper). Instead of one monolithic agent session, decompose it into specialized sub-agents that communicate: one parses figures, one reads methods sections, one resolves chemical names, one assembles the final structured output. Each agent has a focused context and can work in parallel, then share findings.</p>
+<h2>Current Landscape</h2>
+<h3>Frameworks (general-purpose multi-agent)</h3>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Stars</th>
+<th>Approach</th>
+<th>Inter-agent communication</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MetaGPT</td>
+<td>67k</td>
+<td>Role-based (PM, architect, engineer). Agents publish to a shared message pool, subscribe by role. SOPs define handoff order.</td>
+<td>Shared message pool + subscription</td>
+</tr>
+<tr>
+<td>AutoGen/MAF</td>
+<td>57k</td>
+<td>Conversational agents in group chats or nested chats. Now maintenance mode, succeeded by Microsoft Agent Framework.</td>
+<td>Group chat, nested chat, handoffs</td>
+</tr>
+<tr>
+<td>CrewAI</td>
+<td>50k</td>
+<td>Role-based crews with defined tasks. Sequential or hierarchical process. Agents share a knowledge base.</td>
+<td>Task delegation + shared memory</td>
+</tr>
+<tr>
+<td>LangGraph</td>
+<td>30k</td>
+<td>Graph-based: agents are nodes, edges define communication paths. Supports cycles, branching, human-in-loop.</td>
+<td>Explicit graph edges + shared state</td>
+</tr>
+<tr>
+<td>ChatDev</td>
+<td>33k</td>
+<td>Software company simulation. Roles (CEO, CTO, programmer, tester) in chat chains. Waterfall-ish.</td>
+<td>Sequential chat chains</td>
+</tr>
+<tr>
+<td>CAMEL</td>
+<td>17k</td>
+<td>Inception prompting: two agents role-play (instructor/assistant) to solve tasks through conversation.</td>
+<td>Direct pair dialogue</td>
+</tr>
+</tbody></table>
+<h3>Coding-Agent Specific</h3>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>What it does</th>
+<th>Communication model</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Code Task tool</td>
+<td>Built-in sub-agent spawner. Main agent creates sub-tasks, each runs in isolated context, returns result. No inter-sub-agent communication.</td>
+<td>Parent-child only, no sibling talk</td>
+</tr>
+<tr>
+<td>Agent Orchestrator (Composio)</td>
+<td>Spawns parallel Claude Code/Codex in git worktrees. Each agent works independently on separate branches.</td>
+<td>None. Isolated. Merge via git.</td>
+</tr>
+<tr>
+<td>agent-com</td>
+<td>Push-based messaging between Claude Code sessions via webhooks + DB. Star topology through orchestrator. HMAC auth, loop detection.</td>
+<td>Hub-and-spoke via central DB</td>
+</tr>
+<tr>
+<td>OpenClaw sub-agents</td>
+<td>Spawn sub-sessions that auto-announce completion. No direct inter-agent messaging.</td>
+<td>Parent-child completion events</td>
+</tr>
+</tbody></table>
+<h3>Research Papers</h3>
+<p><strong>Multi-Agent Collaboration Mechanisms Survey (Jan 2025)</strong> — Taxonomizes collaboration into: cooperative (shared goal), competitive (adversarial), and mixed. Communication patterns: direct messaging, blackboard/shared memory, voting/debate. Key finding: structured communication protocols (who talks to whom, when) matter more than agent count.</p>
+<p><strong>LLM Multi-Agent Systems: Challenges (Feb 2024, updated May 2025)</strong> — Identifies core challenges: global planning (decomposing work), agent allocation (who does what), communication overhead (more agents = more tokens spent talking), and fault tolerance (one bad agent poisons the group).</p>
+<p><strong>Multi-Agent Collaboration via Evolving Orchestration (Oct 2025)</strong> — &quot;Puppeteer&quot; paradigm: centralized orchestrator dynamically directs specialist agents based on evolving task state. Outperforms static role assignment because the orchestrator can re-allocate work as the task unfolds.</p>
+<p><strong>KARMA: Multi-Agent KG Enrichment (NeurIPS 2025)</strong> — Multiple agents parse articles into knowledge graph entries. Relevant because it&#39;s close to your reaction extraction use case: specialized agents for different extraction subtasks, results merged into structured output.</p>
+<h2>Key Architectural Patterns</h2>
+<p><strong>1. Hub-and-spoke (orchestrator model)</strong>
+One coordinator agent decomposes the task, assigns sub-tasks, collects results. Sub-agents don&#39;t talk to each other. Simple, debuggable, but coordinator is a bottleneck and single point of failure. (Claude Code Task tool, Agent Orchestrator, agent-com)</p>
+<p><strong>2. Shared blackboard</strong>
+All agents read/write to a shared state object. No direct messaging. Agents poll for relevant updates. Good for loosely coupled tasks. (MetaGPT&#39;s message pool, CrewAI&#39;s shared knowledge)</p>
+<p><strong>3. Graph-based routing</strong>
+Communication paths explicitly defined as a DAG or cyclic graph. Agent A outputs to Agent B and C, Agent C outputs to Agent D, etc. Most flexible but hardest to design. (LangGraph)</p>
+<p><strong>4. Debate/consensus</strong>
+Multiple agents independently solve the same problem, then debate or vote on the best answer. Good for verification, bad for efficiency. (CAMEL, AutoGen group chat)</p>
+<h2>The Gap (For Your Use Case)</h2>
+<p>For &quot;extract reactions from a paper,&quot; the ideal system would be:</p>
+<ol>
+<li>Orchestrator decomposes paper into regions (figures, methods, SI)</li>
+<li>Specialist agents process in parallel: figure agent (MolScribe), methods agent (text extraction), SI agent (supplementary tables)</li>
+<li>Inter-agent queries: methods agent asks figure agent &quot;what&#39;s the structure in Figure 2a?&quot; instead of re-processing the figure</li>
+<li>Assembler agent merges all findings into structured reaction entries</li>
+</ol>
+<p>Nobody has built this for coding agents specifically with the inter-agent query pattern. The closest is agent-com (push messaging between Claude Code sessions) but it&#39;s unreleased. Claude Code&#39;s Task tool is parent-child only, no sibling communication. MetaGPT/CrewAI could do it but they&#39;re general-purpose frameworks, not optimized for coding agent harnesses.</p>
+<p>The systems opportunity: inter-agent communication is currently all at the application layer (JSON messages, shared files). If you co-designed it with the inference layer (shared KV cache prefixes from the batch-agent-sdk idea), sibling agents could share context without re-encoding it. An agent asking another agent &quot;what did you find?&quot; could literally reference the other agent&#39;s KV cache instead of sending a text summary.</p>
+<h2>Connects To</h2>
+<ul>
+<li>— Inference optimization for spawning many agents</li>
+<li>mem-mould — Context management within a single agent session</li>
+</ul>
+    </main>
+
+    <footer></footer>
+  </body>
+</html>
