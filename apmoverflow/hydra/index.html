@@ -146,11 +146,21 @@
 </tr>
 </tbody></table>
 <ul>
-<li>Paper itself suggests 2 directions:<ul>
+<li><p>Quick AlphaXiv scan tells me that most of the kernel programming and performant-code agents are focused on multi-agents with &quot;building&quot; and &quot;provisioning&quot; agents</p>
+</li>
+<li><p>Hydra&#39;s contributions:</p>
+<ul>
+<li>Async checking</li>
+<li>Targeted rollback API w/ policy case-study</li>
+</ul>
+</li>
+<li><p>Paper itself suggests 2 directions:</p>
+<ul>
 <li>&quot;Spectrum of Correctness&quot;: formal verification, unit testing, potentially different directions (concurrency? memory-secure? CUDA programming?)<ul>
 <li>Definitely more interested in this</li>
 <li>I know that LLMs are pretty bad until now w/ GPU/kernel programming, a lot of static errors. Feels like I&#39;d be re-purposing hydra which isn&#39;t as sexy, though I have an inkling that there&#39;s more to it.<ul>
 <li>I&#39;ve been deep in the trenches of GPU programming lately, so I&#39;d be interested in exploring it through this lens</li>
+<li>GPU kernel generation is a domain where dynamic checking is pretty cheap though, could target if can&#39;t generalize to all runtime errors</li>
 </ul>
 </li>
 <li>Obviously, instinct says to take the next step: <strong>runtime/dynamic errors</strong><ul>
@@ -163,7 +173,9 @@
 <li>assumes a kind of compositional confidence that dynamic correctness doesn&#39;t actually provide</li>
 <li>&quot;touches&quot; is undecidable in general since it needs alias anal, can approximate but would have to over-include</li>
 <li>Could be good when writing large chunks of code</li>
-<li>There&#39;s also the chicken-and-egg problem of having the LLM write tests to run</li>
+<li>If user comes with no tests, there&#39;s also the chicken-and-egg problem of having the LLM write tests to run</li>
+<li><hr />
+</li>
 </ul>
 </li>
 </ul>
