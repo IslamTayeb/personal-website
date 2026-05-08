@@ -162,6 +162,7 @@
 <li>I&#39;ve been deep in the trenches of GPU programming lately, so I&#39;d be interested in exploring it through this lens</li>
 <li>GPU kernel generation is a domain where dynamic checking is pretty cheap though, could target if can&#39;t generalize to all runtime errors<ul>
 <li><em>Could build on hydra to handle multiple &quot;check&quot; types, e.g. clang-cuda + nvcc + unit tests?</em></li>
+<li>still might be too small of a contribution</li>
 </ul>
 </li>
 </ul>
@@ -177,8 +178,6 @@
 <li>&quot;touches&quot; is undecidable in general since it needs alias anal, can approximate but would have to over-include</li>
 <li>Could be good when writing large chunks of code</li>
 <li>If user comes with no tests, there&#39;s also the chicken-and-egg problem of having the LLM write tests to run</li>
-<li><hr />
-</li>
 </ul>
 </li>
 </ul>
@@ -190,6 +189,14 @@
 </ul>
 </li>
 <li>I don&#39;t think improving the infrastructure is particularly important right now (faster compiler, )</li>
+</ul>
+</li>
+<li><p>Meta problem: I think my head is getting too constrained over &quot;Hydra&quot; and &quot;Hydra-shaped solutions for similar problems&quot;</p>
+<ul>
+<li>I&#39;ve been thinking about &quot;shared KV cache between agents&quot; and KV caches in general, could be useful for hydra and other future work for rollouts<ul>
+<li>common thread: concurrent LLM workloads share state via prefixes more than people exploit</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
