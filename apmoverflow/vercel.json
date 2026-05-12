@@ -1,4 +1,5 @@
 {
+  "buildCommand": "node scripts/generate-feed.mjs",
   "cleanUrls": true,
   "trailingSlash": true,
   "headers": [
