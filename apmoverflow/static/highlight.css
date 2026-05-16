@@ -29,7 +29,7 @@ span.linenos.special {
   background-color: #ffffcc;
 }
 .highlight {
-  background: #f0f0f0;
+  background: var(--toc-background-color);
 }
 .highlight .c {
   color: #60a0b0;

@@ -11,6 +11,7 @@
   --code-background-color: #f0f0ef;
   --code-color: #222;
   --blockquote-color: #222;
+  --toc-background-color: #f9f9f8;
 }
 
 iframe {
@@ -310,7 +311,7 @@ code.mellow-sadcore {
 .toc {
   margin: 2em 0;
   padding: 1.5em;
-  background: #f9f9f8;
+  background: var(--toc-background-color);
   border-radius: 4px;
   border: 1px solid #e8e8e6;
   display: flex;
