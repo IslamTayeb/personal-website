@@ -45,14 +45,14 @@ export const ProductProjects = () => {
   const projectsData = [
     {
       image: '/Spotify-Clustering.webm',
-      projectName: 'Spotify Clustering',
+      projectName: 'Harmonia',
       new: true,
       wip: false,
       videoScale: 1.6,
       projectDescription: (
         <>
-          ML pipeline clustering 1,400+ songs using 33 interpretable dimensions
-          from audio classifiers and GPT-annotated lyrics
+          ML pipeline measuring chaotic audio and lyrics into 33 isolated,
+          interpretable dimensions
         </>
       ),
       projectTech: ['Python', 'OpenAI', 'Plotly'],
@@ -62,7 +62,7 @@ export const ProductProjects = () => {
         'simple-icons:plotly',
       ],
       projectExternalLinks: {
-        github: 'https://github.com/IslamTayeb/spotify-clustering',
+        github: 'https://github.com/IslamTayeb/harmonia',
         blog: 'https://apmoverflow.xyz/on-dimensions-of-taste/',
       },
     },
