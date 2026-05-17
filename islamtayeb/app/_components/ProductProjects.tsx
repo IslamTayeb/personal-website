@@ -44,7 +44,7 @@ const VideoWithPlaceholder = ({
 export const ProductProjects = () => {
   const projectsData = [
     {
-      image: '/Spotify-Clustering.webm',
+      image: '/Harmonia.webm',
       projectName: 'Harmonia',
       new: true,
       wip: false,
