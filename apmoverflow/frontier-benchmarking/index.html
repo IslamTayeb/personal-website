@@ -83,7 +83,7 @@
       <p>Context: early local/Azure frontier-model canaries for deciding whether a direction like &quot;Hydra, but for making test-passing code by construction&quot; is still interesting. My concern was that if a strong LLM receives the problem spec plus unit tests, it might already infer everything needed and one-shot the solution, leaving little room for a test-passing-by-construction system to be useful tbh.</p>
 <h2>Experiment</h2>
 <p>Question: does spec/tests already saturate one-shot frontier models, or is there room for test-feedback / test-passing-by-construction search?</p>
-<p>Tasks: 20 hard LCB/AtCoder-derived problems from <code>hard_post_20240602_prompt_safe_20_seed0.json</code>. This is a hard slice, not the full official LCB distribution.</p>
+<p>Tasks: 20 hard LCB/AtCoder-derived problems from <code>hard_post_20240602_prompt_safe_20_seed0.json</code>.</p>
 <table>
 <thead>
 <tr>
@@ -118,8 +118,7 @@
 <td>all</td>
 </tr>
 </tbody></table>
-<p>Models: GPT-4o, GPT-4.1, GPT-4.1-mini, GPT-5.5 none/low/xhigh.</p>
-<p>Status: non-xhigh cells are complete after retry merging. GPT-5.5 xhigh spec cells are mostly complete; tests-only cells are partial. GPT-5.5 results are capability probes, not clean LCB claims.</p>
+<p>Models: GPT-4o, GPT-4.1, GPT-4.1-mini, GPT-5.5 none/low/xhigh (incomplete).</p>
 <h2>Metrics</h2>
 <table>
 <thead>
