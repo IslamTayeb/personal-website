@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5"
+    />
+
+    <title>On Agent Memory Fidelity (Decnat) | APM Overflow</title>
+    <link rel="canonical" href="https://apmoverflow.xyz/on-agent-memory-fidelity-decnat/" />
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="On Agent Memory Fidelity (Decnat)" />
+    <meta name="description" content="Most code will be written by agents, making code intent harder to reconstruct from the code alone. Agents are constrained in how much they can keep in-memory by their context..." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="APM Overflow" />
+    <meta property="og:title" content="On Agent Memory Fidelity (Decnat)" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://apmoverflow.xyz/on-agent-memory-fidelity-decnat/" />
+    <meta property="og:description" content="Most code will be written by agents, making code intent harder to reconstruct from the code alone. Agents are constrained in how much they can keep in-memory by their context..." />
+    <meta property="og:image" content="/static/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content="https://apmoverflow.xyz/on-agent-memory-fidelity-decnat/" />
+    <meta property="twitter:title" content="On Agent Memory Fidelity (Decnat)" />
+    <meta property="twitter:description" content="Most code will be written by agents, making code intent harder to reconstruct from the code alone. Agents are constrained in how much they can keep in-memory by their context..." />
+    <meta property="twitter:image" content="/static/og-image.png" />
+
+    <!-- Microdata -->
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "article",
+        "name": "On Agent Memory Fidelity (Decnat)",
+        "headline": "On Agent Memory Fidelity (Decnat)",
+        "url": "https://apmoverflow.xyz/on-agent-memory-fidelity-decnat/",
+        "description": "Most code will be written by agents, making code intent harder to reconstruct from the code alone. Agents are constrained in how much they can keep in-memory by their context...",
+        "image": "/static/og-image.png"
+      }
+    </script>
+
+    <link
+      rel="alternate"
+      type="application/atom+xml"
+      href="/feed/"
+      title="APM Overflow"
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      href="/feed/rss.xml"
+      title="APM Overflow"
+    />
+
+    <link rel="icon" href="/static/favicon.svg" />
+    <link rel="apple-touch-icon" href="/static/favicon.svg" />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <!-- Uncomment if post has code blocks: -->
+    <!-- <link rel="stylesheet" href="/static/highlight.css"> -->
+  </head>
+
+  <body class="post">
+    <header>
+      <a class="title" href="/">
+        <h1>APM Overflow</h1>
+      </a>
+      <nav>
+        <p><a href="/">Home</a> <a href="/blog/">Blog</a></p>
+      </nav>
+    </header>
+
+    <main>
+      <h1>On Agent Memory Fidelity (Decnat)</h1>
+
+      <p>
+        <i><time datetime="2026-05-26T12:48Z">May 26, 2026</time></i>
+      </p>
+
+      <!-- Your article content goes here (plain HTML) -->
+      <p>Most code will be written by agents, making code intent harder to reconstruct from the code alone. Agents are constrained in how much they can keep in-memory by their context windows, usually within 400K-1M tokens. Once the context window gets past 50%, model behavior degrades because old, irrelevant, stale, or noisy information remains in the prompt. This is called <a href="https://www.trychroma.com/research/context-rot">context rot</a>. There&#39;s 2 main ways for context to rot in coding agents: (1) irrelevant chats and information are included in the prompt, or (2) unnecessarily long, sparse messages.</p>
+<p>To be concrete, there are three major points I&#39;m interested in:</p>
+<ol>
+<li>Agent chats describe intent better than the code written.</li>
+<li>Every message, no matter how irrelevant, stays in-context.</li>
+<li>Messages can be 10s of thousands of tokens long, largely due to tool calls and reasoning.</li>
+</ol>
+<p>Agentic coding tools periodically &quot;compress&quot; chat history when you&#39;re about to fill up your context window. That helps with huge tool outputs, but only after they’ve been replayed for a while. It shrinks stale work, but does not remove it: the summary still rides through every future prompt as input tokens. And it weakens provenance. The original chat may contain the best explanation of why a line exists, but compaction flattens that history into a lossy blob with no reliable way to zoom back into the exact decision. The two failures are timing and addressability: compaction comes too late, and once it runs, the useful parts are no longer easy to control.</p>
+<h3>Points, deconstructed</h3>
+<p>Point #1 can be addressed by building infrastructure that maps commits to agent chat session IDs. This has already been built as <a href="https://usegitai.com/">git-ai</a>, a Git extension. This allows the agent (and user) to trace back user&#39;s intention with that piece of code assuming it was made with Codex, Claude Code, OpenCode, etc.</p>
+<p>Point #2 can be fixed by allowing the agent to treat its context as a variable w/ . Old work should not stay in the prompt just because it happened earlier in the chat. In theory, we can make an agent that can <code>read</code>, <code>grep</code>, and <code>bash</code> it&#39;s own context to edit it, similar to <a href="https://alexzhang13.github.io/blog/2025/rlm/#:~:text=We%20propose%20Recursive%20Language%20Models%2C%20or,the%20user%E2%80%99s%20prompt%20in%20a%20variable">recursive language models</a> (RLMs). We&#39;ll call this an RGB-agent (credit to <a href="https://blog.alexisfox.dev/arcagi3">Alexis</a>).</p>
+<p>Point #3 is more interesting. It could be fixed by &quot;compressing&quot; messages into lower fidelity. There&#39;s no way to reversibly compress embeddings of frontier models yet, though there is <a href="https://arxiv.org/abs/2502.15957">research</a> on it. If we consider context as a long string, we can use the same RGB-agent from point #2 to compress and edit context after every message. However, we&#39;d still have to continuously re-ingest long context over and over again, so token consumption piles up.</p>
+<h3>Proposal</h3>
+<p>Instead of a long context string with a separate RGB-agent, <code>Context</code> can be viewed as an object with <code>Message</code> objects within. Each <code>Message</code> contains data (<code>timeSent</code>, <code>content</code>, etc.). From this view, I believe that adding <code>fidelity</code> to <code>Message</code> lets an agent filter out obviously-irrelevant context without having to re-ingest the full transcript of <code>Context</code> at full fidelity.</p>
+<p>That seems closer to how conversations work for humans. I do not remember every detail of a conversation (even mid-conversation). Some key parts stay vivid, some collapse into a gist, and tangents might disappear. </p>
+<p>Agent sessions should have the same <em>adaptive forgetting</em>. Where it differs from humans: when detail matters again, the agent should be able to fetch the message in full fidelity.</p>
+<p><strong>Decant</strong> is my prototype of that idea. It gives agents (and users) tools to change message fidelity and explore Git blame-style code provenance.</p>
+<hr />
+<h2>Index</h2>
+<hr />
+<h2>Decant: Context as Message Objects w/ Fidelities</h2>
+<p>Decant is an OpenCode plugin prototype. The idea is to stop treating context as one long string. <strong>Instead, treat it as message objects grouped into topics/categories, then let the agent decide how much of each topic or message should stay in the next prompt.</strong></p>
+<p>There&#39;s levels of fidelity within the context:</p>
+<ol>
+<li><strong>Topic</strong>: multiple messages that describe the same topic</li>
+<li><strong>Message</strong>: building-block of a topic w/ 3 fidelities<ul>
+<li><em>Full</em>: usual message context as given by an LLM</li>
+<li><em>Compressed</em>: message as a summary</li>
+<li><em>Dropped</em>: remove message</li>
+</ul>
+</li>
+</ol>
+<p>The agent does not have to reread the whole transcript. It can start from the topic map, lower the fidelity of stale topics, look at message summaries, then fetch exact messages later if the summary is not enough.</p>
+<p>To be concrete, below is a table summary of important fields of the <code>Topic</code> and <code>Message</code> objects in Decant.</p>
+<table>
+<thead>
+<tr>
+<th><code>Topic</code> Field</th>
+<th>What It Stores</th>
+<th>Why It Exists</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>topicID</code></td>
+<td>Stable ID for the topic. Currently named <code>blobID</code> in the prototype code.</td>
+<td>Lets messages, tools, and UI controls refer to the same topic.</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>Short topic-level summary across multiple messages.</td>
+<td>Replaces many messages when the topic is rendered cheaply.</td>
+</tr>
+<tr>
+<td><code>messageIDs[]</code></td>
+<td>Message IDs assigned to the topic.</td>
+<td>Lets Decant reopen exact messages when the topic summary is not enough.</td>
+</tr>
+<tr>
+<td><code>tokenEstimate</code></td>
+<td>Rough total size estimate for the topic.</td>
+<td>Makes large topics visible before they eat the prompt.</td>
+</tr>
+<tr>
+<td><code>fidelity</code></td>
+<td>Topic render setting: <code>full</code>, <code>summary</code>, <code>compressed</code>, <code>placeholder</code>, or <code>drop</code>.</td>
+<td>Controls how much of the topic appears in the next prompt.</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th><code>Message</code> Field</th>
+<th>What It Stores</th>
+<th>Why It Exists</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>parts[]</code>[^‡]</td>
+<td>Ordered OpenCode message parts: text, reasoning, tool calls/results. Each part has its own type-specific fields.</td>
+<td>A message isn&#39;t a continuous string, but a data structure.</td>
+</tr>
+<tr>
+<td><code>parts[].text</code>[^‡]</td>
+<td>Text or reasoning content when present.</td>
+<td>Keeps normal prose and model-visible content.</td>
+</tr>
+<tr>
+<td><code>topicID</code></td>
+<td>Topic ID the message belongs to.</td>
+<td>Applies topic fidelity through this grouping.</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>Short message-level summary.</td>
+<td>Replaces the full message when a topic or message is rendered cheaply.</td>
+</tr>
+<tr>
+<td><code>tokenEstimate</code></td>
+<td>Rough size estimate for the raw message.</td>
+<td>Makes large messages visible even when provider token accounting is absent.</td>
+</tr>
+<tr>
+<td><code>fidelityOverride</code> / <code>hidden</code></td>
+<td>Message-level render controls.</td>
+<td>Lets one message escape the topic default or disappear from future prompts.</td>
+</tr>
+<tr>
+<td>[^‡]: Already existing OpenCode metadata.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>To be clear: the raw message data still exist, making it reversibly compressible. The prompt just gets a cheaper view by default and could at any moment use a tool call <code>message_detail</code> to &quot;zoom in&quot; to a message when needed.</p>
+<p>Topic fidelity controls how a whole topic appears: <code>full</code>, <code>summary</code>, <code>compressed</code>, <code>placeholder</code>, or <code>drop</code>. Message-level controls can force one message back to <code>full</code>, force it to <code>summary</code>, or hide it.</p>
+<h3>Fidelity Engine</h3>
+<p>Decant annotates the conversation as it happens. On each assistant turn, it asks the model to return the normal answer plus a hidden <code>&lt;annotation&gt;</code> tag, something like:</p>
+<pre><code class="language-JSON">// ...Actual message...
+// &lt;annotation&gt;
+{
+	&quot;topic&quot;: &quot;stable snake_case topic label for this assistant response&quot;,
+	&quot;is_new_topic&quot;: &quot;boolean: whether this response starts a new topic&quot;,
+	&quot;message_summary&quot;: &quot;summary of this assistant message only&quot;,
+    &quot;topic_summary&quot;: &quot;running summary of the whole topic so far&quot;,
+    &quot;placeholder&quot;: &quot;short 5-10 word stub for the topic&quot;,
+    &quot;key_facts&quot;: [
+	    &quot;facts or decisions worth preserving through compression&quot;
+    ]
+}
+// &lt;/annotation&gt;
+</code></pre>
+<p>Decant strips that annotation from the visible chat and stores it next to the session.</p>
+<p>That gives the next prompt a menu of renderings. Recent work can stay full. Finished work can become message summaries. Distant work can become topic summaries. Old dead ends can become placeholders or disappear.</p>
+<p>The annotation is usually on the order of 300-500 output tokens. You&#39;re accepting to pay a consistent, small &quot;tax&quot; to allow the agent the ability to bookkeep and visualize the chat. The agent can call <code>view_context</code> and <code>set_fidelity</code> to change the map before the next turn.</p>
+<p>During OpenCode compaction, Decant also rewrites the compaction prompt so the summarizer respects those annotations instead of flattening every old turn equally. It can use <code>set_fidelity</code> to drop or shrink unimportant context.</p>
+<h3>Updated (Git) Blame</h3>
+<p>As I said before, I think most code will be written by agents. Not only does this make code less readable for humans oftentimes, but it is also dangerous because tons of code is being written without explicit intention. The agents are taking care of edge cases and interpret specifications in a way that the user may not have intended.</p>
+<p>The data in the user&#39;s messages (their intention) is just as important as the code output. And in large organizations with tons of people pushing code, this is especially the case.</p>
+<p>One possible workflow with a <code>blame_lookup</code> tool call:</p>
+<ol>
+<li>Agent runs tool call over a <code>file:line</code></li>
+<li>Run <code>git blame</code> on the line, get commit hash</li>
+<li>Check Agent Session &lt;&gt; Commit mapping, get session ID</li>
+<li>Spawn sub-agent on session with original question about intent + topics in the session</li>
+<li>View message summaries of selected topics, zoom in as necessary</li>
+</ol>
+<p>Now you&#39;ve (1) allowed agents to make use of other agents&#39; transcripts, and (2) created an efficient way for them to search for what they need with the fidelity engine. Pretty cool.</p>
+<p>Specifically for the &quot;Agent Session &lt;&gt; Commit mapping&quot;, Decant checks if you have git-ai installed to see if there&#39;s an existing mapping. It also keeps a local backup that I implemented in a hidden <code>.opencode</code> folder that&#39;s in every project.</p>
+<h3>User Control</h3>
+<p>Decant exposes the context map to the developer for transparency and manual control. You can see what the model is likely to read, how large each topic is, and what has been collapsed or hidden.</p>
+<p>The sidebar and <code>/context</code> show the conversation grouped by topic. Each topic has a token estimate and a fidelity setting. From <code>/context</code>, you can set a topic to <code>full</code>, <code>summary</code>, or <code>drop</code>. You can also override individual messages&#39; fidelity.</p>
+<p><em>Decant’s <code>/context</code> popup: topics, token share, and fidelity controls.</em></p>
+<p><code>/blame</code> is a manual trigger over the aforementioned <code>blame_lookup</code> tool call. You could enter <code>file:line</code>, or ask a natural-language question about past chats. Decant runs <code>blame_lookup</code> as we discussed in the last section, finds the relevant prior session, and answers why a line is present given past conversations about it.</p>
+<h2>Benchmarks</h2>
+<p>I made small DIY benchmarks and quickly realized how annoying agent evals are to design. Take them with a grain of salt.</p>
+<p>I tested four things:</p>
+<ol>
+<li>The agent gets a long conversation with stale topics and then a new task. Does old context leak into the new answer?</li>
+<li>If old work is hidden for the new task, can the agent still recover exact old facts later?</li>
+<li>The agent is asked why a line of code exists. Can it find the prior message that actually explains the line?</li>
+<li>The agent edits code. Can it use prior discussion when it is useful, ignore it when it is missing, and reject it when it is stale? (SWE-bench style tasks)</li>
+</ol>
+<p>Across the benchmark sections, I use four names:</p>
+<ol>
+<li><strong>Default</strong>: default OpenCode behavior: compaction, no selective memory.</li>
+<li><strong>RGB-agent</strong>: the agent has access to <code>glob</code>, <code>grep</code>, <code>bash</code>. It considers <code>rgb-context.md</code> to be its context and can edit it between turns.[^1]</li>
+<li><strong>Decant</strong>: context stays as structured memory. The agent sees a topic map, chooses how much detail each topic should keep, and opens exact messages only when summaries are not enough.</li>
+<li><strong>Decant + RGB-agent</strong>: Decant is used as the search/routing layer first. Then an editor turn copies the needed evidence into <code>rgb-context.md</code>, and the answer turn sees only that distilled file.</li>
+</ol>
+<h3>Context Hygiene</h3>
+<blockquote>
+<p>Can the agent switch tasks without stale chat history leaking into the next prompt?</p>
+</blockquote>
+<p>For each run, the agent first works through unrelated history: an old auth bug, docs edits, unit tests creation, and more. Then the harness forces a compaction boundary and switches to a new task: describe how to trim whitespace around comma-separated CSV header names.</p>
+<p>This is not a natural overflow test. The dirty prelude is too short for that. It is a forced task-boundary test: after old work is compacted or rewritten, what stale context remains visible to the next prompt?</p>
+<p>Default gets the raw OpenCode compaction summary. Decant lowers the old auth/docs/test topics before compaction. RGB-agent rewrites the dirty log into <code>rgb-context.md</code> instead.</p>
+<p>The Default agent can still answer the immediate CSV question. In all four Default runs, the final answer stayed on the CSV task and did not repeat the planted stale terms. The failure is continuation hygiene: OpenCode&#39;s compaction summary still kept old terms such as <code>auth rate limiter</code>, <code>MutexRefreshCoordinator</code>, <code>FLAG_AUTH_QUEUE_ROLLBACK</code>, <code>enqueueRefresh</code>, <code>quickstart</code>, and <code>markdown parser</code> visible to later prompts.</p>
+<p>So I separate two scores. <strong>Answer stayed on CSV</strong> means the final answer avoids planted stale terms and mentions at least two of <code>csv</code>, <code>header</code>, and <code>trim</code>. <strong>Continuation context clean</strong> means the visible context that would carry into the next prompt avoids the planted stale terms. If Decant hides a compaction summary behind placeholder fidelity, I count that hidden text as not visible to the next prompt.</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th align="right">Answer Stayed On CSV</th>
+<th align="right">Continuation Context Clean</th>
+<th align="right">Input Tok</th>
+<th align="right">Cached Input Tok</th>
+<th align="right">Output + Reasoning Tok</th>
+<th align="right">Cache Hit</th>
+<th align="right">Est. Cost[^2]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Default</td>
+<td align="right">4/4</td>
+<td align="right">0/4</td>
+<td align="right">63,636</td>
+<td align="right">292,352</td>
+<td align="right">9,363</td>
+<td align="right">82.1%</td>
+<td align="right">$0.75</td>
+</tr>
+<tr>
+<td>RGB-agent</td>
+<td align="right">4/4</td>
+<td align="right">4/4</td>
+<td align="right">105,439</td>
+<td align="right">360,448</td>
+<td align="right">8,208</td>
+<td align="right">77.4%</td>
+<td align="right">$0.95</td>
+</tr>
+<tr>
+<td>Decant</td>
+<td align="right">4/4</td>
+<td align="right">4/4</td>
+<td align="right">118,401</td>
+<td align="right">433,664</td>
+<td align="right">8,131</td>
+<td align="right">78.6%</td>
+<td align="right">$1.05</td>
+</tr>
+</tbody></table>
+<p>Default answered the easy task, but kept the old auth/docs/test terms visible. RGB-agent and Decant both kept the answer on the CSV task and kept planted stale terms out of visible continuation context.</p>
+<p>The Decant row is a combined artifact. Some single runs leaked stale terms back through OpenCode&#39;s generated compaction summary. That is a real failure mode of this prototype. I use the clean combined run here because the question I wanted answered was narrower: can topic-level controls clean up a forced task switch when the compaction summary follows the map? Yes. It does not say anything about harder coding tasks.</p>
+<h3>Reversible Memory</h3>
+<blockquote>
+<p>Can the agent hide old work during a task switch, then recover exact old facts later?</p>
+</blockquote>
+<p>This is the part the cleanup test does not cover. RGB-agent can be excellent at cleaning a prompt because it rewrites history into <code>rgb-context.md</code>. If the rewrite omits a fact, though, that fact is gone unless something else preserved it.</p>
+<p>Decant&#39;s claim is not cheaper cleanup. It is: hide this now, but keep a route back to the exact old message.</p>
+<p>The run reuses the old auth/docs/parser prelude, switches to CSV header trimming, then asks a historical follow-up: recall <code>FLAG_AUTH_QUEUE_ROLLBACK</code>, the failed test <code>auth_refresh_deduplicates_parallel_requests</code>, the accepted per-tenant queue design, the rejected global mutex, and cite where it came from. This run used <code>openai/gpt-5.5</code> through OpenCode OAuth.</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th align="right">Clean Prompt</th>
+<th align="right">Recovered Old Facts</th>
+<th align="right">No Extra Stale Leak</th>
+<th align="right">Route</th>
+<th align="right">Input Tok</th>
+<th align="right">Cached Input Tok</th>
+<th align="right">Output + Reasoning Tok</th>
+<th align="right">Est. Cost[^2]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Default</td>
+<td align="right">No</td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right">No</td>
+<td align="right">26,011</td>
+<td align="right">101,888</td>
+<td align="right">2,027</td>
+<td align="right">$0.24</td>
+</tr>
+<tr>
+<td>RGB-agent</td>
+<td align="right">Yes</td>
+<td align="right">No</td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right">28,371</td>
+<td align="right">89,600</td>
+<td align="right">1,887</td>
+<td align="right">$0.24</td>
+</tr>
+<tr>
+<td>Decant</td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right">127,808</td>
+<td align="right">99,328</td>
+<td align="right">2,975</td>
+<td align="right">$0.78</td>
+</tr>
+<tr>
+<td>Decant + RGB-agent</td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right">256,454</td>
+<td align="right">135,168</td>
+<td align="right">4,495</td>
+<td align="right">$1.48</td>
+</tr>
+</tbody></table>
+<p>Default remembered the old auth facts because it kept everything around. That also means the next prompt still carried stale auth/docs terms. In this GPT-5.5 run it also used normal repo tools, so I mark the route score as failed.</p>
+<p>RGB-agent cleaned the prompt, but failed the later recall because the rewritten context did not preserve the exact auth facts. Decant passed by routing through the topic map and session lookup. Decant + RGB-agent also passed, but cost more because it paid for Decant lookup plus the RGB file write.</p>
+<p>I read this as a narrow result: Decant makes cleanup reversible in this toy setup. It does not show Decant is cheaper for one-off cleanup. It is not cheaper here.</p>
+<h3>Provenance Lookup</h3>
+<blockquote>
+<p>Can the agent find the old message that explains why a piece of code exists?</p>
+</blockquote>
+<p>The agent gets a tiny repo plus seeded prior agent sessions. One old session contains the real rationale. Other old sessions contain plausible but wrong rationales. The agent must answer the question, cite the supporting session/message, and use the memory condition it was assigned.</p>
+<p>The direct questions ask things like: why does <code>src/auth/queue.ts</code> deduplicate refresh work per tenant instead of using one global mutex? The line question starts from <code>src/cache/ttl.ts</code> line 2 and asks why that line caps requested TTL with <code>namespaceMaxSeconds</code>.</p>
+<p>A provenance pass requires three things: the answer contains all expected rationale facts, the answer does not copy forbidden distractor terms, and the answer cites the relevant session plus supporting message. A path pass means the agent used the assigned condition correctly. For example, Decant must use Decant session/message tools, while RGB-agent must pass through the rewritten <code>rgb-context.md</code> file.</p>
+<table>
+<thead>
+<tr>
+<th>Shape</th>
+<th align="right">Fixtures</th>
+<th>What the agent gets</th>
+<th>What counts as a pass</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ask why</td>
+<td align="right">5</td>
+<td>A direct question like “why per-tenant instead of one global mutex?”</td>
+<td>The reason, plus the session/message that supports it.</td>
+</tr>
+<tr>
+<td>Ask about a line</td>
+<td align="right">1</td>
+<td><code>src/cache/ttl.ts</code> line 2</td>
+<td>The old message explaining why that line exists.</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th align="right">Direct Q</th>
+<th align="right">Line Q</th>
+<th align="right">Total</th>
+<th align="right">Input Tok</th>
+<th align="right">Cached Input Tok</th>
+<th align="right">Output + Reasoning Tok</th>
+<th align="right">Cache Hit</th>
+<th align="right">Est. Cost[^2]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RGB-agent</td>
+<td align="right">5/5</td>
+<td align="right">1/1</td>
+<td align="right">6/6</td>
+<td align="right">122,924</td>
+<td align="right">271,872</td>
+<td align="right">8,492</td>
+<td align="right">68.9%</td>
+<td align="right">$1.01</td>
+</tr>
+<tr>
+<td>Decant</td>
+<td align="right">5/5</td>
+<td align="right">1/1</td>
+<td align="right">6/6</td>
+<td align="right">57,260</td>
+<td align="right">150,528</td>
+<td align="right">1,970</td>
+<td align="right">72.4%</td>
+<td align="right">$0.42</td>
+</tr>
+<tr>
+<td>Decant + RGB-agent</td>
+<td align="right">5/5</td>
+<td align="right">1/1</td>
+<td align="right">6/6</td>
+<td align="right">103,052</td>
+<td align="right">551,936</td>
+<td align="right">10,154</td>
+<td align="right">84.3%</td>
+<td align="right">$1.10</td>
+</tr>
+</tbody></table>
+<p>Every condition in this table found the right evidence. The difference is cost and shape. Decant was the cheapest direct condition. Decant + RGB-agent also passed, but it was expensive because it paid for both control planes: Decant routing plus an RGB rewrite phase.</p>
+<p>The blame path is separate because it is a prototype condition and only runs on the line fixture. In that demo, the agent starts from <code>src/cache/ttl.ts</code> line 2, follows the mapped prior session, and finds the message explaining that <code>namespaceMaxSeconds</code> prevents a noisy namespace from extending stale cache retention past its budget. It satisfies the same provenance pass rule on its one fixture; I would not compare it directly against the other conditions yet.</p>
+<h3>Memory-Aware Coding</h3>
+<blockquote>
+<p>Can old discussion help a patch without copying stale or irrelevant details?</p>
+</blockquote>
+<p>Code-recall is synthetic, but it is not arbitrary. I reduced the SWE-bench/SWE-recall memory cases we cared about into tiny JS repos: the repo/tests do not always tell the whole story, prior issue discussion may contain the missing decision, and nearby memory can be irrelevant or stale.[^3]</p>
+<p>The agent edits one tiny JS repo at a time:</p>
+<ol>
+<li><code>recall-missing-pagination</code>: fix <code>totalPages</code>. The available prior sessions are only distractors about token pagination and GraphQL <code>pageInfo</code>, so the agent should solve from code/tests and not cite memory.</li>
+<li><code>recall-correction-retry-cap</code>: fix <code>retryDelayMs</code>. Visible tests cover the exponential schedule, but the hidden test requires the latest accepted prior decision: keep the 100ms base and cap at 2000ms, not the stale 5000ms cap.</li>
+<li><code>recall-synthesis-report</code>: fix <code>buildReport</code>. Visible tests only check <code>summary</code>; hidden tests require <code>failed_test_ids</code> and <code>retry_owner</code> from a parent synthesis of child-agent findings.</li>
+</ol>
+<p>A coding pass requires the public and hidden <code>node --test</code> tests to pass, only the expected source file to change, no forbidden stale terms in the patch or final answer, and the right recall policy. For missing memory, the agent must not invent a prior citation. For correction/synthesis memory, conditions with memory must cite the relevant session/message. The synthesis fixture failed under every condition in this run. I keep it in the benchmark because that failure is useful: this setup did not separate the methods on that case.</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th align="right">Pass</th>
+<th align="right">Input Tok</th>
+<th align="right">Cached Input Tok</th>
+<th align="right">Output + Reasoning Tok</th>
+<th align="right">Cache Hit</th>
+<th align="right">Est. Cost[^2]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Default</td>
+<td align="right">1/3</td>
+<td align="right">26,248</td>
+<td align="right">137,728</td>
+<td align="right">3,383</td>
+<td align="right">84.0%</td>
+<td align="right">$0.30</td>
+</tr>
+<tr>
+<td>RGB-agent</td>
+<td align="right">2/3</td>
+<td align="right">72,686</td>
+<td align="right">247,808</td>
+<td align="right">7,372</td>
+<td align="right">77.3%</td>
+<td align="right">$0.71</td>
+</tr>
+<tr>
+<td>Decant</td>
+<td align="right">2/3</td>
+<td align="right">47,452</td>
+<td align="right">177,152</td>
+<td align="right">3,667</td>
+<td align="right">78.9%</td>
+<td align="right">$0.44</td>
+</tr>
+<tr>
+<td>Decant + RGB-agent</td>
+<td align="right">2/3</td>
+<td align="right">64,785</td>
+<td align="right">333,312</td>
+<td align="right">7,250</td>
+<td align="right">83.7%</td>
+<td align="right">$0.71</td>
+</tr>
+</tbody></table>
+<p>I read this as selective-memory evidence, not a win. RGB-agent, Decant, and Decant + RGB-agent all got <code>2/3</code>; Default got <code>1/3</code>; the synthesis fixture failed everywhere. The main result is policy behavior: use helpful memory, ignore missing memory, reject stale memory, and cite the session/message when prior context affects the patch. Decant + RGB-agent did not buy more accuracy here. It mostly bought extra control-plane cost.</p>
+<p>I am not using the older SWE-bench context-stress run as a main claim. SWE-recall is closer to the thing I care about: keep the SWE-bench task and grader, but score whether prior issue-discussion memory is used selectively. I do not have a curated public SWE-recall table here yet.</p>
+<h2>Limitations</h2>
+<p>%% Suggested flow:</p>
+<ul>
+<li>Keep this blunt. The current evidence is small.</li>
+<li>Say the small benchmark probes support context hygiene and provenance routing, not general coding-agent improvement.</li>
+<li>Mention that code-recall is synthetic even if derived from SWE-bench-type failures.</li>
+<li>Mention that annotation quality depends on the model; bad topic maps can hide the wrong thing.</li>
+<li>Token/cache numbers are diagnostics. They are not the main claim.</li>
+<li>UI is prototype-grade. The design idea is stronger than the polish.
+%%</li>
+</ul>
+<h2>Future Directions</h2>
+<p>%% Suggested flow:</p>
+<ul>
+<li>Start with SWE-recall: real SWE-bench tasks, <code>hints_text</code> as prior issue-discussion memory, official grader still used for patch quality.</li>
+<li>Compare Decant against RGB-agent, embedding retrieval, and Default.</li>
+<li>Add failure-focused evals: wrong summary, stale summary, over-compressed useful detail, bad topic boundary.</li>
+<li>Try this outside OpenCode. The idea should not depend on one agent platform.</li>
+<li>Consider human-in-the-loop map editing: can a user fix the topic map faster than they can explain context again?</li>
+<li>If you want a stronger ending, ask readers to steal the experiment design rather than adopt Decant.
+%%</li>
+</ul>
+<h2>Afterword</h2>
+<p>I remember after my last internship, I tried to cheapskate by making cheaper Chinese models like Kimi K2 work. Though they&#39;re good, I think you&#39;re genuinely leaving a lot on the table if you use <em>anything</em> but frontier models. I speak from a position of privilege here; I&#39;ve gotten a ton of free compute from jobs and grants. The remaining work is mostly eval design. I&#39;m glad I was able to bring this idea to life without model training, though that path also seems worth trying. All of this to say: I&#39;m interested in the infrastructure around the frontier models, and it&#39;s something I&#39;m hoping to pursue for the next couple of months.</p>
+<hr />
+<p>[^1]: In these benchmarks, RGB-agent means an editor turn writes <code>rgb-context.md</code>, then the next turn receives only that rewritten file. Decant + RGB-agent means the editor uses Decant session tools first, writes <code>rgb-context.md</code>, then the next turn receives only that file.
+[^2]: Estimated cost uses a fixed GPT-5.5 standard price model as of 2026-05-17: <code>input_tokens * $5/M + cache_read_tokens * $0.50/M + (output_tokens + reasoning_tokens) * $30/M</code>. Tool/runtime costs are not included. For non-GPT runs, treat this as a normalized estimate, not the provider bill.
+[^3]: By &quot;derived,&quot; I mean we reduced the memory failure modes from the SWE-bench/SWE-recall cases into tiny JS fixtures, not that we line-for-line ported the original repos. The anchors were <code>pydata__xarray-6992</code> for missing/insufficient prior memory, <code>django__django-16560</code> for issue-discussion memory that pins an accepted API direction, and <code>pylint-dev__pylint-4551</code> for behavior where type/context detail matters more than the surface issue text. The code is synthetic; the experimental shape came from those cases.</p>
+    </main>
+
+    <footer></footer>
+  </body>
+</html>
