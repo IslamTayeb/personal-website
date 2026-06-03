@@ -80,9 +80,7 @@
       </p>
 
       <!-- Your article content goes here (plain HTML) -->
-      <h1>Effect of explanation and confidence fields on LLM extraction</h1>
-<h1>Effect of Adding Explanation or Confidence Fields to LLM Extraction Output</h1>
-<p>Question: If you ask an LLM to extract structured data and include an &quot;explanation&quot; field or a &quot;confidence score&quot; per item, how does that affect accuracy, calibration, and the ad-hoc interpretability story?</p>
+      <p>Question: If you ask an LLM to extract structured data and include an &quot;explanation&quot; field or a &quot;confidence score&quot; per item, how does that affect accuracy, calibration, and the ad-hoc interpretability story?</p>
 <p>Short answer: field order matters enormously, confidence fields are usually badly calibrated, and the request to structure output at all imposes a measurable accuracy tax. The fix is to put the reasoning/explanation before the value, not after.</p>
 <hr />
 <h2>1. The order-of-output problem (this is the big one)</h2>
