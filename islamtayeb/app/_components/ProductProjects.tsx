@@ -74,8 +74,8 @@ export const ProductProjects = () => {
       wip: false,
       projectDescription: (
         <>
-          Raycast extension for keyboard-driven browser control, enabling
-          seamless tab, bookmark, history, and web searches directly
+          Raycast extension for jumping through Helium tabs, bookmarks, history,
+          and web searches from the keyboard
         </>
       ),
       projectTech: ['TypeScript', 'Raycast API', 'AppleScript', 'SQLite'],
