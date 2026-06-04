@@ -63,7 +63,7 @@ export const Hero = () => {
             <Code>
               <Duke size={14} className="-mt-[0.07em]" /> Duke
             </Code>{' '}
-            junior finding lazy automations. Love reading about{' '}
+            Student finding lazy automations. Love reading about{' '}
             <ExternalLink href="https://www.wired.com/2015/09/whatsapp-serves-900-million-users-50-engineers/">
               <UnderlineSpan>cool</UnderlineSpan>
             </ExternalLink>{' '}

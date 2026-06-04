@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>APM Overflow</title>
+    <link>https://apmoverflow.xyz/</link>
+    <description>Hey, I&apos;m Islam. I was born and raised between Egypt and Saudi Arabia, but I&apos;m currently based in Durham, NC studying CS at Duke. In high school, I played osu...</description>
+    <lastBuildDate>Wed, 18 Mar 2026 18:25:00 GMT</lastBuildDate>
+    <atom:link href="https://apmoverflow.xyz/feed/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>On Fingerspitzengefühl</title>
+      <link>https://apmoverflow.xyz/on-fingerspitzengefuhl/</link>
+      <guid isPermaLink="true">https://apmoverflow.xyz/on-fingerspitzengefuhl/</guid>
+      <description>&lt;p&gt; I used to play this rhythm game called &lt;a href=&quot;https://osu.ppy.sh/home&quot;&gt;osu!&lt;/a&gt; from ages 11 to 17. You might&apos;ve seen &lt;a href=&quot;https://www.youtube.com/watch?v=Cp9pyCFRyJ0&quot;&gt;clips&lt;/a&gt; of people reacting to it. The concept is simple: you click circles to the beat of a song. Most players aim with a graphic tablet and tap with Z + X on their keyboard. I played semi-competitively around 2020-2022. &lt;/p&gt;</description>
+      <pubDate>Wed, 18 Mar 2026 18:25:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>On Dimensions of Taste (Harmonia)</title>
+      <link>https://apmoverflow.xyz/on-dimensions-of-taste/</link>
+      <guid isPermaLink="true">https://apmoverflow.xyz/on-dimensions-of-taste/</guid>
+      <description>&lt;p&gt; Over last semester, I wanted to see whether I could formalize my music preferences numerically, whether I could model the distinctions I &lt;em&gt;felt&lt;/em&gt; but couldn&apos;t articulate, and use them to automatically sort my liked songs into playlists. Could I build something that surfaces patterns in my library I sense but can&apos;t describe? &lt;/p&gt;</description>
+      <pubDate>Fri, 02 Jan 2026 00:02:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>On Closing Doors</title>
+      <link>https://apmoverflow.xyz/on-closing-doors/</link>
+      <guid isPermaLink="true">https://apmoverflow.xyz/on-closing-doors/</guid>
+      <description>&lt;p&gt; Much of our fears stem from uncertainty. It&apos;s then intuitive to keep as many doors open &lt;em&gt;just in case&lt;/em&gt;, and meeting freshmen who want to concurrently &quot;build and apply to YC&quot; and &quot;keep quant as a backup&quot; suggests this hedging impulse is more foundational. &lt;/p&gt;</description>
+      <pubDate>Thu, 18 Dec 2025 23:53:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>On Using Computers</title>
+      <link>https://apmoverflow.xyz/on-using-computers/</link>
+      <guid isPermaLink="true">https://apmoverflow.xyz/on-using-computers/</guid>
+      <description>&lt;p&gt; I remember figuring out the shortest routes to class first semester of college. The lowkey flex of &quot;I know a quicker way&quot; never saved much time, and yet it felt &lt;em&gt;fun&lt;/em&gt; to explore campus through these mildly competitive treks. &lt;/p&gt;</description>
+      <pubDate>Sun, 12 Oct 2025 09:19:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

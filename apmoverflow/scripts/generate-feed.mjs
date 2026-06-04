@@ -39,6 +39,10 @@ function toFeedDate(value) {
   return new Date(value).toISOString().replace(/\.\d{3}Z$/, '+00:00');
 }
 
+function toRssDate(value) {
+  return new Date(value).toUTCString();
+}
+
 function absoluteUrl(href) {
   return `${siteUrl}${href.startsWith('/') ? href : `/${href}`}`;
 }
@@ -63,14 +67,15 @@ function postTitle(html) {
   return stripTags(getMatch(main, /<h1>([\s\S]*?)<\/h1>/, 'title'));
 }
 
-const blogItems = [
-  ...blogHtml.matchAll(
-    /<li>\s*<span[^>]*>\s*<i><time datetime="([^"]+)">[^<]+<\/time><\/i>\s*<\/span\s*>\s*<a href="([^"]+)">[\s\S]*?<\/a>\s*<\/li>/g
-  ),
-];
+const blogItems = [...blogHtml.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(
+  ([, item]) => ({
+    listDate: getMatch(item, /<time datetime="([^"]+)"/, 'post date'),
+    href: getMatch(item, /<a\b[^>]*href="([^"]+)"/, 'post link'),
+  })
+);
 
 const entries = await Promise.all(
-  blogItems.map(async ([, listDate, href]) => {
+  blogItems.map(async ({ listDate, href }) => {
     const postPath = path.join(root, href, 'index.html');
     const html = await readFile(postPath, 'utf8');
     const title = postTitle(html);
@@ -98,7 +103,7 @@ const subtitle = getMatch(
   'site description'
 );
 
-const feed = `<?xml version='1.0' encoding='UTF-8'?>
+const atomFeed = `<?xml version='1.0' encoding='UTF-8'?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>${siteUrl}</id>
   <title>APM Overflow</title>
@@ -107,7 +112,8 @@ const feed = `<?xml version='1.0' encoding='UTF-8'?>
     <name>${author}</name>
   </author>
   <link href="${siteUrl}/" rel="alternate"/>
-  <link href="${siteUrl}/feed/" rel="self"/>
+  <link href="${siteUrl}/feed/" rel="self" type="application/atom+xml"/>
+  <link href="${siteUrl}/feed/rss.xml" rel="alternate" type="application/rss+xml"/>
   <subtitle>${escapeXml(subtitle)}</subtitle>
 ${entries
   .map(
@@ -127,5 +133,29 @@ ${entries
 </feed>
 `;
 
+const rssFeed = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>APM Overflow</title>
+    <link>${siteUrl}/</link>
+    <description>${escapeXml(subtitle)}</description>
+    <lastBuildDate>${toRssDate(feedUpdated)}</lastBuildDate>
+    <atom:link href="${siteUrl}/feed/rss.xml" rel="self" type="application/rss+xml"/>
+${entries
+  .map(
+    (entry) => `    <item>
+      <title>${escapeXml(entry.title)}</title>
+      <link>${entry.url}</link>
+      <guid isPermaLink="true">${entry.url}</guid>
+      <description>${escapeXml(entry.content)}</description>
+      <pubDate>${toRssDate(entry.published)}</pubDate>
+    </item>`
+  )
+  .join('\n')}
+  </channel>
+</rss>
+`;
+
 await mkdir(path.join(root, 'feed'), { recursive: true });
-await writeFile(path.join(root, 'feed', 'index.xml'), feed);
+await writeFile(path.join(root, 'feed', 'index.xml'), atomFeed);
+await writeFile(path.join(root, 'feed', 'rss.xml'), rssFeed);

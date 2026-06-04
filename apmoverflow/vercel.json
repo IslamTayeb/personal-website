@@ -3,6 +3,20 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": true,
+  "redirects": [
+    {
+      "source": "/feed",
+      "has": [{ "type": "query", "key": "type", "value": "rss" }],
+      "destination": "/feed/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/feed/",
+      "has": [{ "type": "query", "key": "type", "value": "rss" }],
+      "destination": "/feed/rss.xml",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/static/(.*)",
@@ -14,11 +28,29 @@
       ]
     },
     {
-      "source": "/feed/(.*)",
+      "source": "/feed/",
       "headers": [
         {
           "key": "Content-Type",
           "value": "application/atom+xml; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/feed/index.xml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/atom+xml; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/feed/rss.xml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/rss+xml; charset=utf-8"
         }
       ]
     }

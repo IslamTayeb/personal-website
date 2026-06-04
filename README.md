@@ -21,10 +21,11 @@ npm run format:check
 npm run build
 ```
 
-## Blog Feed
+## Blog Posts
 
-The personal site reads `https://apmoverflow.xyz/feed/` in
-`islamtayeb/app/_components/Blog.tsx`.
+The personal site reads `https://apmoverflow.xyz/blog/` in
+`islamtayeb/app/_components/Blog.tsx` for the latest post order, then fetches
+the linked posts for excerpts. The Atom/RSS feeds should mirror that same list.
 
 The feed is generated from `apmoverflow/blog/index.html` and the linked post
 HTML files:
