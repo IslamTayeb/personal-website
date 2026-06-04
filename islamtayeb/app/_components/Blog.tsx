@@ -229,7 +229,7 @@ export async function Blog() {
               </div>
 
               {/* Content */}
-              <div>
+              <div className="min-w-0">
                 <span className="text-sm text-muted-foreground/60 uppercase tracking-wider font-mono">
                   {post.date}
                 </span>
@@ -237,9 +237,9 @@ export async function Blog() {
                   href={post.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block mt-1"
+                  className="block mt-1 min-w-0"
                 >
-                  <h3 className="font-sans text-base text-foreground leading-snug underline underline-offset-2 hover:no-underline line-clamp-2">
+                  <h3 className="font-sans text-base text-foreground leading-snug underline underline-offset-2 hover:no-underline truncate">
                     {post.title}
                     {index === 0 && (
                       <Badge
