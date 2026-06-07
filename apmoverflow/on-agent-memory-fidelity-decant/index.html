@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=5"
+    />
+
+    <title>On Agent Memory Fidelity (Decant) | APM Overflow</title>
+    <link rel="canonical" href="https://apmoverflow.xyz/on-agent-memory-fidelity-decant/" />
+
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="On Agent Memory Fidelity (Decant)" />
+    <meta name="description" content="Most code will be written by agents, making code intent harder to reconstruct from the code alone. Agents are constrained in how much they can keep in-memory by their context..." />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:site_name" content="APM Overflow" />
+    <meta property="og:title" content="On Agent Memory Fidelity (Decant)" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://apmoverflow.xyz/on-agent-memory-fidelity-decant/" />
+    <meta property="og:description" content="Most code will be written by agents, making code intent harder to reconstruct from the code alone. Agents are constrained in how much they can keep in-memory by their context..." />
+    <meta property="og:image" content="/static/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:url" content="https://apmoverflow.xyz/on-agent-memory-fidelity-decant/" />
+    <meta property="twitter:title" content="On Agent Memory Fidelity (Decant)" />
+    <meta property="twitter:description" content="Most code will be written by agents, making code intent harder to reconstruct from the code alone. Agents are constrained in how much they can keep in-memory by their context..." />
+    <meta property="twitter:image" content="/static/og-image.png" />
+
+    <!-- Microdata -->
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "article",
+        "name": "On Agent Memory Fidelity (Decant)",
+        "headline": "On Agent Memory Fidelity (Decant)",
+        "url": "https://apmoverflow.xyz/on-agent-memory-fidelity-decant/",
+        "description": "Most code will be written by agents, making code intent harder to reconstruct from the code alone. Agents are constrained in how much they can keep in-memory by their context...",
+        "image": "/static/og-image.png"
+      }
+    </script>
+
+    <link
+      rel="alternate"
+      type="application/atom+xml"
+      href="/feed/"
+      title="APM Overflow"
+    />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      href="/feed/rss.xml"
+      title="APM Overflow"
+    />
+
+    <link rel="icon" href="/static/favicon.svg" />
+    <link rel="apple-touch-icon" href="/static/favicon.svg" />
+    <link rel="stylesheet" href="/static/styles.css" />
+    <!-- Uncomment if post has code blocks: -->
+    <!-- <link rel="stylesheet" href="/static/highlight.css"> -->
+  </head>
+
+  <body class="post">
+    <header>
+      <a class="title" href="/">
+        <h1>APM Overflow</h1>
+      </a>
+      <nav>
+        <p><a href="/">Home</a> <a href="/blog/">Blog</a></p>
+      </nav>
+    </header>
+
+    <main>
+      <h1>On Agent Memory Fidelity (Decant)</h1>
+
+      <p>
+        <i><time datetime="2026-05-26T12:48Z">May 26, 2026</time></i>
+      </p>
+
+      <!-- Your article content goes here (plain HTML) -->
+      <p>Since Sonnet 3.7 came out right before my last internship, I&#39;ve barely hand-written code. Coding agents are getting insanely good, and I keep trusting these models to do more and more. I think we&#39;re heading toward a world where most code is written through agents, if not entirely by them.</p>
+<p>That&#39;s a double-edged sword. When you&#39;re not writing code line by line, you stop thinking as hard about every edge case. The intent behind a change doesn&#39;t really live in the diff anymore, it lives in the chat transcript. Which means those transcripts matter more than ever, and they can run into the millions of tokens. Frankly, you rarely need all of that loaded into context to find what you&#39;re after. So I&#39;ve been toying with the idea of embedding compression. Most of the interesting work in the space happens through alternative training methods that make embeddings reversibly compressible, but I wanted to see how far a pure engineering approach could go.</p>
+<p>What follows is an exploration, not a method. It&#39;d need a lot more testing to know if it&#39;s any good, but I thought it was worth putting out there.</p>
+<hr />
+<h2>Index</h2>
+<hr />
+<h2>Background</h2>
+<p>Agents are constrained in how much they can keep in-memory by their context windows, usually within 400K-1M tokens. Once the context window gets past 50%, model behavior degrades because old, irrelevant, stale, or noisy information remains in the prompt. This is called <a href="https://www.trychroma.com/research/context-rot">context rot</a>. There&#39;s 2 main ways for context to rot in coding agents: (1) irrelevant chats and information are included in the prompt, or (2) unnecessarily long, sparse messages.</p>
+<p>To be concrete, there are three major points I&#39;m interested in:</p>
+<ol>
+<li>Agent chats describe intent better than the code written.</li>
+<li>Every message, no matter how irrelevant, stays in-context.</li>
+<li>Messages can be 10s of thousands of tokens long, largely due to tool calls and reasoning.</li>
+</ol>
+<p>Agentic coding tools periodically &quot;compress&quot; chat history when you&#39;re about to fill up your context window. That helps with huge tool outputs, but only after they’ve been replayed for a while. It shrinks stale work, but does not remove it: the summary still rides through every future prompt as input tokens. And it weakens provenance. The original chat may contain the best explanation of why a line exists, but compaction flattens that history into a lossy blob with no reliable way to zoom back into the exact decision. The two failures are timing and addressability: compaction comes too late, and once it runs, the useful parts are no longer easy to control.</p>
+<h3>Points, deconstructed</h3>
+<p>Point #1 can be addressed by building infrastructure that maps commits to agent chat session IDs. This has already been built as <a href="https://usegitai.com/">git-ai</a>, a Git extension. This allows the agent (and user) to trace back user&#39;s intention with that piece of code assuming it was made with Codex, Claude Code, OpenCode, etc.</p>
+<p>Point #2 can be fixed by allowing the agent to treat its context as a variable. Old work should not stay in the prompt just because it happened earlier in the chat. In theory, we can make an agent that can <code>read</code>, <code>grep</code>, and <code>bash</code> over its own context to edit it, similar to <a href="https://alexzhang13.github.io/blog/2025/rlm/#:~:text=We%20propose%20Recursive%20Language%20Models%2C%20or,the%20user%E2%80%99s%20prompt%20in%20a%20variable">recursive language models</a> (RLMs). We&#39;ll call this an RGB-agent (credit to <a href="https://blog.alexisfox.dev/arcagi3">Alexis</a>).</p>
+<p>Point #3 is more interesting. It could be fixed by &quot;compressing&quot; messages into lower fidelity. There&#39;s no way to reversibly compress embeddings of frontier models yet, though there is <a href="https://arxiv.org/abs/2502.15957">research</a> on it. If we consider context as a long string, we can use the same RGB-agent from point #2 to compress and edit context after every message. However, we&#39;d still have to continuously re-ingest long context over and over again, so token consumption piles up.</p>
+<h3>Proposal</h3>
+<p>Instead of a long context string with a separate RGB-agent, <code>Context</code> can be viewed as an object with <code>Message</code> objects within. Each <code>Message</code> contains data (<code>timeSent</code>, <code>content</code>, etc.). From this view, I believe that adding <code>fidelity</code> to <code>Message</code> lets an agent filter out obviously-irrelevant context without having to re-ingest the full transcript of <code>Context</code> at full fidelity.</p>
+<p>That seems closer to how conversations work for humans. I do not remember every detail of a conversation (even mid-conversation). Some key parts stay vivid, some collapse into a gist, and tangents might disappear.</p>
+<p>Agent sessions should have the same <em>adaptive forgetting</em>. Where it differs from humans: when detail matters again, the agent should be able to fetch the message in full fidelity.</p>
+<p>The core distinction is between hiding context from the prompt and deleting it from memory. Decant lowers old work into cheap topic/message views, but keeps the exact messages addressable so the agent can reopen them only when needed.</p>
+<p><strong>Decant</strong> is my prototype of that idea. It gives agents (and users) tools to change message fidelity and explore Git blame-style code provenance.</p>
+<hr />
+<h2>Decant: Context as Message Objects w/ Fidelities</h2>
+<p>Decant is an OpenCode plugin prototype. The idea is to stop treating context as one long string. <strong>Instead, treat it as message objects grouped into topics/categories, then let the agent decide how much of each topic or message should stay in the next prompt.</strong></p>
+<p>There are two control layers:</p>
+<ol>
+<li><strong>Topic</strong>: multiple messages that describe the same thread of work. A topic can be rendered as <code>full</code>, <code>summary</code>, <code>compressed</code>, <code>placeholder</code>, or <code>hidden</code>.</li>
+<li><strong>Message</strong>: the building block of a topic. A single message can inherit the topic setting, force itself back to <code>full</code>, force a <code>summary</code>, or be hidden.</li>
+</ol>
+<p>The agent does not have to reread the whole transcript. It can start from the topic map, lower the fidelity of stale topics, look at message summaries, then fetch exact messages later if the summary is not enough.</p>
+<p>To be concrete, below is a table summary of important fields of the <code>Topic</code> and <code>Message</code> objects in Decant.</p>
+<table>
+<thead>
+<tr>
+<th><code>Topic</code> Field</th>
+<th>What It Stores</th>
+<th>Why It Exists</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>topicID</code></td>
+<td>Stable ID for the topic. Currently named <code>blobID</code> in the prototype code.</td>
+<td>Lets messages, tools, and UI controls refer to the same topic.</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>Short topic-level summary across multiple messages.</td>
+<td>Replaces many messages when the topic is rendered cheaply.</td>
+</tr>
+<tr>
+<td><code>messageIDs[]</code></td>
+<td>Message IDs assigned to the topic.</td>
+<td>Lets Decant reopen exact messages when the topic summary is not enough.</td>
+</tr>
+<tr>
+<td><code>tokenEstimate</code></td>
+<td>Rough total size estimate for the topic.</td>
+<td>Makes large topics visible before they eat the prompt.</td>
+</tr>
+<tr>
+<td><code>fidelity</code></td>
+<td>Topic render setting: <code>full</code>, <code>summary</code>, <code>compressed</code>, <code>placeholder</code>, or <code>hidden</code>.</td>
+<td>Controls how much of the topic appears in the next prompt.</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th><code>Message</code> Field</th>
+<th>What It Stores</th>
+<th>Why It Exists</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>parts[]</code>[^‡]</td>
+<td>Ordered OpenCode message parts: text, reasoning, tool calls/results. Each part has its own type-specific fields.</td>
+<td>A message isn&#39;t a continuous string, but a data structure.</td>
+</tr>
+<tr>
+<td><code>parts[].text</code>[^‡]</td>
+<td>Text or reasoning content when present.</td>
+<td>Keeps normal prose and model-visible content.</td>
+</tr>
+<tr>
+<td><code>topicID</code></td>
+<td>Topic ID the message belongs to.</td>
+<td>Applies topic fidelity through this grouping.</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>Short message-level summary.</td>
+<td>Replaces the full message when a topic or message is rendered cheaply.</td>
+</tr>
+<tr>
+<td><code>tokenEstimate</code></td>
+<td>Rough size estimate for the raw message.</td>
+<td>Makes large messages visible even when provider token accounting is absent.</td>
+</tr>
+<tr>
+<td><code>fidelityOverride</code> / <code>hidden</code></td>
+<td>Message-level render controls.</td>
+<td>Lets one message escape the topic default or disappear from future prompts.</td>
+</tr>
+<tr>
+<td>[^‡]: Already existing OpenCode metadata.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>To be clear: the raw message data still exist, making it reversibly compressible. The prompt just gets a cheaper view by default and could at any moment use a tool call <code>message_detail</code> to &quot;zoom in&quot; to a message when needed.</p>
+<p>Topic fidelity controls how a whole topic appears: <code>full</code>, <code>summary</code>, <code>compressed</code>, <code>placeholder</code>, or <code>hidden</code>. Message-level controls can force one message back to <code>full</code>, force it to <code>summary</code>, or hide it.</p>
+<h3>Fidelity Engine</h3>
+<p>Decant annotates the conversation as it happens. On each assistant turn, it asks the model to return the normal answer plus a hidden <code>&lt;annotation&gt;</code> tag, something like:</p>
+<pre><code class="language-JSON">// ...Actual message...
+// &lt;annotation&gt;
+{
+	&quot;topic&quot;: &quot;stable snake_case topic label for this assistant response&quot;,
+	&quot;is_new_topic&quot;: &quot;boolean: whether this response starts a new topic&quot;,
+	&quot;message_summary&quot;: &quot;summary of this assistant message only&quot;,
+    &quot;topic_summary&quot;: &quot;running summary of the whole topic so far&quot;,
+    &quot;placeholder&quot;: &quot;short 5-10 word stub for the topic&quot;,
+    &quot;key_facts&quot;: [
+	    &quot;facts or decisions worth preserving through compression&quot;
+    ]
+}
+// &lt;/annotation&gt;
+</code></pre>
+<p>Decant strips that annotation from the visible chat and stores it next to the session.</p>
+<p>That gives the next prompt a menu of renderings. Recent work can stay full. Finished work can become message summaries. Distant work can become topic summaries. Old dead ends can become placeholders or disappear.</p>
+<p>The annotation is usually on the order of 300-500 output tokens. You&#39;re accepting to pay a consistent, small &quot;tax&quot; to allow the agent the ability to bookkeep and visualize the chat. The agent can call <code>view_context</code> and <code>set_fidelity</code> to change the map before the next turn.</p>
+<p>During OpenCode compaction, Decant also rewrites the compaction prompt so the summarizer respects those annotations instead of flattening every old turn equally. It can use <code>set_fidelity</code> to hide or shrink unimportant context.</p>
+<h3>Updated (Git) Blame</h3>
+<p>As I said before, I think most code will be written by agents. Not only does this make code less readable for humans oftentimes, but it is also dangerous because tons of code is being written without explicit intention. The agents are taking care of edge cases and interpret specifications in a way that the user may not have intended.</p>
+<p>The data in the user&#39;s messages (their intention) is just as important as the code output. And in large organizations with tons of people pushing code, this is especially the case.</p>
+<p>One possible workflow with a <code>blame_lookup</code> tool call:</p>
+<ol>
+<li>Agent runs tool call over a <code>file:line</code></li>
+<li>Run <code>git blame</code> on the line, get commit hash</li>
+<li>Check Agent Session &lt;&gt; Commit mapping, get session ID</li>
+<li>Spawn sub-agent on session with original question about intent + topics in the session</li>
+<li>View message summaries of selected topics, zoom in as necessary</li>
+</ol>
+<p>Now you&#39;ve (1) allowed agents to make use of other agents&#39; transcripts, and (2) created an efficient way for them to search for what they need with the fidelity engine. Pretty cool.</p>
+<p>Specifically for the &quot;Agent Session &lt;&gt; Commit mapping&quot;, Decant checks if you have git-ai installed to see if there&#39;s an existing mapping. It also keeps a local backup that I implemented in a hidden <code>.opencode</code> folder that&#39;s in every project.</p>
+<h3>User Control</h3>
+<p>Decant exposes the context map to the developer for transparency and manual control. You can see what the model is likely to read, how large each topic is, and what has been collapsed or hidden.</p>
+<p>The sidebar and <code>/context</code> show the conversation grouped by topic. Each topic has a token estimate and a fidelity setting. From <code>/context</code>, you can set a topic to <code>full</code>, <code>summary</code>, <code>compressed</code>, <code>placeholder</code>, or <code>hidden</code>. You can also override individual messages&#39; fidelity.</p>
+<p><em>Decant’s <code>/context</code> popup: topics, token share, and fidelity controls.</em></p>
+<p><code>/blame</code> is a manual trigger over the aforementioned <code>blame_lookup</code> tool call. You could enter <code>file:line</code>, or ask a natural-language question about past chats. Decant runs <code>blame_lookup</code> as we discussed in the last section, finds the relevant prior session, and answers why a line is present given past conversations about it.</p>
+<h2>Evaluation</h2>
+<p>Decant recovered the old facts that default compaction lost, without carrying old memory through unrelated future work. In the provenance eval, it routed from a blamed line back to the old Codex session/message that explained it. These are small evals, not a claim that Decant makes agents better programmers.</p>
+<p>The saved runs live under <code>artifacts/benchmark-runs/</code>.</p>
+<h3>Baselines</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Default compaction</td>
+<td>Carries a compacted summary of the old transcript. Default behavior of OpenCode.</td>
+</tr>
+<tr>
+<td>RGB-agent</td>
+<td>Writes a smaller memory file, then carries that file forward.[^1]</td>
+</tr>
+<tr>
+<td>Decant</td>
+<td>Keeps old detail outside the prompt, then opens exact messages only when needed.</td>
+</tr>
+</tbody></table>
+<h3>Selective Memory Under Future Work</h3>
+<p>I started with 8 old topics, then asked 4 exact recall questions and 48 unrelated current-work questions. I ran this three times with <code>openai/gpt-5.5-fast</code>.</p>
+<p>Default compaction recovered 3 of 12 old facts. RGB and Decant recovered all 12. Decant did it without carrying old context into the unrelated turns.</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th align="right">Runs Passed</th>
+<th align="right">Old-Fact Recall</th>
+<th align="right">Cost vs Default[^2]</th>
+<th align="right">Old Context Carried[^3]</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Default compaction</td>
+<td align="right">0/3</td>
+<td align="right">3/12</td>
+<td align="right">baseline</td>
+<td align="right">259K chars</td>
+</tr>
+<tr>
+<td>RGB-agent</td>
+<td align="right">3/3</td>
+<td align="right">12/12</td>
+<td align="right">+1%</td>
+<td align="right">199K chars</td>
+</tr>
+<tr>
+<td>Decant</td>
+<td align="right">3/3</td>
+<td align="right">12/12</td>
+<td align="right">-22%</td>
+<td align="right">0 chars</td>
+</tr>
+</tbody></table>
+<h3>Fanout</h3>
+<p>Fanout is where carrying memory gets dumb. The old-memory demand stays fixed at 4 recall questions. The unrelated work grows from 24 to 96 future turns. RGB rereads its memory file on every one of those turns. Decant only opens old memory for the recall questions.</p>
+<table>
+<thead>
+<tr>
+<th align="right">Unrelated Future Turns</th>
+<th align="right">RGB Query Tokens</th>
+<th align="right">Decant Query Tokens</th>
+<th align="right">Decant Total Cost vs RGB</th>
+<th align="right">RGB Old Context Carried</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">24</td>
+<td align="right">380K</td>
+<td align="right">158K</td>
+<td align="right">-46%</td>
+<td align="right">871K chars</td>
+</tr>
+<tr>
+<td align="right">48</td>
+<td align="right">731K</td>
+<td align="right">277K</td>
+<td align="right">-44%</td>
+<td align="right">1.8M chars</td>
+</tr>
+<tr>
+<td align="right">96</td>
+<td align="right">1.4M</td>
+<td align="right">514K</td>
+<td align="right">-30%</td>
+<td align="right">3.5M chars</td>
+</tr>
+</tbody></table>
+<h3>Updated Blame / Provenance Lookup</h3>
+<p>The provenance eval starts from code, not from a memory question. Given a <code>file:line</code>, Decant follows blame to a commit, maps that commit to a Codex session, then opens the topic/message that explains the line.</p>
+<pre><code class="language-text">file:line -&gt; git blame commit -&gt; agent session -&gt; topic/message -&gt; rationale
+</code></pre>
+<p>The past chats here are Codex-generated eval fixtures. The repos are tiny, the commits are seeded, and the decoy sessions are known ahead of time. This is not evidence that Decant handles a messy real codebase yet. It checks whether the blame-to-chat route works when the evidence exists.</p>
+<p>A post-hoc GPT-5.5 judge scored each answer from 0 to 1.[^4]</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th align="right">Judge Score</th>
+<th align="right">Cost vs Default[^2]</th>
+<th align="right">Output + Reasoning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Default compaction</td>
+<td align="right">0.93</td>
+<td align="right">baseline</td>
+<td align="right">3.6K</td>
+</tr>
+<tr>
+<td>RGB-agent</td>
+<td align="right">0.95</td>
+<td align="right">+26%</td>
+<td align="right">4.5K</td>
+</tr>
+<tr>
+<td>Decant</td>
+<td align="right">0.93</td>
+<td align="right">-18%</td>
+<td align="right">1.6K</td>
+</tr>
+</tbody></table>
+<p>Scores are basically tied. The useful signal is the route Decant took: the old chat is still inspectable. Decant can find the supporting session/message, cite it, and answer from that evidence instead of relying on one flattened summary.</p>
+<h2>What I&#39;d Test Next</h2>
+<p>The next eval should be SWE-recall: real SWE-bench tasks, <code>hints_text</code> as prior issue-discussion memory, and the official grader still used for patch quality. Then compare Decant against Default, RGB-agent, and embedding retrieval. That is where the idea either becomes useful for coding or stays a memory demo.</p>
+<p>I also want failure-focused checks: wrong summaries, stale summaries, useful detail hidden too aggressively, bad topic boundaries, and expensive recovery routes. Those are the failures that would actually make this dangerous or pointless.</p>
+<h2>Afterword</h2>
+<p>The prototype works enough to make the eval question sharper. I do not think the hard part is proving that agents can summarize old chats. They can. The hard part is proving that a context map helps during real coding work: fewer stale mistakes, better provenance, lower prompt load, and recoverable detail when another agent picks up the thread later.</p>
+<p>I&#39;m glad I was able to get this working without model training. That path still seems worth trying, but the immediate question is more basic: can memory infrastructure around frontier models make long-running agent work less lossy and less sticky?</p>
+<hr />
+<p>[^1]: In these evals, RGB-agent means an editor turn writes <code>rgb-context.md</code>, then the next turn receives only that rewritten file.</p>
+<p>[^2]: Estimated cost uses a fixed GPT-5.5 standard price model as of 2026-05-17: <code>input_tokens * $5/M + cache_read_tokens * $0.50/M + (output_tokens + reasoning_tokens) * $30/M</code>. Tool/runtime costs are not included. For non-GPT runs, treat this as a normalized estimate, not the provider bill.</p>
+<p>[^3]: Old context carried is the size of the maintained memory artifact multiplied across unrelated future turns. It is a prompt-exposure metric, not a billing metric. The memory-infra summary is in <code>artifacts/benchmark-runs/memory-infra-frontier.md</code>.</p>
+<p>[^4]: Judge scores are post-hoc semantic scores over saved artifacts, not the original benchmark pass/fail bit. I used <code>openai/gpt-5.5</code> as the judge. For provenance lookup, the judge saw the question, expected rationale facts, forbidden distractor terms, final answer, and expected session/message citation. Full judge output is in <code>artifacts/benchmark-runs/blog-judge/default-compaction-gpt55-judge/</code>.</p>
+    </main>
+
+    <footer></footer>
+  </body>
+</html>
