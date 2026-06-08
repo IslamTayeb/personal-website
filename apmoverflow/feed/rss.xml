@@ -4,8 +4,15 @@
     <title>APM Overflow</title>
     <link>https://apmoverflow.xyz/</link>
     <description>Hey, I&apos;m Islam. I was born and raised between Egypt and Saudi Arabia, but I&apos;m currently based in Durham, NC studying CS at Duke. In high school, I played osu...</description>
-    <lastBuildDate>Wed, 18 Mar 2026 18:25:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 26 May 2026 12:48:00 GMT</lastBuildDate>
     <atom:link href="https://apmoverflow.xyz/feed/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>On Agent Memory Fidelity (Decant)</title>
+      <link>https://apmoverflow.xyz/on-agent-memory-fidelity-decant/</link>
+      <guid isPermaLink="true">https://apmoverflow.xyz/on-agent-memory-fidelity-decant/</guid>
+      <description>&lt;p&gt; Since Sonnet 3.7 came out right before my last internship, I’ve barely hand-written code. Coding agents are getting insanely good, and I keep trusting these models to do more and more. I think we’re heading toward a world where most (if not all) code is written through and by agents. &lt;/p&gt;</description>
+      <pubDate>Tue, 26 May 2026 12:48:00 GMT</pubDate>
+    </item>
     <item>
       <title>On Fingerspitzengefühl</title>
       <link>https://apmoverflow.xyz/on-fingerspitzengefuhl/</link>
