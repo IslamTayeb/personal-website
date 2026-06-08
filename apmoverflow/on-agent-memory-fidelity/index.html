@@ -437,19 +437,19 @@
         <code>&lt;annotation&gt;</code> tag, something like:
       </p>
       <div class="highlight">
-        <pre><span></span>// ...Actual message...
-// &lt;annotation&gt;
-{
-    "topic": "stable snake_case topic label for this assistant response",
-    "is_new_topic": "boolean: whether this response starts a new topic",
-    "message_summary": "summary of this assistant message only",
-    "topic_summary": "running summary of the whole topic so far",
-    "placeholder": "short 5-10 word stub for the topic",
-    "key_facts": [
-        "facts or decisions worth preserving through compression"
-    ]
-}
-// &lt;/annotation&gt;</pre>
+        <pre><span></span><span class="c1">// ...Actual message...</span>
+<span class="c1">// &lt;annotation&gt;</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;topic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;stable snake_case topic label for this assistant response&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;is_new_topic&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boolean: whether this response starts a new topic&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;message_summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;summary of this assistant message only&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;topic_summary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;running summary of the whole topic so far&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;placeholder&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;short 5-10 word stub for the topic&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;key_facts&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="s2">&quot;facts or decisions worth preserving through compression&quot;</span>
+<span class="w">    </span><span class="p">]</span>
+<span class="p">}</span>
+<span class="c1">// &lt;/annotation&gt;</span></pre>
       </div>
       <p>
         Decant strips that annotation from the visible chat and stores it next
