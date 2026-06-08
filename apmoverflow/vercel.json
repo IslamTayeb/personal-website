@@ -15,6 +15,11 @@
       "has": [{ "type": "query", "key": "type", "value": "rss" }],
       "destination": "/feed/rss.xml",
       "permanent": true
+    },
+    {
+      "source": "/on-agent-memory-fidelity-decant/",
+      "destination": "/on-agent-memory-fidelity/",
+      "permanent": true
     }
   ],
   "headers": [

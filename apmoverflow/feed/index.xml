@@ -11,14 +11,14 @@
   <link href="https://apmoverflow.xyz/feed/rss.xml" rel="alternate" type="application/rss+xml"/>
   <subtitle>Hey, I&apos;m Islam. I was born and raised between Egypt and Saudi Arabia, but I&apos;m currently based in Durham, NC studying CS at Duke. In high school, I played osu...</subtitle>
   <entry>
-    <id>https://apmoverflow.xyz/on-agent-memory-fidelity-decant/</id>
+    <id>https://apmoverflow.xyz/on-agent-memory-fidelity/</id>
     <title>On Agent Memory Fidelity (Decant)</title>
     <updated>2026-05-26T12:48:00+00:00</updated>
     <author>
       <name>islamtayeb</name>
     </author>
     <content type="html">&lt;p&gt; Since Sonnet 3.7 came out right before my last internship, I’ve barely hand-written code. Coding agents are getting insanely good, and I keep trusting these models to do more and more. I think we’re heading toward a world where most (if not all) code is written through and by agents. &lt;/p&gt;</content>
-    <link href="https://apmoverflow.xyz/on-agent-memory-fidelity-decant/" rel="alternate"/>
+    <link href="https://apmoverflow.xyz/on-agent-memory-fidelity/" rel="alternate"/>
     <published>2026-05-26T12:48:00+00:00</published>
   </entry>
   <entry>
