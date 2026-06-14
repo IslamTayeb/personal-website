@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>https://apmoverflow.xyz</id>
   <title>APM Overflow</title>
-  <updated>2026-06-08T12:48:00+00:00</updated>
+  <updated>2026-06-07T12:48:00+00:00</updated>
   <author>
     <name>islamtayeb</name>
   </author>
@@ -13,13 +13,13 @@
   <entry>
     <id>https://apmoverflow.xyz/on-agent-memory-fidelity/</id>
     <title>On Agent Memory Fidelity (Decant)</title>
-    <updated>2026-06-08T12:48:00+00:00</updated>
+    <updated>2026-06-07T12:48:00+00:00</updated>
     <author>
       <name>islamtayeb</name>
     </author>
-    <content type="html">&lt;p&gt; Since Sonnet 3.7 came out right before my last internship, I’ve barely hand-written code. Coding agents are getting insanely good, and I keep trusting these models to do more and more. I think we’re heading toward a world where most (if not all) code is written through and by agents. &lt;/p&gt;</content>
+    <content type="html">&lt;p&gt;tl;dr Context should not be one flat transcript. It should be a structured object of messages, where each message can be &lt;em&gt;full&lt;/em&gt;, &lt;em&gt;summarized&lt;/em&gt;, or &lt;em&gt;hidden&lt;/em&gt;. The agent can tune that detail-level per message per prompt, spending tokens only where needed.&lt;/p&gt;</content>
     <link href="https://apmoverflow.xyz/on-agent-memory-fidelity/" rel="alternate"/>
-    <published>2026-06-08T12:48:00+00:00</published>
+    <published>2026-06-07T12:48:00+00:00</published>
   </entry>
   <entry>
     <id>https://apmoverflow.xyz/on-fingerspitzengefuhl/</id>

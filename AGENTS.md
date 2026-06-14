@@ -23,6 +23,10 @@ npm run format:check # prettier --check .
 
 There are no tests, no typecheck script, and no CI. `npm run build` is the single gate -- it runs the Next.js compiler which includes type-checking. Always run it before considering work done.
 
+For `apmoverflow/` post publishing, run `npm run build` from `apmoverflow/`
+to regenerate static posts and feeds, then still run the main `islamtayeb/`
+build/lint/format gates before committing.
+
 ## Committing
 
 Commit and push when you are confident the project is in good shape for a checkpoint. Before committing:
@@ -42,6 +46,7 @@ Only commit when all three pass. Include meaningful commit messages that describ
 - **Fonts:** Geist Sans, Geist Mono, and Anek Telugu (as `--font-caption`). Default body font is `font-mono`.
 - **Formatting:** Prettier config is at repo root (`prettier.config.js`): single quotes, semicolons, trailing commas `es5`, 80-char width, 2-space indent, LF endings.
 - **`cn()` helper:** `lib/utils.ts` exports `cn()` (clsx + tailwind-merge). Use it for conditional class merging.
+- **`apmoverflow` posts:** publish from checked-in Markdown under `apmoverflow/content/posts/` plus a JSON manifest for slug/date/links/media/alt text. Keep authored prose out of frontmatter and preserve it verbatim.
 
 ## Architecture notes
 
@@ -50,6 +55,9 @@ Only commit when all three pass. Include meaningful commit messages that describ
 - `app/api/track/route.ts` is a visitor-tracking API that posts to Discord via webhook. It depends on env vars in `.env.local` (not committed).
 - Analytics: Vercel Analytics + Speed Insights are loaded in the root layout.
 - No database. No auth. No middleware.
+- `apmoverflow/scripts/build-posts.mjs` generates static post HTML, TOCs,
+  media figures, normalized footnotes, highlighted code blocks, and feeds input.
+  Dates shown on blog surfaces should use three-letter month names.
 
 ## Environment
 

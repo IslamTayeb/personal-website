@@ -1,0 +1,15 @@
+{
+  "name": "apmoverflow",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-posts.mjs && node scripts/generate-feed.mjs",
+    "build:posts": "node scripts/build-posts.mjs",
+    "build:feed": "node scripts/generate-feed.mjs"
+  },
+  "dependencies": {
+    "highlight.js": "^11.11.1",
+    "markdown-it": "^14.2.0",
+    "markdown-it-footnote": "^4.0.0"
+  }
+}

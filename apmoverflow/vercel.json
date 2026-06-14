@@ -1,5 +1,5 @@
 {
-  "buildCommand": "node scripts/generate-feed.mjs",
+  "buildCommand": "npm run build",
   "outputDirectory": ".",
   "cleanUrls": true,
   "trailingSlash": true,

@@ -11,12 +11,12 @@ import { Code, DefaultIcon } from './sharedComponents';
 const VideoWithPlaceholder = ({
   videoSrc,
   placeholderSrc,
-  projectName,
+  mediaAlt,
   scale = 1,
 }: {
   videoSrc: string;
   placeholderSrc: string;
-  projectName: string;
+  mediaAlt: string;
   scale?: number;
 }) => (
   <div
@@ -26,12 +26,13 @@ const VideoWithPlaceholder = ({
     <Image
       src={placeholderSrc}
       fill
-      alt={projectName}
+      alt={mediaAlt}
       quality={100}
       className="object-cover"
     />
     <video
       src={videoSrc}
+      aria-label={mediaAlt}
       autoPlay
       loop
       muted
@@ -46,6 +47,8 @@ export const ProductProjects = () => {
     {
       image: '/Harmonia.webm',
       projectName: 'Harmonia',
+      mediaAlt:
+        'Animated Harmonia preview showing a colored scatter plot of songs embedded by taste dimensions.',
       new: true,
       wip: false,
       videoScale: 1.6,
@@ -70,6 +73,8 @@ export const ProductProjects = () => {
       image: '/HeliumRaycast.webm',
       lockImage: '/HeliumRaycastLock.webp',
       projectName: 'Helium Browser Raycast Extension',
+      mediaAlt:
+        'Animated preview of the Helium Raycast extension workflow on a GitHub pull request page.',
       new: false,
       wip: false,
       projectDescription: (
@@ -94,6 +99,8 @@ export const ProductProjects = () => {
       image: '/Etchr.webm',
       lockImage: '/EtchrLock.webp',
       projectName: 'GitHub README Generator',
+      mediaAlt:
+        'Animated Etchr preview showing a README generator interface with repository sections and generated markdown.',
       new: false,
       wip: false,
       projectDescription: (
@@ -129,6 +136,7 @@ export const ProductProjects = () => {
               lockImage,
               projectDescription,
               projectExternalLinks,
+              mediaAlt,
               projectName,
               projectTech,
               projectTechLogo,
@@ -260,7 +268,7 @@ export const ProductProjects = () => {
                     <VideoWithPlaceholder
                       videoSrc={image}
                       placeholderSrc={lockImage}
-                      projectName={projectName}
+                      mediaAlt={mediaAlt}
                       scale={videoScale}
                     />
                   ) : image.endsWith('.webm') ? (
@@ -274,6 +282,7 @@ export const ProductProjects = () => {
                     >
                       <video
                         src={image}
+                        aria-label={mediaAlt}
                         autoPlay
                         loop
                         muted
@@ -286,7 +295,7 @@ export const ProductProjects = () => {
                       <Image
                         src={image}
                         fill
-                        alt={projectName}
+                        alt={mediaAlt}
                         quality={100}
                         className=""
                       />

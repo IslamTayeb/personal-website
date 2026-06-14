@@ -49,7 +49,7 @@ export const Hero = () => {
               <AvatarImage
                 className="object-cover absolute z-20 transition-all scale-110 -mt-2"
                 src="/myphoto.webp"
-                alt="Original Photo"
+                alt="Portrait of Islam Tayeb"
               />
               <AvatarFallback className="h-full opacity-0">
                 Islam

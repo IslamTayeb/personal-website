@@ -35,13 +35,29 @@ body {
 img + em,
 video + em,
 video + p em,
-iframe + p em {
+iframe + p em,
+figcaption {
   display: block;
   text-align: center;
   font-size: 0.85em;
   opacity: 0.7;
   margin-top: 0.5em;
   margin-bottom: 1em;
+}
+
+figure {
+  margin: 1.25em 0;
+}
+
+figure img,
+figure video {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+video {
+  max-width: 100%;
 }
 
 h1,
@@ -97,6 +113,12 @@ table {
   width: 100%;
 }
 
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
 hr {
   border: 0;
   border-top: 1px dashed;
@@ -134,9 +156,16 @@ a[href^='http'] {
 /* Tables */
 table {
   width: 100%;
+  min-width: 100%;
   border-collapse: collapse;
   font-size: 0.9em;
   margin: 1em 0;
+}
+
+.table-wrap table {
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
 }
 
 @media (max-width: 720px) {
@@ -212,6 +241,17 @@ tbody tr:nth-child(even) {
 
 .highlight {
   background-color: var(--toc-background-color);
+}
+
+.highlight pre {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.highlight code {
+  display: block;
+  padding: 0.9em 0;
+  background: transparent;
 }
 
 .code {

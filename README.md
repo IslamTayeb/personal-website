@@ -27,12 +27,12 @@ The personal site reads `https://apmoverflow.xyz/blog/` in
 `islamtayeb/app/_components/Blog.tsx` for the latest post order, then fetches
 the linked posts for excerpts. The Atom/RSS feeds should mirror that same list.
 
-The feed is generated from `apmoverflow/blog/index.html` and the linked post
-HTML files:
+Markdown-backed posts are generated first, then the feed is generated from
+`apmoverflow/blog/index.html` and the linked post HTML files:
 
 ```sh
 cd apmoverflow
-node scripts/generate-feed.mjs
+npm run build
 ```
 
-Vercel also runs that generator when deploying `apmoverflow/`.
+Vercel also runs that build when deploying `apmoverflow/`.

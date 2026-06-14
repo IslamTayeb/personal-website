@@ -1,6 +1,48 @@
 pre {
   line-height: 125%;
 }
+
+.hljs-comment,
+.hljs-quote {
+  color: #60a0b0;
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-literal,
+.hljs-name,
+.hljs-section,
+.hljs-selector-tag,
+.hljs-strong,
+.hljs-title,
+.hljs-type {
+  color: #007020;
+  font-weight: bold;
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-number,
+.hljs-symbol {
+  color: #40a070;
+}
+
+.hljs-built_in,
+.hljs-class .hljs-title,
+.hljs-function .hljs-title {
+  color: #06287e;
+}
+
+.hljs-string,
+.hljs-template-variable,
+.hljs-variable {
+  color: #4070a0;
+}
+
+.hljs-punctuation,
+.hljs-operator {
+  color: #666;
+}
 td.linenos .normal {
   color: #666666;
   background-color: transparent;
