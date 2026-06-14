@@ -81,9 +81,9 @@ Decant annotates the conversation as it happens. On each assistant turn, it asks
 // ...Actual message...
 // <annotation>
 {
-	"topic": "stable snake_case topic label for this assistant response",
-	"is_new_topic": "boolean: whether this response starts a new topic",
-	"message_summary": "summary of this assistant message only",
+    "topic": "stable snake_case topic label for this assistant response",
+    "is_new_topic": "boolean: whether this response starts a new topic",
+    "message_summary": "summary of this assistant message only",
     "placeholder": "short 5-10 word stub for the topic as description",
     "key_facts": [
 	    "facts or decisions worth preserving through compression"
