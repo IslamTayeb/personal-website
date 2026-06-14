@@ -4,7 +4,7 @@
   "title": "On Agent Memory Fidelity (Decant)",
   "description": "Context should not be one flat transcript. It should be a structured object of messages, where each message can be full, summarized, or hidden.",
   "publishedAt": "2026-06-07T12:48:00Z",
-  "updatedAt": "2026-06-07T12:48:00Z",
+  "updatedAt": "2026-06-14T12:48:00Z",
   "codeLink": {
     "label": "GitHub",
     "href": "https://github.com/IslamTayeb/decant"

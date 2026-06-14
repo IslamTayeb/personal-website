@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>https://apmoverflow.xyz</id>
   <title>APM Overflow</title>
-  <updated>2026-06-07T12:48:00+00:00</updated>
+  <updated>2026-06-14T12:48:00+00:00</updated>
   <author>
     <name>islamtayeb</name>
   </author>
@@ -13,7 +13,7 @@
   <entry>
     <id>https://apmoverflow.xyz/on-agent-memory-fidelity/</id>
     <title>On Agent Memory Fidelity (Decant)</title>
-    <updated>2026-06-07T12:48:00+00:00</updated>
+    <updated>2026-06-14T12:48:00+00:00</updated>
     <author>
       <name>islamtayeb</name>
     </author>

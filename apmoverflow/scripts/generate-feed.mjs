@@ -82,13 +82,16 @@ const entries = await Promise.all(
     const published = toFeedDate(
       html.match(/<time datetime="([^"]+)">/)?.[1] ?? listDate
     );
+    const updated = toFeedDate(
+      html.match(/"dateModified": "([^"]+)"/)?.[1] ?? published
+    );
     const content = firstContentParagraph(html);
 
     return {
       url: absoluteUrl(href),
       title,
       published,
-      updated: published,
+      updated,
       content,
     };
   })
@@ -96,7 +99,10 @@ const entries = await Promise.all(
 
 entries.sort((a, b) => new Date(b.published) - new Date(a.published));
 
-const feedUpdated = entries[0]?.updated ?? toFeedDate(new Date());
+const feedUpdated =
+  entries
+    .map((entry) => entry.updated)
+    .sort((a, b) => new Date(b) - new Date(a))[0] ?? toFeedDate(new Date());
 const subtitle = getMatch(
   homeHtml,
   /<meta\s+name="description"\s+content="([^"]*)"\s*\/>/,

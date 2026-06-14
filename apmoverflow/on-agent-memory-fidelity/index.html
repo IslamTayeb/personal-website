@@ -38,7 +38,7 @@
         "url": "https://apmoverflow.xyz/on-agent-memory-fidelity/",
         "description": "Context should not be one flat transcript. It should be a structured object of messages, where each message can be full, summarized, or hidden.",
         "datePublished": "2026-06-07T12:48:00+00:00",
-        "dateModified": "2026-06-07T12:48:00+00:00"
+        "dateModified": "2026-06-14T12:48:00+00:00"
       }
     </script>
 
@@ -115,7 +115,7 @@
   </div>
   <div class="toc-meta">
     <div><strong>Reading time</strong><br />~2.0K words, ~8 min</div>
-    <div><strong>Last updated</strong><br />Jun 07, 2026</div>
+    <div><strong>Last updated</strong><br />Jun 14, 2026</div>
     <div><strong>Code</strong><br /><a href="https://github.com/IslamTayeb/decant">GitHub</a></div>
   </div>
 </div>
@@ -123,6 +123,7 @@
 <h2 id="background">Background</h2>
 <p>Agents are constrained in how much they can keep in-memory by their context windows, usually within 400K-1M tokens. Once the context window gets past 50%, model behavior degrades because old, irrelevant, stale, or noisy information remains in the prompt. This is called <a href="https://www.trychroma.com/research/context-rot">context rot</a>. There's 2 main ways for context to rot in coding agents: (1) irrelevant chats and information are included in the prompt, or (2) unnecessarily long, sparse messages.</p>
 <p>I argue for a few different threads.</p>
+<figure class="media-figure"><img src="https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/On%20Agent%20Memory%20Fidelity%20%28Decant%29-1.png" alt="Three diagrams comparing context as a constant, an editable string, and message objects with fidelity controls."><figcaption><em>The three framings side by side. Cleanup fires only at the compaction threshold in (1) but every turn in (2) and (3). Only (3) is reversible.</em></figcaption></figure>
 <h3 id="context-as-a-constant">Context as a constant</h3>
 <p>Agentic coding tools periodically &quot;compact&quot; chat history when you're about to fill up your context window. However, if a prompt requires only 1 message out of a chat with 5 messages, you’ll still pay for those 5 messages until you hit that compaction point. On top of that, during compaction, details can be lost without any reversible way of getting those full messages back.</p>
 <h3 id="context-as-a-string-variable">Context as a string variable</h3>
@@ -132,7 +133,6 @@
 <p>Obviously, there is no &quot;compression&quot; parameter on GPT or Claude, so we'll settle for discrete fidelity<sup class="footnote-ref"><a href="#fn2" id="fnref2">2</a></sup> settings, namely full / summary / hidden.</p>
 <p>This is how conversations work for humans. I do not remember every detail of a conversation (even mid-conversation). Some key parts stay vivid, some collapse into a gist, and tangents might disappear.</p>
 <p>Agent sessions should have the same <em>adaptive forgetting</em>. Where it differs from humans: when detail matters again, the agent should be able to fetch the message in full.</p>
-<figure class="media-figure"><img src="https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/On%20Agent%20Memory%20Fidelity%20%28Decant%29-1.png" alt="Three diagrams comparing context as a constant, an editable string, and message objects with fidelity controls."><figcaption><em>The three framings side by side. Cleanup fires only at the compaction threshold in (1) but every turn in (2) and (3). Only (3) is reversible.</em></figcaption></figure>
 <hr>
 <h2 id="decant-context-as-message-objects-w-compression">Decant: Context as Message Objects w/ Compression</h2>
 <p><strong>Decant allows agents to treat context as a collection of message objects grouped into topics, with knobs to adjust compression.</strong> The agent decides how much of each topic or message should stay in the next prompt.</p>

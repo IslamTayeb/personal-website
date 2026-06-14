@@ -17,6 +17,9 @@ Agents are constrained in how much they can keep in-memory by their context wind
 
 I argue for a few different threads.
 
+![On Agent Memory Fidelity (Decant) 1](https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/On Agent Memory Fidelity (Decant)-1.png)
+*The three framings side by side. Cleanup fires only at the compaction threshold in (1) but every turn in (2) and (3). Only (3) is reversible.*
+
 ### Context as a constant
 
 Agentic coding tools periodically "compact" chat history when you're about to fill up your context window. However, if a prompt requires only 1 message out of a chat with 5 messages, you’ll still pay for those 5 messages until you hit that compaction point. On top of that, during compaction, details can be lost without any reversible way of getting those full messages back.
@@ -34,9 +37,6 @@ Obviously, there is no "compression" parameter on GPT or Claude, so we'll settle
 This is how conversations work for humans. I do not remember every detail of a conversation (even mid-conversation). Some key parts stay vivid, some collapse into a gist, and tangents might disappear.
 
 Agent sessions should have the same *adaptive forgetting*. Where it differs from humans: when detail matters again, the agent should be able to fetch the message in full.
-
-![On Agent Memory Fidelity (Decant) 1](https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/On Agent Memory Fidelity (Decant)-1.png)
-*The three framings side by side. Cleanup fires only at the compaction threshold in (1) but every turn in (2) and (3). Only (3) is reversible.*
 
 ---
 
