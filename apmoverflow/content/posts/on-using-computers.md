@@ -24,10 +24,10 @@ You shouldn't need a mental map of where every app, tab, and file is either. Rat
 
 For example, I have key-binds set as follows:
 
--   `⌥ + 1`: *[Helium](https://helium.computer/)* (browser)
--   `⌥ + 2`: *[Obsidian](https://obsidian.md/)* (notes)
--   `⌥ + 3`: Terminal w/ *[Neovim](https://neovim.io/)* booted (IDE)
--   `⌥ + 4`: *Finder*
+-   <kbd>⌥ + 1</kbd>: *[Helium](https://helium.computer/)* (browser)
+-   <kbd>⌥ + 2</kbd>: *[Obsidian](https://obsidian.md/)* (notes)
+-   <kbd>⌥ + 3</kbd>: Terminal w/ *[Neovim](https://neovim.io/)* booted (IDE)
+-   <kbd>⌥ + 4</kbd>: *Finder*
 
 Additionally, I have *[Yabai](https://github.com/koekeishiya/yabai)* set up, which automatically opens 8 spaces when I log into my computer and moves applications to the following:
 
@@ -36,7 +36,7 @@ Additionally, I have *[Yabai](https://github.com/koekeishiya/yabai)* set up, whi
 -   `3`: Music (*Spotify*)
 -   `4-6`: N/A (Misc.)
 -   `7`: To-do (*[Godspeed](https://godspeedapp.com/)*)
--   `8`: Logistics (*Calendar*, *Mail*, *Slack*) And I can switch to different spaces with `^ + X` where `X` is the # of the space.
+-   `8`: Logistics (*Calendar*, *Mail*, *Slack*) And I can switch to different spaces with <kbd>^ + X</kbd> where <kbd>X</kbd> is the # of the space.
 
 ![macOS Mission Control view showing multiple desktop spaces](/static/media/pasted-image-20251003215923.webp) *Snapshot of my Mac spaces, never knew they existed until 1 month after getting my laptop.*
 
@@ -44,7 +44,7 @@ This setup automatically clusters applications by "category" in a way that I've 
 
 1.  Go to `Settings > General > Login Items & Extensions`
 2.  Add all relevant applications that you access often so they open on boot up
-3.  Every time you boot up your Macbook: hit `F3`, create necessary spaces, drag and drop your applications to each space
+3.  Every time you boot up your Macbook: hit <kbd>F3</kbd>, create necessary spaces, drag and drop your applications to each space
 4.  Go to `Settings > Keyboard > Keyboard Shortcuts`
 5.  Open `Mission Control > Mission Control`. You can then set up key-binds for `Switch to Desktop X`
 
@@ -66,11 +66,11 @@ Reminder: automation is about reducing cognitive overhead, not just saving time.
 
 Key-binds are oftentimes faster to use than a mouse. Most people reading this essay average 70+ WPM, which is more than enough to make browsing with your keyboard much faster than with your mouse.
 
-For example, I often find myself drowning in tabs, even without duplicates. So, instead of restricting myself to fewer tabs, I found out that you can search through chrome tabs. The key-bind is `⌘ + Shift + A`. I also found out you can click hyperlinks/buttons on a webpage without a mouse by (1) clicking `⌘ + F`, (2) search + focusing on the text, (3) clicking `Esc`, then (4) clicking `Enter`.
+For example, I often find myself drowning in tabs, even without duplicates. So, instead of restricting myself to fewer tabs, I found out that you can search through chrome tabs. The key-bind is <kbd>⌘ + Shift + A</kbd>. I also found out you can click hyperlinks/buttons on a webpage without a mouse by (1) clicking <kbd>⌘ + F</kbd>, (2) search + focusing on the text, (3) clicking <kbd>Esc</kbd>, then (4) clicking <kbd>Enter</kbd>.
 
 <video aria-label="Screen recording of using browser find to focus and open a page link without using the mouse." autoplay="" loop="" muted="" playsinline="" style="max-width: 100%" src="/static/media/clipboard-20251012-200117-481.mp4"></video>*Clicking hyperlinks/buttons without a mouse*
 
-Another example: I share files often. I found the default flow jarring: download file > open *Finder* > click *Downloads* > drag + drop file > send. However, a quick search through *Raycast*'s extension store led me to the [*Downloads Manager*](https://www.raycast.com/thomas/downloads-manager) extension, which had a shortcut for Pasting latest download. Now, my flow feels way snappier: download a file > press `⌘ + ⌥ + V` > send.
+Another example: I share files often. I found the default flow jarring: download file > open *Finder* > click *Downloads* > drag + drop file > send. However, a quick search through *Raycast*'s extension store led me to the [*Downloads Manager*](https://www.raycast.com/thomas/downloads-manager) extension, which had a shortcut for Pasting latest download. Now, my flow feels way snappier: download a file > press <kbd>⌘ + ⌥ + V</kbd> > send.
 
 In the same vein: I switched to *Neovim* after realizing I was constantly reaching for my mouse in *VS Code*. [Vim motions](https://www.barbarianmeetscoding.com/boost-your-coding-fu-with-vscode-and-vim/moving-blazingly-fast-with-the-core-vim-motions/) keep your hands on the keyboard for everything – navigation, editing, refactoring. Fair warning: the learning curve is brutal. It took me a few weeks of feeling significantly slower before muscle memory kicked in. It's the logical extreme of the keyboard-first principle, but fully worth it if you're willing to invest the time.
 
@@ -183,9 +183,9 @@ Handles frontend/backend, database set-up, and hosting. Great for creating quick
 <details>
 <summary><em>Quality of Life</em></summary>
 
-`Caps Lock` takes up a lot of real estate on your keyboard for an obscure action. I suggest remapping it to either `Backspace` or `Ctrl` – I personally switch my `Left Ctrl` and `Caps Lock`. I used [*hidutils*](https://hidutil-generator.netlify.app/) for the keyboard remapping, but you may also use [*Karabiner*](https://karabiner-elements.pqrs.org/)
+<kbd>Caps Lock</kbd> takes up a lot of real estate on your keyboard for an obscure action. I suggest remapping it to either <kbd>Backspace</kbd> or <kbd>Ctrl</kbd> – I personally switch my <kbd>Left Ctrl</kbd> and <kbd>Caps Lock</kbd>. I used [*hidutils*](https://hidutil-generator.netlify.app/) for the keyboard remapping, but you may also use [*Karabiner*](https://karabiner-elements.pqrs.org/)
 
-[*AltTab*](https://alt-tab-macos.netlify.app/): better `Alt + Tab` experience: window previews, custom triggers, blacklist apps
+[*AltTab*](https://alt-tab-macos.netlify.app/): better <kbd>Alt + Tab</kbd> experience: window previews, custom triggers, blacklist apps
 
 [*MiddleClick*](https://github.com/artginzburg/MiddleClick): emulate a scroll wheel click with 3 finger click
 
