@@ -15,8 +15,6 @@ Most of the interesting work in the space happens through [alternative training 
 
 Agents are constrained in how much they can keep in-memory by their context windows, usually within 400K-1M tokens. Once the context window gets past 50%, model behavior degrades because old, irrelevant, stale, or noisy information remains in the prompt. This is called [context rot](https://www.trychroma.com/research/context-rot). There's 2 main ways for context to rot in coding agents: (1) irrelevant chats and information are included in the prompt, or (2) unnecessarily long, sparse messages.
 
-I argue for a few different threads.
-
 ![On Agent Memory Fidelity (Decant) 1](https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/On Agent Memory Fidelity (Decant)-1.png)
 *The three framings side by side. Cleanup fires only at the compaction threshold in (1) but every turn in (2) and (3). Only (3) is reversible.*
 
@@ -30,9 +28,9 @@ The agent can now treat context as a variable to edit whenever it deems fit. Old
 
 ### Context as message objects
 
-Rather than treating context as a long string, we can view it as a structured object of `Message` objects. Each `Message` contains data (timeSent, content, etc.). Adding a “compression” field to `Message` could theoretically let an agent consider a summary (or drop) of obviously-irrelevant context without having to re-ingest the full session.
+Rather than treating context as a long string, we can view it as a structured object of `Message` objects. Each `Message` contains data (`timeSent`, `content`, etc.). Adding a `compression` field to `Message` could theoretically let an agent consider a summary (or drop) of obviously-irrelevant context without having to re-ingest the full session.
 
-Obviously, there is no "compression" parameter on GPT or Claude, so we'll settle for discrete fidelity[^5] settings, namely full / summary / hidden.
+Obviously, there is no `compression` parameter on GPT or Claude, so we'll settle for discrete `fidelity`[^5] settings, namely `full` / `summary` / `hidden`.
 
 This is how conversations work for humans. I do not remember every detail of a conversation (even mid-conversation). Some key parts stay vivid, some collapse into a gist, and tangents might disappear.
 
@@ -40,16 +38,16 @@ Agent sessions should have the same *adaptive forgetting*. Where it differs from
 
 ---
 
-## Decant: Context as Message Objects w/ Compression
+## Decant
 
 **Decant allows agents to treat context as a collection of message objects grouped into topics, with knobs to adjust compression.** The agent decides how much of each topic or message should stay in the next prompt.
 
 There are two control layers:
 
-1. **Topic**: multiple messages that describe the same thread of work. A topic can be rendered as full / summary / hidden.
-2. **Message**: the building block of a topic. A single message can inherit the topic setting, or force itself back to full / summary / hidden.
+1. `Topic`: multiple messages that describe the same thread of work. A topic can be rendered as `full` / `summary` / `hidden`.
+2. `Message`: the building block of a topic. A single message can `inherit` the topic setting, or force itself back to `full` / `summary` / `hidden`.
 
-The agent does not have to reread the whole transcript. It starts from the topic map, lowers the fidelity of stale topics, looks at message summaries, then fetches exact messages later if the summary is not enough.
+The agent does not have to reread the whole transcript. It starts from the topic map, lowers the `fidelity` of stale topics, looks at message summaries, then fetches exact messages later if the summary is not enough.
 
 To be concrete, Decant's context map looks roughly like this:
 
@@ -94,7 +92,7 @@ Decant annotates the conversation as it happens. On each assistant turn, it asks
 
 Decant strips that annotation from the visible chat and stores it next to the session.
 
-That gives the next prompt a menu of renderings. Recent work can stay full. Finished work can become message summaries. Distant work can become topic summaries. Old dead ends can become placeholders or disappear.
+That gives the next prompt a menu of renderings. Recent work can stay `full`. Finished work can become message summaries. Distant work can become topic summaries. Old dead ends can become placeholders or disappear.
 
 The annotation is usually on the order of 300-500 output tokens. You're accepting to pay a consistent, small "tax" to allow the agent the ability to bookkeep and visualize the chat. The agent can call `view_context` and `set_fidelity` to change the map before the next turn.
 
@@ -123,31 +121,29 @@ Specifically for the "Agent Session <> Commit mapping", Decant checks if you hav
 
 Decant exposes the context map to the dev for transparency and manual control. You can see what the model is likely to read, how large each topic is, and what has been collapsed or hidden.
 
-The sidebar and /context show the conversation grouped by topic. Each topic has a token estimate and a fidelity setting. From /context, you can set a topic to full / summary / hidden. You can also override individual messages' fidelity.
+The sidebar and `/context` show the conversation grouped by topic. Each topic has a token estimate and a `fidelity` setting. From `/context`, you can set a topic to `full` / `summary` / `hidden`. You can also override individual messages' `fidelity`.
 
-/blame is a manual trigger over the aforementioned `blame_lookup` tool call. You could enter a line reference, or ask a natural-language question about past chats. Decant runs `blame_lookup` as we discussed in the last section, finds the relevant prior session, and answers why a line is present given past conversations about it.
+`/blame` is a manual trigger over the aforementioned `blame_lookup()` tool call. You could enter a line reference, or ask a natural-language question about past chats. Decant runs `blame_lookup()` as we discussed in the last section, finds the relevant prior session, and answers why a line is present given past conversations about it.
 
 ## Evaluation
 
-I wanted to test whether Decant actually changes the shape of agent memory. Old conversations should not sit in every future prompt just because they happened earlier. But they also cannot disappear, because later tasks may need an exact old fact or the reason behind a line of code.
+So far, we've been talking about making agents able to reversibly remove old context. I wanted to see if that shape shows up in numbers at all, so I made three evals around the routes I care about:
 
-I tested that in three ways.
+* Old facts leaving the prompt, then coming back when asked for
+* Unrelated future work piling up after the old facts are no longer current
+* Code pointing back to the chat/session that explains why it exists
 
-* The first eval asks whether old facts can be recovered after the old session has been compressed.
-* The second asks what happens when unrelated future work piles up.
-* The third starts from code: given a line reference, can Decant route back to the session/message that explains it?
+The tables compare three ways of handling old context:
 
-All of this is small and hand-built. The point is to check the memory routes, not to claim Decant makes agents better programmers per se. That'd require more rigorous benchmarks with harder problems.
-
-I use three methods throughout the evals.
-
-| Method | What it does |
-| :--- | :--- |
-| Default compaction | Carries a compacted summary of the old transcript. Default behavior of OpenCode. |
-| RGB-agent | Keeps old chat outside the prompt, then uses read, grep, and bash before answering.[^2] |
-| Decant | Keeps old detail outside the prompt, then opens exact messages only when needed. |
+| Method             | What it does                                                                            |
+| :----------------- | :-------------------------------------------------------------------------------------- |
+| Default compaction | Carries a compacted summary of the old transcript. Default behavior of OpenCode.        |
+| RGB-agent          | Keeps old chat outside the prompt, then uses read, grep, and bash before answering.[^2] |
+| Decant             | Keeps old detail outside the prompt, then opens exact messages only when needed.        |
 
 ### Selective Memory Under Future Work
+
+Can the old facts leave the prompt and still be recovered later?
 
 I started with 8 old topics, then asked 4 exact recall questions and 48 unrelated current-work questions. I ran the RGB-agent version three times with openai/gpt-5.5; default and Decant are the saved blog runs for the same shape.
 
@@ -161,7 +157,9 @@ Default compaction recovered 3 of 12 old facts. RGB-agent and Decant recovered a
 
 ### Fanout
 
-The old-memory demand stays fixed at 4 recall questions. The unrelated work grows from 24 to 96 future turns. RGB-agent keeps old memory out of current-work prompts, but recall turns still search the raw transcript. Decant uses fewer query tokens because lookup returns a smaller old-memory slice.
+We keep the old-memory demand fixed at 4 recall questions, then grow unrelated future work from 24 to 96 turns.
+
+RGB-agent keeps old memory out of current-work prompts, but recall turns still search the raw transcript, which seems to help as we increase turns slightly. Decant uses fewer query tokens because lookup returns a smaller old-memory slice though, gives a better "birds-eye view" of the context.
 
 | Condition | 24 Turns | 48 Turns | 96 Turns |
 | :--- | ---: | ---: | ---: |
@@ -170,13 +168,11 @@ The old-memory demand stays fixed at 4 recall questions. The unrelated work grow
 
 ### Updated Git Blame Lookup
 
-Given a line reference, Decant follows blame to a commit, maps that commit to an agent session, then opens the topic/message that explains the line.
+This one checks the code-to-chat route from the blame section above. The question starts from a line reference, and the agent has to route back to the session/message that explains why the line exists.
 
 ```text
 line reference -> git blame commit -> agent session -> topic/message -> rationale
 ```
-
-The past chats here are Codex-generated eval fixtures. The repos are tiny, the commits are seeded, and the decoy sessions are known ahead of time. This is not evidence that Decant handles a messy real codebase yet. It checks whether the blame-to-chat route works when the evidence exists.
 
 A post-hoc GPT-5.5 judge scored the five standard blame answers from 0 to 1.[^4] For default, this table assumes the full old fixture context is charged on each question, as it would normally. Obviously, compaction would take place in "chunks" of 1M tokens if the chat was >1M tokens long.
 
@@ -186,13 +182,25 @@ A post-hoc GPT-5.5 judge scored the five standard blame answers from 0 to 1.[^4]
 | RGB-agent          |        0.91 |              53K |       $0.10 (-65%) |
 | Decant             |        0.93 |              44K |       $0.05 (-83%) |
 
+## Limitations
+
+None of these evals show Decant makes agents better programmers. I'm frankly too ~~lazy~~ busy to make that benchmark right now.
+
+What I test is specifically can old context get cheaper without becoming unrecoverable? Can lookup stay targeted as unrelated future work piles up? Can a code line route back to the chat evidence behind it?
+
+The blame eval is especially controlled. The past chats are Codex-generated fixtures, the repos are tiny, and the commits are seeded. This is not evidence that Decant handles a messy real codebase with 100s of engineers yet.
+
+Also, the models are not trained for either side of this comparison. They are not trained to be recursive-language-model-style RGB-agents that edit their own working context. They are also not trained to use Decant's fidelity controls as a native memory system. I would not be shocked if a better-trained RGB-agent turns out to be the objective answer.
+
 ## Afterword
 
-None of the evals show Decant makes agents better programmers, partially because I'm too lazy to make a full benchmark. But it shows the potential infra gains, and memory routes work when the evidence exists in the blame eval. Testing how this works out in actual production environments with big teams would be an interesting future direction though.
+The evals are enough to make me think the infra gains are real, and the memory routes work when the evidence exists. Testing how this holds up in actual production environments with big teams would be pretty cool.
 
-Also, the discrete full / summary / hidden knobs are placeholders for a continuous and learned `compression` field. [R3Mem](https://doi.org/10.48550/arXiv.2502.15957) trains embeddings to be reversibly compressible.
+Also, the discrete `full` / `summary` / `hidden` knobs are placeholders for a continuous and learned `compression` field. [R3Mem](https://doi.org/10.48550/arXiv.2502.15957) trains embeddings to be reversibly compressible.
 
-Alas, I've enjoyed thinking about agents for the last couple of months. I've been thinking a lot about "compilers" for different fields and how transformers fundamentally work to enable funny improvements like [copy-pasting the prompt](https://arxiv.org/abs/2512.14982) and [asking for reasoning before score](https://arxiv.org/abs/2408.02442).
+Alas, I've enjoyed thinking about agents for the last couple of months. I've been thinking a lot about "compilers" for different fields and how transformers fundamentally work to enable funny improvements like [copy-pasting the prompt](https://arxiv.org/abs/2512.14982) and [asking for reasoning before score](https://arxiv.org/abs/2408.02442). Big things coming!
+
+P.S. Been revisiting the Bleach soundtrack, some real [gems](https://open.spotify.com/track/3EpPf1hMLF0jMoeuOsBV9f) in there. Also discovered there's a Raising Cane's 15~ minutes from Duke, which I've been frequenting.
 
 ---
 
