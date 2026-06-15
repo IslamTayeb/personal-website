@@ -2,6 +2,8 @@ import { site } from '../site.config.mjs';
 import { datetime, formatDate, toFeedDate } from '../utils/date.mjs';
 import { escapeHtml } from '../utils/html.mjs';
 
+const stylesheetVersion = '20260615-codeblock-mobile';
+
 export function renderPostPage(post) {
   const { manifest } = post;
   const description = escapeHtml(manifest.description);
@@ -80,8 +82,8 @@ export function renderPostPage(post) {
 
     <link rel="icon" href="/static/favicon.svg" />
     <link rel="apple-touch-icon" href="/static/favicon.svg" />
-    <link rel="stylesheet" href="/static/styles.css" />
-    <link rel="stylesheet" href="/static/highlight.css" />
+    <link rel="stylesheet" href="/static/styles.css?v=${stylesheetVersion}" />
+    <link rel="stylesheet" href="/static/highlight.css?v=${stylesheetVersion}" />
   </head>
 
   <body class="${bodyClass}">
