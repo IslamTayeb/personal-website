@@ -196,9 +196,9 @@ The fix: weight each lyric dimension by `(1 - instrumentalness)`, pulling toward
 
 <div class="highlight"><pre><span></span><span class="c1"># For bipolar features (neutral = 0.5):</span>
 <span class="n">weighted</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="p">(</span><span class="n">raw</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">instrumentalness</span><span class="p">)</span>
-<p><span class="c1"># For presence features (neutral = 0):</span>
+<span class="c1"># For presence features (neutral = 0):</span>
 <span class="n">weighted</span> <span class="o">=</span> <span class="n">raw</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">instrumentalness</span><span class="p">)</span>
-</p></pre></div>
+</pre></div>
 
 At `instrumentalness = 0` (pure vocals), the raw lyric value passes through unchanged. At `instrumentalness = 1` (pure instrumental), the value collapses to neutral. In between, it's a smooth blend: Fred Again's vocal samples contribute a little, Kendrick's verses contribute fully.
 

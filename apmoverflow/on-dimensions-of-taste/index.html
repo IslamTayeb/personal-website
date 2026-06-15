@@ -193,9 +193,9 @@ Middle Eastern=0.43, South Asian=0.29, East Asian=0.14, African=0.0
 <p>The fix: weight each lyric dimension by <code>(1 - instrumentalness)</code>, pulling toward the appropriate neutral value:</p>
 <div class="highlight"><pre><span></span><span class="c1"># For bipolar features (neutral = 0.5):</span>
 <span class="n">weighted</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="p">(</span><span class="n">raw</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">instrumentalness</span><span class="p">)</span>
-<p><span class="c1"># For presence features (neutral = 0):</span>
+<span class="c1"># For presence features (neutral = 0):</span>
 <span class="n">weighted</span> <span class="o">=</span> <span class="n">raw</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">instrumentalness</span><span class="p">)</span>
-</p></pre></div>
+</pre></div>
 <p>At <code>instrumentalness = 0</code> (pure vocals), the raw lyric value passes through unchanged. At <code>instrumentalness = 1</code> (pure instrumental), the value collapses to neutral. In between, it's a smooth blend: Fred Again's vocal samples contribute a little, Kendrick's verses contribute fully.</p>
 <p>This fixed the scattering problem. After this change, Fred Again's <em>leavemealone</em> stopped clustering with lyrically similar pop tracks and landed with other electronic music where it belonged.</p>
 <p>That gives me <strong>33 dimensions total</strong>: 19 audio, 12 lyrics, 2 metadata. Each song is now a point in 33-dimensional space. The next step: group them.</p>
