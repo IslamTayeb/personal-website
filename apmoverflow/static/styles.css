@@ -93,7 +93,7 @@ h3 {
   font-size: 1.25em;
 }
 
-body.post main > h1 {
+body.post-on-fingerspitzengefuhl main > h1 {
   font-size: 2em;
   line-height: 1.15;
   overflow-wrap: normal;
@@ -119,13 +119,13 @@ nav a {
 }
 
 @media (max-width: 480px) {
-  body.post main > h1 {
+  body.post-on-fingerspitzengefuhl main > h1 {
     font-size: 1.8em;
   }
 }
 
 @media (max-width: 360px) {
-  body.post main > h1 {
+  body.post-on-fingerspitzengefuhl main > h1 {
     font-size: 1.55em;
   }
 }

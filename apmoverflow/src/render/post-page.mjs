@@ -7,6 +7,10 @@ export function renderPostPage(post) {
   const description = escapeHtml(manifest.description);
   const title = escapeHtml(manifest.title);
   const canonical = `${site.url}/${manifest.slug}/`;
+  const bodyClass =
+    manifest.slug === 'on-fingerspitzengefuhl'
+      ? 'post post-on-fingerspitzengefuhl'
+      : 'post';
   const socialImage = manifest.socialImage
     ? `<meta property="og:image" content="${escapeHtml(manifest.socialImage)}" />
     <meta property="twitter:image" content="${escapeHtml(
@@ -80,7 +84,7 @@ export function renderPostPage(post) {
     <link rel="stylesheet" href="/static/highlight.css" />
   </head>
 
-  <body class="post">
+  <body class="${bodyClass}">
     <header>
       <a class="title" href="/">
         <h1>${site.name}</h1>
