@@ -39,7 +39,7 @@
         "description": "Context should not be one flat transcript. It should be a structured object of messages, where each message can be full, summarized, or hidden.",
         "datePublished": "2026-06-07T12:48:00+00:00",
         "dateModified": "2026-06-14T12:48:00+00:00"
-      }
+}
     </script>
 
     <link
@@ -85,6 +85,7 @@
 <p>With that said, since we’re not writing code line-by-line, our intent becomes more abstract, and we stop critically thinking about the code itself. The chats with Claude show your intent more than the code diffs. However, they can be millions of tokens large, and most intent rarely needs the entire chat loaded into context. So, I started toying with the idea of embedding compression and context infrastructure.</p>
 <p>Most of the interesting work in the space happens through <a href="https://doi.org/10.48550/arXiv.2502.15957">alternative training methods</a> that make embeddings reversibly compressible, but I wanted to see how far a pure harness-engineering approach could go.</p>
 <hr>
+<!-- generated:toc:start -->
 <div class="toc">
   <div class="toc-main">
     <h2 id="index">Index</h2>
@@ -119,6 +120,7 @@
     <div><strong>Code</strong><br /><a href="https://github.com/IslamTayeb/decant">GitHub</a></div>
   </div>
 </div>
+<!-- generated:toc:end -->
 <hr>
 <h2 id="background">Background</h2>
 <p>Agents are constrained in how much they can keep in-memory by their context windows, usually within 400K-1M tokens. Once the context window gets past 50%, model behavior degrades because old, irrelevant, stale, or noisy information remains in the prompt. This is called <a href="https://www.trychroma.com/research/context-rot">context rot</a>. There's 2 main ways for context to rot in coding agents: (1) irrelevant chats and information are included in the prompt, or (2) unnecessarily long, sparse messages.</p>

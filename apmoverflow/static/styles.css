@@ -27,7 +27,7 @@ body {
   font-family: var(--font-secondary);
   font-size: var(--font-scale);
   margin: auto;
-  padding: 20px 20px 0;
+  padding: 20px 20px 25vh;
   max-width: var(--width);
   text-align: left;
   background-color: var(--background-color);
@@ -53,17 +53,29 @@ figcaption {
 
 figure {
   margin: 1.25em 0;
+  max-width: 100%;
 }
 
 figure img,
 figure video {
   display: block;
   max-width: 100%;
+  height: auto;
   margin: 0 auto;
 }
 
-video {
+main img,
+main video,
+main iframe {
+  box-sizing: border-box;
   max-width: 100%;
+}
+
+video {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 h1,
@@ -74,6 +86,10 @@ h5,
 h6 {
   font-family: var(--font-main);
   color: var(--heading-color);
+}
+
+h3 {
+  font-size: 1.25em;
 }
 
 a.title {
@@ -132,12 +148,39 @@ img {
   max-width: 100%;
 }
 
+pre {
+  display: block;
+  box-sizing: border-box;
+  max-width: 100%;
+  margin: 1em 0;
+  padding: 0.9em 15px;
+  overflow-x: auto;
+  background-color: var(--code-background-color);
+  color: var(--code-color);
+  border-radius: 3px;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+  -webkit-overflow-scrolling: touch;
+}
+
 code {
   font-family: monospace;
   padding: 2px;
   background-color: var(--code-background-color);
   color: var(--code-color);
   border-radius: 3px;
+}
+
+pre code {
+  display: block;
+  min-width: max-content;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 blockquote {
@@ -251,30 +294,38 @@ tbody tr:nth-child(even) {
 
 .highlight,
 .code {
-  padding: 1px 15px;
+  box-sizing: border-box;
+  max-width: 100%;
   color: var(--code-color);
   border-radius: 3px;
   margin-block-start: 1em;
   margin-block-end: 1em;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .highlight {
+  padding: 0 15px;
   background-color: var(--toc-background-color);
 }
 
 .highlight pre {
   margin: 0;
-  overflow-x: auto;
+  padding: 0.9em 0;
+  overflow-x: visible;
+  background: transparent;
+  border-radius: 0;
 }
 
 .highlight code {
   display: block;
-  padding: 0.9em 0;
+  min-width: max-content;
+  padding: 0;
   background: transparent;
 }
 
 .code {
+  padding: 0.9em 15px;
   background-color: var(--code-background-color);
 }
 

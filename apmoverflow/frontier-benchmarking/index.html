@@ -21,13 +21,13 @@
     <meta property="og:url" content="https://apmoverflow.xyz/frontier-benchmarking/" />
     <meta property="og:description" content="Context: early local/Azure frontier-model canaries for deciding whether a direction like &quot;Hydra, but for making test-passing code by construction&quot; is still interesting. My..." />
     <meta property="og:image" content="/static/og-image.png" />
+    <meta property="twitter:image" content="/static/og-image.png" />
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary" />
     <meta property="twitter:url" content="https://apmoverflow.xyz/frontier-benchmarking/" />
     <meta property="twitter:title" content="Frontier Benchmarking" />
     <meta property="twitter:description" content="Context: early local/Azure frontier-model canaries for deciding whether a direction like &quot;Hydra, but for making test-passing code by construction&quot; is still interesting. My..." />
-    <meta property="twitter:image" content="/static/og-image.png" />
 
     <!-- Microdata -->
     <script type="application/ld+json">
@@ -37,9 +37,11 @@
         "name": "Frontier Benchmarking",
         "headline": "Frontier Benchmarking",
         "url": "https://apmoverflow.xyz/frontier-benchmarking/",
-        "description": "Context: early local/Azure frontier-model canaries for deciding whether a direction like &quot;Hydra, but for making test-passing code by construction&quot; is still interesting. My...",
+        "description": "Context: early local/Azure frontier-model canaries for deciding whether a direction like \"Hydra, but for making test-passing code by construction\" is still interesting. My...",
+        "datePublished": "2026-05-20T13:54:00+00:00",
+        "dateModified": "2026-05-20T13:54:00+00:00",
         "image": "/static/og-image.png"
-      }
+}
     </script>
 
     <link
@@ -58,8 +60,7 @@
     <link rel="icon" href="/static/favicon.svg" />
     <link rel="apple-touch-icon" href="/static/favicon.svg" />
     <link rel="stylesheet" href="/static/styles.css" />
-    <!-- Uncomment if post has code blocks: -->
-    <!-- <link rel="stylesheet" href="/static/highlight.css"> -->
+    <link rel="stylesheet" href="/static/highlight.css" />
   </head>
 
   <body class="post">
@@ -79,293 +80,32 @@
         <i><time datetime="2026-05-20T13:54Z">May 20, 2026</time></i>
       </p>
 
-      <!-- Your article content goes here (plain HTML) -->
       <p>Context: early local/Azure frontier-model canaries for deciding whether a direction like &quot;Hydra, but for making test-passing code by construction&quot; is still interesting. My concern was that if a strong LLM receives the problem spec plus unit tests, it might already infer everything needed and one-shot the solution, leaving little room for a test-passing-by-construction system to be useful tbh.</p>
-<h2>Experiment</h2>
+<h2 id="experiment">Experiment</h2>
 <p>Question: does spec/tests already saturate one-shot frontier models, or is there room for test-feedback / test-passing-by-construction search?</p>
 <p>Tasks: 20 hard LCB/AtCoder-derived problems from <code>hard_post_20240602_prompt_safe_20_seed0.json</code>.</p>
-<table>
-<thead>
-<tr>
-<th>Cell</th>
-<th>Spec?</th>
-<th>Tests?</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>spec_only</code></td>
-<td>yes</td>
-<td>none</td>
-</tr>
-<tr>
-<td><code>spec_some_tests</code></td>
-<td>yes</td>
-<td>half</td>
-</tr>
-<tr>
-<td><code>spec_all_tests</code></td>
-<td>yes</td>
-<td>all</td>
-</tr>
-<tr>
-<td><code>tests_some</code></td>
-<td>no</td>
-<td>half</td>
-</tr>
-<tr>
-<td><code>tests_all</code></td>
-<td>no</td>
-<td>all</td>
-</tr>
-</tbody></table>
+<table><thead><tr><th>Cell</th><th>Spec?</th><th>Tests?</th></tr></thead><tbody><tr><td><code>spec_only</code></td><td>yes</td><td>none</td></tr><tr><td><code>spec_some_tests</code></td><td>yes</td><td>half</td></tr><tr><td><code>spec_all_tests</code></td><td>yes</td><td>all</td></tr><tr><td><code>tests_some</code></td><td>no</td><td>half</td></tr><tr><td><code>tests_all</code></td><td>no</td><td>all</td></tr></tbody></table>
 <p>Models: GPT-4o, GPT-4.1, GPT-4.1-mini, GPT-5.5 none/low/xhigh (incomplete).</p>
-<h2>Metrics</h2>
-<table>
-<thead>
-<tr>
-<th>Metric</th>
-<th>Definition</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Compile-valid</td>
-<td>Extracted C++ passes local strict syntax/typecheck</td>
-</tr>
-<tr>
-<td>Visible tests</td>
-<td>Input/output test cases included in the prompt before generation</td>
-</tr>
-<tr>
-<td>Visible pass</td>
-<td>Generated code passes only the prompt-shown tests</td>
-</tr>
-<tr>
-<td>Correct</td>
-<td>Generated code passes the full eval test suite, including tests not shown in the prompt</td>
-</tr>
-<tr>
-<td>Prefill/infra invalid</td>
-<td>No normal code block / empty output / <code>invalid_prefill</code></td>
-</tr>
-</tbody></table>
+<h2 id="metrics">Metrics</h2>
+<table><thead><tr><th>Metric</th><th>Definition</th></tr></thead><tbody><tr><td>Compile-valid</td><td>Extracted C++ passes local strict syntax/typecheck</td></tr><tr><td>Visible tests</td><td>Input/output test cases included in the prompt before generation</td></tr><tr><td>Visible pass</td><td>Generated code passes only the prompt-shown tests</td></tr><tr><td>Correct</td><td>Generated code passes the full eval test suite, including tests not shown in the prompt</td></tr><tr><td>Prefill/infra invalid</td><td>No normal code block / empty output / <code>invalid_prefill</code></td></tr></tbody></table>
 <p>Compile-valid command shape:</p>
-<pre><code class="language-bash">clang++ -fsyntax-only -x c++ -std=c++17 -Wall -Wextra -Werror \
-  [local include/toolchain/resource flags] candidate.cpp
-</code></pre>
-<table>
-<thead>
-<tr>
-<th>Flag</th>
-<th>Meaning</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>-fsyntax-only</code></td>
-<td>Parse/typecheck the program but do not produce an executable</td>
-</tr>
-<tr>
-<td><code>-x c++</code></td>
-<td>Treat the input as C++ source</td>
-</tr>
-<tr>
-<td><code>-std=c++17</code></td>
-<td>Compile as C++17</td>
-</tr>
-<tr>
-<td><code>-Wall -Wextra</code></td>
-<td>Enable common/extra compiler warnings</td>
-</tr>
-<tr>
-<td><code>-Werror</code></td>
-<td>Promote warnings to errors, which makes this stricter than normal contest compilation</td>
-</tr>
-<tr>
-<td>local include/toolchain/resource flags</td>
-<td>Environment-specific paths for finding C++ headers/toolchain resources</td>
-</tr>
-</tbody></table>
+<div class="highlight"><pre><code class="hljs language-bash">clang++ -fsyntax-only -x c++ -std=c++17 -Wall -Wextra -Werror \
+  [<span class="hljs-built_in">local</span> include/toolchain/resource flags] candidate.cpp
+</code></pre></div>
+<table><thead><tr><th>Flag</th><th>Meaning</th></tr></thead><tbody><tr><td><code>-fsyntax-only</code></td><td>Parse/typecheck the program but do not produce an executable</td></tr><tr><td><code>-x c++</code></td><td>Treat the input as C++ source</td></tr><tr><td><code>-std=c++17</code></td><td>Compile as C++17</td></tr><tr><td><code>-Wall -Wextra</code></td><td>Enable common/extra compiler warnings</td></tr><tr><td><code>-Werror</code></td><td>Promote warnings to errors, which makes this stricter than normal contest compilation</td></tr><tr><td>local include/toolchain/resource flags</td><td>Environment-specific paths for finding C++ headers/toolchain resources</td></tr></tbody></table>
 <p>LCB-style correctness counts compile errors, runtime errors, timeouts, wrong answers, and invalid/empty outputs as failures. Compile-valid is not correctness; it only says the code is locally valid C++ under strict flags. Because of <code>-Werror</code>, some non-compile-valid rows may be warning-only artifacts that a normal contest judge would compile.</p>
 <p>For <code>spec_some_tests</code> / <code>tests_some</code>, visible pass and correctness can differ: visible pass checks the shown half of tests, while correctness checks all tests. For <code>spec_all_tests</code> / <code>tests_all</code>, the prompt-visible tests are the full local test bundle, so visible pass and correctness should align except for infra/evaluator details.</p>
-<h2>Correctness</h2>
+<h2 id="correctness">Correctness</h2>
 <p>Strict <code>correct / 20</code>, except xhigh tests-only cells are partial and should not be compared directly.</p>
-<table>
-<thead>
-<tr>
-<th>Model Artifact</th>
-<th align="right"><code>spec_only</code></th>
-<th align="right"><code>spec_some_tests</code></th>
-<th align="right"><code>spec_all_tests</code></th>
-<th align="right"><code>tests_some</code></th>
-<th align="right"><code>tests_all</code></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>GPT-4o</td>
-<td align="right">3/20</td>
-<td align="right">3/20</td>
-<td align="right">2/20</td>
-<td align="right">0/20</td>
-<td align="right">0/20</td>
-</tr>
-<tr>
-<td>GPT-4.1</td>
-<td align="right">4/20</td>
-<td align="right">3/20</td>
-<td align="right">4/20</td>
-<td align="right">0/20</td>
-<td align="right">0/20</td>
-</tr>
-<tr>
-<td>GPT-4.1-mini</td>
-<td align="right">5/20</td>
-<td align="right">4/20</td>
-<td align="right">4/20</td>
-<td align="right">0/20</td>
-<td align="right">0/20</td>
-</tr>
-<tr>
-<td>GPT-5.5 none</td>
-<td align="right">5/20</td>
-<td align="right">7/20</td>
-<td align="right">6/20</td>
-<td align="right">1/20</td>
-<td align="right">2/20</td>
-</tr>
-<tr>
-<td>GPT-5.5 low</td>
-<td align="right">14/20</td>
-<td align="right">14/20</td>
-<td align="right">13/20</td>
-<td align="right">5/20</td>
-<td align="right">8/20</td>
-</tr>
-<tr>
-<td>GPT-5.5 xhigh</td>
-<td align="right">17/20</td>
-<td align="right">19/20</td>
-<td align="right">18/20</td>
-<td align="right">–</td>
-<td align="right">–</td>
-</tr>
-</tbody></table>
-<h2>Compile Validity</h2>
+<table><thead><tr><th>Model Artifact</th><th align="right"><code>spec_only</code></th><th align="right"><code>spec_some_tests</code></th><th align="right"><code>spec_all_tests</code></th><th align="right"><code>tests_some</code></th><th align="right"><code>tests_all</code></th></tr></thead><tbody><tr><td>GPT-4o</td><td align="right">3/20</td><td align="right">3/20</td><td align="right">2/20</td><td align="right">0/20</td><td align="right">0/20</td></tr><tr><td>GPT-4.1</td><td align="right">4/20</td><td align="right">3/20</td><td align="right">4/20</td><td align="right">0/20</td><td align="right">0/20</td></tr><tr><td>GPT-4.1-mini</td><td align="right">5/20</td><td align="right">4/20</td><td align="right">4/20</td><td align="right">0/20</td><td align="right">0/20</td></tr><tr><td>GPT-5.5 none</td><td align="right">5/20</td><td align="right">7/20</td><td align="right">6/20</td><td align="right">1/20</td><td align="right">2/20</td></tr><tr><td>GPT-5.5 low</td><td align="right">14/20</td><td align="right">14/20</td><td align="right">13/20</td><td align="right">5/20</td><td align="right">8/20</td></tr><tr><td>GPT-5.5 xhigh</td><td align="right">17/20</td><td align="right">19/20</td><td align="right">18/20</td><td align="right">–</td><td align="right">–</td></tr></tbody></table>
+<h2 id="compile-validity">Compile Validity</h2>
 <p>Compile-valid counts under the local strict C++ checker.</p>
-<table>
-<thead>
-<tr>
-<th>Model Artifact</th>
-<th align="right"><code>spec_only</code></th>
-<th align="right"><code>spec_some_tests</code></th>
-<th align="right"><code>spec_all_tests</code></th>
-<th align="right"><code>tests_some</code></th>
-<th align="right"><code>tests_all</code></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>GPT-4o</td>
-<td align="right">16/20</td>
-<td align="right">15/20</td>
-<td align="right">16/20</td>
-<td align="right">20/20</td>
-<td align="right">16/20</td>
-</tr>
-<tr>
-<td>GPT-4.1</td>
-<td align="right">13/20</td>
-<td align="right">14/20</td>
-<td align="right">10/20</td>
-<td align="right">16/20</td>
-<td align="right">14/20</td>
-</tr>
-<tr>
-<td>GPT-4.1-mini</td>
-<td align="right">16/20</td>
-<td align="right">14/20</td>
-<td align="right">16/20</td>
-<td align="right">17/20</td>
-<td align="right">19/20</td>
-</tr>
-<tr>
-<td>GPT-5.5 none</td>
-<td align="right">18/20</td>
-<td align="right">16/20</td>
-<td align="right">19/20</td>
-<td align="right">19/20</td>
-<td align="right">19/20</td>
-</tr>
-<tr>
-<td>GPT-5.5 low</td>
-<td align="right">18/20</td>
-<td align="right">19/20</td>
-<td align="right">18/20</td>
-<td align="right">19/20</td>
-<td align="right">18/20</td>
-</tr>
-<tr>
-<td>GPT-5.5 xhigh</td>
-<td align="right">18/20</td>
-<td align="right">19/20</td>
-<td align="right">18/20</td>
-<td align="right">–</td>
-<td align="right">–</td>
-</tr>
-</tbody></table>
-<h2>Visible Tests</h2>
+<table><thead><tr><th>Model Artifact</th><th align="right"><code>spec_only</code></th><th align="right"><code>spec_some_tests</code></th><th align="right"><code>spec_all_tests</code></th><th align="right"><code>tests_some</code></th><th align="right"><code>tests_all</code></th></tr></thead><tbody><tr><td>GPT-4o</td><td align="right">16/20</td><td align="right">15/20</td><td align="right">16/20</td><td align="right">20/20</td><td align="right">16/20</td></tr><tr><td>GPT-4.1</td><td align="right">13/20</td><td align="right">14/20</td><td align="right">10/20</td><td align="right">16/20</td><td align="right">14/20</td></tr><tr><td>GPT-4.1-mini</td><td align="right">16/20</td><td align="right">14/20</td><td align="right">16/20</td><td align="right">17/20</td><td align="right">19/20</td></tr><tr><td>GPT-5.5 none</td><td align="right">18/20</td><td align="right">16/20</td><td align="right">19/20</td><td align="right">19/20</td><td align="right">19/20</td></tr><tr><td>GPT-5.5 low</td><td align="right">18/20</td><td align="right">19/20</td><td align="right">18/20</td><td align="right">19/20</td><td align="right">18/20</td></tr><tr><td>GPT-5.5 xhigh</td><td align="right">18/20</td><td align="right">19/20</td><td align="right">18/20</td><td align="right">–</td><td align="right">–</td></tr></tbody></table>
+<h2 id="visible-tests">Visible Tests</h2>
 <p>This is the direct saturation check for the &quot;can the LLM already pass the tests it sees?&quot; concern.</p>
-<table>
-<thead>
-<tr>
-<th>Model Artifact</th>
-<th align="right"><code>spec_some_tests</code> visible pass</th>
-<th align="right"><code>spec_all_tests</code> full pass</th>
-<th align="right"><code>tests_some</code> visible pass</th>
-<th align="right"><code>tests_all</code> full pass</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>GPT-4o</td>
-<td align="right">3/20</td>
-<td align="right">2/20</td>
-<td align="right">0/20</td>
-<td align="right">0/20</td>
-</tr>
-<tr>
-<td>GPT-4.1</td>
-<td align="right">4/20</td>
-<td align="right">4/20</td>
-<td align="right">0/20</td>
-<td align="right">0/20</td>
-</tr>
-<tr>
-<td>GPT-4.1-mini</td>
-<td align="right">4/20</td>
-<td align="right">4/20</td>
-<td align="right">0/20</td>
-<td align="right">0/20</td>
-</tr>
-<tr>
-<td>GPT-5.5 none</td>
-<td align="right">7/20</td>
-<td align="right">6/20</td>
-<td align="right">3/20</td>
-<td align="right">2/20</td>
-</tr>
-<tr>
-<td>GPT-5.5 low</td>
-<td align="right">14/20</td>
-<td align="right">13/20</td>
-<td align="right">9/20</td>
-<td align="right">8/20</td>
-</tr>
-<tr>
-<td>GPT-5.5 xhigh</td>
-<td align="right">19/20</td>
-<td align="right">18/20</td>
-<td align="right">–</td>
-<td align="right">–</td>
-</tr>
-</tbody></table>
+<table><thead><tr><th>Model Artifact</th><th align="right"><code>spec_some_tests</code> visible pass</th><th align="right"><code>spec_all_tests</code> full pass</th><th align="right"><code>tests_some</code> visible pass</th><th align="right"><code>tests_all</code> full pass</th></tr></thead><tbody><tr><td>GPT-4o</td><td align="right">3/20</td><td align="right">2/20</td><td align="right">0/20</td><td align="right">0/20</td></tr><tr><td>GPT-4.1</td><td align="right">4/20</td><td align="right">4/20</td><td align="right">0/20</td><td align="right">0/20</td></tr><tr><td>GPT-4.1-mini</td><td align="right">4/20</td><td align="right">4/20</td><td align="right">0/20</td><td align="right">0/20</td></tr><tr><td>GPT-5.5 none</td><td align="right">7/20</td><td align="right">6/20</td><td align="right">3/20</td><td align="right">2/20</td></tr><tr><td>GPT-5.5 low</td><td align="right">14/20</td><td align="right">13/20</td><td align="right">9/20</td><td align="right">8/20</td></tr><tr><td>GPT-5.5 xhigh</td><td align="right">19/20</td><td align="right">18/20</td><td align="right">–</td><td align="right">–</td></tr></tbody></table>
 <p>GPT-5.5 low and xhigh (reasoning models) are the main caution. On LCB spec-containing cells, their one-shot rates are high enough that a search system may have little headroom to show improvement.</p>
+
     </main>
 
     <footer></footer>

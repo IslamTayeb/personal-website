@@ -1,0 +1,14 @@
+{
+  "slug": "hydra",
+  "source": "hydra.md",
+  "title": "Hydra",
+  "description": "Context: Hydra (Du, Ou, Zhuo, Lentz @ Duke). Async checking + checkpoint-and-rollback for LLM code gen, retrofitted onto Clang. Meeting with Matthew Lentz.",
+  "publishedAt": "2026-05-08T13:01Z",
+  "updatedAt": "2026-05-08T13:01Z",
+  "listed": false,
+  "allowHtml": true,
+  "wrapTables": false,
+  "socialImage": "/static/og-image.png",
+  "images": [],
+  "videoInserts": []
+}
