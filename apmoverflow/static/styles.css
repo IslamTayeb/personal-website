@@ -10,7 +10,7 @@
   --visited-color: #8b6fcb;
   --code-background-color: #f0f0ef;
   --code-color: #222;
-  --blockquote-color: #222;
+  --blockquote-color: var(--text-color);
   --toc-background-color: #f9f9f8;
   --table-column-min-width: 6ch;
 }
@@ -186,7 +186,7 @@ pre code {
 
 blockquote {
   border-left: 1px solid #999;
-  color: var(--code-color);
+  color: var(--blockquote-color);
   padding-left: 20px;
   font-style: italic;
 }
