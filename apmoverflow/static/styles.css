@@ -202,6 +202,23 @@ code {
   border-radius: 3px;
 }
 
+kbd {
+  display: inline-block;
+  transform: translateY(-0.05em);
+  margin: 0 0.05em;
+  padding: 0.08em 0.42em 0.12em;
+  border: 1px solid #b9b9b1;
+  border-bottom-color: #8f8f86;
+  border-radius: 4px;
+  background: linear-gradient(#fff, #ececea);
+  box-shadow: 0 1px 0 #8f8f86;
+  color: #222;
+  font-family: monospace;
+  font-size: 0.88em;
+  line-height: 1.35;
+  white-space: nowrap;
+}
+
 pre code {
   display: block;
   min-width: max-content;

@@ -24,7 +24,7 @@
     {
       "beforeHeadingId": "evaluation",
       "filename": "decant-context-controls-20260615.mp4",
-      "captionHtml": "Decant’s <code>/context</code> popup: topics, token share, and fidelity controls.",
+      "captionHtml": "Decant’s <kbd>/context</kbd> popup: topics, token share, and fidelity controls.",
       "ariaLabel": "Video showing Decant’s context popup with topics, token share, and fidelity controls."
     }
   ]
