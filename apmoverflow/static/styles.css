@@ -12,6 +12,7 @@
   --code-color: #222;
   --blockquote-color: #222;
   --toc-background-color: #f9f9f8;
+  --table-column-min-width: 6ch;
 }
 
 iframe {
@@ -209,7 +210,7 @@ table {
   width: 100%;
   min-width: 100%;
   max-width: 100%;
-  table-layout: fixed;
+  table-layout: auto;
   border-collapse: collapse;
   font-size: 0.9em;
   margin: 1em 0;
@@ -225,11 +226,16 @@ table {
   table {
     font-size: 0.82em;
   }
+
+  :root {
+    --table-column-min-width: 3ch;
+  }
 }
 
 th,
 td {
   padding: 0.4em 0.6em;
+  min-width: var(--table-column-min-width);
   text-align: left;
   vertical-align: top;
   white-space: normal;
@@ -243,11 +249,6 @@ th a,
 td a {
   white-space: normal;
   overflow-wrap: anywhere;
-}
-
-.table-wrap table:has(th:nth-child(2):last-child) th:first-child,
-.table-wrap table:has(th:nth-child(2):last-child) td:first-child {
-  width: 28%;
 }
 
 th {
