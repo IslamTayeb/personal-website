@@ -198,11 +198,11 @@
 <p>Specifically for the &quot;Agent Session &lt;&gt; Commit mapping&quot;, Decant checks if you have git-ai installed to see if there's an existing mapping. It also keeps a hidden project-local backup.</p>
 <h3 id="user-control">User Control</h3>
 <p>Decant exposes the context map to the dev for transparency and manual control. You can see what the model is likely to read, how large each topic is, and what has been collapsed or hidden.</p>
-<p>The sidebar and <code>/context</code> show the conversation grouped by topic. Each topic has a token estimate and a <code>fidelity</code> setting. From <code>/context</code>, you can set a topic to <code>full</code> / <code>summary</code> / <code>hidden</code>. You can also override individual messages' <code>fidelity</code>.</p>
-<p><code>/blame</code> is a manual trigger over the aforementioned <code>blame_lookup()</code> tool call. You could enter a line reference, or ask a natural-language question about past chats. Decant runs <code>blame_lookup()</code> as we discussed in the last section, finds the relevant prior session, and answers why a line is present given past conversations about it.</p>
+<p>The sidebar and <kbd>/context</kbd> show the conversation grouped by topic. Each topic has a token estimate and a <code>fidelity</code> setting. From <kbd>/context</kbd>, you can set a topic to <code>full</code> / <code>summary</code> / <code>hidden</code>. You can also override individual messages' <code>fidelity</code>.</p>
+<p><kbd>/blame</kbd> is a manual trigger over the aforementioned <code>blame_lookup()</code> tool call. You could enter a line reference, or ask a natural-language question about past chats. Decant runs <code>blame_lookup()</code> as we discussed in the last section, finds the relevant prior session, and answers why a line is present given past conversations about it.</p>
 <figure class="media-figure video-figure">
   <video autoplay controls loop muted playsinline preload="auto" aria-label="Video showing Decant’s context popup with topics, token share, and fidelity controls.">
-    <source src="https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/Clipboard-20260525-142921-346.mp4" type="video/mp4" />
+    <source src="https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/decant-context-controls-20260615.mp4" type="video/mp4" />
   </video>
   <figcaption><em>Decant’s <code>/context</code> popup: topics, token share, and fidelity controls.</em></figcaption>
 </figure>

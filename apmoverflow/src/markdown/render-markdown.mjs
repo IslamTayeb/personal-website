@@ -72,6 +72,41 @@ function headingTextForId(markdown, id) {
   throw new Error(`Could not find heading for media insert target: ${id}`);
 }
 
+function kbdInlineRule(state, silent) {
+  const openTag = '<kbd>';
+  const closeTag = '</kbd>';
+
+  if (!state.src.startsWith(openTag, state.pos)) {
+    return false;
+  }
+
+  const contentStart = state.pos + openTag.length;
+  const contentEnd = state.src.indexOf(closeTag, contentStart);
+
+  if (contentEnd < 0) {
+    return false;
+  }
+
+  const content = state.src.slice(contentStart, contentEnd);
+
+  if (content.length === 0 || /[<>]/.test(content)) {
+    return false;
+  }
+
+  if (!silent) {
+    state.push('kbd_open', 'kbd', 1);
+
+    const text = state.push('text', '', 0);
+    text.content = content;
+
+    state.push('kbd_close', 'kbd', -1);
+  }
+
+  state.pos = contentEnd + closeTag.length;
+
+  return true;
+}
+
 function prepareMarkdown(markdown, manifest) {
   let prepared = normalizeFootnoteOrder(markdown);
 
@@ -106,6 +141,8 @@ function configureMarkdown(manifest) {
     linkify: false,
     typographer: false,
   }).use(footnote);
+
+  md.inline.ruler.before('html_inline', 'kbd', kbdInlineRule);
 
   md.renderer.rules.footnote_caption = (tokens, idx) => {
     return Number(tokens[idx].meta.id + 1).toString();

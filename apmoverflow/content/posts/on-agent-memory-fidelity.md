@@ -121,9 +121,9 @@ Specifically for the "Agent Session <> Commit mapping", Decant checks if you hav
 
 Decant exposes the context map to the dev for transparency and manual control. You can see what the model is likely to read, how large each topic is, and what has been collapsed or hidden.
 
-The sidebar and `/context` show the conversation grouped by topic. Each topic has a token estimate and a `fidelity` setting. From `/context`, you can set a topic to `full` / `summary` / `hidden`. You can also override individual messages' `fidelity`.
+The sidebar and <kbd>/context</kbd> show the conversation grouped by topic. Each topic has a token estimate and a `fidelity` setting. From <kbd>/context</kbd>, you can set a topic to `full` / `summary` / `hidden`. You can also override individual messages' `fidelity`.
 
-`/blame` is a manual trigger over the aforementioned `blame_lookup()` tool call. You could enter a line reference, or ask a natural-language question about past chats. Decant runs `blame_lookup()` as we discussed in the last section, finds the relevant prior session, and answers why a line is present given past conversations about it.
+<kbd>/blame</kbd> is a manual trigger over the aforementioned `blame_lookup()` tool call. You could enter a line reference, or ask a natural-language question about past chats. Decant runs `blame_lookup()` as we discussed in the last section, finds the relevant prior session, and answers why a line is present given past conversations about it.
 
 ## Evaluation
 
