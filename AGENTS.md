@@ -61,7 +61,7 @@ Only commit when all three pass. Include meaningful commit messages that describ
 - **`apmoverflow` posts:** publish from checked-in Markdown under `apmoverflow/content/posts/` plus a JSON manifest for slug/date/links/media/alt text. Keep authored prose out of frontmatter and preserve it verbatim. For migrated posts, treat this repo's Markdown as newer than any stale Obsidian copy; if linking Obsidian, point the Obsidian note at the repo Markdown source.
 - **`apmoverflow` generated outputs:** slug `index.html` files, `blog/index.html`, and `feed/*.xml` are generated from the modular pipeline. Do not hand-edit generated HTML for source-backed posts; edit Markdown/manifests and rebuild.
 - **`apmoverflow` manifests:** use `listed: false` for source-backed pages that should exist at their slug but stay out of `/blog/` and feeds. Use `allowHtml: true` only for legacy posts that need raw HTML blocks such as iframes, hand-built TOCs, tables, or footnote sections. Use `wrapTables: false` when the Markdown already contains preserved table wrappers/raw HTML.
-- **`apmoverflow` tables:** treat generated `.table-wrap` tables as the shared Markdown table primitive. Keep them content-aware and horizontally scrollable for dense data; leave legacy raw HTML tables stable unless intentionally migrating them into the wrapper model.
+- **`apmoverflow` tables:** treat generated `.table-wrap` tables as the shared Markdown table primitive. Do not add internal horizontal table scrollbars; dense tables should wrap and grow taller instead. Leave legacy raw HTML tables stable unless intentionally migrating them into the wrapper model.
 
 ## Architecture notes
 
