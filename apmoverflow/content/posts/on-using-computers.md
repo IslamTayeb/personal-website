@@ -82,81 +82,106 @@ With these principles in mind, I've spent a good chunk of my time on the interne
 
 These are the applications that fundamentally changed how I interact with my computer. Each one directly supports at least two of my core principles and has become non-negotiable in my workflow. If you agree with this essay, you should try these.
 
-*[Raycast](https://www.raycast.com/)*: Command palette + extension platform
+<details>
+<summary><em><a href="https://www.raycast.com/">Raycast</a></em>: Command palette + extension platform</summary>
 
 Quick launcher for apps, clipboard history, tab search, calculations, workflows. Extensions turn GUI apps (e.g. Spotify) fully keyboard-driven.
 
 Key extensions: your respective browser's extension (command-palette for tabs), [*Raycast AI*](https://www.raycast.com/core-features/ai), [*Calendar*](https://www.raycast.com/core-features/calendar), [*Spotify*](https://www.raycast.com/mattisssa/spotify-player), [*2FA Code Finder*](https://www.raycast.com/yuercl/imessage-2fa), [*Toothpick*](https://www.raycast.com/VladCuciureanu/toothpick) (bluetooth), [*Bitwarden*](https://raycast.com/jomifepe/bitwarden), [*iLovePDF*](https://www.raycast.com/mohamedk1/ilovepdf), and more.
 
 First app I install on any Mac. No alternatives come close.
+</details>
 
-*[Yabai](https://github.com/koekeishiya/yabai)*: MacOS window tiling manager
+<details>
+<summary><em><a href="https://github.com/koekeishiya/yabai">Yabai</a></em>: MacOS window tiling manager</summary>
 
 Enforces grid-based window layouts, auto-arranges on open, space switching via key-binds.
 
 Alternatives: [*Rectangle*](https://rectangleapp.com/)<sup class="footnote-ref" id="fnref-1"><a href="#fn-1">1</a></sup> (not quite a window tiling manager, but great step-up over defaults), [*Aerospace*](https://github.com/nikitabobko/AeroSpace) (better UX than Yabai, but clunkier performance since they're not using Mac spaces)
+</details>
 
-*[Obsidian](https://obsidian.md/)*: Markdown-based notes
+<details>
+<summary><em><a href="https://obsidian.md/">Obsidian</a></em>: Markdown-based notes</summary>
 
 Markdown makes it standardized and simple to write structured notes. Sync requires paid subscription, but worth it for stable vim writing experience.
 
 Alternatives: *Apple Notes* (free sync, lightweight), [*Notion*](https://www.notion.so/) (bloated and unstandardized, but many love it)
+</details>
 
-*[Neovim](https://neovim.io/) ([LazyVim](https://www.lazyvim.org/))*: Keyboard-driven terminal-based IDE
+<details>
+<summary><em><a href="https://neovim.io/">Neovim</a> (<a href="https://www.lazyvim.org/">LazyVim</a>)</em>: Keyboard-driven terminal-based IDE</summary>
 
 Keyboard-driven coding with vim motions, no mouse needed. Extremely modular, definitely an investment if new to vim motions. [Primeagen's videos](https://www.youtube.com/watch?v=ZWWxwwUsPNw) convinced me to switch.
 
 Alternatives: [*Athas*](https://athas.dev/) (tried the alpha, loved it), VSC-based IDEs w/ [*Vim*](https://marketplace.visualstudio.com/items?itemName=vscodevim.vim) extension
+</details>
 
 ### P2
 
 These applications aren't as transformative as P1, but they're reliable, well-designed tools that respect keyboard-first workflows and reduce friction in daily tasks. They won't revolutionize your setup, but they'll smooth out rough edges you didn't realize existed.
 
-*[Helium](https://helium.computer/)*: Ungoogled-chromium fork with `!bang` search
+<details>
+<summary><em><a href="https://helium.computer/">Helium</a></em>: Ungoogled-chromium fork with <code>!bang</code> search</summary>
 
 Direct site search from address bar (`!gh` for GitHub, `!y` for YouTube, etc.). Focused on performance + privacy, won back some battery life.
 
 Alternatives: [*Zen*](https://zen-browser.app/) (most stable *[Arc](https://arc.net/)* replacement, not a fan of Firefox engine), [*Ora*](https://www.orabrowser.com/) (alpha build on WebKit)
+</details>
 
-*[Godspeed](https://godspeedapp.com/)*: Keyboard-driven to-do list
+<details>
+<summary><em><a href="https://godspeedapp.com/">Godspeed</a></em>: Keyboard-driven to-do list</summary>
 
 Great iPhone widget + global hotkey for adding to-dos. Designed to be fully keyboard-driven. Very fast and lightweight.
 
 Alternatives: Your note-taking app of choice, [*Todoist*](https://www.todoist.com/) (one of the best global hotkeys, loved how "p1", "due tod", etc. translated to metadata)
+</details>
 
-*Apple Mail*: Native mail client
+<details>
+<summary><em>Apple Mail</em>: Native mail client</summary>
 
 Lightweight, syncs my Gmail + Outlook emails well with OAuth2, and syncs between my Macbook + iPhone very well. Mostly keyboard-driven, great for inbox zero.
 
 Alternatives: [*Superhuman*](https://superhuman.com/) (big fan of inbox zero-native design, but overkill for me), [*Thunderbird*](https://www.thunderbird.net/en-US/) (reminds me of Linux Mint days, great and simple), *Gmail*/[*Outlook*](https://www.microsoft.com/en-us/microsoft-365/outlook/outlook-for-mac) clients if all your emails can be contained in either
+</details>
 
-*Apple Calendar*: Native calendar client
+<details>
+<summary><em>Apple Calendar</em>: Native calendar client</summary>
 
 Much like with Apple Mail, I want sync between my iPhone and Mac with a lightweight app that is keyboard-driven – checks all the boxes. Raycast extension allows me to quickly add events with my keyboard.
+</details>
 
-*[tmux](https://github.com/tmux/tmux/wiki)*: Terminal multiplexer
+<details>
+<summary><em><a href="https://github.com/tmux/tmux/wiki">tmux</a></em>: Terminal multiplexer</summary>
 
 Lets you run multiple sessions, detach and reattach to them, and manage multiple panes and windows within a single SSH or local terminal.
+</details>
 
 ### P3
 
 Smaller utilities and quality-of-life improvements. Each solves a specific annoyance or enables a niche workflow. Not essential, but the kind of thing where once you have it, going back feels wrong.
 
-*[Oh My Zsh](https://ohmyz.sh/)*: Framework for managing zsh configuration
+<details>
+<summary><em><a href="https://ohmyz.sh/">Oh My Zsh</a></em>: Framework for managing zsh configuration</summary>
 
 Comes with a lot of neat plugins (auto-suggestions, syntax highlighting). Alternative would be to install your own plugins and manage them yourself.
+</details>
 
-*[Zoxide](https://github.com/ajeetdsouza/zoxide)*: Smarter cd command
+<details>
+<summary><em><a href="https://github.com/ajeetdsouza/zoxide">Zoxide</a></em>: Smarter cd command</summary>
 
 Remembers frequently-used directories so you can jump to them with partial matches. Type `z foo` instead of `cd ~/projects/foobar/src`. Works across all major shells, supports interactive selection with fzf.
 
 **Alternatives:** [*autojump*](https://github.com/wting/autojump), [*z*](https://github.com/rupa/z) (original, but slower)
+</details>
 
-*[Lovable](https://lovable.dev/)*: Best no-brain vibe-coding tool
+<details>
+<summary><em><a href="https://lovable.dev/">Lovable</a></em>: Best no-brain vibe-coding tool</summary>
 
 Handles frontend/backend, database set-up, and hosting. Great for creating quick internal tooling and automations.
+</details>
 
-*Quality of Life*
+<details>
+<summary><em>Quality of Life</em></summary>
 
 `Caps Lock` takes up a lot of real estate on your keyboard for an obscure action. I suggest remapping it to either `Backspace` or `Ctrl` – I personally switch my `Left Ctrl` and `Caps Lock`. I used [*hidutils*](https://hidutil-generator.netlify.app/) for the keyboard remapping, but you may also use [*Karabiner*](https://karabiner-elements.pqrs.org/)
 
@@ -171,6 +196,7 @@ Handles frontend/backend, database set-up, and hosting. Great for creating quick
 [*Pure Paste*](https://sindresorhus.com/pure-paste): paste pure, unformatted text by default
 
 [*Command X*](https://sindresorhus.com/command-x): cut and paste files in *Finder*, surprised this doesn't come with MacOS by default
+</details>
 
 Like finding shortcuts across campus, optimizing my setup is never really "done." There's always another route to try, another workflow to smooth out. My computer's been my campus since I was 6, and I'm not done tinkering with shortcuts – it was always about having fun (and aura) above all else.
 
