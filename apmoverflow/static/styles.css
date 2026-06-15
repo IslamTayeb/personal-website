@@ -93,6 +93,13 @@ h3 {
   font-size: 1.25em;
 }
 
+body.post main > h1 {
+  font-size: 2em;
+  line-height: 1.15;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
 a.title {
   text-decoration: none !important;
 }
@@ -109,6 +116,18 @@ a:hover {
 
 nav a {
   margin-right: 8px;
+}
+
+@media (max-width: 480px) {
+  body.post main > h1 {
+    font-size: 1.8em;
+  }
+}
+
+@media (max-width: 360px) {
+  body.post main > h1 {
+    font-size: 1.55em;
+  }
 }
 
 strong,
