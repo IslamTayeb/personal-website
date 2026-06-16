@@ -4,7 +4,7 @@ import footnote from 'markdown-it-footnote';
 
 import { site } from '../site.config.mjs';
 import { formatDate } from '../utils/date.mjs';
-import { escapeHtml } from '../utils/html.mjs';
+import { escapeHtml, stripTags } from '../utils/html.mjs';
 import { filenameFromUrl, mediaUrl } from '../utils/media.mjs';
 import { slugify } from '../utils/slug.mjs';
 
@@ -201,7 +201,7 @@ function applyHeadingIds(tokens) {
 
     const inline = tokens[index + 1];
     const text = inline?.content ?? '';
-    const baseId = slugify(text);
+    const baseId = slugify(stripTags(text));
     const count = seen.get(baseId) ?? 0;
     const id = count === 0 ? baseId : `${baseId}-${count + 1}`;
 

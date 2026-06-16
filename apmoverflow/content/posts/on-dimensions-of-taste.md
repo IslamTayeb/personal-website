@@ -238,7 +238,7 @@ Interestingly, I felt like *HAC* struggled with sub-clusters a little. This was 
 
 After standardizing features, running HAC, and listening to a lot of my questionable music taste, I landed on 5 clusters.
 
-#### `Hard-Rap` (Cluster 0, [Playlist](https://open.spotify.com/playlist/2r09O8jpBHFbsPFR9KtVBh)) — 733 songs, 58.5%
+#### <code class="hard-rap">Hard-Rap</code> (Cluster 0, [Playlist](https://open.spotify.com/playlist/2r09O8jpBHFbsPFR9KtVBh)) — 733 songs, 58.5%
 
 High-energy rap dominated by trap and cloud rap. The cluster that confirms I am, at my core, a "guy music" typa guy.
 
@@ -250,14 +250,14 @@ High-energy rap dominated by trap and cloud rap. The cluster that confirms I am,
 
 <iframe src="https://islamtayeb.github.io/harmonia/export/visualizations/subclusters/Hard-Rap_subclusters/index.html" width="100%" height="350px"></iframe>
 
-*3D UMAP visualization of `Hard-Rap` sub-clusters*
+*3D UMAP visualization of <code class="hard-rap">Hard-Rap</code> sub-clusters*
 
 I did feel like this cluster was huge and shuffling through it there felt like a *Lil Baby* rap side and a more upbeat 2010s *Kanye* rap side. Sub-clustering with k-means (k=2) revealed two modes:
 
--   **`Hard-Rap-Aggro` (Cluster 0.0, [Playlist](https://open.spotify.com/playlist/2bV4JYV2kWfe7eB6arr1Wh)) — 472 songs, 64.4%:** Pure `mood_agressive`. JPEGMAFIA, Carnival-era Kanye, (rapping) Drake, Paris Texas. The defining split from 0.1: lower `mood_sad`, lower `electronic_acoustic` production, more hype. Big "gym playlist" energy.
--   **`Hard-Rap-Acoustic` (Cluster 0.1, [Playlist](https://open.spotify.com/playlist/11qLKy6BR2AG7aN8AE0EkH)) — 261 songs, 35.6%:** More laid-back. Ultralight Beam Kanye, DUCKWORTH Kendrick, Heaven to Me Tyler. Higher `mood_sad`, higher `electronic_acoustic` production, more relaxed. I was surprised by the "sad" label. Listening back, I hear acoustic warmth more than melancholy. Less 808s, more soul samples. The acoustic production style might be tricking the model to think the audio is sadder?
+-   **<code class="hard-rap-aggro">Hard-Rap-Aggro</code> (Cluster 0.0, [Playlist](https://open.spotify.com/playlist/2bV4JYV2kWfe7eB6arr1Wh)) — 472 songs, 64.4%:** Pure `mood_agressive`. JPEGMAFIA, Carnival-era Kanye, (rapping) Drake, Paris Texas. The defining split from 0.1: lower `mood_sad`, lower `electronic_acoustic` production, more hype. Big "gym playlist" energy.
+-   **<code class="hard-rap-acoustic">Hard-Rap-Acoustic</code> (Cluster 0.1, [Playlist](https://open.spotify.com/playlist/11qLKy6BR2AG7aN8AE0EkH)) — 261 songs, 35.6%:** More laid-back. Ultralight Beam Kanye, DUCKWORTH Kendrick, Heaven to Me Tyler. Higher `mood_sad`, higher `electronic_acoustic` production, more relaxed. I was surprised by the "sad" label. Listening back, I hear acoustic warmth more than melancholy. Less 808s, more soul samples. The acoustic production style might be tricking the model to think the audio is sadder?
 
-#### `Narrative-Rap` (Cluster 1, [Playlist](https://open.spotify.com/playlist/0YR44cIs9Frfp4V7g0eovT)) — 226 songs, 18.0%
+#### <code class="narrative-rap">Narrative-Rap</code> (Cluster 1, [Playlist](https://open.spotify.com/playlist/0YR44cIs9Frfp4V7g0eovT)) — 226 songs, 18.0%
 
 Songs that tell stories. Lyrically dense, emotionally heavy.
 
@@ -271,7 +271,7 @@ Interesting note: J-pop was the second-largest genre here. This reminded me of t
 
 This isn't merely sad music; it's introspective music. Frankly, I've been listening to this cluster for a while and it's almost perfectly coagulated, so no sub-clustering was necessary.
 
-#### `Jazz-Fusion` (Cluster 2, [Playlist](https://open.spotify.com/playlist/1Yd9WxdGakzTnwpooWP89m)) — 91 songs, 7.3%
+#### <code class="jazz-fusion">Jazz-Fusion</code> (Cluster 2, [Playlist](https://open.spotify.com/playlist/1Yd9WxdGakzTnwpooWP89m)) — 91 songs, 7.3%
 
 Instrumental, relaxed, head-nodding music.
 
@@ -283,7 +283,7 @@ Instrumental, relaxed, head-nodding music.
 
 This cluster barely existed until summer 2024, then surged. More on that in the temporal section.
 
-#### `Rhythm-Game-EDM` (Cluster 3, [Playlist](https://open.spotify.com/playlist/2UycjhM5qkU9EULPUpxMzi)) — 47 songs, 3.8%
+#### <code class="rhythm-game-edm">Rhythm-Game-EDM</code> (Cluster 3, [Playlist](https://open.spotify.com/playlist/2UycjhM5qkU9EULPUpxMzi)) — 47 songs, 3.8%
 
 EDM, osu! music. Breakcore, hardcore, chiptune.
 
@@ -295,7 +295,7 @@ EDM, osu! music. Breakcore, hardcore, chiptune.
 
 This cluster was near-zero until October 2024; easily the fastest growing cluster. More on that timing later.
 
-#### `Mellow` (Cluster 4, [Playlist](https://open.spotify.com/playlist/67kgiiBpRUEqGHmzifMKVh)) — 156 songs, 12.5%
+#### <code class="mellow">Mellow</code> (Cluster 4, [Playlist](https://open.spotify.com/playlist/67kgiiBpRUEqGHmzifMKVh)) — 156 songs, 12.5%
 
 Soft, reflective, acoustic-leaning.
 
@@ -307,19 +307,19 @@ Soft, reflective, acoustic-leaning.
 
 <iframe src="https://islamtayeb.github.io/harmonia/export/visualizations/subclusters/Mellow_subclusters/index.html" width="100%" height="350px"></iframe>
 
-*3D UMAP visualization of `Mellow` sub-clusters*
+*3D UMAP visualization of <code class="mellow">Mellow</code> sub-clusters*
 
 Although I saw the high `mood_sad`, shuffling through the playlist made me feel like it's mellow with 2 moods. Subclustering with KNN (k=2) further revealed:
 
-**`Mellow-Hopecore` (Cluster 4.0, [Playlist](https://open.spotify.com/playlist/0xe4HFUZ0EefL4542Fcext)) — 97 songs, 62.2%:** Hopeful calm. On God Kanye, SDP Interlude Travis, Latin folk. Lower `mood_sad`, lower `danceability` (in the *Essentia* sense), less `electronic_acoustic` than 4.1. The "things will be okay" playlist. One of my favorite (sub)clusters.
+**<code class="mellow-hopecore">Mellow-Hopecore</code> (Cluster 4.0, [Playlist](https://open.spotify.com/playlist/0xe4HFUZ0EefL4542Fcext)) — 97 songs, 62.2%:** Hopeful calm. On God Kanye, SDP Interlude Travis, Latin folk. Lower `mood_sad`, lower `danceability` (in the *Essentia* sense), less `electronic_acoustic` than 4.1. The "things will be okay" playlist. One of my favorite (sub)clusters.
 
-**`Mellow-Sadcore` (Cluster 4.1, [Playlist](https://open.spotify.com/playlist/5TxF9kfvBJlyiRKpLoAbwK)) — 59 songs, 37.8%:** Sad calm. JANNABI, Glass Animals, Mustafa. Higher `mood_sad`, higher `danceability`, more `electronic_acoustic`. The "things are not okay but at least the music is pretty" playlist.
+**<code class="mellow-sadcore">Mellow-Sadcore</code> (Cluster 4.1, [Playlist](https://open.spotify.com/playlist/5TxF9kfvBJlyiRKpLoAbwK)) — 59 songs, 37.8%:** Sad calm. JANNABI, Glass Animals, Mustafa. Higher `mood_sad`, higher `danceability`, more `electronic_acoustic`. The "things are not okay but at least the music is pretty" playlist.
 
 #### Overview
 
-The dissimilarity matrix validates that the clusters are fairly different. `Narrative-Rap` and `Mellow` are the closest pair (d = 0.59), both introspective and emotionally weighted. `Hard-Rap` and `Narrative-Rap` are also close (d = 0.67), sharing rap conventions despite diverging in lyrical tone. This matters because the clustering respects the gradients I actually perceive: rap stays near rap, reflective stays near reflective. `Mellow-Sadcore` is even closer to `Narrative-Rap`.
+The dissimilarity matrix validates that the clusters are fairly different. <code class="narrative-rap">Narrative-Rap</code> and <code class="mellow">Mellow</code> are the closest pair (d = 0.59), both introspective and emotionally weighted. <code class="hard-rap">Hard-Rap</code> and <code class="narrative-rap">Narrative-Rap</code> are also close (d = 0.67), sharing rap conventions despite diverging in lyrical tone. This matters because the clustering respects the gradients I actually perceive: rap stays near rap, reflective stays near reflective. <code class="mellow-sadcore">Mellow-Sadcore</code> is even closer to <code class="narrative-rap">Narrative-Rap</code>.
 
-`Hard-Rap` and `Jazz-Fusion` are the most distant pair (d = 1.51). The features driving this are instrumentalness (*Cohen's d* = -6.37), language (3.63), lyric explicitness (3.34), and lyric arousal (2.95). One cluster is vocal-heavy, English-dominant, explicit, and high-energy. The other is instrumental, language-neutral, clean, and calm. They represent opposite ends of the feature space, which is exactly what I'd expect given how differently they function in my listening habits.
+<code class="hard-rap">Hard-Rap</code> and <code class="jazz-fusion">Jazz-Fusion</code> are the most distant pair (d = 1.51). The features driving this are instrumentalness (*Cohen's d* = -6.37), language (3.63), lyric explicitness (3.34), and lyric arousal (2.95). One cluster is vocal-heavy, English-dominant, explicit, and high-energy. The other is instrumental, language-neutral, clean, and calm. They represent opposite ends of the feature space, which is exactly what I'd expect given how differently they function in my listening habits.
 
 <iframe src="https://islamtayeb.github.io/harmonia/export/visualizations/overview/cluster_similarity_matrix/index.html" width="100%" height="600px"></iframe>
 
@@ -399,17 +399,17 @@ The overall mood profile stays fairly stable over time, but clear changes in my 
 
 At my internship, Connor kept putting me on Latin folk and jazz-adjacent stuff. Berni was a big EDM guy back in the day and reminded me of the European EDM heads I used to know from osu!. Christian introduced me to Masayoshi Takanaka on our ride to Yosemite that summer, and I've been hooked on Japanese jazz fusion since. In my head, all of it was just "work music."
 
-In the cluster chart, you can see `Jazz-Fusion` spawn. It went from 0.83% of additions in Q2 to 8.63% in Q3, then 14.70% in Q4. Instrumental, relaxed, interesting enough to keep me locked in while working. The mood profile shifted too: `mood_relaxed` climbed through July and August as I added more of this stuff. Once that slot exists in your day, it stays.
+In the cluster chart, you can see <code class="jazz-fusion">Jazz-Fusion</code> spawn. It went from 0.83% of additions in Q2 to 8.63% in Q3, then 14.70% in Q4. Instrumental, relaxed, interesting enough to keep me locked in while working. The mood profile shifted too: `mood_relaxed` climbed through July and August as I added more of this stuff. Once that slot exists in your day, it stays.
 
 #### Fall 2024: Blue Lock edits at 2am
 
-Around fall 2024, my brother started sending me Blue Lock anime edits. I *really* liked "l'etoile d'afrique - #18" by VDYCD from one of them, and that sent me down a phonk and opium rabbit hole. I was listening to this stuff super hard. The aggressive, high-energy production fit right into the `Rhythm-Game-EDM` cluster, but the lyrical content (when there was any) was darker, more confrontational. Another person, another slot carved out.
+Around fall 2024, my brother started sending me Blue Lock anime edits. I *really* liked "l'etoile d'afrique - #18" by VDYCD from one of them, and that sent me down a phonk and opium rabbit hole. I was listening to this stuff super hard. The aggressive, high-energy production fit right into the <code class="rhythm-game-edm">Rhythm-Game-EDM</code> cluster, but the lyrical content (when there was any) was darker, more confrontational. Another person, another slot carved out.
 
 #### Fall 2025: Fall break in the common room
 
 Over fall break, a few friends and I ended up on a Spotify playlist of popular osu! beatmaps. I thought it'd be a one-night nostalgia trip.
 
-`Rhythm-Game-EDM` went from 1.65% in Q2 to 9.100% in Q4. That weekend reminded me of how fire osu! music was. You can see `mood_party` and engagement spike around October because of it in the mood profile. High valence, high energy, very electronic. The cluster is loud in feature space, so it's easy for the model to catch. But the real reason it stuck is that it already had a place in my head. That weekend just reminded me it was there.
+<code class="rhythm-game-edm">Rhythm-Game-EDM</code> went from 1.65% in Q2 to 9.100% in Q4. That weekend reminded me of how fire osu! music was. You can see `mood_party` and engagement spike around October because of it in the mood profile. High valence, high energy, very electronic. The cluster is loud in feature space, so it's easy for the model to catch. But the real reason it stuck is that it already had a place in my head. That weekend just reminded me it was there.
 
 <iframe width="100%" height="600px" src="https://islamtayeb.github.io/harmonia/export/visualizations/temporal/mood_trends/index.html"></iframe>
 
@@ -437,7 +437,7 @@ Honestly though, the temporal analysis alone was worth the project. Seeing which
 
 ### What I Learned About My Taste
 
-*59%* of my library is `Hard-Rap`.
+*59%* of my library is <code class="hard-rap">Hard-Rap</code>.
 
 But the more interesting findings were the phases I'd forgotten I was having. Remembering my summer days listening to Connor's Latin folk playlist in the office, the lock-in I had that fall break with friends, that March where I quit premed. The genre trends tell the same story at a higher level: trap declining, electronic rising, jazz appearing from nowhere. My taste isn't some coherent aesthetic I curated. It's a messy mosaic of people and moments, and I was happy to reminisce while looking at the data.
 
