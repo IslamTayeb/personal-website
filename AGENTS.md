@@ -14,6 +14,20 @@ workspace manager):
 The repo root holds shared repo metadata plus project directories. There is no
 root `package.json`.
 
+## Rehaul intent
+
+This worktree is for an experimental rehaul, not direct production migration.
+The north star is for **`islamtayeb.dev`** and **`apmoverflow.xyz`** to converge
+toward one shared visual and interaction language while preserving their
+different jobs: the main site as the personal/work portfolio surface, and APM
+Overflow as the writing/publishing surface.
+
+Treat `component-lab/` as the place to draft that shared style before porting
+anything back into `islamtayeb/` or `apmoverflow/`. Explore typography,
+navigation, project cards, writing layouts, and article/blog primitives there
+first. Do not convert APM Overflow to Next.js or merge lab code into production
+unless there is an explicit implementation decision.
+
 ## Main site commands
 
 All commands must run from `islamtayeb/`:
