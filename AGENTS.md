@@ -2,12 +2,17 @@
 
 ## Repo layout
 
-Two independent projects live in one repo (no workspace manager):
+Two production projects and one experimental sandbox live in this repo (no
+workspace manager):
 
 - **`islamtayeb/`** -- the main Next.js 14 App Router site (islamtayeb.dev). All dev work happens here.
 - **`apmoverflow/`** -- a static HTML blog deployed separately via its own `vercel.json`. Rarely touched.
+- **`component-lab/`** -- an experimental Next.js component lab for v0 imports,
+  visual direction, and APM Overflow/site vibe exploration. It is not production
+  code and should stay isolated until a specific design is intentionally ported.
 
-The repo root only holds `README.md`, `prettier.config.js`, and `.gitignore`. There is no root `package.json`.
+The repo root holds shared repo metadata plus project directories. There is no
+root `package.json`.
 
 ## Main site commands
 
@@ -39,20 +44,42 @@ Use `npm run import:legacy -- --force --slug <slug>` only when intentionally
 refreshing one imported source file from its checked-in HTML. Then still run the
 main `islamtayeb/` build/lint/format gates before committing.
 
+## Component lab commands
+
+For experimental site/blog design work, run commands from `component-lab/`:
+
+```sh
+npm run dev          # local lab server on localhost:3001
+npm run build        # production build check for the sandbox
+npm run lint         # eslint
+npm run format       # prettier --write .
+npm run format:check # prettier --check .
+```
+
+Use npm only in the lab. Do not wire `component-lab/` into either Vercel deploy
+until the experiment graduates into a deliberate implementation plan.
+
+React Grab is installed in the lab for local visual iteration. It is loaded only
+in development from `app/layout.tsx`.
+
 ## Committing
 
 Commit and push when you are confident the project is in good shape for a checkpoint. Before committing:
 
 1. Run `npm run build` from `islamtayeb/` and confirm it succeeds with no errors.
 2. Run `npm run lint` and `npm run format:check` to catch style issues.
-3. If formatting is off, run `npm run format` first, then re-verify with build.
+3. When touching `component-lab/`, also run its `npm run build`, `npm run lint`,
+   and `npm run format:check` from `component-lab/`.
+4. If formatting is off, run `npm run format` first, then re-verify with build.
 
 Only commit when all three pass. Include meaningful commit messages that describe the "why."
 
 ## Key conventions
 
 - **Package manager:** npm (lockfile is `package-lock.json`).
-- **Path alias:** `@/*` maps to the `islamtayeb/` root (e.g., `@/lib/utils`, `@/components/ui/button`).
+- **Path alias:** `@/*` maps to the active project root in both Next apps
+  (e.g., `islamtayeb/lib/utils` inside `islamtayeb/`,
+  `component-lab/lib/utils` inside `component-lab/`).
 - **Styling:** Tailwind CSS 3 with HSL CSS variables. Dark mode is class-based via `next-themes`.
 - **Component library:** shadcn/ui (new-york style, slate base, RSC enabled). Config in `components.json`. UI primitives live in `components/ui/`.
 - **Fonts:** Geist Sans, Geist Mono, and Anek Telugu (as `--font-caption`). Default body font is `font-mono`.
