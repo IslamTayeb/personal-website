@@ -1,117 +1,70 @@
-'use client';
-
-import { useState } from 'react';
 import { Section, Variant } from './frame';
 
 type Post = {
   date: string;
   title: string;
+  href: string;
   isNew?: boolean;
-  desc: string;
+  desc?: string;
 };
 
 const POSTS: Post[] = [
   {
-    date: 'Jun 2026',
+    date: 'Jun 07, 2026',
     title: 'On Agent Memory Fidelity (Decant)',
+    href: 'https://apmoverflow.xyz/on-agent-memory-fidelity/',
     isNew: true,
     desc: 'How agents lose the plot over long horizons, and what faithful memory recall actually costs.',
   },
   {
-    date: 'Mar 2026',
+    date: 'Mar 18, 2026',
     title: 'On Fingerspitzengefühl',
+    href: 'https://apmoverflow.xyz/on-fingerspitzengefuhl/',
     desc: 'The fingertip-feel of good taste — why some calls are felt before they can be explained.',
   },
   {
-    date: 'Jan 2026',
+    date: 'Jan 02, 2026',
     title: 'On Dimensions of Taste (Harmonia)',
-    desc: 'A first attempt at decomposing taste into axes you can actually reason about.',
+    href: 'https://apmoverflow.xyz/on-dimensions-of-taste/',
+    desc: '',
   },
 ];
 
-// Continuous rail matching Experience. blog = blue (legend).
-// `mode`:
-//   'always'      — descriptions always visible, dots solid
-//   'collapsible' — each row toggles; state lives on the rail node
-//   'plain'       — title links only, no descriptions
-function Rail({ mode }: { mode: 'always' | 'collapsible' | 'plain' }) {
-  const [open, setOpen] = useState<Record<string, boolean>>({});
+function WritingRail() {
   return (
     <ul className="flex w-full flex-col">
-      {POSTS.map((p, i) => {
-        const isOpen =
-          mode === 'collapsible' ? (open[p.title] ?? false) : false;
-        const showDesc = mode === 'always' || isOpen;
+      {POSTS.map((post, index) => {
+        const hasDesc = Boolean(post.desc?.trim());
         return (
-          <li key={p.title} className="relative flex gap-4 pb-5 last:pb-0">
-            {/* continuous connecting segment — picks up blue while open */}
-            {i < POSTS.length - 1 ? (
-              <span
-                className={`absolute left-[3.5px] top-5 bottom-0 w-px ${
-                  isOpen ? 'bg-roy-b' : 'bg-border'
-                }`}
-              />
+          <li key={post.title} className="relative flex gap-4 pb-7 last:pb-0">
+            {index < POSTS.length - 1 ? (
+              <span className="absolute left-[3.5px] top-5 bottom-5 w-px bg-border" />
             ) : null}
-            {/* rail node: solid square (blue if new), hollow blue-ring when open */}
             <span
-              className={`relative mt-1 shrink-0 ${
-                isOpen
-                  ? 'h-2.5 w-2.5 -ml-px border-2 border-roy-b bg-background'
-                  : p.isNew
-                    ? 'h-2 w-2 bg-roy-b'
-                    : 'h-2 w-2 bg-foreground'
+              className={`relative mt-1 h-2 w-2 shrink-0 ${
+                post.isNew ? 'bg-roy-b' : 'bg-foreground'
               }`}
             />
-            {mode === 'plain' ? (
-              <a href="#" className="group flex flex-col gap-0.5">
-                <span className="text-sm text-foreground decoration-roy-b decoration-2 underline-offset-4 group-hover:underline">
-                  {p.title}
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-                  {p.date}
-                </span>
-              </a>
-            ) : (
-              <div className="flex w-full flex-col gap-0.5">
-                <button
-                  type="button"
-                  onClick={
-                    mode === 'collapsible'
-                      ? () => setOpen((o) => ({ ...o, [p.title]: !isOpen }))
-                      : undefined
-                  }
-                  className={`flex flex-col gap-0.5 text-left ${
-                    mode === 'collapsible' ? 'group' : 'cursor-default'
-                  }`}
+            <div className="flex w-full flex-col gap-1">
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <a
+                  href={post.href}
+                  target="_blank"
+                  rel="noreferrer external"
+                  className="text-sm text-foreground underline decoration-border decoration-2 underline-offset-4 hover:text-roy-b hover:decoration-roy-b"
                 >
-                  <span
-                    className={`text-sm ${
-                      isOpen ? 'text-roy-b' : 'text-foreground'
-                    }`}
-                  >
-                    {p.title}
-                  </span>
-                  <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-                    {p.date}
-                  </span>
-                </button>
-                {showDesc ? (
-                  <div className="mt-1 flex flex-col gap-1.5">
-                    <p className="max-w-sm text-xs leading-relaxed text-muted-foreground text-pretty">
-                      {p.desc}
-                    </p>
-                    {mode === 'collapsible' ? (
-                      <a
-                        href="#"
-                        className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-b decoration-roy-b decoration-2 underline-offset-4 hover:underline"
-                      >
-                        read →
-                      </a>
-                    ) : null}
-                  </div>
-                ) : null}
+                  {post.title}
+                </a>
+                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                  {post.date}
+                </span>
               </div>
-            )}
+              {hasDesc ? (
+                <p className="max-w-sm text-xs leading-relaxed text-muted-foreground text-pretty">
+                  {post.desc}
+                </p>
+              ) : null}
+            </div>
           </li>
         );
       })}
@@ -125,21 +78,11 @@ export function WritingSection() {
       index="05"
       title="Writing — continuous rail"
       accent="text-roy-b"
-      note="v.06 — corner ticks dropped. The writing list now uses the same continuous rail as Experience for consistency, in blog blue. A keeps descriptions always-on; B makes each row a toggle where the state lives on the rail node (solid square → hollow blue ring, with the connecting segment and title turning blue); C is a plain linked list with just titles and dates."
+      cols={1}
+      note="Selected direction: the APM Overflow index rail stays always-on. If a post description is blank, the row automatically falls back to a plain linked title/date treatment instead of needing a separate C variant."
     >
-      {/* A — descriptions always visible */}
-      <Variant label="A — Always-on descriptions" tag="no toggles">
-        <Rail mode="always" />
-      </Variant>
-
-      {/* B — row toggles, state on the rail node */}
-      <Variant label="B — Row-toggle (rail = state)" tag="row = trigger">
-        <Rail mode="collapsible" />
-      </Variant>
-
-      {/* C — plain linked list */}
-      <Variant label="C — Plain linked list">
-        <Rail mode="plain" />
+      <Variant label="Selected — desc-aware rail" tag="final">
+        <WritingRail />
       </Variant>
     </Section>
   );

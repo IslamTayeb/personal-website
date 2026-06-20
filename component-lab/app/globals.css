@@ -6,9 +6,9 @@
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: var(--font-sora), 'Geist Fallback';
-  --font-mono: var(--font-dm-mono), 'Geist Mono Fallback';
-  --font-serif: var(--font-instrument-serif), Georgia, serif;
+  --font-sans: var(--font-sora), Arial, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-serif: Georgia, serif;
   --color-ink: var(--ink);
   --color-orange: var(--orange);
   --color-roy-r: var(--roy-r);
@@ -188,6 +188,24 @@
   }
   html {
     @apply font-sans;
+  }
+  a[href],
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled='true'],
+  [data-locked='true'] {
+    cursor: not-allowed;
+  }
+  a[target='_blank'],
+  a[rel~='external'],
+  .external-link {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.18em;
   }
   ::selection {
     background: var(--orange);

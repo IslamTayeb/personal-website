@@ -1,204 +1,153 @@
-'use client';
-
+import type { ReactNode } from 'react';
 import { Section } from '@/components/lab/frame';
-import { cn } from '@/lib/utils';
 
-type Face = {
-  id: string;
-  name: string;
-  cssVar: string;
-  note: string;
-  favorite?: boolean;
-};
-
-const SANS: Face[] = [
-  {
-    id: 'geist',
-    name: 'Geist',
-    cssVar: 'var(--font-geist-sans)',
-    note: 'Current baseline. Neutral and modern, but slightly low-contrast — reads light at small sizes.',
-  },
-  {
-    id: 'inter-tight',
-    name: 'Inter Tight',
-    cssVar: 'var(--font-inter-tight)',
-    note: 'Tighter, sturdier workhorse. Heavier on the page and very legible. Safe and strong.',
-  },
-  {
-    id: 'space-grotesk',
-    name: 'Space Grotesk',
-    cssVar: 'var(--font-space-grotesk)',
-    note: 'Geometric with sharp terminals that echo the hard corners. Real personality.',
-  },
-  {
-    id: 'hanken',
-    name: 'Hanken Grotesk',
-    cssVar: 'var(--font-hanken-grotesk)',
-    note: 'Warm humanist grotesk. Friendly but still tidy — good for long reading.',
-  },
-  {
-    id: 'schibsted',
-    name: 'Schibsted Grotesk',
-    cssVar: 'var(--font-schibsted-grotesk)',
-    note: 'Editorial news grotesk. Confident headings, slightly condensed feel.',
-  },
-  {
-    id: 'sora',
-    name: 'Sora',
-    cssVar: 'var(--font-sora)',
-    note: 'Current favorite: geometric and a touch technical, distinct without being loud.',
-    favorite: true,
-  },
-  {
-    id: 'bricolage',
-    name: 'Bricolage Grotesque',
-    cssVar: 'var(--font-bricolage)',
-    note: 'Quirky display grotesque with character in the headings — most expressive of the set.',
-  },
-  {
-    id: 'ibm-plex-sans',
-    name: 'IBM Plex Sans',
-    cssVar: 'var(--font-ibm-plex-sans)',
-    note: 'Typed-document classic. Pairs natively with IBM Plex Mono for an engineering-doc feel.',
-  },
-];
-
-const MONO: Face[] = [
-  {
-    id: 'geist-mono',
-    name: 'Geist Mono',
-    cssVar: 'var(--font-geist-mono)',
-    note: 'Current baseline mono. Clean, neutral, low personality.',
-  },
-  {
-    id: 'jetbrains',
-    name: 'JetBrains Mono',
-    cssVar: 'var(--font-jetbrains-mono)',
-    note: 'Developer-favourite. Sturdy, very legible at tiny metadata sizes.',
-  },
-  {
-    id: 'space-mono',
-    name: 'Space Mono',
-    cssVar: 'var(--font-space-mono)',
-    note: 'Loads of character — distinctive caps and quirky shapes. Pairs with Space Grotesk.',
-  },
-  {
-    id: 'dm-mono',
-    name: 'DM Mono',
-    cssVar: 'var(--font-dm-mono)',
-    note: 'Soft, light mono. Understated — recedes into metadata nicely.',
-  },
-  {
-    id: 'spline',
-    name: 'Spline Sans Mono',
-    cssVar: 'var(--font-spline-sans-mono)',
-    note: 'Mono with a humanist, almost-sans warmth. Modern and easy to read.',
-  },
-  {
-    id: 'martian',
-    name: 'Martian Mono',
-    cssVar: 'var(--font-martian-mono)',
-    note: 'Squarish, technical, slightly wide. Strong machine-label energy.',
-  },
-  {
-    id: 'fragment',
-    name: 'Fragment Mono',
-    cssVar: 'var(--font-fragment-mono)',
-    note: 'Refined typewriter feel. Editorial mono with subtle warmth.',
-  },
-  {
-    id: 'ibm-plex-mono',
-    name: 'IBM Plex Mono',
-    cssVar: 'var(--font-ibm-plex-mono)',
-    note: 'Engineering-doc mono. Pairs natively with IBM Plex Sans.',
-  },
-];
-
-function SansSpecimen({ face }: { face: Face }) {
+function TypeRole({
+  label,
+  value,
+  detail,
+}: {
+  label: string;
+  value: string;
+  detail: string;
+}) {
   return (
-    <div
-      className={cn(
-        'flex flex-col gap-3 py-6',
-        face.favorite && '-mx-3 border border-roy-b bg-roy-b/10 px-3 text-roy-b'
-      )}
-      style={{ fontFamily: face.cssVar }}
-    >
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-roy-r">
-          {face.name}
-        </span>
-        <div
-          className="flex items-baseline gap-2 font-mono text-[10px]"
-          style={{ fontFamily: 'var(--font-geist-mono)' }}
-        >
-          {face.favorite ? (
-            <span className="uppercase tracking-[0.15em] text-roy-b">
-              current favorite
-            </span>
-          ) : null}
-          <span className="text-muted-foreground">sans</span>
-        </div>
+    <div className="border-t border-border pt-3">
+      <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+        {label}
       </div>
-      <h3 className="text-2xl font-semibold leading-tight tracking-tight text-foreground">
-        Islam Tayeb
-      </h3>
-      <p className="max-w-xl text-sm font-normal leading-relaxed text-foreground text-pretty">
-        A Duke student finding lazy automations. Born between Egypt and Saudi
-        Arabia, now in Durham — building software, doing research, and writing
-        on APM Overflow.
-      </p>
-      <div className="flex flex-wrap items-baseline gap-x-4 text-base text-foreground">
-        <span className="font-normal">Regular</span>
-        <span className="font-medium">Medium</span>
-        <span className="font-semibold">Semibold</span>
-        <span className="font-bold">Bold</span>
-      </div>
-      <p className="text-xs leading-relaxed text-muted-foreground">
-        {face.note}
+      <div className="mt-2 text-sm font-medium text-foreground">{value}</div>
+      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+        {detail}
       </p>
     </div>
   );
 }
 
-function MonoSpecimen({ face }: { face: Face }) {
+function SoraSpecimen() {
+  return (
+    <div className="border-t border-border pt-6">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-roy-r">
+          Sora
+        </div>
+        <div className="font-mono text-[10px] uppercase tracking-[0.18em] text-roy-b">
+          selected sans
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+        <div>
+          <h3 className="text-3xl font-semibold leading-tight tracking-tight text-foreground text-balance">
+            Islam Tayeb
+          </h3>
+          <p className="mt-4 max-w-2xl text-base font-normal leading-relaxed text-foreground text-pretty">
+            A Duke student finding lazy automations. Born between Egypt and
+            Saudi Arabia, now in Durham — building software, doing research, and
+            writing on APM Overflow.
+          </p>
+        </div>
+
+        <div className="grid content-start gap-5">
+          <p className="text-sm leading-relaxed text-foreground/85 text-pretty">
+            Sora stays geometric and technical without turning the site into a
+            startup dashboard. It has enough character for the portfolio, but it
+            can still carry long APM Overflow paragraphs without getting loud.
+          </p>
+          <div className="flex flex-wrap items-baseline gap-x-5 gap-y-2 text-base text-foreground">
+            <span className="font-normal">Regular</span>
+            <span className="font-medium">Medium</span>
+            <span className="font-semibold">Semibold</span>
+            <span className="font-bold">Bold</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8 grid gap-5 md:grid-cols-3">
+        <TypeRole
+          label="hero"
+          value="large semibold, tight leading"
+          detail="The personal-site opener can feel sharp and technical without using a separate display face."
+        />
+        <TypeRole
+          label="body"
+          value="regular, full-strength ink"
+          detail="Readable enough for APM Overflow excerpts and article furniture, not only portfolio cards."
+        />
+        <TypeRole
+          label="links"
+          value="medium with hard accent"
+          detail="Works with the ROYB system because the letters are clean and not overly decorative."
+        />
+      </div>
+    </div>
+  );
+}
+
+function MonoLine({ label, children }: { label: string; children: ReactNode }) {
+  return (
+    <div className="grid gap-2 border-t border-border pt-3 sm:grid-cols-[7rem_1fr]">
+      <span className="text-[10px] uppercase tracking-[0.18em] text-roy-b">
+        {label}
+      </span>
+      <span className="font-medium text-foreground">{children}</span>
+    </div>
+  );
+}
+
+function DmMonoSpecimen() {
   return (
     <div
-      className="flex flex-col gap-3 py-6"
-      style={{ fontFamily: face.cssVar }}
+      className="border-t border-border pt-6"
+      style={{ fontFamily: 'var(--font-dm-mono)' }}
     >
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="text-[10px] uppercase tracking-[0.15em] text-roy-b">
-          {face.name}
-        </span>
-        <span
-          className="text-[10px] text-muted-foreground"
-          style={{ fontFamily: 'var(--font-geist-mono)' }}
-        >
-          mono
-        </span>
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <div className="text-[10px] uppercase tracking-[0.18em] text-roy-b">
+          DM Mono
+        </div>
+        <div className="text-[10px] uppercase tracking-[0.18em] text-roy-b">
+          selected mono
+        </div>
       </div>
-      {/* metadata row — the real use case for mono on the site */}
-      <div className="flex flex-wrap gap-x-6 gap-y-1 text-[13px] text-foreground">
-        <span>
-          <span className="text-roy-b">focus</span>&nbsp;&nbsp;automations
-        </span>
-        <span>
-          <span className="text-roy-b">loc</span>&nbsp;&nbsp;durham, nc
-        </span>
-        <span>
-          <span className="text-roy-b">2026</span>
-        </span>
+
+      <div className="mt-6 grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
+        <div>
+          <div className="flex flex-wrap gap-x-7 gap-y-2 text-lg font-medium text-foreground">
+            <span>
+              <span className="text-roy-b">focus</span>&nbsp;&nbsp;automations
+            </span>
+            <span>
+              <span className="text-roy-b">loc</span>&nbsp;&nbsp;durham, nc
+            </span>
+            <span>
+              <span className="text-roy-b">2026</span>
+            </span>
+          </div>
+          <p className="mt-5 text-base font-medium leading-relaxed text-foreground/80">
+            0OIl1 — {'{ }'} () [] /\ &amp; @ # = → ABCxyz 0123456789
+          </p>
+          <p
+            className="mt-5 text-sm leading-relaxed text-muted-foreground text-pretty"
+            style={{ fontFamily: 'var(--font-sora)' }}
+          >
+            DM Mono is the selected metadata voice. It is quiet, but the medium
+            weight gives labels and small utility text enough body to survive
+            the paper background.
+          </p>
+        </div>
+
+        <div className="grid gap-3 text-sm leading-relaxed">
+          <MonoLine label="project">
+            Harmonia&nbsp;&nbsp;/&nbsp;&nbsp;Python, OpenAI, Plotly
+          </MonoLine>
+          <MonoLine label="writing">
+            apm-overflow&nbsp;&nbsp;/&nbsp;&nbsp;agent memory fidelity
+          </MonoLine>
+          <MonoLine label="status">
+            draft&nbsp;&nbsp;→&nbsp;&nbsp;review&nbsp;&nbsp;→&nbsp;&nbsp;ship
+          </MonoLine>
+          <MonoLine label="slug">/blog/on-agent-memory-fidelity</MonoLine>
+        </div>
       </div>
-      {/* glyph legibility check at small size */}
-      <p className="text-xs leading-relaxed text-muted-foreground">
-        0OIl1 — {'{ }'} () [] /\ &amp; @ # = → ABCxyz 0123456789
-      </p>
-      <p
-        className="text-xs leading-relaxed text-muted-foreground"
-        style={{ fontFamily: 'var(--font-geist-sans)' }}
-      >
-        {face.note}
-      </p>
     </div>
   );
 }
@@ -210,50 +159,11 @@ export function FontsSection() {
       title="Typeface"
       accent="text-roy-r"
       cols={1}
-      note="Split into two lists — sans (headings + body) and mono (metadata). Each specimen sits on the page background with real spacing, no grey panels. Headings are semibold and body is full-strength ink, which fixes most of the 'too light' feel. Pick one sans + one mono."
+      note="Typeface options are no longer a comparison grid. Current direction: Sora for headings and body, DM Mono for metadata and labels, with DM Mono pushed slightly heavier where it appears on the page."
     >
-      <div className="flex flex-col gap-10">
-        {/* SANS */}
-        <div className="flex flex-col">
-          <span className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            Sans — headings &amp; body
-          </span>
-          <div className="grid gap-x-10 md:grid-cols-2">
-            {SANS.map((f, i) => (
-              <div
-                key={f.id}
-                className={
-                  i % 2 === 0 ? 'md:border-r md:border-border md:pr-10' : ''
-                }
-              >
-                <div className="border-t border-border">
-                  <SansSpecimen face={f} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* MONO */}
-        <div className="flex flex-col">
-          <span className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-            Mono — metadata &amp; labels
-          </span>
-          <div className="grid gap-x-10 md:grid-cols-2">
-            {MONO.map((f, i) => (
-              <div
-                key={f.id}
-                className={
-                  i % 2 === 0 ? 'md:border-r md:border-border md:pr-10' : ''
-                }
-              >
-                <div className="border-t border-border">
-                  <MonoSpecimen face={f} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="flex flex-col gap-14">
+        <SoraSpecimen />
+        <DmMonoSpecimen />
       </div>
     </Section>
   );

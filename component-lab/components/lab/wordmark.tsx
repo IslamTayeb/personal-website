@@ -2,100 +2,78 @@
 
 import { useState } from 'react';
 import { Section, Variant } from './frame';
-import { MoonGlyph, SquaredPlusGlyph } from './glyphs';
+import { MoonGlyph, SquaredPlusGlyph, type MoonVariant } from './glyphs';
 
 type Active = 'islam' | 'blog';
 
-// A — selected gets its ROYB color, unselected falls to muted grey.
-function SelectorGrey() {
-  const [active, setActive] = useState<Active>('islam');
-  return (
-    <div className="flex items-center gap-5 font-mono text-sm">
-      <button
-        type="button"
-        onClick={() => setActive('islam')}
-        className={`flex items-center gap-2 ${
-          active === 'islam' ? 'text-roy-r' : 'text-muted-foreground'
-        }`}
-      >
-        <MoonGlyph size={14} /> islam
-      </button>
-      <span aria-hidden className="h-4 w-px bg-border" />
-      <button
-        type="button"
-        onClick={() => setActive('blog')}
-        className={`flex items-center gap-2 ${
-          active === 'blog' ? 'text-roy-b' : 'text-muted-foreground'
-        }`}
-      >
-        <SquaredPlusGlyph size={13} /> blog
-      </button>
-    </div>
-  );
-}
+const MOONS: { id: MoonVariant; label: string }[] = [
+  { id: 'heavy-cut', label: 'A heavy cut' },
+  { id: 'sickle', label: 'B sickle' },
+  { id: 'compact', label: 'C compact' },
+  { id: 'round-cut', label: 'D round cut' },
+  { id: 'open', label: 'E open stroke' },
+  { id: 'half', label: 'F half moon' },
+  { id: 'angle', label: 'G angled' },
+  { id: 'dot-cut', label: 'H dot cut' },
+];
 
-// B — slash separator, active gets its ROYB color, inactive falls to grey.
-function SelectorInk() {
+function SelectedWordmark() {
   const [active, setActive] = useState<Active>('islam');
-  return (
-    <div className="flex items-center gap-5 font-mono text-sm">
-      <button
-        type="button"
-        onClick={() => setActive('islam')}
-        className={`flex items-center gap-2 ${
-          active === 'islam' ? 'text-roy-r' : 'text-muted-foreground'
-        }`}
-      >
-        <MoonGlyph size={14} /> islam
-      </button>
-      <span aria-hidden className="text-muted-foreground">
-        /
-      </span>
-      <button
-        type="button"
-        onClick={() => setActive('blog')}
-        className={`flex items-center gap-2 ${
-          active === 'blog' ? 'text-roy-b' : 'text-muted-foreground'
-        }`}
-      >
-        <SquaredPlusGlyph size={13} /> blog
-      </button>
-    </div>
-  );
-}
+  const [moon, setMoon] = useState<MoonVariant>('heavy-cut');
 
-// C — only the glyph carries the color, the word always stays ink.
-function SelectorGlyphOnly() {
-  const [active, setActive] = useState<Active>('islam');
   return (
-    <div className="flex items-center gap-5 font-mono text-sm text-foreground">
-      <button
-        type="button"
-        onClick={() => setActive('islam')}
-        className="flex items-center gap-2"
-      >
-        <MoonGlyph
-          size={14}
-          className={
+    <div className="flex w-full flex-col gap-8">
+      <div className="flex items-center gap-5 font-mono text-base">
+        <button
+          type="button"
+          onClick={() => setActive('islam')}
+          className={`flex items-center gap-2 ${
             active === 'islam' ? 'text-roy-r' : 'text-muted-foreground'
-          }
-        />
-        islam
-      </button>
-      <span aria-hidden className="text-muted-foreground">
-        /
-      </span>
-      <button
-        type="button"
-        onClick={() => setActive('blog')}
-        className="flex items-center gap-2"
-      >
-        <SquaredPlusGlyph
-          size={13}
-          className={active === 'blog' ? 'text-roy-b' : 'text-muted-foreground'}
-        />
-        blog
-      </button>
+          }`}
+        >
+          <MoonGlyph size={15} variant={moon} /> islam
+        </button>
+        <span aria-hidden style={{ color: '#DFDEDB' }}>
+          /
+        </span>
+        <button
+          type="button"
+          onClick={() => setActive('blog')}
+          className={`flex items-center gap-2 ${
+            active === 'blog' ? 'text-roy-b' : 'text-muted-foreground'
+          }`}
+        >
+          <SquaredPlusGlyph size={14} /> blog
+        </button>
+      </div>
+
+      <div className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
+        {MOONS.map((option) => {
+          const selected = option.id === moon;
+          return (
+            <button
+              type="button"
+              key={option.id}
+              onClick={() => setMoon(option.id)}
+              className={`flex items-center justify-between gap-3 bg-background p-3 text-left hover:bg-secondary ${
+                selected ? 'text-roy-r' : 'text-foreground'
+              }`}
+            >
+              <span className="flex items-center gap-3">
+                <MoonGlyph size={18} variant={option.id} />
+                <span className="font-mono text-[10px] uppercase tracking-[0.14em]">
+                  {option.label}
+                </span>
+              </span>
+              {selected ? (
+                <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-roy-r">
+                  selected
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -106,21 +84,11 @@ export function WordmarkSection() {
       index="01"
       title="Wordmark / Glyph"
       accent="text-roy-r"
-      note="v.03 — now a real selector: islam (☾, red) and blog (⊞, blue), glyph left of each word. Click to switch — the active property takes its ROYB color, no extra square needed. Separator comparison: A uses a thin vertical rule, B and C use a slash (/). The variants also differ in how the inactive item reads: muted grey, full ink, or glyph-only color."
+      cols={1}
+      note="Selected direction: islam/blog remains a real selector with a quiet #DFDEDB slash. The blog keeps the squared plus; the islam side is now testing thicker crescent candidates instead of forcing the moon into a square."
     >
-      {/* A */}
-      <Variant label="A — Inactive = grey" tag="recommended">
-        <SelectorGrey />
-      </Variant>
-
-      {/* B */}
-      <Variant label="B — Slash + inactive grey" tag="final">
-        <SelectorInk />
-      </Variant>
-
-      {/* C */}
-      <Variant label="C — Color on glyph only">
-        <SelectorGlyphOnly />
+      <Variant label="Selected — slash selector + moon candidates" tag="final">
+        <SelectedWordmark />
       </Variant>
     </Section>
   );

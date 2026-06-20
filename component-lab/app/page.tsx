@@ -29,7 +29,7 @@ export default function Page() {
             Islam Tayeb
           </span>
           <span className="font-mono text-xs text-muted-foreground">
-            v.06 — 2026
+            v.07 — 2026
           </span>
         </div>
         <div className="royb-band h-1 w-full" />
@@ -39,10 +39,10 @@ export default function Page() {
           <span className="text-roy-b">APM Overflow</span>.
         </h1>
         <p className="max-w-2xl text-sm font-normal leading-relaxed text-foreground/80 text-pretty">
-          Sharp corners, monochrome paper, mono metadata. v.06 adds §04 Projects
-          (fancy cards from your site plus simpler treatments), rebuilds Writing
-          as a continuous rail to match Experience, and drops the grey panels in
-          Typeface. Finals are tagged. Everything instant, nothing soft.
+          Sharp corners, monochrome paper, mono metadata. v.07 keeps favorite
+          directions as the main specimens: Sora/DM Mono, slash wordmark with
+          moon candidates, stacked-mobile hero, show-more experience rail, dense
+          image-less projects, and desc-aware writing rows.
         </p>
       </header>
 

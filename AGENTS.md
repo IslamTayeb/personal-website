@@ -92,6 +92,10 @@ Only commit when all three pass. Include meaningful commit messages that describ
   (e.g., `islamtayeb/lib/utils` inside `islamtayeb/`,
   `component-lab/lib/utils` inside `component-lab/`).
 - **Styling:** Tailwind CSS 3 with HSL CSS variables. Dark mode is class-based via `next-themes`.
+- **Interaction cues:** Anything clickable should show the pointer cursor on
+  hover. Anything present but locked/unavailable should show the not-allowed
+  cursor. Any link that opens elsewhere should be visibly underlined; color is
+  optional, but the underline is not.
 - **Component library:** shadcn/ui (new-york style, slate base, RSC enabled). Config in `components.json`. UI primitives live in `components/ui/`.
 - **Fonts:** Geist Sans, Geist Mono, and Anek Telugu (as `--font-caption`). Default body font is `font-mono`.
 - **Formatting:** Prettier config is at repo root (`prettier.config.js`): single quotes, semicolons, trailing commas `es5`, 80-char width, 2-space indent, LF endings.
