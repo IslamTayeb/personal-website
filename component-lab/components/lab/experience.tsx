@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { experienceGroups, type ExperienceGroup } from '@/lib/lab-data';
 import { Section, Variant } from './frame';
 import { RailItem, RailList } from './rail';
@@ -123,15 +124,16 @@ function RailGroupBlock({
   expanded: boolean;
   onToggleExpanded: () => void;
 }) {
-  const accent = groupAccents[group.dot] ?? groupAccents['bg-roy-o'];
-
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-2 pb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-        <span className={`text-xs leading-none ${accent.text}`} aria-hidden>
-          ⌄
-        </span>
-        <span className={accent.text}>{group.kind}</span>
+        <ChevronDown
+          className="relative bottom-px text-muted-foreground"
+          size={11}
+          strokeWidth={1.8}
+          aria-hidden
+        />
+        <span>{group.kind}</span>
         <span className="text-muted-foreground/60">({group.roles.length})</span>
       </div>
       <RailGroup

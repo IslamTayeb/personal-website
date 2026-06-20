@@ -25,7 +25,7 @@ export function ThemeToggle() {
       className="group inline-flex items-stretch border border-border font-mono text-[10px] uppercase tracking-[0.15em]"
     >
       <span
-        className={`px-2 py-1 transition-none ${
+        className={`px-2 py-1 ${
           !isDark
             ? 'bg-foreground text-background'
             : 'bg-transparent text-muted-foreground'
@@ -34,7 +34,7 @@ export function ThemeToggle() {
         Light
       </span>
       <span
-        className={`border-l border-border px-2 py-1 transition-none ${
+        className={`border-l border-border px-2 py-1 ${
           isDark
             ? 'bg-foreground text-background'
             : 'bg-transparent text-muted-foreground'

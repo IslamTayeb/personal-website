@@ -4,11 +4,11 @@ import { LabExternalLink } from './links';
 
 function HeroContactIndex() {
   return (
-    <div className="flex flex-col gap-3 font-mono text-[11px] md:border-r md:border-border md:pr-4">
+    <div className="flex flex-col gap-3 font-mono text-[11px]">
       <div className="flex flex-col gap-1">
         <span className="text-muted-foreground">contact</span>
-        <ul className="flex flex-wrap gap-x-3 gap-y-0.5 md:flex-col">
-          {contactLinks.map((link) => (
+        <ul className="flex flex-wrap text-foreground">
+          {contactLinks.map((link, index) => (
             <li key={link.label}>
               <LabExternalLink
                 href={link.href}
@@ -17,11 +17,14 @@ function HeroContactIndex() {
               >
                 {link.text}
               </LabExternalLink>
+              {index < contactLinks.length - 1 ? (
+                <span className="mr-1">, </span>
+              ) : null}
             </li>
           ))}
         </ul>
       </div>
-      <div className="grid grid-cols-[3.4rem_1fr] gap-2 border-t border-border pt-2">
+      <div className="grid grid-cols-[3.4rem_1fr] gap-2">
         <span className="text-muted-foreground">loc</span>
         <span className="text-foreground">Durham, NC</span>
       </div>
@@ -69,12 +72,12 @@ export function HeroSection() {
     >
       <Variant label="Selected — compact hero, stacks on phone" tag="final">
         <div className="flex w-full flex-col gap-3">
-          <h3 className="text-xl font-semibold tracking-tight text-foreground">
-            Islam Tayeb
+          <h3 className="font-serif text-2xl font-bold tracking-normal text-foreground">
+            (Islam M)<sup className="text-sm leading-none">2</sup> Tayeb
           </h3>
-          <div className="flex flex-col gap-4 md:grid md:grid-cols-[7.25rem_1fr] md:gap-5">
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-[10.5rem_1fr] md:gap-5">
             <HeroStory />
-            <div className="order-2 md:order-1">
+            <div className="order-2 h-full md:order-1 md:border-r md:border-border md:pr-5">
               <HeroContactIndex />
             </div>
           </div>

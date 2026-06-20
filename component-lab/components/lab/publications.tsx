@@ -2,18 +2,9 @@
 
 import { useState } from 'react';
 import { publications, type Publication } from '@/lib/lab-data';
+import { cn } from '@/lib/utils';
 import { Section, Variant } from './frame';
 import { LabExternalLink } from './links';
-
-function PublicationTags({ tags }: { tags: string[] }) {
-  return (
-    <ul className="flex flex-wrap gap-x-2 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-      {tags.map((tag) => (
-        <li key={tag}>{tag}</li>
-      ))}
-    </ul>
-  );
-}
 
 function PublicationRow({
   publication,
@@ -25,12 +16,20 @@ function PublicationRow({
   onToggle: () => void;
 }) {
   return (
-    <li className="border-t border-border first:border-t-0">
+    <li
+      className={cn(
+        'border-t border-border first:border-t-0',
+        open && 'bg-muted/45'
+      )}
+    >
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={open}
-        className="grid w-full gap-2 px-2 py-2.5 text-left transition-colors hover:bg-muted/45 md:grid-cols-[5.5rem_1fr_auto]"
+        className={cn(
+          'grid w-full gap-2 px-2 py-2.5 text-left md:grid-cols-[5.5rem_1fr_auto]',
+          !open && 'hover:bg-muted/45'
+        )}
       >
         <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
           {publication.date}
@@ -47,12 +46,11 @@ function PublicationRow({
           <span className="text-xs leading-snug text-muted-foreground text-pretty">
             {publication.authors}
           </span>
-          <span className="flex flex-wrap gap-x-2 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-            {publication.venue ? <span>{publication.venue}</span> : null}
-            {publication.venue ? <span>/</span> : null}
-            <span>{publication.impact}</span>
-          </span>
-          <PublicationTags tags={publication.tags} />
+          {publication.venue ? (
+            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+              {publication.venue}
+            </span>
+          ) : null}
         </span>
         <span
           className="font-mono text-xs leading-none text-muted-foreground"

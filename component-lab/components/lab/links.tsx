@@ -50,7 +50,7 @@ export function LabExternalLink({
       rel={external ? 'noreferrer external' : undefined}
       className={`royb-link royb-link-${variant} ${className}`}
     >
-      {variant === 'highlight-royb' ? (
+      {variant === 'highlight-royb' || variant === 'raw-royb' ? (
         <RoybLetters>{children}</RoybLetters>
       ) : (
         children
@@ -97,7 +97,7 @@ export function LinksSection() {
       title="Links — ROYB hover tests"
       accent="text-roy-b"
       cols={1}
-      note="Selected direction is the low highlight. The alternates keep the same underlined link grammar, but test blue hover text and ROYB-by-character hover text."
+      note="Selected direction is the low highlight. Hover is immediate and drops the underline; the second set repeats the same text-color tests without any highlight fill."
     >
       {linkHoverOptions.map((option) => (
         <Variant key={option.label} label={option.label} tag={option.tag}>

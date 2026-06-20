@@ -1,4 +1,10 @@
-export type LinkVariant = 'highlight' | 'highlight-blue' | 'highlight-royb';
+export type LinkVariant =
+  | 'highlight'
+  | 'highlight-blue'
+  | 'highlight-royb'
+  | 'raw'
+  | 'raw-blue'
+  | 'raw-royb';
 
 export type TextSegment = {
   text: string;
@@ -48,11 +54,9 @@ export type Publication = {
   authors: string;
   venue?: string;
   venueHref?: string;
-  impact: string;
   type: string;
   href: string;
   desc: string[];
-  tags: string[];
 };
 
 export type CourseCategory = 'Systems' | 'Theory' | 'Biochemistry';
@@ -198,6 +202,24 @@ export const linkHoverOptions: LinkHoverOption[] = [
     variant: 'highlight-royb',
     desc: 'Same low highlight, with the characters cycling red, orange, yellow, blue by index.',
   },
+  {
+    label: 'D — raw text',
+    tag: 'no highlight',
+    variant: 'raw',
+    desc: 'No highlight fill: hover only removes the underline immediately.',
+  },
+  {
+    label: 'E — raw + blue text',
+    tag: 'no highlight',
+    variant: 'raw-blue',
+    desc: 'No highlight fill: hover removes the underline and moves the text to the section color.',
+  },
+  {
+    label: 'F — raw + ROYB letters',
+    tag: 'no highlight',
+    variant: 'raw-royb',
+    desc: 'No highlight fill: hover removes the underline and cycles each character through ROYB.',
+  },
 ];
 
 export const experienceGroups: ExperienceGroup[] = [
@@ -278,27 +300,23 @@ export const publications: Publication[] = [
     venue: 'Journal of Environmental Chemical Engineering',
     venueHref:
       'https://www.journals.elsevier.com/journal-of-environmental-chemical-engineering',
-    impact: 'Impact Factor: 7.2',
     type: 'Research Article',
     href: 'https://doi.org/10.1016/j.jece.2025.119315',
     desc: [
       'Developed a machine learning framework to predict CO₂ adsorption capacity in porous organic polymers. Used gradient boosting and genetic algorithms.',
       'I helped develop the ML framework, performed data curation and processing, and helped write the original manuscript.',
     ],
-    tags: ['Python', 'Traditional ML', 'Carbon Capture'],
   },
   {
     date: 'May 2025',
     title: 'Primal Dual Continual Learning for Robust Antibody Design',
     authors: 'Islam Tayeb, Navid NaderiAlizadeh',
-    impact: 'Pre-print',
     type: 'Pre-print',
     href: 'https://doi.org/10.13140/RG.2.2.11182.98880',
     desc: [
       'Framework for handling distribution shifts in antibody design using constrained continual learning. Uses dual variables to adaptively allocate memory and prevent catastrophic forgetting across design cycles.',
       'I developed the algorithm and implemented the full framework for the Antibody DomainBed benchmark.',
     ],
-    tags: ['PyTorch', 'Protein Design', 'Continual Learning'],
   },
   {
     date: 'Jan 2024',
@@ -308,14 +326,12 @@ export const publications: Publication[] = [
       'Mahmoud Abdelnaby, Islam Tayeb, Ahmed Alloush, Hussain Alyosef, Aljazi Alnoaimi, Mostafa Zeama, Mohammed Mohammed, Sagheer Onaizi',
     venue: 'Journal of CO₂ Utilization',
     venueHref: 'https://www.journals.elsevier.com/journal-of-co2-utilization',
-    impact: 'Impact Factor: 8.4',
     type: 'Research Article',
     href: 'https://doi.org/10.1016/j.jcou.2023.102647',
     desc: [
       'Modified a metal-organic framework polymer to better capture CO₂ directly from air. The modified version captured 15% more CO₂ than the original material.',
       'I designed and synthesized the materials in the lab, characterized their properties, and helped write the paper.',
     ],
-    tags: ['Wet Lab', 'Polymer Synthesis', 'Carbon Capture'],
   },
 ];
 

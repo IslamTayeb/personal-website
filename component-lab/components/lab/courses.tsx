@@ -73,7 +73,7 @@ function CourseButton({
       aria-pressed={active}
       title={course.locked ? 'Locked for now' : course.desc}
       onClick={onSelect}
-      className={`relative inline-flex items-center border px-1.5 py-0.5 font-mono text-[11px] leading-tight transition-colors ${
+      className={`relative inline-flex items-center border px-1.5 py-0.5 font-mono text-[11px] leading-tight ${
         course.locked
           ? `${styles.locked} border-dashed`
           : active

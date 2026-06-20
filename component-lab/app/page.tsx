@@ -6,6 +6,7 @@ import { PublicationsSection } from '@/components/lab/publications';
 import { CoursesSection } from '@/components/lab/courses';
 import { WritingSection } from '@/components/lab/writing';
 import { AccentSection } from '@/components/lab/accent';
+import { DitheringSection } from '@/components/lab/dithering';
 import { ThemeToggle } from '@/components/lab/theme-toggle';
 import { MoonGlyph, SparkleGlyph } from '@/components/lab/glyphs';
 
@@ -30,7 +31,7 @@ export default function Page() {
             Islam Tayeb
           </span>
           <span className="font-mono text-xs text-muted-foreground">
-            v.09 — 2026
+            v.10 — 2026
           </span>
         </div>
         <div className="royb-band h-1 w-full" />
@@ -40,9 +41,9 @@ export default function Page() {
           <span className="text-roy-b">APM Overflow</span>.
         </h1>
         <p className="max-w-2xl text-sm font-normal leading-relaxed text-foreground/80 text-pretty">
-          Sharp corners, monochrome paper, mono metadata. v.09 drops settled
-          type specimens, adds real course content, and tests ROYB link hover
-          behavior.
+          Sharp corners, monochrome paper, mono metadata. v.10 drops settled
+          type specimens, adds real course content, and opens dithering as a
+          texture experiment.
         </p>
       </header>
 
@@ -54,6 +55,7 @@ export default function Page() {
       <CoursesSection />
       <WritingSection />
       <AccentSection />
+      <DitheringSection />
 
       <footer className="flex items-center justify-between border-t border-border py-7 font-mono text-xs text-muted-foreground">
         <span className="flex items-center gap-2">
