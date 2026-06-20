@@ -1,45 +1,32 @@
 import { writingPosts } from '@/lib/lab-data';
 import { Section, Variant } from './frame';
+import { LabExternalLink } from './links';
+import { RailItem, RailList } from './rail';
 
 function WritingRail() {
   return (
-    <ul className="flex w-full flex-col">
+    <RailList>
       {writingPosts.map((post, index) => {
         const hasDesc = Boolean(post.desc?.trim());
         return (
-          <li key={post.title} className="relative flex gap-4 pb-7 last:pb-0">
-            {index < writingPosts.length - 1 ? (
-              <span className="absolute left-[3.5px] top-5 bottom-1 w-px bg-border" />
-            ) : null}
-            <span
-              className={`relative mt-1 h-2 w-2 shrink-0 ${
-                post.isNew ? 'bg-roy-b' : 'bg-foreground'
-              }`}
-            />
-            <div className="flex w-full flex-col gap-1">
-              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <a
-                  href={post.href}
-                  target="_blank"
-                  rel="noreferrer external"
-                  className="text-sm text-foreground underline decoration-border decoration-2 underline-offset-4 hover:text-roy-b hover:decoration-roy-b"
-                >
-                  {post.title}
-                </a>
-                <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-                  {post.date}
-                </span>
-              </div>
-              {hasDesc ? (
-                <p className="text-xs leading-snug text-muted-foreground text-pretty md:whitespace-nowrap">
-                  {post.desc}
-                </p>
-              ) : null}
-            </div>
-          </li>
+          <RailItem
+            key={post.title}
+            dotClassName={post.isNew ? 'bg-roy-b' : 'bg-foreground'}
+            title={
+              <LabExternalLink
+                href={post.href}
+                className="section-color-b text-foreground"
+              >
+                {post.title}
+              </LabExternalLink>
+            }
+            meta={post.date}
+            description={hasDesc ? post.desc : undefined}
+            connector={index < writingPosts.length - 1 ? 'solid' : 'none'}
+          />
         );
       })}
-    </ul>
+    </RailList>
   );
 }
 

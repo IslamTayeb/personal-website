@@ -20,35 +20,37 @@ const categoryStyles: Record<
     active: string;
     inactive: string;
     locked: string;
-    tint: string;
   }
 > = {
   Systems: {
     dot: 'bg-roy-o',
     text: 'text-roy-o',
     border: 'border-roy-o',
-    active: 'border-roy-o bg-roy-o/10 text-foreground',
-    inactive: 'border-roy-o/35 text-foreground hover:border-roy-o',
-    locked: 'border-roy-o/20 text-muted-foreground/45 opacity-45',
-    tint: 'course-pill-o',
+    active: 'border-roy-o bg-roy-o/[0.18] text-foreground',
+    inactive:
+      'border-roy-o/35 bg-roy-o/[0.07] text-foreground hover:border-roy-o',
+    locked:
+      'border-roy-o/20 bg-roy-o/[0.05] text-muted-foreground/35 saturate-50',
   },
   Theory: {
     dot: 'bg-roy-b',
     text: 'text-roy-b',
     border: 'border-roy-b',
-    active: 'border-roy-b bg-roy-b/10 text-foreground',
-    inactive: 'border-roy-b/35 text-foreground hover:border-roy-b',
-    locked: 'border-roy-b/20 text-muted-foreground/45 opacity-45',
-    tint: 'course-pill-b',
+    active: 'border-roy-b bg-roy-b/[0.16] text-foreground',
+    inactive:
+      'border-roy-b/35 bg-roy-b/[0.07] text-foreground hover:border-roy-b',
+    locked:
+      'border-roy-b/20 bg-roy-b/[0.05] text-muted-foreground/35 saturate-50',
   },
   Biochemistry: {
     dot: 'bg-roy-y',
     text: 'text-roy-y',
     border: 'border-roy-y',
-    active: 'border-roy-y bg-roy-y/10 text-foreground',
-    inactive: 'border-roy-y/40 text-foreground hover:border-roy-y',
-    locked: 'border-roy-y/25 text-muted-foreground/45 opacity-45',
-    tint: 'course-pill-y',
+    active: 'border-roy-y bg-roy-y/[0.24] text-foreground',
+    inactive:
+      'border-roy-y/45 bg-roy-y/[0.1] text-foreground hover:border-roy-y',
+    locked:
+      'border-roy-y/25 bg-roy-y/[0.07] text-muted-foreground/35 saturate-50',
   },
 };
 
@@ -71,7 +73,7 @@ function CourseButton({
       aria-pressed={active}
       title={course.locked ? 'Locked for now' : course.desc}
       onClick={onSelect}
-      className={`inline-flex items-center border px-1.5 py-0.5 font-mono text-[11px] leading-tight transition-colors ${styles.tint} ${
+      className={`relative inline-flex items-center border px-1.5 py-0.5 font-mono text-[11px] leading-tight transition-colors ${
         course.locked
           ? `${styles.locked} border-dashed`
           : active
@@ -79,13 +81,11 @@ function CourseButton({
             : `${styles.inactive} border-dashed`
       }`}
     >
-      {course.locked ? (
-        <Lock className="mr-1 h-3 w-3 shrink-0" aria-hidden />
-      ) : null}
       <span>{course.name}</span>
-      <span className="ml-1 text-muted-foreground/60">/{course.code}</span>
       {course.locked ? (
-        <span className="ml-1 text-muted-foreground/40">locked</span>
+        <span className="absolute inset-0 flex items-center justify-center bg-background/35">
+          <Lock className="h-3 w-3 text-muted-foreground/45" aria-hidden />
+        </span>
       ) : null}
     </button>
   );
@@ -182,7 +182,7 @@ export function CoursesSection() {
                 <span
                   className={`font-mono text-[10px] uppercase tracking-[0.12em] ${categoryStyles[activeItem.category].text}`}
                 >
-                  {activeItem.code} / {activeItem.category}
+                  {activeItem.category}
                 </span>
               </div>
               <p className="mt-1 text-xs leading-snug text-muted-foreground text-pretty">

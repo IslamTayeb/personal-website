@@ -1,4 +1,4 @@
-export type LinkVariant = 'sweep' | 'step' | 'band' | 'echo' | 'invert';
+export type LinkVariant = 'highlight' | 'highlight-blue' | 'highlight-royb';
 
 export type TextSegment = {
   text: string;
@@ -24,6 +24,7 @@ export type ExperienceRole = {
   org: string;
   date: string;
   desc: string;
+  incoming?: boolean;
 };
 
 export type ExperienceGroup = {
@@ -180,30 +181,22 @@ export const heroParagraphs: TextSegment[][] = [
 
 export const linkHoverOptions: LinkHoverOption[] = [
   {
-    label: 'A — sweep underline',
-    tag: 'hero default',
-    variant: 'sweep',
-    desc: 'Quiet until hover, then the underline grows into a hard ROYB rail.',
+    label: 'A — low highlight',
+    tag: 'selected',
+    variant: 'highlight',
+    desc: 'Favorite direction: keeps the underline, then fills only the lower half of the text on hover.',
   },
   {
-    label: 'B — stepped rail',
-    variant: 'step',
-    desc: 'Always shows the ROYB structure, hover shifts the rail one notch.',
+    label: 'B — highlight + blue text',
+    tag: 'alternate',
+    variant: 'highlight-blue',
+    desc: 'Same low highlight, but the hovered text moves to the section color.',
   },
   {
-    label: 'C — low highlight',
-    variant: 'band',
-    desc: 'Keeps the underline, then fills only the lower half of the text.',
-  },
-  {
-    label: 'D — chroma echo',
-    variant: 'echo',
-    desc: 'Subtle colored type shadow on hover; louder and more digital.',
-  },
-  {
-    label: 'E — hard invert',
-    variant: 'invert',
-    desc: 'Most aggressive option: full ROYB strip with inverted ink.',
+    label: 'C — highlight + ROYB letters',
+    tag: 'experimental',
+    variant: 'highlight-royb',
+    desc: 'Same low highlight, with the characters cycling red, orange, yellow, blue by index.',
   },
 ];
 
@@ -211,7 +204,7 @@ export const experienceGroups: ExperienceGroup[] = [
   {
     kind: 'Research',
     visibleCount: 3,
-    dot: 'bg-roy-y',
+    dot: 'bg-roy-o',
     roles: [
       {
         org: 'Duke University',
@@ -233,7 +226,7 @@ export const experienceGroups: ExperienceGroup[] = [
   {
     kind: 'Engineering',
     visibleCount: 1,
-    dot: 'bg-roy-o',
+    dot: 'bg-roy-y',
     roles: [
       {
         org: 'Soff (YC S24)',

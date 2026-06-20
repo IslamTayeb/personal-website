@@ -3,6 +3,33 @@
 import { useState } from 'react';
 import { experienceGroups, type ExperienceGroup } from '@/lib/lab-data';
 import { Section, Variant } from './frame';
+import { RailItem, RailList } from './rail';
+
+const hollowDots: Record<string, string> = {
+  'bg-roy-y': 'border border-roy-y bg-background',
+  'bg-roy-o': 'border border-roy-o bg-background',
+  'bg-roy-b': 'border border-roy-b bg-background',
+  'bg-roy-r': 'border border-roy-r bg-background',
+};
+
+const groupAccents: Record<string, { text: string; hover: string }> = {
+  'bg-roy-y': {
+    text: 'text-roy-y',
+    hover: 'hover:text-roy-y hover:decoration-roy-y',
+  },
+  'bg-roy-o': {
+    text: 'text-roy-o',
+    hover: 'hover:text-roy-o hover:decoration-roy-o',
+  },
+  'bg-roy-b': {
+    text: 'text-roy-b',
+    hover: 'hover:text-roy-b hover:decoration-roy-b',
+  },
+  'bg-roy-r': {
+    text: 'text-roy-r',
+    hover: 'hover:text-roy-r hover:decoration-roy-r',
+  },
+};
 
 function RailGroup({
   group,
@@ -18,60 +45,55 @@ function RailGroup({
     : group.roles.slice(0, group.visibleCount);
   const hiddenCount = Math.max(0, group.roles.length - group.visibleCount);
   const hasHidden = hiddenCount > 0;
+  const accent = groupAccents[group.dot] ?? groupAccents['bg-roy-o'];
 
   return (
-    <ul className="flex flex-col">
+    <RailList>
       {roles.map((role, index) => {
         const isLastVisibleRole = index === roles.length - 1;
         const showMoreBelow = isLastVisibleRole && hasHidden && !expanded;
+        const connector =
+          index < roles.length - 1
+            ? 'solid'
+            : showMoreBelow
+              ? 'dashed'
+              : 'none';
 
         return (
-          <li
+          <RailItem
             key={`${group.kind}-${role.org}-${role.date}`}
-            className={`relative flex gap-4 ${
-              showMoreBelow ? 'pb-1' : 'pb-4 last:pb-0'
-            }`}
-          >
-            {index < roles.length - 1 ? (
-              <span className="absolute left-[3.5px] top-5 bottom-1.5 w-px bg-border" />
-            ) : null}
-            {showMoreBelow ? (
-              <span
-                className="absolute left-[3.5px] top-5 bottom-0 w-px text-border"
-                style={{
-                  backgroundImage:
-                    'repeating-linear-gradient(to bottom, currentColor 0 4px, transparent 4px 8px)',
-                }}
-              />
-            ) : null}
-            <span className={`relative mt-1 h-2 w-2 shrink-0 ${group.dot}`} />
-            <div className="flex w-full flex-col gap-0.5">
-              <div className="flex items-baseline justify-between gap-3">
-                <span className="text-sm text-foreground">{role.org}</span>
-                <span className="shrink-0 font-mono text-[10px] text-muted-foreground">
-                  {role.date}
-                </span>
-              </div>
-              <p className="text-xs leading-snug text-muted-foreground text-pretty md:whitespace-nowrap">
-                {role.desc}
-              </p>
-            </div>
-          </li>
+            dotClassName={role.incoming ? hollowDots[group.dot] : group.dot}
+            title={role.org}
+            meta={role.date}
+            description={role.desc}
+            connector={connector}
+            connectorClassName={showMoreBelow ? 'bottom-6' : undefined}
+            footer={
+              showMoreBelow ? (
+                <button
+                  type="button"
+                  onClick={onToggleExpanded}
+                  className={`w-fit font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground underline decoration-border underline-offset-4 ${accent.hover}`}
+                >
+                  Show more ({hiddenCount})
+                </button>
+              ) : null
+            }
+          />
         );
       })}
-      {hasHidden ? (
-        <li className="relative flex gap-4 pb-4">
-          <span className="w-2 shrink-0" aria-hidden />
+      {hasHidden && expanded ? (
+        <li className="pl-6 pt-0.5">
           <button
             type="button"
             onClick={onToggleExpanded}
-            className="w-fit font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground underline decoration-border underline-offset-4 hover:text-roy-o hover:decoration-roy-o"
+            className={`w-fit font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground underline decoration-border underline-offset-4 ${accent.hover}`}
           >
-            {expanded ? 'Show less' : `Show more (${hiddenCount})`}
+            Show less
           </button>
         </li>
       ) : null}
-    </ul>
+    </RailList>
   );
 }
 
@@ -79,7 +101,7 @@ function ExperienceRail() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="flex w-full flex-col gap-7">
+    <div className="flex w-full flex-col gap-4">
       {experienceGroups.map((group) => (
         <RailGroupBlock
           key={group.kind}
@@ -101,13 +123,15 @@ function RailGroupBlock({
   expanded: boolean;
   onToggleExpanded: () => void;
 }) {
+  const accent = groupAccents[group.dot] ?? groupAccents['bg-roy-o'];
+
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-2 pb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-        <span className="text-xs leading-none" aria-hidden>
+        <span className={`text-xs leading-none ${accent.text}`} aria-hidden>
           ⌄
         </span>
-        {group.kind}
+        <span className={accent.text}>{group.kind}</span>
         <span className="text-muted-foreground/60">({group.roles.length})</span>
       </div>
       <RailGroup

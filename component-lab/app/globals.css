@@ -252,6 +252,15 @@
     display: inline-block;
     isolation: isolate;
     color: inherit;
+    background-image: linear-gradient(
+      to top,
+      color-mix(in oklch, var(--section-color, var(--roy-b)) 18%, transparent) 0
+        42%,
+      transparent 42% 100%
+    );
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 0 100%;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
     text-decoration-thickness: 1.5px;
@@ -260,126 +269,47 @@
       color 160ms ease,
       background-size 180ms ease,
       background-position 180ms ease,
-      box-shadow 180ms ease,
-      text-decoration-color 160ms ease,
-      text-shadow 180ms ease;
-  }
-  .royb-link::after {
-    position: absolute;
-    right: 0;
-    bottom: -0.08em;
-    left: 0;
-    height: 2px;
-    pointer-events: none;
-    content: '';
-    background: linear-gradient(
-      90deg,
-      var(--roy-r),
-      var(--roy-o),
-      var(--roy-y-band),
-      var(--roy-b)
-    );
-    transform: scaleX(0);
-    transform-origin: left;
-    transition:
-      transform 180ms ease,
-      height 180ms ease,
-      opacity 160ms ease,
-      background-position 180ms ease;
+      text-decoration-color 160ms ease;
   }
   .royb-link:hover {
-    text-decoration-line: none;
+    background-size: 100% 100%;
   }
-  .royb-link:hover::after {
-    transform: scaleX(1);
+  .royb-link-highlight-blue:hover {
+    color: var(--section-color, var(--roy-b));
   }
-  .royb-link-sweep {
-    color: inherit;
+  .royb-link-highlight-royb .royb-char {
+    transition: color 160ms ease;
   }
-  .royb-link-step::after {
-    background-image: linear-gradient(
-      90deg,
-      var(--roy-r) 0 22%,
-      transparent 22% 26%,
-      var(--roy-o) 26% 48%,
-      transparent 48% 52%,
-      var(--roy-y-band) 52% 74%,
-      transparent 74% 78%,
-      var(--roy-b) 78% 100%
-    );
-    background-position: 0 0;
-    background-size: 180% 100%;
-    transform: scaleX(1);
+  .royb-link-highlight-royb:hover .royb-char-r {
+    color: var(--roy-r);
   }
-  .royb-link-step:hover::after {
-    background-position: 100% 0;
+  .royb-link-highlight-royb:hover .royb-char-o {
+    color: var(--roy-o);
   }
-  .royb-link-step:hover {
+  .royb-link-highlight-royb:hover .royb-char-y {
+    color: var(--roy-y);
+  }
+  .royb-link-highlight-royb:hover .royb-char-b {
     color: var(--roy-b);
-  }
-  .royb-link-band::after {
-    bottom: 0.02em;
-    z-index: -1;
-    height: 0.55em;
-    background-image: linear-gradient(
-      90deg,
-      color-mix(in oklch, var(--roy-r) 45%, transparent),
-      color-mix(in oklch, var(--roy-o) 45%, transparent),
-      color-mix(in oklch, var(--roy-y-band) 45%, transparent),
-      color-mix(in oklch, var(--roy-b) 45%, transparent)
-    );
-  }
-  .royb-link-echo:hover {
-    color: var(--foreground);
-    text-shadow:
-      0.05em 0 var(--roy-r),
-      0.1em 0 var(--roy-o),
-      0.15em 0 var(--roy-y-band),
-      0.2em 0 var(--roy-b);
-  }
-  .royb-link-invert::after {
-    z-index: -1;
-    height: 100%;
-    background-image: linear-gradient(
-      90deg,
-      var(--roy-r) 0 25%,
-      var(--roy-o) 25% 50%,
-      var(--roy-y-band) 50% 75%,
-      var(--roy-b) 75% 100%
-    );
-  }
-  .royb-link-invert:hover {
-    color: var(--background);
   }
   @media (prefers-reduced-motion: reduce) {
     .royb-link {
       transition: none;
     }
+    .royb-link-highlight-royb .royb-char {
+      transition: none;
+    }
   }
-  .course-pill-o {
-    background-image: linear-gradient(
-      to top,
-      color-mix(in oklch, var(--roy-o) 13%, transparent) 0 45%,
-      transparent 45% 100%
-    );
+  .section-color-r {
+    --section-color: var(--roy-r);
   }
-  .course-pill-b {
-    background-image: linear-gradient(
-      to top,
-      color-mix(in oklch, var(--roy-b) 13%, transparent) 0 45%,
-      transparent 45% 100%
-    );
+  .section-color-o {
+    --section-color: var(--roy-o);
   }
-  .course-pill-y {
-    background-image: linear-gradient(
-      to top,
-      color-mix(in oklch, var(--roy-y-band) 20%, transparent) 0 45%,
-      transparent 45% 100%
-    );
+  .section-color-y {
+    --section-color: var(--roy-y);
   }
-  .course-pill-o:hover,
-  .course-pill-b:hover,
-  .course-pill-y:hover {
-    background-size: 100% 100%;
+  .section-color-b {
+    --section-color: var(--roy-b);
   }
 }

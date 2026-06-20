@@ -13,7 +13,6 @@ function HeroContactIndex() {
               <LabExternalLink
                 href={link.href}
                 external={link.external ?? true}
-                variant="sweep"
                 className="text-foreground"
               >
                 {link.text}
