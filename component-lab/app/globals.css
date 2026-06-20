@@ -317,7 +317,9 @@
   }
   .dither-link-hover {
     position: relative;
+    z-index: 0;
     display: inline-block;
+    isolation: isolate;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
     text-decoration-thickness: 1.5px;
@@ -328,13 +330,14 @@
     right: -0.05em;
     bottom: 0.02em;
     left: -0.05em;
+    z-index: -1;
     height: 0.55em;
     pointer-events: none;
     content: '';
     background-image:
       radial-gradient(
-        color-mix(in oklch, var(--roy-b) 16%, var(--background)) 0 1px,
-        transparent 1.15px
+        color-mix(in oklch, var(--roy-b) 16%, var(--background)) 0 0.8px,
+        transparent 0.95px
       ),
       linear-gradient(
         to top,
@@ -342,7 +345,7 @@
         color-mix(in oklch, var(--roy-b) 5%, var(--background))
       );
     background-size:
-      4px 4px,
+      3px 3px,
       100% 100%;
     opacity: 0;
   }
@@ -350,7 +353,7 @@
     text-decoration-line: none;
   }
   .dither-link-hover:hover::after {
-    animation: dither-link-fade 180ms steps(4, end) forwards;
+    opacity: 1;
   }
   .dither-static-field {
     background-image: radial-gradient(
@@ -358,15 +361,5 @@
       transparent 1.1px
     );
     background-size: 5px 5px;
-  }
-  @keyframes dither-link-fade {
-    0% {
-      clip-path: inset(0 100% 0 0);
-      opacity: 1;
-    }
-    100% {
-      clip-path: inset(0 0 0 0);
-      opacity: 1;
-    }
   }
 }

@@ -99,7 +99,7 @@ function OrderedDitherBar({
           const t = y / Math.max(1, fadeRows - cellSize);
           const density = Math.max(
             0,
-            0.92 * (1 - Math.log1p(t * 4) / Math.log1p(4))
+            0.94 * (1 - Math.log1p(Math.pow(t, 3.6) * 5) / Math.log1p(5))
           );
           const threshold =
             bayer4[Math.floor(y / cellSize) % 4][Math.floor(x / cellSize) % 4];
@@ -122,7 +122,7 @@ function OrderedDitherBar({
   return (
     <canvas
       ref={ref}
-      className={`h-16 w-full [image-rendering:pixelated] ${className}`}
+      className={`h-8 w-full [image-rendering:pixelated] ${className}`}
       aria-hidden
     />
   );
