@@ -63,6 +63,7 @@ export function RailItem({
       <div className="flex w-full min-w-0 flex-col gap-1">
         <div className="flex min-w-0 items-baseline justify-between gap-3">
           <span
+            data-testid="rail-title"
             className={cn(
               'min-w-0 text-sm leading-tight text-foreground',
               titleClassName

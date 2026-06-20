@@ -54,7 +54,11 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sora.variable} ${dmMono.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${sora.variable} ${dmMono.variable} bg-background`}
+    >
       <body className="bg-background font-sans text-foreground antialiased">
         <main className="mx-auto min-h-screen max-w-3xl px-4">
           <SiteHeader />

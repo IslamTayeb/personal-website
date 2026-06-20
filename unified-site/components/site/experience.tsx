@@ -75,9 +75,9 @@ function RailGroup({
                 <button
                   type="button"
                   onClick={onToggleExpanded}
-                  className={`w-fit font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground underline decoration-border underline-offset-4 ${accent.hover}`}
+                  className={`w-fit font-mono text-[10px] tracking-[0.08em] text-muted-foreground underline decoration-border underline-offset-4 ${accent.hover}`}
                 >
-                  Show more ({hiddenCount})
+                  show more
                 </button>
               ) : null
             }
@@ -109,15 +109,19 @@ function RailGroupBlock({
   onToggleExpanded: () => void;
 }) {
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center gap-2 pb-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+    <div
+      data-testid="experience-group"
+      data-group={group.kind}
+      className="flex flex-col"
+    >
+      <div className="grid grid-cols-[1.25rem_minmax(0,1fr)] items-center pb-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
         <ChevronDown
           className="relative bottom-px text-muted-foreground"
           size={11}
           strokeWidth={1.8}
           aria-hidden
         />
-        <span>
+        <span data-testid="experience-group-label" data-group={group.kind}>
           {group.kind} ({group.roles.length})
         </span>
       </div>

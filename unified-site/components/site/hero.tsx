@@ -84,11 +84,7 @@ export function Hero() {
             data-testid="hero-title"
             className="w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"
           >
-            (Islam M)
-            <sup className="ml-px text-sm font-bold leading-none tracking-normal">
-              2
-            </sup>{' '}
-            Tayeb
+            Islam Tayeb
           </h1>
           <div className="flex flex-col gap-3.5 md:grid md:grid-cols-[15rem_minmax(0,1fr)] md:gap-4">
             <div className="min-w-0 md:border-r md:border-border md:pr-4">
