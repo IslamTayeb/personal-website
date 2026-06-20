@@ -1,10 +1,4 @@
-export type LinkVariant =
-  | 'highlight'
-  | 'highlight-blue'
-  | 'highlight-royb'
-  | 'raw'
-  | 'raw-blue'
-  | 'raw-royb';
+export type LinkVariant = 'highlight-blue';
 
 export type TextSegment = {
   text: string;
@@ -185,40 +179,10 @@ export const heroParagraphs: TextSegment[][] = [
 
 export const linkHoverOptions: LinkHoverOption[] = [
   {
-    label: 'A — low highlight',
+    label: 'Selected — low highlight + blue text',
     tag: 'selected',
-    variant: 'highlight',
-    desc: 'Favorite direction: keeps the underline, then fills only the lower half of the text on hover.',
-  },
-  {
-    label: 'B — highlight + blue text',
-    tag: 'alternate',
     variant: 'highlight-blue',
-    desc: 'Same low highlight, but the hovered text moves to the section color.',
-  },
-  {
-    label: 'C — highlight + ROYB letters',
-    tag: 'experimental',
-    variant: 'highlight-royb',
-    desc: 'Same low highlight, with the characters cycling red, orange, yellow, blue by index.',
-  },
-  {
-    label: 'D — raw text',
-    tag: 'no highlight',
-    variant: 'raw',
-    desc: 'No highlight fill: hover only removes the underline immediately.',
-  },
-  {
-    label: 'E — raw + blue text',
-    tag: 'no highlight',
-    variant: 'raw-blue',
-    desc: 'No highlight fill: hover removes the underline and moves the text to the section color.',
-  },
-  {
-    label: 'F — raw + ROYB letters',
-    tag: 'no highlight',
-    variant: 'raw-royb',
-    desc: 'No highlight fill: hover removes the underline and cycles each character through ROYB.',
+    desc: 'Favorite direction: an immediate, lower-opacity highlight with hovered text moving to the section color.',
   },
 ];
 

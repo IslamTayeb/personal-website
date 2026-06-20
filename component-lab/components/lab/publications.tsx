@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { publications, type Publication } from '@/lib/lab-data';
 import { cn } from '@/lib/utils';
 import { Section, Variant } from './frame';
@@ -35,13 +36,11 @@ function PublicationRow({
           {publication.date}
         </span>
         <span className="flex min-w-0 flex-col gap-1">
-          <span className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-            <span className="text-sm font-medium leading-tight text-foreground">
-              {publication.title}
-            </span>
-            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-y">
-              {publication.type}
-            </span>
+          <span className="text-sm font-medium leading-tight text-foreground">
+            {publication.title}
+          </span>
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-y">
+            {publication.type}
           </span>
           <span className="text-xs leading-snug text-muted-foreground text-pretty">
             {publication.authors}
@@ -53,10 +52,22 @@ function PublicationRow({
           ) : null}
         </span>
         <span
-          className="font-mono text-xs leading-none text-muted-foreground"
+          className="flex items-start pt-0.5 text-muted-foreground"
           aria-hidden
         >
-          {open ? '⌄' : '›'}
+          {open ? (
+            <ChevronDown
+              className="relative bottom-px"
+              size={11}
+              strokeWidth={1.8}
+            />
+          ) : (
+            <ChevronRight
+              className="relative bottom-px"
+              size={11}
+              strokeWidth={1.8}
+            />
+          )}
         </span>
       </button>
 

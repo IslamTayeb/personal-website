@@ -256,12 +256,10 @@
     text-decoration-thickness: 1.5px;
     text-underline-offset: 0.18em;
   }
-  .royb-link-highlight,
-  .royb-link-highlight-blue,
-  .royb-link-highlight-royb {
+  .royb-link-highlight-blue {
     background-image: linear-gradient(
       to top,
-      color-mix(in oklch, var(--section-color, var(--roy-b)) 18%, transparent) 0
+      color-mix(in oklch, var(--section-color, var(--roy-b)) 11%, transparent) 0
         42%,
       transparent 42% 100%
     );
@@ -269,37 +267,13 @@
     background-position: left bottom;
     background-size: 0 100%;
   }
-  .royb-link-highlight:hover,
-  .royb-link-highlight-blue:hover,
-  .royb-link-highlight-royb:hover {
+  .royb-link-highlight-blue:hover {
     background-size: 100% 100%;
     text-decoration-color: var(--section-color, var(--roy-b));
     text-decoration-line: none;
   }
-  .royb-link-raw:hover,
-  .royb-link-raw-blue:hover,
-  .royb-link-raw-royb:hover {
-    text-decoration-line: none;
-  }
-  .royb-link-highlight-blue:hover,
-  .royb-link-raw-blue:hover {
+  .royb-link-highlight-blue:hover {
     color: var(--section-color, var(--roy-b));
-  }
-  .royb-link-highlight-royb:hover .royb-char-r,
-  .royb-link-raw-royb:hover .royb-char-r {
-    color: var(--roy-r);
-  }
-  .royb-link-highlight-royb:hover .royb-char-o,
-  .royb-link-raw-royb:hover .royb-char-o {
-    color: var(--roy-o);
-  }
-  .royb-link-highlight-royb:hover .royb-char-y,
-  .royb-link-raw-royb:hover .royb-char-y {
-    color: var(--roy-y);
-  }
-  .royb-link-highlight-royb:hover .royb-char-b,
-  .royb-link-raw-royb:hover .royb-char-b {
-    color: var(--roy-b);
   }
   .section-color-r {
     --section-color: var(--roy-r);
@@ -312,39 +286,6 @@
   }
   .section-color-b {
     --section-color: var(--roy-b);
-  }
-  .dither-edge {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(
-      90deg,
-      var(--roy-r) 0% 25%,
-      var(--roy-o) 25% 50%,
-      var(--roy-y-band) 50% 75%,
-      var(--roy-b) 75% 100%
-    );
-  }
-  .dither-edge::before,
-  .dither-edge::after {
-    position: absolute;
-    right: 0;
-    left: 0;
-    height: 18px;
-    pointer-events: none;
-    content: '';
-    background-image: radial-gradient(
-      var(--background) 0 1px,
-      transparent 1.1px
-    );
-    background-size: 4px 4px;
-  }
-  .dither-edge::before {
-    top: 0;
-    mask-image: linear-gradient(to bottom, #000 0%, transparent 90%);
-  }
-  .dither-edge::after {
-    bottom: 0;
-    mask-image: linear-gradient(to top, #000 0%, transparent 90%);
   }
   .dither-field {
     background-image:
@@ -374,25 +315,42 @@
       1px 100%;
     background-repeat: repeat, no-repeat;
   }
-  .dither-link {
-    background-image: radial-gradient(
-      color-mix(in oklch, var(--roy-b) 45%, transparent) 0 1px,
-      transparent 1.1px
-    );
-    background-position: left bottom;
-    background-size: 4px 4px;
+  .dither-link-hover {
+    position: relative;
+    display: inline-block;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.18em;
   }
-  .dither-tile {
+  .dither-link-hover::after {
+    position: absolute;
+    right: -0.05em;
+    bottom: 0.02em;
+    left: -0.05em;
+    height: 0.55em;
+    pointer-events: none;
+    content: '';
     background-image:
-      radial-gradient(currentColor 0 1px, transparent 1.1px),
+      radial-gradient(
+        color-mix(in oklch, var(--roy-b) 16%, var(--background)) 0 1px,
+        transparent 1.15px
+      ),
       linear-gradient(
-        135deg,
-        color-mix(in oklch, currentColor 12%, transparent),
-        transparent
+        to top,
+        color-mix(in oklch, var(--roy-b) 5%, var(--background)),
+        color-mix(in oklch, var(--roy-b) 5%, var(--background))
       );
     background-size:
-      5px 5px,
+      4px 4px,
       100% 100%;
+    opacity: 0;
+  }
+  .dither-link-hover:hover {
+    text-decoration-line: none;
+  }
+  .dither-link-hover:hover::after {
+    animation: dither-link-fade 180ms steps(4, end) forwards;
   }
   .dither-static-field {
     background-image: radial-gradient(
@@ -400,5 +358,15 @@
       transparent 1.1px
     );
     background-size: 5px 5px;
+  }
+  @keyframes dither-link-fade {
+    0% {
+      clip-path: inset(0 100% 0 0);
+      opacity: 1;
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
   }
 }

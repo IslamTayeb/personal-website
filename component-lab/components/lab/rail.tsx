@@ -37,7 +37,7 @@ export function RailItem({
   descriptionClassName?: string;
 }) {
   return (
-    <li className={cn('relative flex gap-4 pb-2.5 last:pb-0', className)}>
+    <li className={cn('relative flex gap-4 pb-1.5 last:pb-0', className)}>
       {connector !== 'none' ? (
         <span
           className={cn(
@@ -56,7 +56,7 @@ export function RailItem({
         />
       ) : null}
       <span className={cn('relative mt-1 h-2 w-2 shrink-0', dotClassName)} />
-      <div className="flex w-full min-w-0 flex-col gap-0.5">
+      <div className="flex w-full min-w-0 flex-col gap-1">
         <div className="flex min-w-0 items-baseline justify-between gap-3">
           <span
             className={cn(
@@ -82,7 +82,7 @@ export function RailItem({
             {description}
           </p>
         ) : null}
-        {footer ? <div className="mt-0.5">{footer}</div> : null}
+        {footer ? <div>{footer}</div> : null}
       </div>
     </li>
   );

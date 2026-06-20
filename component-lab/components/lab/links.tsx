@@ -2,38 +2,10 @@ import type { ReactNode } from 'react';
 import { linkHoverOptions, type LinkVariant } from '@/lib/lab-data';
 import { Section, Variant } from './frame';
 
-const roybCharClasses = [
-  'royb-char-r',
-  'royb-char-o',
-  'royb-char-y',
-  'royb-char-b',
-];
-
-function RoybLetters({ children }: { children: ReactNode }) {
-  if (typeof children !== 'string') {
-    return children;
-  }
-
-  let colorIndex = 0;
-
-  return Array.from(children).map((char, index) => {
-    const isSpace = /\s/.test(char);
-    const colorClass = isSpace
-      ? ''
-      : roybCharClasses[colorIndex++ % roybCharClasses.length];
-
-    return (
-      <span key={`${char}-${index}`} className={`royb-char ${colorClass}`}>
-        {isSpace ? '\u00a0' : char}
-      </span>
-    );
-  });
-}
-
 export function LabExternalLink({
   href,
   children,
-  variant = 'highlight',
+  variant = 'highlight-blue',
   className = '',
   external = true,
 }: {
@@ -50,11 +22,7 @@ export function LabExternalLink({
       rel={external ? 'noreferrer external' : undefined}
       className={`royb-link royb-link-${variant} ${className}`}
     >
-      {variant === 'highlight-royb' || variant === 'raw-royb' ? (
-        <RoybLetters>{children}</RoybLetters>
-      ) : (
-        children
-      )}
+      {children}
     </a>
   );
 }
@@ -97,7 +65,7 @@ export function LinksSection() {
       title="Links — ROYB hover tests"
       accent="text-roy-b"
       cols={1}
-      note="Selected direction is the low highlight. Hover is immediate and drops the underline; the second set repeats the same text-color tests without any highlight fill."
+      note="Selected direction is the lower-opacity highlight plus section-color text on hover. Other link hover variants are removed until this direction feels wrong."
     >
       {linkHoverOptions.map((option) => (
         <Variant key={option.label} label={option.label} tag={option.tag}>
