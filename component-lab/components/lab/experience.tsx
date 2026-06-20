@@ -88,11 +88,11 @@ function RailGroup({
           <li
             key={`${group.kind}-${role.org}-${role.date}`}
             className={`relative flex gap-4 ${
-              showMoreBelow ? 'pb-2' : 'pb-7 last:pb-0'
+              showMoreBelow ? 'pb-1' : 'pb-4 last:pb-0'
             }`}
           >
             {index < roles.length - 1 ? (
-              <span className="absolute left-[3.5px] top-5 bottom-1 w-px bg-border" />
+              <span className="absolute left-[3.5px] top-5 bottom-1.5 w-px bg-border" />
             ) : null}
             {showMoreBelow ? (
               <span
@@ -111,7 +111,7 @@ function RailGroup({
                   {role.date}
                 </span>
               </div>
-              <p className="max-w-sm text-xs leading-relaxed text-muted-foreground text-pretty">
+              <p className="text-xs leading-snug text-muted-foreground text-pretty md:whitespace-nowrap">
                 {role.desc}
               </p>
             </div>
