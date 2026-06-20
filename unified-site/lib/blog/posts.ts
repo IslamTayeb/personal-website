@@ -1,12 +1,14 @@
 import { cache } from 'react';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
+import { getBlogSummary } from '@/data/blog-summaries';
 import { validatePostManifest, type PostManifest } from './manifest';
 import { renderMarkdown, type Heading } from './markdown';
 
 export type BlogPost = {
   manifest: PostManifest;
   sourceMarkdown: string;
+  summary: string;
   html: string;
   headings: Heading[];
   readingMeta: string;
@@ -41,6 +43,7 @@ async function loadPostsUncached() {
       return {
         manifest,
         sourceMarkdown,
+        summary: getBlogSummary(manifest.slug),
         html: rendered.html,
         headings: rendered.headings,
         readingMeta: rendered.readingMeta,

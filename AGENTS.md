@@ -36,12 +36,19 @@ unless there is an explicit implementation decision.
 to combine the current personal site content and APM Overflow writing into one
 Next.js app without deployment wiring. Preserve the component-lab visual
 language: Sora + DM Mono, narrow document width, sharp borders, paper/ink base,
-the `islam / blog` selector, the top ROYB bar, and strong ROYB accents. Keep it
+the `islam / blog` selector, the top ROYB bar, and strong ROYB accents. Use
+borders as structural rules, not default boxes around every section. Keep it
 motionless: no animations, transitions, render-time measurements, resize
 observers, canvas/dither experiments, autoplay media, or animation libraries.
 The desired feel is elevated minimalism with real density: whitespace should
 separate ideas, not inflate the page. Prefer compact rows, concise copy, and only
 information that earns its place.
+
+For `unified-site/`, any description/summary/excerpt shown in a compact list,
+rail, course detail, or preview must render as a single line at the current
+desktop document width. Use concise source copy plus explicit one-line CSS
+(`truncate`/nowrap/hidden overflow) and visual tests; do not rely on luck or
+copy length alone.
 
 ## Main site commands
 

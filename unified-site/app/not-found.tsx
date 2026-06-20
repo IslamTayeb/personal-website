@@ -10,7 +10,7 @@ export default function NotFound() {
         Nothing here.
       </h1>
       <p className="mt-2 text-sm text-muted-foreground">
-        The page does not exist in this unified prototype.
+        This page does not exist.
       </p>
       <Link
         href="/"

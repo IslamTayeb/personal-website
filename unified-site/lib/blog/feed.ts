@@ -26,7 +26,7 @@ export async function buildAtomFeed() {
     <link href="${href}" rel="alternate" />
     <published>${datetime(post.manifest.publishedAt)}</published>
     <updated>${datetime(post.manifest.updatedAt)}</updated>
-    <summary>${escapeHtml(post.manifest.description)}</summary>
+    <summary>${escapeHtml(post.summary)}</summary>
   </entry>`;
     })
     .join('\n  ')}

@@ -67,7 +67,14 @@ function RailGroup({
               )
             }
             meta={role.date}
-            description={`${role.role}. ${role.desc}`}
+            description={
+              <>
+                <strong className="font-medium text-foreground/90">
+                  {role.role}
+                </strong>
+                . {role.desc}
+              </>
+            }
             connector={connector}
             connectorClassName={showMoreBelow ? 'bottom-6' : undefined}
             footer={
@@ -138,13 +145,7 @@ export function Experience() {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <Section
-      id="experience"
-      index="2"
-      title="Experience"
-      accent="text-roy-o"
-      note="Grouped rail with Research first, Engineering second, and inline see more/see less."
-    >
+    <Section id="experience" index="1" title="Experience" accent="text-roy-o">
       <BorderedPanel>
         <div className="flex w-full flex-col gap-3.5">
           {experienceGroups.map((group) => (

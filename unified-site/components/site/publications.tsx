@@ -6,10 +6,9 @@ export function Publications() {
   return (
     <Section
       id="publications"
-      index="4"
+      index="2"
       title="Publications"
       accent="text-roy-y"
-      note="Current publication content in the lab accordion treatment."
     >
       <BorderedPanel>
         <PublicationDisclosure

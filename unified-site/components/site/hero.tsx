@@ -1,7 +1,6 @@
 import { contactLinks } from '@/data/links';
 import { heroParagraphs, profile, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
-import { BorderedPanel, Section } from '@/components/primitives/section';
 
 function ContactIndex() {
   return (
@@ -43,10 +42,7 @@ function HeroSegment({ segment }: { segment: TextSegment }) {
   }
 
   return (
-    <ExternalLink
-      href={segment.href}
-      section={segment.external === false ? 'r' : 'b'}
-    >
+    <ExternalLink href={segment.href} section="r">
       {segment.text}
     </ExternalLink>
   );
@@ -54,7 +50,7 @@ function HeroSegment({ segment }: { segment: TextSegment }) {
 
 function HeroStory() {
   return (
-    <div className="flex flex-col gap-1.5 text-sm leading-snug text-foreground text-pretty">
+    <div className="flex flex-col gap-1.5 text-sm leading-snug text-foreground">
       {heroParagraphs.map((paragraph, paragraphIndex) => (
         <p key={paragraphIndex}>
           {paragraph.map((segment, segmentIndex) => (
@@ -71,29 +67,25 @@ function HeroStory() {
 
 export function Hero() {
   return (
-    <Section
+    <section
       id="hero"
-      index="1"
-      title="Hero"
-      accent="text-roy-o"
-      note="Portfolio copy and contact metadata in the component-lab document voice."
+      data-testid="hero-section"
+      className="border-t border-border py-5 md:py-6"
     >
-      <BorderedPanel>
-        <div className="flex w-full flex-col gap-2.5">
-          <h1
-            data-testid="hero-title"
-            className="w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"
-          >
-            Islam Tayeb
-          </h1>
-          <div className="flex flex-col gap-3.5 md:grid md:grid-cols-[15rem_minmax(0,1fr)] md:gap-4">
-            <div className="min-w-0 md:border-r md:border-border md:pr-4">
-              <ContactIndex />
-            </div>
-            <HeroStory />
+      <div className="flex w-full flex-col gap-2">
+        <h1
+          data-testid="hero-title"
+          className="w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"
+        >
+          Islam Tayeb
+        </h1>
+        <div className="flex flex-col gap-3 md:grid md:grid-cols-[13rem_minmax(0,1fr)] md:gap-4">
+          <div className="min-w-0 md:border-r md:border-border md:pr-4">
+            <ContactIndex />
           </div>
+          <HeroStory />
         </div>
-      </BorderedPanel>
-    </Section>
+      </div>
+    </section>
   );
 }

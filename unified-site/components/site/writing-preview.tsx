@@ -8,13 +8,7 @@ export async function WritingPreview() {
   const posts = (await getListedPosts()).slice(0, 3);
 
   return (
-    <Section
-      id="writing"
-      index="6"
-      title="Writing"
-      accent="text-roy-b"
-      note="APM Overflow becomes the writing surface inside islamtayeb.dev."
-    >
+    <Section id="writing" index="4" title="Writing" accent="text-roy-b">
       <BorderedPanel>
         <div className="flex w-full flex-col gap-3.5">
           <RailList>
@@ -32,7 +26,7 @@ export async function WritingPreview() {
                   </ExternalLink>
                 }
                 meta={formatDate(post.manifest.publishedAt)}
-                description={post.manifest.description}
+                description={post.summary}
                 connector={index < posts.length - 1 ? 'solid' : 'none'}
               />
             ))}

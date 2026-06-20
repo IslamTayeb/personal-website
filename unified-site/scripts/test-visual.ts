@@ -53,6 +53,7 @@ async function assertHomeMeasurements(page: Page) {
     const detail = document.querySelector('[data-testid="course-detail"]');
     const section = document.querySelector('section');
     const panel = document.querySelector('[data-testid="bordered-panel"]');
+    const panelStyle = panel ? getComputedStyle(panel) : null;
     const connectors = [
       ...document.querySelectorAll('[data-testid="rail-connector"]'),
     ];
@@ -85,6 +86,8 @@ async function assertHomeMeasurements(page: Page) {
       heroTitleText: title?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       titleRight: title?.getBoundingClientRect().right ?? 0,
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      hasProjectsSection: Boolean(document.querySelector('#projects')),
       hasThemeToggle: Boolean(themeToggle),
       viewportWidth: window.innerWidth,
       courseDetailHeight: detail?.getBoundingClientRect().height ?? 0,
@@ -98,6 +101,9 @@ async function assertHomeMeasurements(page: Page) {
         : 0,
       panelPaddingTop: panel
         ? Number.parseFloat(getComputedStyle(panel).paddingTop)
+        : 0,
+      panelBorderTopWidth: panelStyle
+        ? Number.parseFloat(panelStyle.borderTopWidth)
         : 0,
       railTopGap:
         firstConnector && firstDot
@@ -126,6 +132,22 @@ async function assertHomeMeasurements(page: Page) {
     'hero title should not overflow'
   );
   assert.ok(measurements.hasThemeToggle, 'header should include theme toggle');
+  assert.ok(
+    !measurements.hasProjectsSection,
+    'projects section should not render'
+  );
+  for (const phrase of [
+    'unified prototype',
+    'component-lab',
+    'One document surface',
+    'Portfolio sections',
+    'Hero',
+  ]) {
+    assert.ok(
+      !measurements.bodyText.includes(phrase),
+      `public page should not leak internal copy: ${phrase}`
+    );
+  }
   for (const label of ['experience', 'publications', 'courses', 'writing']) {
     assert.ok(
       !measurements.headerText.includes(label),
@@ -139,7 +161,7 @@ async function assertHomeMeasurements(page: Page) {
   );
   assert.equal(
     measurements.courseDetailHeight,
-    33,
+    22,
     'course detail height should be stable'
   );
   assert.ok(
@@ -149,6 +171,11 @@ async function assertHomeMeasurements(page: Page) {
   assert.ok(
     measurements.panelPaddingTop <= 16,
     'panel padding should stay compact'
+  );
+  assert.equal(
+    measurements.panelBorderTopWidth,
+    0,
+    'section panels should not draw full boxes'
   );
 
   if (measurements.railTopGap !== null && measurements.railBottomGap !== null) {
@@ -173,6 +200,38 @@ async function assertHomeMeasurements(page: Page) {
       `${group.group} label should align to first rail title: ${group.labelLeft} / ${group.railTitleLeft}`
     );
   }
+}
+
+async function assertVisibleOneLineDescriptions(page: Page) {
+  const failures = await page.evaluate(() =>
+    [...document.querySelectorAll<HTMLElement>('[data-one-line="true"]')]
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+
+        return rect.width > 0 && rect.height > 0;
+      })
+      .map((element) => {
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        const lineHeight = Number.parseFloat(style.lineHeight);
+
+        return {
+          text: element.textContent?.replace(/\s+/g, ' ').trim(),
+          whiteSpace: style.whiteSpace,
+          overflowX: style.overflowX,
+          height: Number(rect.height.toFixed(2)),
+          lineHeight,
+        };
+      })
+      .filter(
+        (item) =>
+          item.whiteSpace !== 'nowrap' ||
+          item.overflowX !== 'hidden' ||
+          item.height > item.lineHeight * 1.5
+      )
+  );
+
+  assert.deepEqual(failures, [], 'visible descriptions should be one line');
 }
 
 async function assertCourseHeightIsStable(page: Page) {
@@ -253,6 +312,7 @@ async function main() {
     await page.goto(baseUrl, { waitUntil: 'networkidle' });
     await screenshot(page, 'home-desktop');
     await assertHomeMeasurements(page);
+    await assertVisibleOneLineDescriptions(page);
     await assertThemeToggleIsStable(page);
     await assertCourseHeightIsStable(page);
     await screenshot(page, 'home-course-deselected');
@@ -263,6 +323,7 @@ async function main() {
     await page
       .getByRole('button', { name: /Machine learning for predicting/ })
       .click();
+    await assertVisibleOneLineDescriptions(page);
     await screenshot(page, 'home-publication-open');
 
     const mobile = await browser.newPage({
@@ -275,6 +336,7 @@ async function main() {
       viewport: { width: 1280, height: 900 },
     });
     await blog.goto(`${baseUrl}/blog`, { waitUntil: 'networkidle' });
+    await assertVisibleOneLineDescriptions(blog);
     await screenshot(blog, 'blog-index');
 
     const [firstPost] = await getListedPosts();
@@ -284,6 +346,7 @@ async function main() {
     await article.goto(`${baseUrl}/blog/${firstPost.manifest.slug}`, {
       waitUntil: 'networkidle',
     });
+    await assertVisibleOneLineDescriptions(article);
     await screenshot(article, 'blog-article');
 
     console.log(`visual ok: screenshots written to ${screenshotDir}`);

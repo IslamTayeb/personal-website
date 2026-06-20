@@ -32,10 +32,10 @@ export async function generateMetadata({
 
   return {
     title: post.manifest.title,
-    description: post.manifest.description,
+    description: post.summary,
     openGraph: {
       title: post.manifest.title,
-      description: post.manifest.description,
+      description: post.summary,
       type: 'article',
       publishedTime: datetime(post.manifest.publishedAt),
       modifiedTime: datetime(post.manifest.updatedAt),
@@ -70,8 +70,11 @@ export default async function BlogPostPage({ params }: PageProps) {
         <h1 className="text-2xl font-semibold leading-tight tracking-tight text-foreground text-balance md:text-3xl">
           {post.manifest.title}
         </h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground text-pretty">
-          {post.manifest.description}
+        <p
+          data-one-line="true"
+          className="max-w-2xl truncate text-sm leading-relaxed text-muted-foreground"
+        >
+          {post.summary}
         </p>
         {post.manifest.codeLink ? (
           <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">

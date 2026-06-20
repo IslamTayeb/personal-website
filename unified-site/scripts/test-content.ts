@@ -80,6 +80,11 @@ async function main() {
       post.manifest.description,
       `${post.manifest.slug} needs description`
     );
+    assert.ok(post.summary, `${post.manifest.slug} needs a public summary`);
+    assert.ok(
+      post.summary.length <= 96,
+      `${post.manifest.slug} summary should stay concise`
+    );
     assert.ok(
       post.html.includes('<p') || post.html.includes('<h'),
       `${post.manifest.slug} should render article content`

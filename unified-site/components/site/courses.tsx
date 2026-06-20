@@ -4,13 +4,7 @@ import { courses, defaultCourseCode, teaching } from '@/data/courses';
 
 export function Courses() {
   return (
-    <Section
-      id="courses"
-      index="5"
-      title="Courses"
-      accent="text-roy-y"
-      note="Real course and teaching content with locked-state and selection behavior preserved."
-    >
+    <Section id="courses" index="3" title="Courses" accent="text-roy-y">
       <BorderedPanel>
         <CourseSelector
           coursework={courses}

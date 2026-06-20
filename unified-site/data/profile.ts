@@ -7,7 +7,7 @@ export type TextSegment = {
 };
 
 export const profile = {
-  name: '(Islam M)² Tayeb',
+  name: 'Islam Tayeb',
   location: 'Durham, NC',
   hometown: 'Egypt',
   email: 'islam.tayeb@duke.edu',

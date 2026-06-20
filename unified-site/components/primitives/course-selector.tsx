@@ -64,7 +64,7 @@ function CourseButton({
       title={course.locked ? 'Locked for now' : course.desc}
       onClick={onToggle}
       className={cn(
-        'relative inline-flex items-center border px-1.5 py-0.5 font-mono text-[11px] leading-tight',
+        'relative inline-flex max-w-full items-center border px-1.5 py-0.5 font-mono text-[11px] leading-tight',
         course.locked
           ? `${styles.locked} border-dashed`
           : active
@@ -72,7 +72,7 @@ function CourseButton({
             : `${styles.inactive} border-dashed`
       )}
     >
-      <span>{course.name}</span>
+      <span className="truncate whitespace-nowrap">{course.name}</span>
       {course.locked ? (
         <span className="absolute inset-0 flex items-center justify-center bg-background/35">
           <Lock className="h-3 w-3 text-muted-foreground/45" aria-hidden />
@@ -167,20 +167,22 @@ export function CourseSelector({
       <div
         data-testid="course-detail"
         className={cn(
-          'flex h-[33px] flex-col justify-center border-l-2 pl-3',
+          'flex h-[22px] flex-col justify-center border-l-2 pl-3',
           activeItem
             ? categoryStyles[activeItem.category].border
             : 'border-border'
         )}
       >
         {activeItem ? (
-          <p className="text-xs leading-snug text-muted-foreground text-pretty">
+          <p
+            data-one-line="true"
+            className="truncate text-xs leading-snug text-muted-foreground"
+          >
             {activeItem.desc || 'Details pending.'}
           </p>
         ) : (
-          <div className="grid gap-1" aria-label="No course selected">
-            <span className="h-3 w-2/3 bg-muted" />
-            <span className="h-3 w-1/2 bg-muted" />
+          <div aria-label="No course selected">
+            <span className="block h-3 w-2/3 bg-muted" />
           </div>
         )}
       </div>

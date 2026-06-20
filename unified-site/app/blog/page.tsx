@@ -27,20 +27,16 @@ export default async function BlogIndexPage() {
         </div>
         <RoybBand />
         <h1 className="max-w-2xl text-xl font-semibold leading-snug tracking-tight text-foreground text-balance md:text-2xl">
-          APM Overflow, folded into the same document system.
+          Notes on agents, taste, and systems.
         </h1>
-        <p className="max-w-2xl text-sm leading-relaxed text-foreground/80 text-pretty">
-          Agent systems, taste, tooling, benchmarks, and small infrastructure
-          notes. Same source Markdown; new surface.
+        <p
+          data-one-line="true"
+          className="max-w-2xl truncate text-sm leading-relaxed text-foreground/80"
+        >
+          Small essays and research notes, newest first.
         </p>
       </header>
-      <Section
-        id="posts"
-        index="0"
-        title="Index"
-        accent="text-roy-b"
-        note="Listed posts from apmoverflow/content/posts, sorted newest first."
-      >
+      <Section id="posts" index="0" title="Index" accent="text-roy-b">
         <BorderedPanel>
           <ol className="divide-y divide-border">
             {posts.map((post, index) => (
@@ -69,8 +65,11 @@ export default async function BlogIndexPage() {
                       </span>
                     ) : null}
                   </div>
-                  <p className="mt-1 text-xs leading-snug text-muted-foreground text-pretty">
-                    {post.manifest.description}
+                  <p
+                    data-one-line="true"
+                    className="mt-1 truncate text-xs leading-snug text-muted-foreground"
+                  >
+                    {post.summary}
                   </p>
                 </div>
               </li>

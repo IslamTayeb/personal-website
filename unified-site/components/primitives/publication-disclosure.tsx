@@ -78,7 +78,9 @@ function PublicationRow({
           <div className="flex min-w-0 flex-col gap-2">
             <div className="grid gap-1 text-xs leading-snug text-muted-foreground text-pretty">
               {publication.desc.map((paragraph) => (
-                <p key={paragraph}>{paragraph}</p>
+                <p key={paragraph} data-one-line="true" className="truncate">
+                  {paragraph}
+                </p>
               ))}
             </div>
             <div className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
