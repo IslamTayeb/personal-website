@@ -8,10 +8,16 @@ function WritingRail() {
     <RailList>
       {writingPosts.map((post, index) => {
         const hasDesc = Boolean(post.desc?.trim());
+        const dotClassName = post.draft
+          ? 'border border-roy-b bg-background'
+          : post.isNew
+            ? 'bg-roy-b'
+            : 'bg-foreground';
+
         return (
           <RailItem
             key={post.title}
-            dotClassName={post.isNew ? 'bg-roy-b' : 'bg-foreground'}
+            dotClassName={dotClassName}
             title={
               <LabExternalLink
                 href={post.href}

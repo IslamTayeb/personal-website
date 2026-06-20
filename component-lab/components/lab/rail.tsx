@@ -37,7 +37,7 @@ export function RailItem({
   descriptionClassName?: string;
 }) {
   return (
-    <li className={cn('relative flex gap-4 pb-1.5 last:pb-0', className)}>
+    <li className={cn('relative flex gap-4 pb-1 last:pb-0', className)}>
       {connector !== 'none' ? (
         <span
           className={cn(

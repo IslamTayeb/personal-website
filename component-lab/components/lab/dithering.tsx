@@ -31,7 +31,7 @@ const ditherOptions: DitherOption[] = [
   {
     label: 'D — dither-fade link highlight',
     kind: 'link',
-    desc: 'A lower-opacity dot-screen highlight that fades in only on hover, separate from the regular link style.',
+    desc: 'A lower-opacity dot-screen highlight that appears on hover, separate from the regular link style.',
   },
   {
     label: 'E — active dither field',
@@ -68,7 +68,7 @@ function OrderedDitherBar({
       const width = Math.max(1, Math.round(rect.width));
       const height = Math.max(1, Math.round(rect.height));
       const dpr = window.devicePixelRatio || 1;
-      const cellSize = 3;
+      const cellSize = 1.5;
       const fadeRows = height;
 
       canvas.width = width * dpr;
@@ -96,7 +96,10 @@ function OrderedDitherBar({
         ctx.fillStyle = color;
 
         for (let y = 0; y < height; y += cellSize) {
-          const t = y / Math.max(1, fadeRows - cellSize);
+          const t = Math.min(
+            1,
+            (y + cellSize / 2) / Math.max(1, fadeRows * 0.72)
+          );
           const density = Math.max(
             0,
             0.94 * (1 - Math.log1p(Math.pow(t, 3.6) * 5) / Math.log1p(5))
@@ -122,7 +125,7 @@ function OrderedDitherBar({
   return (
     <canvas
       ref={ref}
-      className={`h-8 w-full [image-rendering:pixelated] ${className}`}
+      className={`h-4 w-full [image-rendering:pixelated] ${className}`}
       aria-hidden
     />
   );

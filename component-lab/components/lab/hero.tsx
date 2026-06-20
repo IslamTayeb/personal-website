@@ -46,7 +46,7 @@ function HeroSegment({ segment }: { segment: TextSegment }) {
 
 function HeroStory() {
   return (
-    <div className="order-1 flex flex-col gap-2 text-sm leading-snug text-foreground text-pretty md:order-2">
+    <div className="flex flex-col gap-2 text-sm leading-snug text-foreground text-pretty">
       {heroParagraphs.map((paragraph, paragraphIndex) => (
         <p key={paragraphIndex}>
           {paragraph.map((segment, segmentIndex) => (
@@ -79,11 +79,11 @@ export function HeroSection() {
             </sup>{' '}
             Tayeb
           </h3>
-          <div className="flex flex-col gap-4 md:grid md:grid-cols-[10.5rem_1fr] md:gap-5">
-            <HeroStory />
-            <div className="order-2 h-full md:order-1 md:border-r md:border-border md:pr-5">
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-[max-content_1fr] md:gap-5">
+            <div className="md:w-max md:border-r md:border-border md:pr-5">
               <HeroContactIndex />
             </div>
+            <HeroStory />
           </div>
         </div>
       </Variant>

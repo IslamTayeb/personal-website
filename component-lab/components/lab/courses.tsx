@@ -58,10 +58,12 @@ function CourseButton({
   course,
   active,
   onSelect,
+  onDeselect,
 }: {
   course: Course;
   active: boolean;
   onSelect: () => void;
+  onDeselect: () => void;
 }) {
   const styles = categoryStyles[course.category];
 
@@ -72,7 +74,12 @@ function CourseButton({
       data-locked={course.locked ? 'true' : undefined}
       aria-pressed={active}
       title={course.locked ? 'Locked for now' : course.desc}
-      onClick={onSelect}
+      onClick={() => {
+        if (!active) {
+          onSelect();
+        }
+      }}
+      onDoubleClick={onDeselect}
       className={`relative inline-flex items-center border px-1.5 py-0.5 font-mono text-[11px] leading-tight ${
         course.locked
           ? `${styles.locked} border-dashed`
@@ -96,11 +103,13 @@ function CourseCluster({
   items,
   active,
   onSelect,
+  onDeselect,
 }: {
   label: string;
   items: Course[];
-  active: string;
+  active: string | null;
   onSelect: (code: string) => void;
+  onDeselect: () => void;
 }) {
   return (
     <div className="flex flex-col gap-2">
@@ -114,6 +123,7 @@ function CourseCluster({
             course={course}
             active={active === course.code}
             onSelect={() => onSelect(course.code)}
+            onDeselect={onDeselect}
           />
         ))}
       </div>
@@ -135,11 +145,11 @@ function CategoryLegend() {
 }
 
 export function CoursesSection() {
-  const [active, setActive] = useState(defaultCourseCode);
+  const [active, setActive] = useState<string | null>(defaultCourseCode);
   const allItems = [...courseItems, ...teaching];
-  const activeItem =
-    allItems.find((course) => course.code === active) ??
-    allItems.find((course) => !course.locked);
+  const activeItem = active
+    ? allItems.find((course) => course.code === active)
+    : undefined;
 
   return (
     <Section
@@ -163,33 +173,34 @@ export function CoursesSection() {
             items={courseItems}
             active={active}
             onSelect={setActive}
+            onDeselect={() => setActive(null)}
           />
           <CourseCluster
             label="Teaching"
             items={teaching}
             active={active}
             onSelect={setActive}
+            onDeselect={() => setActive(null)}
           />
 
-          {activeItem ? (
-            <div
-              className={`border-l-2 pl-3 ${categoryStyles[activeItem.category].border}`}
-            >
-              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <span className="text-sm font-medium text-foreground">
-                  {activeItem.name}
-                </span>
-                <span
-                  className={`font-mono text-[10px] uppercase tracking-[0.12em] ${categoryStyles[activeItem.category].text}`}
-                >
-                  {activeItem.category}
-                </span>
-              </div>
-              <p className="mt-1 text-xs leading-snug text-muted-foreground text-pretty">
+          <div
+            className={`min-h-[33px] border-l-2 pl-3 ${
+              activeItem
+                ? categoryStyles[activeItem.category].border
+                : 'border-border'
+            }`}
+          >
+            {activeItem ? (
+              <p className="text-xs leading-snug text-muted-foreground text-pretty">
                 {activeItem.desc || 'Details pending.'}
               </p>
-            </div>
-          ) : null}
+            ) : (
+              <div className="grid gap-1">
+                <span className="h-3 w-2/3 bg-muted" />
+                <span className="h-3 w-1/2 bg-muted" />
+              </div>
+            )}
+          </div>
         </div>
       </Variant>
     </Section>

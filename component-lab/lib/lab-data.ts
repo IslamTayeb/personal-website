@@ -39,6 +39,7 @@ export type BlogPost = {
   title: string;
   href: string;
   isNew?: boolean;
+  draft?: boolean;
   desc?: string;
 };
 
