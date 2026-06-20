@@ -24,29 +24,24 @@ const groupAccents: Record<string, { hover: string }> = {
 function RailGroup({
   group,
   expanded,
-  onToggleExpanded,
 }: {
   group: ExperienceGroup;
   expanded: boolean;
-  onToggleExpanded: () => void;
 }) {
   const roles = expanded
     ? group.roles
     : group.roles.slice(0, group.visibleCount);
-  const hiddenCount = Math.max(0, group.roles.length - group.visibleCount);
-  const hasHidden = hiddenCount > 0;
-  const accent = groupAccents[group.dot] ?? groupAccents['bg-roy-o'];
+  const hasHidden = group.roles.length > group.visibleCount;
   const showRoleLabel = group.kind !== 'Engineering';
 
   return (
     <RailList>
       {roles.map((role, index) => {
         const isLastVisibleRole = index === roles.length - 1;
-        const showMoreBelow = isLastVisibleRole && hasHidden && !expanded;
         const connector =
           index < roles.length - 1
             ? 'solid'
-            : showMoreBelow
+            : isLastVisibleRole && hasHidden && !expanded
               ? 'dashed'
               : 'none';
 
@@ -81,32 +76,9 @@ function RailGroup({
               )
             }
             connector={connector}
-            connectorClassName={showMoreBelow ? 'bottom-6' : undefined}
-            footer={
-              showMoreBelow ? (
-                <button
-                  type="button"
-                  onClick={onToggleExpanded}
-                  className={`w-fit font-mono text-[10px] tracking-[0.08em] text-muted-foreground underline decoration-border underline-offset-4 ${accent.hover}`}
-                >
-                  show more
-                </button>
-              ) : null
-            }
           />
         );
       })}
-      {hasHidden && expanded ? (
-        <li className="pl-6 pt-0.5">
-          <button
-            type="button"
-            onClick={onToggleExpanded}
-            className={`w-fit font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground underline decoration-border underline-offset-4 ${accent.hover}`}
-          >
-            Show less
-          </button>
-        </li>
-      ) : null}
     </RailList>
   );
 }
@@ -120,6 +92,9 @@ function RailGroupBlock({
   expanded: boolean;
   onToggleExpanded: () => void;
 }) {
+  const hasHidden = group.roles.length > group.visibleCount;
+  const accent = groupAccents[group.dot] ?? groupAccents['bg-roy-o'];
+
   return (
     <div
       data-testid="experience-group"
@@ -137,11 +112,19 @@ function RailGroupBlock({
           {group.kind} ({group.roles.length})
         </span>
       </div>
-      <RailGroup
-        group={group}
-        expanded={expanded}
-        onToggleExpanded={onToggleExpanded}
-      />
+      <RailGroup group={group} expanded={expanded} />
+      {hasHidden ? (
+        <div className="flex justify-end pt-1">
+          <button
+            type="button"
+            onClick={onToggleExpanded}
+            data-testid="experience-more-control"
+            className={`font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground underline decoration-border underline-offset-4 ${accent.hover}`}
+          >
+            {expanded ? 'show less' : 'show more'}
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }

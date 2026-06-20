@@ -167,7 +167,7 @@ export function CourseSelector({
       <div
         data-testid="course-detail"
         className={cn(
-          'flex h-[22px] flex-col justify-center border-l-2 pl-3',
+          'flex h-[42px] flex-col justify-center border-l-2 pl-3',
           activeItem
             ? categoryStyles[activeItem.category].border
             : 'border-border'
@@ -175,8 +175,9 @@ export function CourseSelector({
       >
         {activeItem ? (
           <p
-            data-one-line="true"
-            className="truncate text-xs leading-snug text-muted-foreground"
+            data-testid="course-detail-text"
+            className="line-clamp-2 text-xs leading-snug text-muted-foreground"
+            title={activeItem.desc || 'Details pending.'}
           >
             {activeItem.desc || 'Details pending.'}
           </p>

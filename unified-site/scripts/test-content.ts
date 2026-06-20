@@ -119,10 +119,13 @@ async function main() {
       assert.match(post.html, /data-prototype="code"/);
       assert.match(post.html, /data-prototype="table"/);
       assert.match(post.html, /data-prototype="references"/);
-      assert.ok(
-        (post.html.match(/class="prototype-tag">prototyping<\/span>/g) ?? [])
-          .length >= 4
+      assert.match(
+        post.html,
+        /class="prototype-card" data-prototype="article-index"/
       );
+      assert.match(post.html, />prototyping<\/span>/);
+      assert.doesNotMatch(post.html, /prototype-row/);
+      assert.doesNotMatch(post.html, /prototype-tag/);
       assert.match(
         post.html,
         /<div class="table-wrap" data-prototype="table">/

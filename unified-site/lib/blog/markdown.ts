@@ -171,7 +171,7 @@ function buildToc(
     );
   }
 
-  return `<nav class="article-toc" aria-label="Article index" data-prototype="article-index"><div class="toc-main"><h2 id="index" class="prototype-heading"><span>Index</span><span class="prototype-tag">prototyping</span></h2><div class="toc-sections">${sectionHtml}</div></div><div class="toc-meta">${metaItems.join('')}</div></nav>`;
+  return `<div class="prototype-card" data-prototype="article-index"><span>prototyping</span><span>index variants are in the component lab</span></div><nav class="article-toc" aria-label="Article index"><div class="toc-main"><h2 id="index">Index</h2><div class="toc-sections">${sectionHtml}</div></div><div class="toc-meta">${metaItems.join('')}</div></nav>`;
 }
 
 function mediaHtml(manifest: PostManifest, filename: string) {
@@ -327,7 +327,7 @@ function configureMarkdown(manifest: PostManifest) {
           }).value
         : md.utils.escapeHtml(token.content);
 
-    return `<div class="highlight" data-prototype="code"><div class="prototype-row"><span>code</span><span class="prototype-tag">prototyping</span></div><pre><code class="hljs language-${escapeHtml(
+    return `<div class="highlight" data-prototype="code"><pre><code class="hljs language-${escapeHtml(
       lang
     )}">${highlighted}</code></pre></div>\n`;
   };
@@ -381,14 +381,14 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
     html = html
       .replace(
         /<table>/g,
-        '<div class="table-wrap" data-prototype="table"><div class="prototype-row"><span>table</span><span class="prototype-tag">prototyping</span></div><table>'
+        '<div class="table-wrap" data-prototype="table"><table>'
       )
       .replace(/<\/table>/g, '</table></div>');
   }
 
   html = html.replace(
     /<section class="footnotes">/g,
-    '<section class="footnotes" data-prototype="references"><div class="prototype-row"><span>references</span><span class="prototype-tag">prototyping</span></div>'
+    '<section class="footnotes" data-prototype="references">'
   );
 
   for (const insert of manifest.videoInserts) {

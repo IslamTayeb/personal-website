@@ -38,17 +38,23 @@ function PublicationRow({
           <span className="text-sm font-medium leading-tight text-foreground">
             {publication.title}
           </span>
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-y">
+          <span
+            data-testid="publication-meta-line"
+            className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-y"
+          >
             {publication.type}
+            {publication.venue ? (
+              <>
+                <span className="px-1 text-muted-foreground">/</span>
+                <span className="text-muted-foreground">
+                  {publication.venue}
+                </span>
+              </>
+            ) : null}
           </span>
           <span className="text-xs leading-snug text-muted-foreground text-pretty">
             {publication.authors}
           </span>
-          {publication.venue ? (
-            <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-              {publication.venue}
-            </span>
-          ) : null}
         </span>
         <span
           className="flex items-start pt-0.5 text-muted-foreground"

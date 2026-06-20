@@ -92,7 +92,9 @@
         var(--background)
       )
       var(--background);
+    scrollbar-gutter: auto;
     scrollbar-width: thin;
+    overflow-y: auto;
   }
   body {
     @apply bg-background text-foreground;
@@ -121,14 +123,21 @@
   }
   ::-webkit-scrollbar {
     width: 10px;
+    height: 10px;
   }
   ::-webkit-scrollbar-track {
     background: var(--background);
+    border-radius: 0 !important;
   }
   ::-webkit-scrollbar-thumb {
     background: color-mix(in oklch, var(--foreground) 76%, var(--background));
-    border: 0;
-    border-radius: 0;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background-clip: border-box;
+  }
+  ::-webkit-scrollbar-corner {
+    background: var(--background);
+    border-radius: 0 !important;
   }
 }
 
@@ -220,9 +229,31 @@
   }
   .article-prose .highlight {
     @apply my-4 max-w-full overflow-x-auto bg-muted px-3 font-mono text-xs leading-snug text-foreground;
+    scrollbar-color: var(--roy-b) transparent;
+    scrollbar-gutter: auto;
+    scrollbar-width: thin;
   }
   .article-prose .highlight pre {
     @apply m-0 overflow-x-visible bg-transparent py-2;
+  }
+  .article-prose .highlight::-webkit-scrollbar,
+  .article-prose .table-wrap::-webkit-scrollbar {
+    height: 8px;
+  }
+  .article-prose .highlight::-webkit-scrollbar-track,
+  .article-prose .table-wrap::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 0 !important;
+  }
+  .article-prose .highlight::-webkit-scrollbar-thumb {
+    background: var(--roy-b);
+    border: 0 !important;
+    border-radius: 0 !important;
+  }
+  .article-prose .table-wrap::-webkit-scrollbar-thumb {
+    background: var(--roy-o);
+    border: 0 !important;
+    border-radius: 0 !important;
   }
   .article-prose .highlight code {
     @apply block min-w-max bg-transparent p-0 font-mono;
@@ -272,15 +303,11 @@
   .article-prose .hljs-operator {
     color: var(--muted-foreground);
   }
-  .article-prose .prototype-heading,
-  .article-prose .prototype-row {
-    @apply flex items-center justify-between gap-3;
+  .article-prose .prototype-card {
+    @apply mb-2 flex items-center justify-between gap-3 border border-border bg-muted/35 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground;
   }
-  .article-prose .prototype-row {
-    @apply border-b border-border pb-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground;
-  }
-  .article-prose .prototype-tag {
-    @apply shrink-0 font-mono text-[9px] font-normal uppercase tracking-[0.12em] text-muted-foreground;
+  .article-prose .prototype-card span:first-child {
+    @apply text-foreground;
   }
   .article-prose .article-toc {
     @apply my-6 flex flex-col gap-5 border border-border bg-muted/45 p-4 md:flex-row md:justify-between;
@@ -323,6 +350,9 @@
   }
   .article-prose .table-wrap {
     @apply my-4 max-w-full overflow-x-auto;
+    scrollbar-color: var(--roy-o) transparent;
+    scrollbar-gutter: auto;
+    scrollbar-width: thin;
   }
   .article-prose table {
     @apply w-full min-w-full table-auto border-collapse text-xs;

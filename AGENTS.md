@@ -59,9 +59,16 @@ validators should cover these cases where possible.
 
 When the user asks for a component-lab exploration of something that also exists
 in `unified-site/`, mark the current unified implementation with a small
-`prototyping` tag beside that primitive. The tag means "there are active lab
-variants to choose from," not "this is final." Remove or retire the tag once the
-chosen lab direction is ported back into the unified page.
+standalone `prototyping` card immediately above that primitive, not an inline tag
+inside the prose/control itself. The card means "there are active lab variants
+to choose from," not "this is final." Remove or retire the card once the chosen
+lab direction is ported back into the unified page.
+
+Scrollbars in `unified-site/` should be square, never rounded. Prefer
+`overflow: auto` so they disappear when not needed; use thin, CSS-only,
+background-matched tracks and no inset thumb borders. If a scrollbar needs
+accent treatment, keep it to dense internal scrollers like code or table areas,
+not the global page scrollbar.
 
 ## Main site commands
 

@@ -50,10 +50,24 @@ async function assertHomeMeasurements(page: Page) {
     const title = document.querySelector('[data-testid="hero-title"]');
     const header = document.querySelector('[data-testid="site-header"]');
     const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
+    const publicationMetaLine = document.querySelector(
+      '[data-testid="publication-meta-line"]'
+    );
     const engineeringGroup = document.querySelector(
       '[data-testid="experience-group"][data-group="Engineering"]'
     );
+    const moreControl = document.querySelector<HTMLElement>(
+      '[data-testid="experience-more-control"]'
+    );
+    const seeMoreScholar = [
+      ...document.querySelectorAll<HTMLElement>('a'),
+    ].find((link) =>
+      link.textContent?.toLowerCase().includes('see more on scholar')
+    );
     const detail = document.querySelector('[data-testid="course-detail"]');
+    const detailText = document.querySelector(
+      '[data-testid="course-detail-text"]'
+    );
     const section = document.querySelector('section');
     const panel = document.querySelector('[data-testid="bordered-panel"]');
     const panelStyle = panel ? getComputedStyle(panel) : null;
@@ -94,13 +108,18 @@ async function assertHomeMeasurements(page: Page) {
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       hasProjectsSection: Boolean(document.querySelector('#projects')),
       hasThemeToggle: Boolean(themeToggle),
+      themeToggleText:
+        themeToggle?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      publicationMetaLineText:
+        publicationMetaLine?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       viewportWidth: window.innerWidth,
       courseDetailHeight: detail?.getBoundingClientRect().height ?? 0,
-      showMoreText:
-        [...document.querySelectorAll('button')]
-          .find((button) => button.textContent?.trim() === 'show more')
-          ?.textContent?.trim() ?? '',
+      showMoreText: moreControl?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      showMoreRight: moreControl?.getBoundingClientRect().right ?? 0,
+      seeMoreScholarRight: seeMoreScholar?.getBoundingClientRect().right ?? 0,
       experienceGroups,
+      courseDetailText:
+        detailText?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       sectionPaddingTop: section
         ? Number.parseFloat(getComputedStyle(section).paddingTop)
         : 0,
@@ -137,6 +156,11 @@ async function assertHomeMeasurements(page: Page) {
     'hero title should not overflow'
   );
   assert.ok(measurements.hasThemeToggle, 'header should include theme toggle');
+  assert.equal(
+    measurements.themeToggleText,
+    '',
+    'theme toggle should use compact icon controls, not Light/Dark text'
+  );
   assert.ok(
     !measurements.hasProjectsSection,
     'projects section should not render'
@@ -144,6 +168,8 @@ async function assertHomeMeasurements(page: Page) {
   for (const phrase of [
     'unified prototype',
     'component-lab',
+    'Systems, research, and writing from',
+    'Building small systems for science',
     'One document surface',
     'Portfolio sections',
     'Hero',
@@ -164,6 +190,11 @@ async function assertHomeMeasurements(page: Page) {
     'show more',
     'collapsed experience control should not include a count'
   );
+  assert.ok(
+    Math.abs(measurements.showMoreRight - measurements.seeMoreScholarRight) <=
+      1,
+    'experience show more should align to the same right edge as section actions'
+  );
   for (const role of ['Software Engineer Intern', 'ML Engineer Intern']) {
     assert.ok(
       !measurements.engineeringText.includes(role),
@@ -172,8 +203,20 @@ async function assertHomeMeasurements(page: Page) {
   }
   assert.equal(
     measurements.courseDetailHeight,
-    22,
+    42,
     'course detail height should be stable'
+  );
+  assert.ok(
+    measurements.courseDetailText.includes('Memory management') &&
+      measurements.courseDetailText.includes('magic'),
+    'course detail should preserve the personal old-site course note'
+  );
+  assert.ok(
+    measurements.publicationMetaLineText.includes('Research Article') &&
+      measurements.publicationMetaLineText.includes(
+        'Journal of Environmental Chemical Engineering'
+      ),
+    'publication type and journal should share the same metadata line'
   );
   assert.ok(
     measurements.sectionPaddingTop <= 32,
@@ -313,8 +356,17 @@ async function assertScrollbarStyles(page: Page) {
   );
   assert.ok(
     css.includes('::-webkit-scrollbar-thumb') &&
-      css.includes('border-radius: 0'),
+      css.includes('border-radius: 0 !important'),
     'scrollbar thumb should be square'
+  );
+  assert.ok(
+    css.includes('::-webkit-scrollbar-corner') &&
+      css.includes('border-radius: 0 !important'),
+    'scrollbar corner should also stay square'
+  );
+  assert.ok(
+    css.includes('scrollbar-gutter: auto'),
+    'scrollbars should appear only when overflow needs them'
   );
 }
 
@@ -400,6 +452,7 @@ async function assertArticleRendering(page: Page) {
     ].map((element) => ({
       kind: element.getAttribute('data-prototype'),
       text: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      tagName: element.tagName,
     }));
 
     const titleRect = title?.getBoundingClientRect();
@@ -499,12 +552,20 @@ async function assertArticleRendering(page: Page) {
   assert.ok(result.footnotesSize <= 13, 'footnotes should stay compact');
   assert.equal(result.footnoteListTag, 'OL', 'footnotes should be ordered');
   assert.ok(result.tableDisplay.length > 0, 'article tables should render');
-  for (const kind of ['article-index', 'code', 'table', 'references']) {
+  assert.ok(
+    result.prototypeTags.some(
+      (item) =>
+        item.kind === 'article-index' &&
+        item.tagName === 'DIV' &&
+        item.text.includes('prototyping') &&
+        item.text.includes('component lab')
+    ),
+    'article index should have a separate prototyping card above the TOC'
+  );
+  for (const kind of ['code', 'table', 'references']) {
     assert.ok(
-      result.prototypeTags.some(
-        (item) => item.kind === kind && item.text.includes('prototyping')
-      ),
-      `article ${kind} primitive should carry a prototyping tag`
+      result.prototypeTags.some((item) => item.kind === kind),
+      `article ${kind} primitive should carry a data prototype marker`
     );
   }
 }
