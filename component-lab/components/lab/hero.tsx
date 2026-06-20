@@ -14,7 +14,7 @@ function HeroContactIndex() {
       </div>
       <div className="flex justify-between gap-4">
         <span className="text-muted-foreground">hometown</span>
-        <span className="text-right text-foreground">Egypt + Saudi Arabia</span>
+        <span className="text-right text-foreground">Egypt</span>
       </div>
       <div className="flex flex-col gap-1">
         <span className="text-muted-foreground">contact</span>
