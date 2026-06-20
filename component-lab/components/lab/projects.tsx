@@ -136,7 +136,7 @@ function DenseRail({ projects }: { projects: Project[] }) {
       {projects.map((project, index) => (
         <li key={project.name} className="relative flex gap-4 pb-7 last:pb-0">
           {index < projects.length - 1 ? (
-            <span className="absolute left-[3.5px] top-5 bottom-5 w-px bg-border" />
+            <span className="absolute left-[3.5px] top-5 bottom-1 w-px bg-border" />
           ) : null}
           <span className="relative mt-1 h-2 w-2 shrink-0 bg-roy-o" />
           <div className="flex w-full flex-col gap-1">

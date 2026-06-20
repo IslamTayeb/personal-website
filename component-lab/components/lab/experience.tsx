@@ -82,7 +82,7 @@ function RailGroup({ group, expanded }: { group: Group; expanded: boolean }) {
             className="relative flex gap-4 pb-7 last:pb-0"
           >
             {index < roles.length - 1 ? (
-              <span className="absolute left-[3.5px] top-5 bottom-5 w-px bg-border" />
+              <span className="absolute left-[3.5px] top-5 bottom-1 w-px bg-border" />
             ) : null}
             <span className={`relative mt-1 h-2 w-2 shrink-0 ${group.dot}`} />
             <div className="flex w-full flex-col gap-0.5">
