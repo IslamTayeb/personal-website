@@ -7,7 +7,15 @@ import { LabExternalLink } from './links';
 
 function HeroContactIndex() {
   return (
-    <div className="flex flex-col gap-3 font-mono text-sm leading-snug">
+    <div className="flex flex-col gap-3 font-mono text-xs leading-snug">
+      <div className="flex justify-between gap-4">
+        <span className="text-muted-foreground">location</span>
+        <span className="text-right text-foreground">Durham, NC</span>
+      </div>
+      <div className="flex justify-between gap-4">
+        <span className="text-muted-foreground">hometown</span>
+        <span className="text-right text-foreground">Egypt + Saudi Arabia</span>
+      </div>
       <div className="flex flex-col gap-1">
         <span className="text-muted-foreground">contact</span>
         <ul className="flex flex-wrap text-foreground">
@@ -26,14 +34,6 @@ function HeroContactIndex() {
             </li>
           ))}
         </ul>
-      </div>
-      <div className="flex justify-between gap-4">
-        <span className="text-muted-foreground">location</span>
-        <span className="text-right text-foreground">Durham, NC</span>
-      </div>
-      <div className="flex justify-between gap-4">
-        <span className="text-muted-foreground">hometown</span>
-        <span className="text-right text-foreground">Alexandria, Egypt</span>
       </div>
     </div>
   );
@@ -109,7 +109,7 @@ export function HeroSection() {
             className="w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"
           >
             (Islam M)
-            <sup className="ml-0.5 text-sm font-bold leading-none tracking-normal">
+            <sup className="ml-px text-sm font-bold leading-none tracking-normal">
               2
             </sup>{' '}
             Tayeb
