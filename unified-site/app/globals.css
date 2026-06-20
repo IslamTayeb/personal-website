@@ -1,0 +1,196 @@
+@import 'tailwindcss';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sora), Arial, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-serif: Georgia, serif;
+  --color-ink: var(--ink);
+  --color-orange: var(--orange);
+  --color-roy-r: var(--roy-r);
+  --color-roy-o: var(--roy-o);
+  --color-roy-y: var(--roy-y);
+  --color-roy-y-band: var(--roy-y-band);
+  --color-roy-b: var(--roy-b);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+}
+
+:root {
+  color-scheme: light;
+  --background: oklch(0.985 0.002 90);
+  --foreground: oklch(0.18 0.004 60);
+  --muted: oklch(0.95 0.003 90);
+  --muted-foreground: oklch(0.52 0.006 70);
+  --accent: oklch(0.95 0.003 90);
+  --accent-foreground: oklch(0.18 0.004 60);
+  --border: oklch(0.9 0.004 80);
+  --input: oklch(0.9 0.004 80);
+  --ring: oklch(0.68 0.2 45);
+  --radius: 0rem;
+  --ink: oklch(0.18 0.004 60);
+  --orange: oklch(0.68 0.2 45);
+  --roy-r: oklch(0.62 0.24 27);
+  --roy-o: oklch(0.7 0.2 55);
+  --roy-y: oklch(0.86 0.17 95);
+  --roy-y-band: oklch(0.86 0.17 95);
+  --roy-b: oklch(0.55 0.18 250);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 15%);
+    --ring: oklch(0.556 0 0);
+    --roy-y: oklch(0.86 0.17 95);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply scroll-pt-16 font-sans;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  a[href],
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled='true'],
+  [data-locked='true'] {
+    cursor: not-allowed;
+  }
+  a[target='_blank'],
+  a[rel~='external'],
+  .external-link {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.18em;
+  }
+  ::selection {
+    background: var(--orange);
+    color: var(--background);
+  }
+}
+
+@layer utilities {
+  .royb-band {
+    background: linear-gradient(
+      90deg,
+      var(--roy-r) 0% 25%,
+      var(--roy-o) 25% 50%,
+      var(--roy-y-band) 50% 75%,
+      var(--roy-b) 75% 100%
+    );
+  }
+  .royb-link {
+    display: inline-block;
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.18em;
+  }
+  .royb-link-highlight {
+    --link-hover-highlight: color-mix(
+      in oklch,
+      var(--section-color, var(--roy-b)) 11%,
+      transparent
+    );
+    background-image: linear-gradient(
+      to top,
+      var(--link-hover-highlight) 0 42%,
+      transparent 42% 100%
+    );
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 0 100%;
+  }
+  .royb-link-highlight:hover {
+    background-size: 100% 100%;
+    color: var(--section-color, var(--roy-b));
+    text-decoration-line: none;
+  }
+  .section-color-r {
+    --section-color: var(--roy-r);
+  }
+  .section-color-o {
+    --section-color: var(--roy-o);
+  }
+  .section-color-y {
+    --section-color: var(--roy-y);
+  }
+  .section-color-b {
+    --section-color: var(--roy-b);
+  }
+  .article-prose {
+    @apply text-sm leading-relaxed text-foreground;
+  }
+  .article-prose > * + * {
+    margin-top: 1rem;
+  }
+  .article-prose h2 {
+    @apply border-t border-border pt-6 font-mono text-xs uppercase tracking-[0.18em] text-foreground;
+  }
+  .article-prose h3 {
+    @apply font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground;
+  }
+  .article-prose a {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.18em;
+  }
+  .article-prose blockquote {
+    @apply border-l-2 border-roy-b pl-3 text-muted-foreground;
+  }
+  .article-prose pre {
+    @apply overflow-x-auto border border-border bg-muted p-3 font-mono text-xs;
+  }
+  .article-prose code {
+    @apply bg-muted px-1 py-0.5 font-mono text-[0.9em];
+  }
+  .article-prose pre code {
+    @apply bg-transparent p-0;
+  }
+  .article-prose img,
+  .article-prose video {
+    @apply w-full border border-border;
+  }
+  .article-prose table {
+    @apply w-full table-auto border-collapse text-xs;
+  }
+  .article-prose th,
+  .article-prose td {
+    @apply border border-border px-2 py-1 align-top;
+  }
+  .article-prose .footnotes {
+    @apply border-t border-border pt-4 text-xs text-muted-foreground;
+  }
+}

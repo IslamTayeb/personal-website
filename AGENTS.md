@@ -2,14 +2,18 @@
 
 ## Repo layout
 
-Two production projects and one experimental sandbox live in this repo (no
-workspace manager):
+Two production projects, one experimental sandbox, and one unified prototype
+live in this repo (no workspace manager):
 
 - **`islamtayeb/`** -- the main Next.js 14 App Router site (islamtayeb.dev). All dev work happens here.
 - **`apmoverflow/`** -- a static HTML blog deployed separately via its own `vercel.json`. Rarely touched.
 - **`component-lab/`** -- an experimental Next.js component lab for v0 imports,
   visual direction, and APM Overflow/site vibe exploration. It is not production
   code and should stay isolated until a specific design is intentionally ported.
+- **`unified-site/`** -- a new isolated Next.js prototype that combines the
+  personal site and APM Overflow under one islamtayeb.dev-style surface. It reads
+  APM Overflow post sources from `apmoverflow/content/posts/` but must not modify
+  `component-lab/`, `islamtayeb/`, or `apmoverflow/` unless explicitly asked.
 
 The repo root holds shared repo metadata plus project directories. There is no
 root `package.json`.
@@ -27,6 +31,17 @@ anything back into `islamtayeb/` or `apmoverflow/`. Explore typography,
 navigation, project cards, writing layouts, and article/blog primitives there
 first. Do not convert APM Overflow to Next.js or merge lab code into production
 unless there is an explicit implementation decision.
+
+`unified-site/` is that implementation decision in prototype form only: use it
+to combine the current personal site content and APM Overflow writing into one
+Next.js app without deployment wiring. Preserve the component-lab visual
+language: Sora + DM Mono, narrow document width, sharp borders, paper/ink base,
+the `islam / blog` selector, the top ROYB bar, and strong ROYB accents. Keep it
+motionless: no animations, transitions, render-time measurements, resize
+observers, canvas/dither experiments, autoplay media, or animation libraries.
+The desired feel is elevated minimalism with real density: whitespace should
+separate ideas, not inflate the page. Prefer compact rows, concise copy, and only
+information that earns its place.
 
 ## Main site commands
 
@@ -73,6 +88,25 @@ npm run format:check # prettier --check .
 Use npm only in the lab. Do not wire `component-lab/` into either Vercel deploy
 until the experiment graduates into a deliberate implementation plan.
 
+## Unified site commands
+
+For the combined prototype, run commands from `unified-site/`:
+
+```sh
+npm run dev          # local prototype server on localhost:3002
+npm run build        # Next production build
+npm run lint         # eslint
+npm run format       # prettier --write .
+npm run format:check # prettier --check .
+npm run test:content # validate APM post loading/rendering/feed generation
+npm run test:no-motion # fail on motion/resizing/dither/canvas leftovers
+npm run test:visual  # Playwright screenshots + focused DOM measurements
+```
+
+When touching `unified-site/`, run build, lint, format check, content test,
+no-motion test, and visual test before considering work done. Inspect the
+generated screenshots for visual rhythm, not just pass/fail output.
+
 ## Verification discipline
 
 Testing and verification are as important as the fix itself. Do not make a
@@ -97,7 +131,9 @@ Commit and push when you are confident the project is in good shape for a checkp
 2. Run `npm run lint` and `npm run format:check` to catch style issues.
 3. When touching `component-lab/`, also run its `npm run build`, `npm run lint`,
    and `npm run format:check` from `component-lab/`.
-4. If formatting is off, run `npm run format` first, then re-verify with build.
+4. When touching `unified-site/`, also run its build, lint, format check,
+   content, no-motion, and visual checks from `unified-site/`.
+5. If formatting is off, run `npm run format` first, then re-verify with build.
 
 Only commit when all three pass. Include meaningful commit messages that describe the "why."
 
@@ -106,7 +142,8 @@ Only commit when all three pass. Include meaningful commit messages that describ
 - **Package manager:** npm (lockfile is `package-lock.json`).
 - **Path alias:** `@/*` maps to the active project root in both Next apps
   (e.g., `islamtayeb/lib/utils` inside `islamtayeb/`,
-  `component-lab/lib/utils` inside `component-lab/`).
+  `component-lab/lib/utils` inside `component-lab/`, and
+  `unified-site/lib/utils` inside `unified-site/`).
 - **Styling:** Tailwind CSS 3 with HSL CSS variables. Dark mode is class-based via `next-themes`.
 - **Interaction cues:** Anything clickable should show the pointer cursor on
   hover. Anything present but locked/unavailable should show the not-allowed
