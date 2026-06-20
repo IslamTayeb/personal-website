@@ -1,12 +1,14 @@
 'use client';
 
 import { Section } from '@/components/lab/frame';
+import { cn } from '@/lib/utils';
 
 type Face = {
   id: string;
   name: string;
   cssVar: string;
   note: string;
+  favorite?: boolean;
 };
 
 const SANS: Face[] = [
@@ -44,7 +46,8 @@ const SANS: Face[] = [
     id: 'sora',
     name: 'Sora',
     cssVar: 'var(--font-sora)',
-    note: 'Geometric and a touch technical. Distinct without being loud.',
+    note: 'Current favorite: geometric and a touch technical, distinct without being loud.',
+    favorite: true,
   },
   {
     id: 'bricolage',
@@ -114,19 +117,27 @@ const MONO: Face[] = [
 function SansSpecimen({ face }: { face: Face }) {
   return (
     <div
-      className="flex flex-col gap-3 py-6"
+      className={cn(
+        'flex flex-col gap-3 py-6',
+        face.favorite && '-mx-3 border border-roy-b bg-roy-b/10 px-3 text-roy-b'
+      )}
       style={{ fontFamily: face.cssVar }}
     >
       <div className="flex items-baseline justify-between gap-3">
         <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-roy-r">
           {face.name}
         </span>
-        <span
-          className="font-mono text-[10px] text-muted-foreground"
+        <div
+          className="flex items-baseline gap-2 font-mono text-[10px]"
           style={{ fontFamily: 'var(--font-geist-mono)' }}
         >
-          sans
-        </span>
+          {face.favorite ? (
+            <span className="uppercase tracking-[0.15em] text-roy-b">
+              current favorite
+            </span>
+          ) : null}
+          <span className="text-muted-foreground">sans</span>
+        </div>
       </div>
       <h3 className="text-2xl font-semibold leading-tight tracking-tight text-foreground">
         Islam Tayeb
