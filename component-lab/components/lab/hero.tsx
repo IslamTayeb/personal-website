@@ -1,8 +1,5 @@
 import { Section, Variant } from './frame';
 
-const STORY =
-  "Hey, I'm Islam. I was born and raised between Egypt and Saudi Arabia, and I'm currently based in Durham, NC for college at Duke. In high school I played osu! competitively and did esports graphic design full-time. I've been lucky to jump between cities and pivot interests more than once — these days I'm building lazy automations, geeking over infra war-stories, and over-optimizing configs.";
-
 const META: [string, string][] = [
   ['Focus', 'Lazy automations'],
   ['Likes', 'Infra stories, configs'],
@@ -12,7 +9,7 @@ const META: [string, string][] = [
 function HeroMeta({ compact = false }: { compact?: boolean }) {
   if (compact) {
     return (
-      <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5 font-mono text-xs">
+      <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-1 font-mono text-[11px]">
         {META.map(([key, value]) => (
           <div key={key} className="contents">
             <dt className="text-muted-foreground">{key}</dt>
@@ -24,7 +21,7 @@ function HeroMeta({ compact = false }: { compact?: boolean }) {
   }
 
   return (
-    <dl className="flex flex-col gap-3 font-mono text-xs md:border-r md:border-border md:pr-8">
+    <dl className="flex flex-col gap-2 font-mono text-[11px] md:border-r md:border-border md:pr-5">
       {META.map(([key, value]) => (
         <div key={key} className="flex flex-col gap-0.5">
           <dt className="text-muted-foreground">{key}</dt>
@@ -35,6 +32,22 @@ function HeroMeta({ compact = false }: { compact?: boolean }) {
   );
 }
 
+function HeroStory() {
+  return (
+    <div className="order-1 flex flex-col gap-2 text-sm leading-snug text-foreground text-pretty md:order-2">
+      <p>
+        Duke student finding lazy automations. Love reading about cool infra
+        stories and over-optimizing configs. Also interested in building for
+        science. Currently based in Durham, NC.
+      </p>
+      <p>
+        I grew up between Egypt and Saudi Arabia, played osu! competitively, and
+        have been writing on APM Overflow.
+      </p>
+    </div>
+  );
+}
+
 export function HeroSection() {
   return (
     <Section
@@ -42,20 +55,15 @@ export function HeroSection() {
       title="Hero — apmoverflow index voice"
       accent="text-roy-o"
       cols={1}
-      note="Selected direction: the apmoverflow-index voice stays, but the layout is no longer a comparison grid. Desktop uses the two-column meta/story split with a divider; phone stacks like the simple version, with title-case metadata below the paragraph."
+      note="Selected direction: compact current-site copy without inline badges. Desktop uses the two-column meta/story split with a divider; phone stacks with metadata below the paragraph."
     >
-      <Variant
-        label="Selected — two-column divider, stacks on phone"
-        tag="final"
-      >
-        <div className="flex w-full flex-col gap-5">
-          <h3 className="text-2xl font-semibold tracking-tight text-foreground">
+      <Variant label="Selected — compact hero, stacks on phone" tag="final">
+        <div className="flex w-full flex-col gap-3">
+          <h3 className="text-xl font-semibold tracking-tight text-foreground">
             Islam Tayeb
           </h3>
-          <div className="flex flex-col gap-5 md:grid md:grid-cols-[10rem_1fr] md:gap-8">
-            <p className="order-1 text-sm leading-relaxed text-foreground text-pretty md:order-2">
-              {STORY}
-            </p>
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-[8.5rem_1fr] md:gap-5">
+            <HeroStory />
             <div className="order-2 md:order-1">
               <div className="md:hidden">
                 <HeroMeta compact />

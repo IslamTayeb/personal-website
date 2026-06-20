@@ -116,9 +116,8 @@ export function MoonGlyph({
   );
 }
 
-// Squared plus. Hand-built so the plus is perfectly centered in the box, which
-// is the exact thing the unicode glyph gets wrong.
-export function SquaredPlusGlyph({ size = 16, className = '' }: GlyphProps) {
+// Single large sparkle, drawn instead of using the multi-sparkle emoji.
+export function SparkleGlyph({ size = 16, className = '' }: GlyphProps) {
   return (
     <svg
       width={size}
@@ -128,19 +127,9 @@ export function SquaredPlusGlyph({ size = 16, className = '' }: GlyphProps) {
       aria-hidden="true"
       className={className}
     >
-      <rect
-        x="1.5"
-        y="1.5"
-        width="13"
-        height="13"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      />
       <path
-        d="M8 4.5v7M4.5 8h7"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="square"
+        d="M8 1.8 9.7 6.3 14.2 8 9.7 9.7 8 14.2 6.3 9.7 1.8 8 6.3 6.3 8 1.8Z"
+        fill="currentColor"
       />
     </svg>
   );

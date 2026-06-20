@@ -18,8 +18,8 @@ export function Section({
   const colsClass =
     cols === 1 ? '' : cols === 2 ? 'md:grid-cols-2' : 'md:grid-cols-3';
   return (
-    <section className="border-t border-border py-12 md:py-16">
-      <header className="mb-8 flex flex-col gap-1">
+    <section className="border-t border-border py-8 md:py-10">
+      <header className="mb-5 flex flex-col gap-1">
         <div className="flex items-baseline gap-3">
           <span className={`font-mono text-xs ${accent}`}>§{index}</span>
           <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
@@ -27,7 +27,7 @@ export function Section({
           </h2>
         </div>
         {note ? (
-          <p className="max-w-2xl pl-9 text-sm leading-relaxed text-muted-foreground text-pretty">
+          <p className="max-w-2xl pl-9 text-sm leading-snug text-muted-foreground text-pretty">
             {note}
           </p>
         ) : null}
@@ -64,7 +64,7 @@ export function Variant({
           </span>
         ) : null}
       </div>
-      <div className="flex flex-1 items-center p-6">{children}</div>
+      <div className="flex flex-1 items-center p-4">{children}</div>
     </div>
   );
 }

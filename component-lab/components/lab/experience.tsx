@@ -63,26 +63,45 @@ const GROUPS: Group[] = [
   },
 ];
 
-function RailGroup({ group, expanded }: { group: Group; expanded: boolean }) {
+function RailGroup({
+  group,
+  expanded,
+  onToggleExpanded,
+}: {
+  group: Group;
+  expanded: boolean;
+  onToggleExpanded: () => void;
+}) {
   const roles = expanded
     ? group.roles
     : group.roles.slice(0, group.visibleCount);
+  const hiddenCount = Math.max(0, group.roles.length - group.visibleCount);
+  const hasHidden = hiddenCount > 0;
 
   return (
-    <div className="flex flex-col">
-      <div className="flex items-center gap-2 pb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-        <span className="text-xs leading-none">›</span>
-        {group.kind}
-        <span className="text-muted-foreground/60">({group.roles.length})</span>
-      </div>
-      <ul className="flex flex-col">
-        {roles.map((role, index) => (
+    <ul className="flex flex-col">
+      {roles.map((role, index) => {
+        const isLastVisibleRole = index === roles.length - 1;
+        const showMoreBelow = isLastVisibleRole && hasHidden && !expanded;
+
+        return (
           <li
             key={`${group.kind}-${role.org}-${role.date}`}
-            className="relative flex gap-4 pb-7 last:pb-0"
+            className={`relative flex gap-4 ${
+              showMoreBelow ? 'pb-2' : 'pb-7 last:pb-0'
+            }`}
           >
             {index < roles.length - 1 ? (
               <span className="absolute left-[3.5px] top-5 bottom-1 w-px bg-border" />
+            ) : null}
+            {showMoreBelow ? (
+              <span
+                className="absolute left-[3.5px] top-5 bottom-0 w-px text-border"
+                style={{
+                  backgroundImage:
+                    'repeating-linear-gradient(to bottom, currentColor 0 4px, transparent 4px 8px)',
+                }}
+              />
             ) : null}
             <span className={`relative mt-1 h-2 w-2 shrink-0 ${group.dot}`} />
             <div className="flex w-full flex-col gap-0.5">
@@ -97,33 +116,90 @@ function RailGroup({ group, expanded }: { group: Group; expanded: boolean }) {
               </p>
             </div>
           </li>
-        ))}
-      </ul>
-    </div>
+        );
+      })}
+      {hasHidden ? (
+        <li className="relative flex gap-4 pb-4">
+          <span className="w-2 shrink-0" aria-hidden />
+          <button
+            type="button"
+            onClick={onToggleExpanded}
+            className="w-fit font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground underline decoration-border underline-offset-4 hover:text-roy-o hover:decoration-roy-o"
+          >
+            {expanded ? 'Show less' : `Show more (${hiddenCount})`}
+          </button>
+        </li>
+      ) : null}
+    </ul>
   );
 }
 
 function ExperienceRail() {
   const [expanded, setExpanded] = useState(false);
-  const hiddenCount = GROUPS.reduce(
-    (total, group) =>
-      total + Math.max(0, group.roles.length - group.visibleCount),
-    0
-  );
+  const [groupOpen, setGroupOpen] = useState<Record<string, boolean>>({
+    Research: true,
+    Engineering: true,
+  });
 
   return (
     <div className="flex w-full flex-col gap-7">
       {GROUPS.map((group) => (
-        <RailGroup key={group.kind} group={group} expanded={expanded} />
+        <CollapsibleRailGroup
+          key={group.kind}
+          group={group}
+          expanded={expanded}
+          open={groupOpen[group.kind] ?? true}
+          onToggleExpanded={() => setExpanded((value) => !value)}
+          onToggle={() =>
+            setGroupOpen((current) => ({
+              ...current,
+              [group.kind]: !(current[group.kind] ?? true),
+            }))
+          }
+        />
       ))}
-      {hiddenCount > 0 ? (
-        <button
-          type="button"
-          onClick={() => setExpanded((value) => !value)}
-          className="w-fit font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground underline decoration-border underline-offset-4 hover:text-roy-o hover:decoration-roy-o"
+    </div>
+  );
+}
+
+function CollapsibleRailGroup({
+  group,
+  expanded,
+  open,
+  onToggle,
+  onToggleExpanded,
+}: {
+  group: Group;
+  expanded: boolean;
+  open: boolean;
+  onToggle: () => void;
+  onToggleExpanded: () => void;
+}) {
+  return (
+    <div className="flex flex-col">
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        className="flex items-center gap-2 pb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground"
+      >
+        <span
+          className={`inline-block text-xs leading-none transition-none ${
+            open ? 'rotate-90' : ''
+          }`}
+          aria-hidden
         >
-          {expanded ? 'Show less' : `Show more (${hiddenCount})`}
-        </button>
+          ›
+        </span>
+        {group.kind}
+        <span className="text-muted-foreground/60">({group.roles.length})</span>
+      </button>
+      {open ? (
+        <RailGroup
+          group={group}
+          expanded={expanded}
+          onToggleExpanded={onToggleExpanded}
+        />
       ) : null}
     </div>
   );
@@ -136,9 +212,12 @@ export function ExperienceSection() {
       title="Experience — grouped rail"
       accent="text-roy-o"
       cols={1}
-      note="Selected direction: one always-on grouped rail. It opens with the top three research roles and the top engineering role, then a single show more/show less control reveals the remaining engineering roles."
+      note="Selected direction: grouped rail with interactive group collapse. Research opens with three roles; Engineering opens with one role, a dotted continuation, and an inline show more/show less control inside the group."
     >
-      <Variant label="Selected — top roles + show more" tag="final">
+      <Variant
+        label="Selected — collapsible groups + inline show more"
+        tag="final"
+      >
         <ExperienceRail />
       </Variant>
     </Section>
