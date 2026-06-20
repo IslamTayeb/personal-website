@@ -67,17 +67,13 @@ function RailGroup({ group, expanded }: { group: Group; expanded: boolean }) {
   const roles = expanded
     ? group.roles
     : group.roles.slice(0, group.visibleCount);
-  const countLabel =
-    roles.length === group.roles.length
-      ? `${group.roles.length}`
-      : `${roles.length} of ${group.roles.length}`;
 
   return (
     <div className="flex flex-col">
       <div className="flex items-center gap-2 pb-3 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
         <span className="text-xs leading-none">›</span>
         {group.kind}
-        <span className="text-muted-foreground/60">({countLabel})</span>
+        <span className="text-muted-foreground/60">({group.roles.length})</span>
       </div>
       <ul className="flex flex-col">
         {roles.map((role, index) => (
