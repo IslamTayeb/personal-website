@@ -72,7 +72,7 @@ export function HeroSection() {
     >
       <Variant label="Selected — compact hero, stacks on phone" tag="final">
         <div className="flex w-full flex-col gap-3">
-          <h3 className="font-serif text-2xl font-bold tracking-normal text-foreground">
+          <h3 className="font-sans text-2xl font-semibold tracking-tight text-foreground">
             (Islam M)<sup className="text-sm leading-none">2</sup> Tayeb
           </h3>
           <div className="flex flex-col gap-4 md:grid md:grid-cols-[10.5rem_1fr] md:gap-5">
