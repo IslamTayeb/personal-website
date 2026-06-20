@@ -4,8 +4,6 @@
   "private": true,
   "packageManager": "npm@11.11.1",
   "scripts": {
-    "postinstall": "npm run sync:react-grab",
-    "sync:react-grab": "node -e \"const fs=require('node:fs');fs.mkdirSync('public/vendor/react-grab',{recursive:true});fs.copyFileSync('node_modules/react-grab/dist/index.global.js','public/vendor/react-grab/index.global.js');\"",
     "dev": "next dev -p 3001",
     "build": "next build",
     "start": "next start -p 3001",
@@ -36,7 +34,6 @@
     "eslint-config-next": "^16.2.9",
     "postcss": "8.5.15",
     "prettier": "^3.6.2",
-    "react-grab": "^0.1.47",
     "tailwindcss": "^4.2.0",
     "typescript": "5.7.3"
   },

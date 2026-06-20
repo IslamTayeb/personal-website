@@ -59,9 +59,6 @@ npm run format:check # prettier --check .
 Use npm only in the lab. Do not wire `component-lab/` into either Vercel deploy
 until the experiment graduates into a deliberate implementation plan.
 
-React Grab is installed in the lab for local visual iteration. It is loaded only
-in development from `app/layout.tsx`.
-
 ## Committing
 
 Commit and push when you are confident the project is in good shape for a checkpoint. Before committing:

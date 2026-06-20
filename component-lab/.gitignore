@@ -5,7 +5,6 @@ __v0_jsx-dev-runtime.ts
 .snowflake/
 .v0-trash/
 .vercel/
-public/vendor/react-grab/
 
 # Environment variables
 .env*.local

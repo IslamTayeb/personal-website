@@ -1,5 +1,4 @@
 import { Analytics } from '@vercel/analytics/next';
-import Script from 'next/script';
 import type { Metadata, Viewport } from 'next';
 import {
   Geist,
@@ -139,15 +138,6 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${interTight.variable} ${jetbrainsMono.variable} ${spaceGrotesk.variable} ${spaceMono.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable} ${hankenGrotesk.variable} ${schibstedGrotesk.variable} ${sora.variable} ${bricolage.variable} ${dmMono.variable} ${splineSansMono.variable} ${martianMono.variable} ${fragmentMono.variable} bg-background`}
     >
-      <head>
-        {process.env.NODE_ENV === 'development' && (
-          <Script
-            src="/vendor/react-grab/index.global.js"
-            crossOrigin="anonymous"
-            strategy="beforeInteractive"
-          />
-        )}
-      </head>
       <body className="font-sans antialiased">
         <ThemeProvider
           attribute="class"
