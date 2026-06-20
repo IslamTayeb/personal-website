@@ -133,8 +133,9 @@ function RailGroupBlock({
           strokeWidth={1.8}
           aria-hidden
         />
-        <span>{group.kind}</span>
-        <span className="text-muted-foreground/60">({group.roles.length})</span>
+        <span>
+          {group.kind} ({group.roles.length})
+        </span>
       </div>
       <RailGroup
         group={group}
