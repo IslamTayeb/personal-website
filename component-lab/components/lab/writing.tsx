@@ -1,43 +1,14 @@
+import { writingPosts } from '@/lib/lab-data';
 import { Section, Variant } from './frame';
-
-type Post = {
-  date: string;
-  title: string;
-  href: string;
-  isNew?: boolean;
-  desc?: string;
-};
-
-const POSTS: Post[] = [
-  {
-    date: 'Jun 07, 2026',
-    title: 'On Agent Memory Fidelity (Decant)',
-    href: 'https://apmoverflow.xyz/on-agent-memory-fidelity/',
-    isNew: true,
-    desc: 'How agents lose the plot over long horizons, and what faithful memory recall actually costs.',
-  },
-  {
-    date: 'Mar 18, 2026',
-    title: 'On Fingerspitzengefühl',
-    href: 'https://apmoverflow.xyz/on-fingerspitzengefuhl/',
-    desc: 'The fingertip-feel of good taste — why some calls are felt before they can be explained.',
-  },
-  {
-    date: 'Jan 02, 2026',
-    title: 'On Dimensions of Taste (Harmonia)',
-    href: 'https://apmoverflow.xyz/on-dimensions-of-taste/',
-    desc: '',
-  },
-];
 
 function WritingRail() {
   return (
     <ul className="flex w-full flex-col">
-      {POSTS.map((post, index) => {
+      {writingPosts.map((post, index) => {
         const hasDesc = Boolean(post.desc?.trim());
         return (
           <li key={post.title} className="relative flex gap-4 pb-7 last:pb-0">
-            {index < POSTS.length - 1 ? (
+            {index < writingPosts.length - 1 ? (
               <span className="absolute left-[3.5px] top-5 bottom-1 w-px bg-border" />
             ) : null}
             <span
@@ -60,7 +31,7 @@ function WritingRail() {
                 </span>
               </div>
               {hasDesc ? (
-                <p className="max-w-sm text-xs leading-relaxed text-muted-foreground text-pretty">
+                <p className="text-xs leading-snug text-muted-foreground text-pretty md:whitespace-nowrap">
                   {post.desc}
                 </p>
               ) : null}
@@ -75,7 +46,7 @@ function WritingRail() {
 export function WritingSection() {
   return (
     <Section
-      index="05"
+      index="6"
       title="Writing — continuous rail"
       accent="text-roy-b"
       cols={1}

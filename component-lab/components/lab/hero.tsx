@@ -1,49 +1,60 @@
+import { contactLinks, heroParagraphs, type TextSegment } from '@/lib/lab-data';
 import { Section, Variant } from './frame';
+import { LabExternalLink } from './links';
 
-const META: [string, string][] = [
-  ['Focus', 'Lazy automations'],
-  ['Likes', 'Infra stories, configs'],
-  ['Loc', 'Durham, NC'],
-];
+function HeroContactIndex() {
+  return (
+    <div className="flex flex-col gap-3 font-mono text-[11px] md:border-r md:border-border md:pr-4">
+      <div className="flex flex-col gap-1">
+        <span className="text-muted-foreground">contact</span>
+        <ul className="flex flex-wrap gap-x-3 gap-y-0.5 md:flex-col">
+          {contactLinks.map((link) => (
+            <li key={link.label}>
+              <LabExternalLink
+                href={link.href}
+                external={link.external ?? true}
+                variant="sweep"
+                className="text-foreground"
+              >
+                {link.text}
+              </LabExternalLink>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div className="grid grid-cols-[3.4rem_1fr] gap-2 border-t border-border pt-2">
+        <span className="text-muted-foreground">loc</span>
+        <span className="text-foreground">Durham, NC</span>
+      </div>
+    </div>
+  );
+}
 
-function HeroMeta({ compact = false }: { compact?: boolean }) {
-  if (compact) {
-    return (
-      <dl className="grid grid-cols-[auto_1fr] gap-x-5 gap-y-1 font-mono text-[11px]">
-        {META.map(([key, value]) => (
-          <div key={key} className="contents">
-            <dt className="text-muted-foreground">{key}</dt>
-            <dd className="text-foreground">{value}</dd>
-          </div>
-        ))}
-      </dl>
-    );
+function HeroSegment({ segment }: { segment: TextSegment }) {
+  if (!segment.href) {
+    return segment.text;
   }
 
   return (
-    <dl className="flex flex-col gap-2 font-mono text-[11px] md:border-r md:border-border md:pr-5">
-      {META.map(([key, value]) => (
-        <div key={key} className="flex flex-col gap-0.5">
-          <dt className="text-muted-foreground">{key}</dt>
-          <dd className="text-foreground">{value}</dd>
-        </div>
-      ))}
-    </dl>
+    <LabExternalLink href={segment.href} external={segment.external ?? true}>
+      {segment.text}
+    </LabExternalLink>
   );
 }
 
 function HeroStory() {
   return (
     <div className="order-1 flex flex-col gap-2 text-sm leading-snug text-foreground text-pretty md:order-2">
-      <p>
-        Duke student finding lazy automations. Love reading about cool infra
-        stories and over-optimizing configs. Also interested in building for
-        science. Currently based in Durham, NC.
-      </p>
-      <p>
-        I grew up between Egypt and Saudi Arabia, played osu! competitively, and
-        have been writing on APM Overflow.
-      </p>
+      {heroParagraphs.map((paragraph, paragraphIndex) => (
+        <p key={paragraphIndex}>
+          {paragraph.map((segment, segmentIndex) => (
+            <HeroSegment
+              key={`${paragraphIndex}-${segmentIndex}`}
+              segment={segment}
+            />
+          ))}
+        </p>
+      ))}
     </div>
   );
 }
@@ -51,26 +62,21 @@ function HeroStory() {
 export function HeroSection() {
   return (
     <Section
-      index="02"
+      index="1"
       title="Hero — apmoverflow index voice"
       accent="text-roy-o"
       cols={1}
-      note="Selected direction: compact current-site copy without inline badges. Desktop uses the two-column meta/story split with a divider; phone stacks with metadata below the paragraph."
+      note="Selected direction: compact current-site copy without inline badges. The left rail is now a contact/link index, closer to the APM Overflow blog index than a metadata card."
     >
       <Variant label="Selected — compact hero, stacks on phone" tag="final">
         <div className="flex w-full flex-col gap-3">
           <h3 className="text-xl font-semibold tracking-tight text-foreground">
             Islam Tayeb
           </h3>
-          <div className="flex flex-col gap-4 md:grid md:grid-cols-[8.5rem_1fr] md:gap-5">
+          <div className="flex flex-col gap-4 md:grid md:grid-cols-[7.25rem_1fr] md:gap-5">
             <HeroStory />
             <div className="order-2 md:order-1">
-              <div className="md:hidden">
-                <HeroMeta compact />
-              </div>
-              <div className="hidden md:block">
-                <HeroMeta />
-              </div>
+              <HeroContactIndex />
             </div>
           </div>
         </div>

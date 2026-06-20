@@ -39,7 +39,7 @@ function SelectedWordmark() {
 export function WordmarkSection() {
   return (
     <Section
-      index="01"
+      index="0"
       title="Wordmark / Glyph"
       accent="text-roy-r"
       cols={1}

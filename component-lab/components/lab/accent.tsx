@@ -68,7 +68,7 @@ function LegendMini() {
 export function AccentSection() {
   return (
     <Section
-      index="06"
+      index="7"
       title="ROYB — how to actually decide"
       accent="text-roy-y"
       note="v.04 — a real decider instead of theory. The legend below fixes one meaning per color site-wide. Then compare two miniatures of the WHOLE page: INTER paints each section a single color (clean rainbow scroll, but the color is decoration), vs LEGEND/INTRA where each section shows only the colors it contains and the full ROYB appears across the page (color carries meaning). My pick is LEGEND — it explains why you 'never reach all four' in one block, and that's fine."

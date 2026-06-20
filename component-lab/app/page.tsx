@@ -1,7 +1,9 @@
-import { FontsSection } from '@/components/lab/fonts';
 import { WordmarkSection } from '@/components/lab/wordmark';
 import { HeroSection } from '@/components/lab/hero';
+import { LinksSection } from '@/components/lab/links';
 import { ExperienceSection } from '@/components/lab/experience';
+import { PublicationsSection } from '@/components/lab/publications';
+import { CoursesSection } from '@/components/lab/courses';
 import { WritingSection } from '@/components/lab/writing';
 import { AccentSection } from '@/components/lab/accent';
 import { ThemeToggle } from '@/components/lab/theme-toggle';
@@ -28,7 +30,7 @@ export default function Page() {
             Islam Tayeb
           </span>
           <span className="font-mono text-xs text-muted-foreground">
-            v.08 — 2026
+            v.09 — 2026
           </span>
         </div>
         <div className="royb-band h-1 w-full" />
@@ -38,16 +40,18 @@ export default function Page() {
           <span className="text-roy-b">APM Overflow</span>.
         </h1>
         <p className="max-w-2xl text-sm font-normal leading-relaxed text-foreground/80 text-pretty">
-          Sharp corners, monochrome paper, mono metadata. v.08 narrows the lab
-          to the current-site measure, tightens the rhythm, and keeps the heavy
-          moon / sparkle wordmark.
+          Sharp corners, monochrome paper, mono metadata. v.09 drops settled
+          type specimens, adds real course content, and tests ROYB link hover
+          behavior.
         </p>
       </header>
 
-      <FontsSection />
       <WordmarkSection />
       <HeroSection />
+      <LinksSection />
       <ExperienceSection />
+      <PublicationsSection />
+      <CoursesSection />
       <WritingSection />
       <AccentSection />
 
