@@ -280,6 +280,44 @@ async function assertThemeToggleIsStable(page: Page) {
   );
 }
 
+async function assertHeroLinksHoverRed(page: Page) {
+  const heroLink = page.locator('[data-testid="hero-section"] a').first();
+
+  await heroLink.hover();
+
+  const colors = await page.evaluate(() => {
+    const link = document.querySelector<HTMLElement>(
+      '[data-testid="hero-section"] a:hover'
+    );
+    const probe = document.createElement('span');
+
+    probe.style.color = 'var(--roy-r)';
+    document.body.append(probe);
+
+    const linkColor = link ? getComputedStyle(link).color : '';
+    const redToken = getComputedStyle(probe).color;
+
+    probe.remove();
+
+    return {
+      linkColor,
+      redToken,
+      textDecorationLine: link ? getComputedStyle(link).textDecorationLine : '',
+    };
+  });
+
+  assert.equal(
+    colors.linkColor,
+    colors.redToken,
+    'hero links should hover to the ROYB red token'
+  );
+  assert.equal(
+    colors.textDecorationLine,
+    'none',
+    'hovered hero links should drop the underline'
+  );
+}
+
 async function main() {
   await mkdir(screenshotDir, { recursive: true });
 
@@ -313,6 +351,7 @@ async function main() {
     await screenshot(page, 'home-desktop');
     await assertHomeMeasurements(page);
     await assertVisibleOneLineDescriptions(page);
+    await assertHeroLinksHoverRed(page);
     await assertThemeToggleIsStable(page);
     await assertCourseHeightIsStable(page);
     await screenshot(page, 'home-course-deselected');
