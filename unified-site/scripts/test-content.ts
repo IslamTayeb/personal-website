@@ -106,6 +106,34 @@ async function main() {
     );
     assertImagesHaveAlt(post.manifest.slug, post.html);
     assertRenderedExternalLinks(post.manifest.slug, post.html);
+
+    if (post.manifest.slug === 'on-agent-memory-fidelity') {
+      assert.match(post.html, /class="article-toc"/);
+      assert.match(post.html, /data-prototype="article-index"/);
+      assert.match(post.html, /Reading time/);
+      assert.match(post.html, /Last updated/);
+      assert.match(post.html, /GitHub/);
+      assert.match(post.html, /class="toc-subs"/);
+      assert.match(post.html, /class="article-media"/);
+      assert.match(post.html, /<figcaption><em>/);
+      assert.match(post.html, /data-prototype="code"/);
+      assert.match(post.html, /data-prototype="table"/);
+      assert.match(post.html, /data-prototype="references"/);
+      assert.ok(
+        (post.html.match(/class="prototype-tag">prototyping<\/span>/g) ?? [])
+          .length >= 4
+      );
+      assert.match(
+        post.html,
+        /<div class="table-wrap" data-prototype="table">/
+      );
+      assert.match(post.html, /<table>/);
+      assert.match(post.html, /class="hljs-keyword"/);
+      assert.match(
+        post.html,
+        /<video autoplay controls loop muted playsinline preload="auto"/
+      );
+    }
   }
 
   const feed = await buildAtomFeed();

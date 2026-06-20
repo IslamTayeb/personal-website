@@ -50,6 +50,19 @@ desktop document width. Use concise source copy plus explicit one-line CSS
 (`truncate`/nowrap/hidden overflow) and visual tests; do not rely on luck or
 copy length alone.
 
+Avoid hydration flicker and load-time state swaps. Do not render a visible
+default state and then correct it in `useEffect` after reading local storage,
+media queries, viewport dimensions, or user environment. If a preference such as
+theme must affect first paint, set it before visible content renders or keep the
+control visually neutral and size-stable until user interaction. Deterministic
+validators should cover these cases where possible.
+
+When the user asks for a component-lab exploration of something that also exists
+in `unified-site/`, mark the current unified implementation with a small
+`prototyping` tag beside that primitive. The tag means "there are active lab
+variants to choose from," not "this is final." Remove or retire the tag once the
+chosen lab direction is ported back into the unified page.
+
 ## Main site commands
 
 All commands must run from `islamtayeb/`:

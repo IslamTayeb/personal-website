@@ -36,6 +36,7 @@ function RailGroup({
   const hiddenCount = Math.max(0, group.roles.length - group.visibleCount);
   const hasHidden = hiddenCount > 0;
   const accent = groupAccents[group.dot] ?? groupAccents['bg-roy-o'];
+  const showRoleLabel = group.kind !== 'Engineering';
 
   return (
     <RailList>
@@ -68,12 +69,16 @@ function RailGroup({
             }
             meta={role.date}
             description={
-              <>
-                <strong className="font-medium text-foreground/90">
-                  {role.role}
-                </strong>
-                . {role.desc}
-              </>
+              showRoleLabel ? (
+                <>
+                  <strong className="font-medium text-foreground/90">
+                    {role.role}
+                  </strong>
+                  . {role.desc}
+                </>
+              ) : (
+                role.desc
+              )
             }
             connector={connector}
             connectorClassName={showMoreBelow ? 'bottom-6' : undefined}

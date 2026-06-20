@@ -48,6 +48,27 @@ export const viewport: Viewport = {
   ],
 };
 
+const themeInitScript = `
+(function () {
+  try {
+    var saved = window.localStorage.getItem('theme');
+    var theme =
+      saved === 'light' || saved === 'dark'
+        ? saved
+        : window.matchMedia('(prefers-color-scheme: dark)').matches
+          ? 'dark'
+          : 'light';
+    var root = document.documentElement;
+    root.classList.remove('light', 'dark');
+    root.classList.add(theme);
+    root.style.colorScheme = theme;
+  } catch (_) {
+    document.documentElement.classList.add('light');
+    document.documentElement.style.colorScheme = 'light';
+  }
+})();
+`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -60,6 +81,7 @@ export default function RootLayout({
       className={`${sora.variable} ${dmMono.variable} bg-background`}
     >
       <body className="bg-background font-sans text-foreground antialiased">
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <main className="mx-auto min-h-screen max-w-3xl px-4">
           <SiteHeader />
           {children}

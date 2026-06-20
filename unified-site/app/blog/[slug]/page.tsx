@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArticleProse } from '@/components/primitives/article-prose';
-import { ExternalLink } from '@/components/primitives/external-link';
 import { RoybBand } from '@/components/primitives/royb-band';
 import { formatDate, datetime } from '@/lib/blog/date';
 import { getAllPosts, getPostBySlug } from '@/lib/blog/posts';
@@ -54,35 +53,17 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <article className="py-7 md:py-8">
-      <header className="mb-7 flex flex-col gap-3.5">
-        <div className="flex items-center justify-between gap-4">
-          <time
-            dateTime={post.manifest.publishedAt}
-            className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground"
-          >
-            {formatDate(post.manifest.publishedAt)}
-          </time>
-          <span className="font-mono text-xs text-muted-foreground">
-            {post.readingMeta}
-          </span>
-        </div>
+      <header className="mb-7 flex flex-col gap-2.5">
         <RoybBand />
         <h1 className="text-2xl font-semibold leading-tight tracking-tight text-foreground text-balance md:text-3xl">
           {post.manifest.title}
         </h1>
-        <p
-          data-one-line="true"
-          className="max-w-2xl truncate text-sm leading-relaxed text-muted-foreground"
+        <time
+          dateTime={post.manifest.publishedAt}
+          className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground"
         >
-          {post.summary}
-        </p>
-        {post.manifest.codeLink ? (
-          <div className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-            <ExternalLink href={post.manifest.codeLink.href} section="b">
-              {post.manifest.codeLink.label}
-            </ExternalLink>
-          </div>
-        ) : null}
+          {formatDate(post.manifest.publishedAt)}
+        </time>
       </header>
       <ArticleProse html={post.html} />
     </article>

@@ -11,6 +11,9 @@ const blocked = [
   'ResizeObserver',
   'getBoundingClientRect',
   'requestAnimationFrame',
+  'useEffect',
+  'useLayoutEffect',
+  'useSyncExternalStore',
   'canvas',
   'dither',
 ];

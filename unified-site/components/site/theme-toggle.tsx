@@ -1,65 +1,21 @@
 'use client';
 
-import { useEffect, useSyncExternalStore } from 'react';
-
 type ThemeName = 'light' | 'dark';
-const listeners = new Set<() => void>();
-let currentTheme: ThemeName = 'light';
 
-function subscribe(listener: () => void) {
-  listeners.add(listener);
-
-  return () => listeners.delete(listener);
-}
-
-function getSnapshot() {
-  return currentTheme;
-}
-
-function getServerSnapshot() {
-  return 'light' as const;
-}
-
-function readTheme(): ThemeName {
-  const saved = window.localStorage.getItem('theme');
-
-  if (saved === 'light' || saved === 'dark') {
-    return saved;
-  }
-
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
-}
-
-function writeTheme(theme: ThemeName, save: boolean) {
+function applyTheme(theme: ThemeName) {
   document.documentElement.classList.remove('light', 'dark');
   document.documentElement.classList.add(theme);
   document.documentElement.style.colorScheme = theme;
-  currentTheme = theme;
-
-  if (save) {
-    window.localStorage.setItem('theme', theme);
-  }
-
-  for (const listener of listeners) {
-    listener();
-  }
+  window.localStorage.setItem('theme', theme);
 }
 
 export function ThemeToggle() {
-  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-
-  useEffect(() => {
-    writeTheme(readTheme(), false);
-  }, []);
-
-  const isDark = theme === 'dark';
-
   function toggleTheme() {
-    const nextTheme = isDark ? 'light' : 'dark';
+    const nextTheme = document.documentElement.classList.contains('dark')
+      ? 'light'
+      : 'dark';
 
-    writeTheme(nextTheme, true);
+    applyTheme(nextTheme);
   }
 
   return (
@@ -72,21 +28,13 @@ export function ThemeToggle() {
     >
       <span
         data-testid="theme-toggle-light"
-        className={`px-2 py-1 ${
-          !isDark
-            ? 'bg-foreground text-background'
-            : 'bg-transparent text-muted-foreground'
-        }`}
+        className="bg-foreground px-2 py-1 text-background dark:bg-transparent dark:text-muted-foreground"
       >
         Light
       </span>
       <span
         data-testid="theme-toggle-dark"
-        className={`border-l border-border px-2 py-1 ${
-          isDark
-            ? 'bg-foreground text-background'
-            : 'bg-transparent text-muted-foreground'
-        }`}
+        className="border-l border-border bg-transparent px-2 py-1 text-muted-foreground dark:bg-foreground dark:text-background"
       >
         Dark
       </span>

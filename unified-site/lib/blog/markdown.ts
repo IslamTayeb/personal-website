@@ -4,6 +4,7 @@ import footnote from 'markdown-it-footnote';
 import { escapeHtml, stripTags } from './html';
 import { filenameFromUrl, mediaBaseUrl, mediaUrl } from './media';
 import { slugify } from './slug';
+import { formatDate } from './date';
 import type { PostManifest } from './manifest';
 
 export type Heading = {
@@ -104,21 +105,73 @@ function prepareMarkdown(markdown: string, manifest: PostManifest) {
   return prepared;
 }
 
-function buildToc(headings: Heading[]) {
+function tocLabel(heading: Heading) {
+  return heading.level === 2 && heading.text.includes(':')
+    ? heading.text.split(':')[0]
+    : heading.text;
+}
+
+function buildToc(
+  headings: Heading[],
+  manifest: PostManifest,
+  sourceMarkdown: string
+) {
   const sections = headings.filter((heading) => heading.level === 2);
 
   if (sections.length === 0) {
     return '';
   }
 
-  return `<nav class="article-toc" aria-label="Article index"><ul>${sections
-    .map(
-      (heading) =>
-        `<li><a href="#${escapeHtml(heading.id)}">${escapeHtml(
-          heading.text.includes(':') ? heading.text.split(':')[0] : heading.text
-        )}</a></li>`
-    )
-    .join('')}</ul></nav>`;
+  const subsectionsByParent = new Map<string, Heading[]>();
+  let currentParent: string | null = null;
+
+  for (const heading of headings) {
+    if (heading.level === 2) {
+      currentParent = heading.id;
+      subsectionsByParent.set(currentParent, []);
+    } else if (heading.level === 3 && currentParent) {
+      subsectionsByParent.get(currentParent)?.push(heading);
+    }
+  }
+
+  const sectionHtml = sections
+    .map((section, index) => {
+      const sublinks = (subsectionsByParent.get(section.id) ?? [])
+        .map(
+          (subsection) =>
+            `<a href="#${escapeHtml(subsection.id)}">${escapeHtml(
+              tocLabel(subsection)
+            )}</a>`
+        )
+        .join('');
+      const subs = sublinks ? `<div class="toc-subs">${sublinks}</div>` : '';
+
+      return `<div class="toc-section"><a href="#${escapeHtml(
+        section.id
+      )}"><span class="toc-num">${index}</span>${escapeHtml(
+        tocLabel(section)
+      )}</a>${subs}</div>`;
+    })
+    .join('');
+
+  const metaItems = [
+    `<div><strong>Reading time</strong><br />${escapeHtml(
+      readingMeta(sourceMarkdown)
+    )}</div>`,
+    `<div><strong>Last updated</strong><br />${escapeHtml(
+      formatDate(manifest.updatedAt)
+    )}</div>`,
+  ];
+
+  if (manifest.codeLink) {
+    metaItems.push(
+      `<div><strong>Code</strong><br /><a href="${escapeHtml(
+        manifest.codeLink.href
+      )}">${escapeHtml(manifest.codeLink.label)}</a></div>`
+    );
+  }
+
+  return `<nav class="article-toc" aria-label="Article index" data-prototype="article-index"><div class="toc-main"><h2 id="index" class="prototype-heading"><span>Index</span><span class="prototype-tag">prototyping</span></h2><div class="toc-sections">${sectionHtml}</div></div><div class="toc-meta">${metaItems.join('')}</div></nav>`;
 }
 
 function mediaHtml(manifest: PostManifest, filename: string) {
@@ -130,11 +183,11 @@ function mediaHtml(manifest: PostManifest, filename: string) {
     return '';
   }
 
-  return `<figure class="article-media"><video src="${escapeHtml(
-    mediaUrl(insert.filename)
-  )}" controls preload="metadata" aria-label="${escapeHtml(
+  return `<figure class="article-media video-figure"><video autoplay controls loop muted playsinline preload="auto" aria-label="${escapeHtml(
     insert.ariaLabel
-  )}"></video><figcaption>${insert.captionHtml}</figcaption></figure>`;
+  )}"><source src="${escapeHtml(
+    mediaUrl(insert.filename)
+  )}" type="video/mp4" /></video><figcaption><em>${insert.captionHtml}</em></figcaption></figure>`;
 }
 
 function normalizeExternalAnchors(html: string) {
@@ -274,7 +327,7 @@ function configureMarkdown(manifest: PostManifest) {
           }).value
         : md.utils.escapeHtml(token.content);
 
-    return `<div class="highlight"><pre><code class="hljs language-${escapeHtml(
+    return `<div class="highlight" data-prototype="code"><div class="prototype-row"><span>code</span><span class="prototype-tag">prototyping</span></div><pre><code class="hljs language-${escapeHtml(
       lang
     )}">${highlighted}</code></pre></div>\n`;
   };
@@ -307,9 +360,36 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
   const env: MarkdownEnv = { headings: [] };
   const md = configureMarkdown(manifest);
   let html = md.render(prepared, env);
-  const toc = buildToc(env.headings);
+  const toc = buildToc(env.headings, manifest, markdown);
 
-  html = html.replace('<p>%%GENERATED_TOC%%</p>', toc);
+  html = html
+    .replace('<p>%%GENERATED_TOC%%</p>', toc)
+    .replace(
+      /<p>\s*(<img\b[^>]*>)\s*\n<em>([\s\S]*?)<\/em>\s*<\/p>/g,
+      '<figure class="article-media">$1<figcaption><em>$2</em></figcaption></figure>'
+    )
+    .replace(
+      /<p>\s*(<img\b[^>]*>)\s*<\/p>\s*<p>\s*<em>([\s\S]*?)<\/em>\s*<\/p>/g,
+      '<figure class="article-media">$1<figcaption><em>$2</em></figcaption></figure>'
+    )
+    .replace(
+      /<hr>\s*<hr class="footnotes-sep">/g,
+      '<hr class="footnotes-sep">'
+    );
+
+  if (manifest.wrapTables) {
+    html = html
+      .replace(
+        /<table>/g,
+        '<div class="table-wrap" data-prototype="table"><div class="prototype-row"><span>table</span><span class="prototype-tag">prototyping</span></div><table>'
+      )
+      .replace(/<\/table>/g, '</table></div>');
+  }
+
+  html = html.replace(
+    /<section class="footnotes">/g,
+    '<section class="footnotes" data-prototype="references"><div class="prototype-row"><span>references</span><span class="prototype-tag">prototyping</span></div>'
+  );
 
   for (const insert of manifest.videoInserts) {
     html = html.replace(

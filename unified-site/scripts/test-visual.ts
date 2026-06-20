@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdir } from 'node:fs/promises';
+import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { chromium, type Browser, type Page } from '@playwright/test';
@@ -50,6 +50,9 @@ async function assertHomeMeasurements(page: Page) {
     const title = document.querySelector('[data-testid="hero-title"]');
     const header = document.querySelector('[data-testid="site-header"]');
     const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
+    const engineeringGroup = document.querySelector(
+      '[data-testid="experience-group"][data-group="Engineering"]'
+    );
     const detail = document.querySelector('[data-testid="course-detail"]');
     const section = document.querySelector('section');
     const panel = document.querySelector('[data-testid="bordered-panel"]');
@@ -86,6 +89,8 @@ async function assertHomeMeasurements(page: Page) {
       heroTitleText: title?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       titleRight: title?.getBoundingClientRect().right ?? 0,
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      engineeringText:
+        engineeringGroup?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       hasProjectsSection: Boolean(document.querySelector('#projects')),
       hasThemeToggle: Boolean(themeToggle),
@@ -159,6 +164,12 @@ async function assertHomeMeasurements(page: Page) {
     'show more',
     'collapsed experience control should not include a count'
   );
+  for (const role of ['Software Engineer Intern', 'ML Engineer Intern']) {
+    assert.ok(
+      !measurements.engineeringText.includes(role),
+      `engineering rail should not render role label: ${role}`
+    );
+  }
   assert.equal(
     measurements.courseDetailHeight,
     22,
@@ -280,6 +291,46 @@ async function assertThemeToggleIsStable(page: Page) {
   );
 }
 
+async function assertScrollbarStyles(page: Page) {
+  const scrollbarColor = await page.evaluate(
+    () => getComputedStyle(document.documentElement).scrollbarColor
+  );
+  const css = await readFile(path.join(root, 'app', 'globals.css'), 'utf8');
+
+  assert.notEqual(
+    scrollbarColor,
+    'auto',
+    'html should set explicit scrollbar colors'
+  );
+  assert.ok(
+    css.includes('::-webkit-scrollbar-track') &&
+      css.includes('background: var(--background)'),
+    'scrollbar track should match the page background'
+  );
+  assert.ok(
+    css.includes('::-webkit-scrollbar-thumb') && css.includes('border: 0'),
+    'scrollbar thumb should not have an inset border'
+  );
+  assert.ok(
+    css.includes('::-webkit-scrollbar-thumb') &&
+      css.includes('border-radius: 0'),
+    'scrollbar thumb should be square'
+  );
+}
+
+async function assertThemeBootstrapBeforeHeader() {
+  const html = await fetch(baseUrl).then((response) => response.text());
+  const scriptIndex = html.indexOf('window.localStorage.getItem');
+  const headerIndex = html.indexOf('data-testid="site-header"');
+
+  assert.ok(scriptIndex >= 0, 'theme bootstrap script should render');
+  assert.ok(headerIndex >= 0, 'site header should render');
+  assert.ok(
+    scriptIndex < headerIndex,
+    'theme bootstrap should run before visible header markup'
+  );
+}
+
 async function assertHeroLinksHoverRed(page: Page) {
   const heroLink = page.locator('[data-testid="hero-section"] a').first();
 
@@ -318,6 +369,146 @@ async function assertHeroLinksHoverRed(page: Page) {
   );
 }
 
+async function assertArticleRendering(page: Page) {
+  const result = await page.evaluate(() => {
+    const header = document.querySelector('article > header');
+    const title = header?.querySelector('h1');
+    const date = header?.querySelector('time');
+    const toc = document.querySelector<HTMLElement>('.article-toc');
+    const tocText = toc?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    const firstImage =
+      document.querySelector<HTMLElement>('.article-media img');
+    const firstCaption = document.querySelector<HTMLElement>(
+      '.article-media figcaption'
+    );
+    const video = document.querySelector<HTMLVideoElement>(
+      '.video-figure video'
+    );
+    const h2 = document.querySelector<HTMLElement>('.article-prose > h2');
+    const h3 = document.querySelector<HTMLElement>('.article-prose > h3');
+    const token = document.querySelector<HTMLElement>(
+      '.article-prose .highlight .hljs-keyword, .article-prose .highlight .hljs-string'
+    );
+    const code = document.querySelector<HTMLElement>(
+      '.article-prose .highlight code'
+    );
+    const footnotes = document.querySelector<HTMLElement>('.footnotes');
+    const footnoteList = document.querySelector<HTMLElement>('.footnotes ol');
+    const table = document.querySelector<HTMLElement>('.table-wrap table');
+    const prototypeTags = [
+      ...document.querySelectorAll<HTMLElement>('[data-prototype]'),
+    ].map((element) => ({
+      kind: element.getAttribute('data-prototype'),
+      text: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+    }));
+
+    const titleRect = title?.getBoundingClientRect();
+    const dateRect = date?.getBoundingClientRect();
+    const imageStyle = firstImage ? getComputedStyle(firstImage) : null;
+    const captionStyle = firstCaption ? getComputedStyle(firstCaption) : null;
+    const h2Style = h2 ? getComputedStyle(h2) : null;
+    const h3Style = h3 ? getComputedStyle(h3) : null;
+    const tokenStyle = token ? getComputedStyle(token) : null;
+    const codeStyle = code ? getComputedStyle(code) : null;
+    const footnotesStyle = footnotes ? getComputedStyle(footnotes) : null;
+    const tableStyle = table ? getComputedStyle(table) : null;
+
+    return {
+      headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      titleBottom: titleRect?.bottom ?? 0,
+      dateTop: dateRect?.top ?? 0,
+      tocText,
+      tocHasSublinks: Boolean(toc?.querySelector('.toc-subs a')),
+      imageBorderTop: imageStyle?.borderTopWidth ?? '',
+      captionAlign: captionStyle?.textAlign ?? '',
+      captionSize: Number.parseFloat(captionStyle?.fontSize ?? '0'),
+      videoAutoplay: video?.autoplay ?? false,
+      videoControls: video?.controls ?? false,
+      videoLoop: video?.loop ?? false,
+      videoMuted: video?.muted ?? false,
+      videoPlaysInline: video?.playsInline ?? false,
+      videoPreload: video?.preload ?? '',
+      h2Size: Number.parseFloat(h2Style?.fontSize ?? '0'),
+      h3Size: Number.parseFloat(h3Style?.fontSize ?? '0'),
+      h2Weight: Number.parseInt(h2Style?.fontWeight ?? '0', 10),
+      h3Transform: h3Style?.textTransform ?? '',
+      tokenColor: tokenStyle?.color ?? '',
+      codeColor: codeStyle?.color ?? '',
+      footnotesSize: Number.parseFloat(footnotesStyle?.fontSize ?? '0'),
+      footnoteListTag: footnoteList?.tagName ?? '',
+      tableDisplay: tableStyle?.display ?? '',
+      prototypeTags,
+    };
+  });
+
+  assert.ok(
+    !result.headerText.includes('Why agent context should be structured'),
+    'article header should not include the summary block'
+  );
+  assert.ok(
+    !result.headerText.includes('GitHub'),
+    'article header should not include the code link'
+  );
+  assert.ok(
+    result.dateTop >= result.titleBottom,
+    'article date should render under the title'
+  );
+  for (const text of ['Reading time', 'Last updated', 'Code', 'GitHub']) {
+    assert.ok(
+      result.tocText.includes(text),
+      `article index should include ${text}`
+    );
+  }
+  assert.ok(result.tocHasSublinks, 'article index should include H3 sublinks');
+  assert.equal(
+    result.imageBorderTop,
+    '0px',
+    'article media should be borderless'
+  );
+  assert.equal(
+    result.captionAlign,
+    'center',
+    'media captions should be centered'
+  );
+  assert.ok(result.captionSize < 14, 'media captions should be small');
+  assert.equal(result.videoAutoplay, true, 'video should autoplay');
+  assert.equal(result.videoControls, true, 'video should show controls');
+  assert.equal(result.videoLoop, true, 'video should loop');
+  assert.equal(result.videoMuted, true, 'video should be muted for autoplay');
+  assert.equal(result.videoPlaysInline, true, 'video should play inline');
+  assert.equal(
+    result.videoPreload,
+    'auto',
+    'video should preload automatically'
+  );
+  assert.ok(
+    result.h2Size > result.h3Size,
+    'H2 should be visually stronger than H3'
+  );
+  assert.ok(result.h2Weight >= 600, 'H2 should have strong weight');
+  assert.equal(
+    result.h3Transform,
+    'uppercase',
+    'H3 should be a distinct mono label'
+  );
+  assert.notEqual(
+    result.tokenColor,
+    result.codeColor,
+    'syntax tokens should not collapse to plain code color'
+  );
+  assert.ok(result.footnotesSize <= 13, 'footnotes should stay compact');
+  assert.equal(result.footnoteListTag, 'OL', 'footnotes should be ordered');
+  assert.ok(result.tableDisplay.length > 0, 'article tables should render');
+  for (const kind of ['article-index', 'code', 'table', 'references']) {
+    assert.ok(
+      result.prototypeTags.some(
+        (item) => item.kind === kind && item.text.includes('prototyping')
+      ),
+      `article ${kind} primitive should carry a prototyping tag`
+    );
+  }
+}
+
 async function main() {
   await mkdir(screenshotDir, { recursive: true });
 
@@ -342,6 +533,7 @@ async function main() {
 
   try {
     await waitForServer(baseUrl);
+    await assertThemeBootstrapBeforeHeader();
 
     browser = await chromium.launch();
     const page = await browser.newPage({
@@ -350,6 +542,7 @@ async function main() {
     await page.goto(baseUrl, { waitUntil: 'networkidle' });
     await screenshot(page, 'home-desktop');
     await assertHomeMeasurements(page);
+    await assertScrollbarStyles(page);
     await assertVisibleOneLineDescriptions(page);
     await assertHeroLinksHoverRed(page);
     await assertThemeToggleIsStable(page);
@@ -386,6 +579,7 @@ async function main() {
       waitUntil: 'networkidle',
     });
     await assertVisibleOneLineDescriptions(article);
+    await assertArticleRendering(article);
     await screenshot(article, 'blog-article');
 
     console.log(`visual ok: screenshots written to ${screenshotDir}`);

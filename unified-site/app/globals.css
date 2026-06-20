@@ -86,8 +86,12 @@
   }
   html {
     @apply scroll-pt-16 font-sans;
-    scrollbar-color: var(--roy-b)
-      color-mix(in oklch, var(--border) 42%, transparent);
+    scrollbar-color: color-mix(
+        in oklch,
+        var(--foreground) 76%,
+        var(--background)
+      )
+      var(--background);
     scrollbar-width: thin;
   }
   body {
@@ -119,11 +123,12 @@
     width: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: color-mix(in oklch, var(--border) 42%, transparent);
+    background: var(--background);
   }
   ::-webkit-scrollbar-thumb {
-    background: color-mix(in oklch, var(--roy-b) 78%, var(--foreground));
-    border: 3px solid var(--background);
+    background: color-mix(in oklch, var(--foreground) 76%, var(--background));
+    border: 0;
+    border-radius: 0;
   }
 }
 
@@ -183,11 +188,14 @@
   .article-prose > * + * {
     margin-top: 1rem;
   }
+  .article-prose p {
+    @apply leading-relaxed;
+  }
   .article-prose h2 {
-    @apply border-t border-border pt-6 font-mono text-xs uppercase tracking-[0.18em] text-foreground;
+    @apply mt-8 text-xl font-semibold leading-tight tracking-tight text-foreground;
   }
   .article-prose h3 {
-    @apply font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground;
+    @apply mt-5 font-mono text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground;
   }
   .article-prose a {
     text-decoration-line: underline;
@@ -197,27 +205,161 @@
   .article-prose blockquote {
     @apply border-l-2 border-roy-b pl-3 text-muted-foreground;
   }
-  .article-prose pre {
-    @apply overflow-x-auto border border-border bg-muted p-3 font-mono text-xs;
+  .article-prose figure {
+    @apply my-5 max-w-full;
   }
-  .article-prose code {
+  .article-prose figure img,
+  .article-prose figure video {
+    @apply mx-auto block h-auto max-w-full border-0;
+  }
+  .article-prose figcaption {
+    @apply mt-2 block text-center text-xs leading-snug text-muted-foreground;
+  }
+  .article-prose figcaption em {
+    @apply italic;
+  }
+  .article-prose .highlight {
+    @apply my-4 max-w-full overflow-x-auto bg-muted px-3 font-mono text-xs leading-snug text-foreground;
+  }
+  .article-prose .highlight pre {
+    @apply m-0 overflow-x-visible bg-transparent py-2;
+  }
+  .article-prose .highlight code {
+    @apply block min-w-max bg-transparent p-0 font-mono;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .article-prose :not(pre) > code {
     @apply bg-muted px-1 py-0.5 font-mono text-[0.9em];
   }
-  .article-prose pre code {
-    @apply bg-transparent p-0;
+  .article-prose .hljs-comment,
+  .article-prose .hljs-quote {
+    color: color-mix(in oklch, var(--muted-foreground) 90%, var(--roy-b));
+    font-style: italic;
   }
-  .article-prose img,
-  .article-prose video {
-    @apply w-full border border-border;
+  .article-prose .hljs-keyword,
+  .article-prose .hljs-literal,
+  .article-prose .hljs-name,
+  .article-prose .hljs-selector-tag,
+  .article-prose .hljs-strong,
+  .article-prose .hljs-type {
+    color: var(--roy-r);
+    font-weight: 600;
+  }
+  .article-prose .hljs-title,
+  .article-prose .hljs-class .hljs-title,
+  .article-prose .hljs-function .hljs-title {
+    color: var(--roy-b);
+    font-weight: 600;
+  }
+  .article-prose .hljs-attr,
+  .article-prose .hljs-attribute,
+  .article-prose .hljs-number,
+  .article-prose .hljs-symbol {
+    color: var(--roy-o);
+  }
+  .article-prose .hljs-string,
+  .article-prose .hljs-template-variable,
+  .article-prose .hljs-variable {
+    color: color-mix(in oklch, var(--roy-b) 72%, var(--foreground));
+  }
+  .article-prose .hljs-built_in,
+  .article-prose .hljs-built-in {
+    color: color-mix(in oklch, var(--roy-y) 55%, var(--foreground));
+  }
+  .article-prose .hljs-punctuation,
+  .article-prose .hljs-operator {
+    color: var(--muted-foreground);
+  }
+  .article-prose .prototype-heading,
+  .article-prose .prototype-row {
+    @apply flex items-center justify-between gap-3;
+  }
+  .article-prose .prototype-row {
+    @apply border-b border-border pb-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground;
+  }
+  .article-prose .prototype-tag {
+    @apply shrink-0 font-mono text-[9px] font-normal uppercase tracking-[0.12em] text-muted-foreground;
+  }
+  .article-prose .article-toc {
+    @apply my-6 flex flex-col gap-5 border border-border bg-muted/45 p-4 md:flex-row md:justify-between;
+  }
+  .article-prose .article-toc h2 {
+    @apply m-0 font-mono text-xs font-medium uppercase tracking-[0.18em] text-foreground;
+  }
+  .article-prose .toc-main {
+    @apply min-w-0 flex-1;
+  }
+  .article-prose .toc-sections {
+    @apply mt-3 flex flex-col gap-2 text-sm;
+  }
+  .article-prose .toc-section > a {
+    @apply text-foreground no-underline;
+  }
+  .article-prose .toc-section > a:hover {
+    @apply underline;
+  }
+  .article-prose .toc-num {
+    @apply mr-2 font-mono text-xs text-muted-foreground;
+  }
+  .article-prose .toc-subs {
+    @apply ml-5 mt-1 flex flex-col gap-0.5 border-l border-border pl-3;
+  }
+  .article-prose .toc-subs a {
+    @apply text-xs text-muted-foreground no-underline;
+  }
+  .article-prose .toc-subs a:hover {
+    @apply underline;
+  }
+  .article-prose .toc-meta {
+    @apply flex shrink-0 flex-wrap gap-x-5 gap-y-2 border-t border-border pt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground md:w-48 md:flex-col md:border-l md:border-t-0 md:pl-4 md:pt-0;
+  }
+  .article-prose .toc-meta strong {
+    @apply text-foreground;
+  }
+  .article-prose .toc-meta a {
+    @apply text-muted-foreground;
+  }
+  .article-prose .table-wrap {
+    @apply my-4 max-w-full overflow-x-auto;
   }
   .article-prose table {
-    @apply w-full table-auto border-collapse text-xs;
+    @apply w-full min-w-full table-auto border-collapse text-xs;
   }
   .article-prose th,
   .article-prose td {
-    @apply border border-border px-2 py-1 align-top;
+    @apply min-w-[6ch] px-2 py-1.5 align-top;
+    overflow-wrap: anywhere;
+  }
+  .article-prose th {
+    @apply border-b border-border bg-muted/65 text-left font-semibold text-foreground;
+  }
+  .article-prose tbody tr:nth-child(odd) {
+    @apply bg-muted/35;
+  }
+  .article-prose tbody tr:nth-child(even) {
+    @apply bg-background;
+  }
+  .article-prose .footnotes-sep {
+    @apply my-6 border-0 border-t border-dashed border-border;
   }
   .article-prose .footnotes {
-    @apply border-t border-border pt-4 text-xs text-muted-foreground;
+    @apply text-xs leading-relaxed text-muted-foreground;
+  }
+  .article-prose .footnotes ol {
+    @apply pl-5;
+  }
+  .article-prose .footnotes li {
+    @apply mb-3;
+  }
+  .article-prose .footnotes li p {
+    @apply m-0;
+  }
+  .article-prose .footnote-ref a {
+    @apply font-mono text-[0.85em] text-roy-b no-underline;
+  }
+  .article-prose .footnote-backref {
+    @apply ml-1 text-muted-foreground no-underline;
   }
 }
