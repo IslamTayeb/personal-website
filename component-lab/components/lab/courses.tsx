@@ -23,6 +23,16 @@ const categoryStyles: Record<
   }
 > = {
   Systems: {
+    dot: 'bg-roy-r',
+    text: 'text-roy-r',
+    border: 'border-roy-r',
+    active: 'border-roy-r bg-roy-r/[0.14] text-foreground',
+    inactive:
+      'border-roy-r/35 bg-roy-r/[0.06] text-foreground hover:border-roy-r',
+    locked:
+      'border-roy-r/20 bg-roy-r/[0.04] text-muted-foreground/35 saturate-50',
+  },
+  Theory: {
     dot: 'bg-roy-o',
     text: 'text-roy-o',
     border: 'border-roy-o',
@@ -31,16 +41,6 @@ const categoryStyles: Record<
       'border-roy-o/35 bg-roy-o/[0.07] text-foreground hover:border-roy-o',
     locked:
       'border-roy-o/20 bg-roy-o/[0.05] text-muted-foreground/35 saturate-50',
-  },
-  Theory: {
-    dot: 'bg-roy-b',
-    text: 'text-roy-b',
-    border: 'border-roy-b',
-    active: 'border-roy-b bg-roy-b/[0.16] text-foreground',
-    inactive:
-      'border-roy-b/35 bg-roy-b/[0.07] text-foreground hover:border-roy-b',
-    locked:
-      'border-roy-b/20 bg-roy-b/[0.05] text-muted-foreground/35 saturate-50',
   },
   Biochemistry: {
     dot: 'bg-roy-y',
@@ -184,7 +184,7 @@ export function CoursesSection() {
           />
 
           <div
-            className={`min-h-[33px] border-l-2 pl-3 ${
+            className={`flex min-h-[33px] flex-col justify-center border-l-2 pl-3 ${
               activeItem
                 ? categoryStyles[activeItem.category].border
                 : 'border-border'

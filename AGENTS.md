@@ -73,6 +73,22 @@ npm run format:check # prettier --check .
 Use npm only in the lab. Do not wire `component-lab/` into either Vercel deploy
 until the experiment graduates into a deliberate implementation plan.
 
+## Verification discipline
+
+Testing and verification are as important as the fix itself. Do not make a
+change and assume it worked. For every behavioral, layout, interaction, or
+content-routing change, create or run a concrete check that proves the intended
+thing changed and that the surrounding behavior did not regress. Use the
+available project gates, focused scripts, screenshots, browser interaction
+checks, DOM measurements, or content assertions as appropriate to the risk.
+
+When iterating on the component lab, prefer small, repeatable verification
+snippets that capture the meaning being tested, such as rail spacing, selected
+state behavior, responsive layout, link affordances, and dark/light contrast.
+These checks are part of how the design direction gets clarified over time, not
+an afterthought. If the intended behavior or visual meaning is ambiguous, ask
+the user instead of guessing.
+
 ## Committing
 
 Commit and push when you are confident the project is in good shape for a checkpoint. Before committing:

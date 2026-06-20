@@ -20,7 +20,10 @@ function SelectedWordmark() {
       >
         <MoonGlyph size={15} variant="heavy-cut" /> islam
       </button>
-      <span aria-hidden style={{ color: '#DFDEDB' }}>
+      <span
+        aria-hidden
+        className="text-[#DFDEDB] dark:text-muted-foreground/45"
+      >
         /
       </span>
       <button

@@ -41,7 +41,7 @@ export function RailItem({
       {connector !== 'none' ? (
         <span
           className={cn(
-            'absolute left-[3.5px] top-5 bottom-0 w-px',
+            'absolute left-[3.5px] top-4 bottom-0 w-px',
             connector === 'solid' ? 'bg-border' : 'text-border',
             connectorClassName
           )}

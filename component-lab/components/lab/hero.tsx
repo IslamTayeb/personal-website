@@ -1,10 +1,13 @@
+'use client';
+
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { contactLinks, heroParagraphs, type TextSegment } from '@/lib/lab-data';
 import { Section, Variant } from './frame';
 import { LabExternalLink } from './links';
 
 function HeroContactIndex() {
   return (
-    <div className="flex flex-col gap-3 font-mono text-[11px]">
+    <div className="flex flex-col gap-3 font-mono text-sm leading-snug">
       <div className="flex flex-col gap-1">
         <span className="text-muted-foreground">contact</span>
         <ul className="flex flex-wrap text-foreground">
@@ -24,9 +27,13 @@ function HeroContactIndex() {
           ))}
         </ul>
       </div>
-      <div className="grid grid-cols-[3.4rem_1fr] gap-2">
-        <span className="text-muted-foreground">loc</span>
-        <span className="text-foreground">Durham, NC</span>
+      <div className="flex justify-between gap-4">
+        <span className="text-muted-foreground">location</span>
+        <span className="text-right text-foreground">Durham, NC</span>
+      </div>
+      <div className="flex justify-between gap-4">
+        <span className="text-muted-foreground">hometown</span>
+        <span className="text-right text-foreground">Alexandria, Egypt</span>
       </div>
     </div>
   );
@@ -62,6 +69,31 @@ function HeroStory() {
 }
 
 export function HeroSection() {
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const [titleWidth, setTitleWidth] = useState<number | null>(null);
+
+  useEffect(() => {
+    const title = titleRef.current;
+    if (!title) {
+      return;
+    }
+
+    const updateTitleWidth = () => {
+      setTitleWidth(Math.ceil(title.getBoundingClientRect().width));
+    };
+
+    updateTitleWidth();
+
+    const resizeObserver = new ResizeObserver(updateTitleWidth);
+    resizeObserver.observe(title);
+
+    return () => resizeObserver.disconnect();
+  }, []);
+
+  const gridStyle = {
+    '--hero-left-width': titleWidth ? `${titleWidth}px` : '14rem',
+  } as CSSProperties;
+
   return (
     <Section
       index="1"
@@ -72,15 +104,21 @@ export function HeroSection() {
     >
       <Variant label="Selected — compact hero, stacks on phone" tag="final">
         <div className="flex w-full flex-col gap-3">
-          <h3 className="font-sans text-2xl font-semibold tracking-tight text-foreground">
+          <h3
+            ref={titleRef}
+            className="w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"
+          >
             (Islam M)
-            <sup className="text-sm font-bold leading-none tracking-normal">
+            <sup className="ml-0.5 text-sm font-bold leading-none tracking-normal">
               2
             </sup>{' '}
             Tayeb
           </h3>
-          <div className="flex flex-col gap-4 md:grid md:grid-cols-[max-content_1fr] md:gap-5">
-            <div className="md:w-max md:border-r md:border-border md:pr-5">
+          <div
+            style={gridStyle}
+            className="flex flex-col gap-4 md:grid md:grid-cols-[var(--hero-left-width)_minmax(0,1fr)] md:gap-5"
+          >
+            <div className="min-w-0 md:border-r md:border-border md:pr-5">
               <HeroContactIndex />
             </div>
             <HeroStory />
