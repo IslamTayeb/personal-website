@@ -38,7 +38,7 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Apr 2026 - Present',
         href: 'https://users.cs.duke.edu/~mlentz/',
         state: 'present',
-        desc: 'Token mining and codegen correctness for agents with runtime-error repair feedback loops.',
+        desc: 'Tokenminning and codegen correctness for agents with runtime-error repair feedback loops.',
       },
       {
         org: 'Duke University',

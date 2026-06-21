@@ -1,15 +1,15 @@
 export type ExternalWriting = {
   title: string;
   href: string;
-  source: string;
+  meta: string;
   date: string;
 };
 
 export const externalWriting: ExternalWriting[] = [
   {
-    title: 'Finding the right answer was never the point',
+    title: 'Finding the Right Answer Was Never the Point',
     href: 'https://www.dukechronicle.com/article/daf941cd-e431-4e71-a282-5f7da9a56c28',
-    source: 'Duke Chronicle',
+    meta: '894 words, 4 min',
     date: 'Nov 2024',
   },
 ];

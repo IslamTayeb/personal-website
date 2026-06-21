@@ -203,7 +203,7 @@ Middle Eastern=0.43, South Asian=0.29, East Asian=0.14, African=0.0
 <p>With 33 interpretable dimensions, I needed a clustering algorithm. I tried 3. Do note that I (mostly) ignored things like silhouette scores (data wasn't well-separated enough) or elbow methods. Most of my work here was based on observation.</p>
 <h4 id="hdbscan">HDBSCAN</h4>
 <p><em>HDBSCAN</em> was my first choice. It had worked well for me on biological data before: density-based, no need to specify k, finds arbitrary shapes. On music, HDBSCAN labeled 90% of tracks as noise.</p>
-<p><em>HDBSCAN</em> assumes clusters are &quot;regions of the data that are denser than the surrounding space&quot;; the mental model is &quot;trying to separate the islands from the sea.&quot; But music taste barely has any density gaps. Chill pop gradates into bedroom pop gradates into lo-fi. There are no valleys to cut.</p>
+<p>It assumes clusters are &quot;regions of the data that are denser than the surrounding space&quot;; the mental model is &quot;trying to separate the islands from the sea.&quot; But music taste barely has any density gaps. Chill pop gradates into bedroom pop gradates into lo-fi. There are no valleys to cut.</p>
 <h4 id="knn">KNN</h4>
 <p><em>KNN</em>-based clustering (building a neighbor graph, then running community detection) was better. It captures local structure. A song might neighbor five chill tracks and one jazz track, and that single edge pulls it wrong. I found ~20% of tracks felt misplaced from randomly shuffling. It was miles better than <em>HDBSCAN</em>, but I was still exploring.</p>
 <h4 id="hierarchical-agglomerative-clustering-hac">Hierarchical Agglomerative Clustering (HAC)</h4>
@@ -254,8 +254,14 @@ Middle Eastern=0.43, South Asian=0.29, East Asian=0.14, African=0.0
 <iframe src="https://islamtayeb.github.io/harmonia/export/visualizations/subclusters/Mellow_subclusters/index.html" width="100%" height="350px"></iframe>
 <p><em>3D UMAP visualization of <code class="mellow">Mellow</code> sub-clusters</em></p>
 <p>Although I saw the high <code>mood_sad</code>, shuffling through the playlist made me feel like it's mellow with 2 moods. Subclustering with KNN (k=2) further revealed:</p>
+<ul>
+<li>
 <p><strong><code class="mellow-hopecore">Mellow-Hopecore</code> (Cluster 4.0, <a href="https://open.spotify.com/playlist/0xe4HFUZ0EefL4542Fcext">Playlist</a>) — 97 songs, 62.2%:</strong> Hopeful calm. On God Kanye, SDP Interlude Travis, Latin folk. Lower <code>mood_sad</code>, lower <code>danceability</code> (in the <em>Essentia</em> sense), less <code>electronic_acoustic</code> than 4.1. The &quot;things will be okay&quot; playlist. One of my favorite (sub)clusters.</p>
+</li>
+<li>
 <p><strong><code class="mellow-sadcore">Mellow-Sadcore</code> (Cluster 4.1, <a href="https://open.spotify.com/playlist/5TxF9kfvBJlyiRKpLoAbwK">Playlist</a>) — 59 songs, 37.8%:</strong> Sad calm. JANNABI, Glass Animals, Mustafa. Higher <code>mood_sad</code>, higher <code>danceability</code>, more <code>electronic_acoustic</code>. The &quot;things are not okay but at least the music is pretty&quot; playlist.</p>
+</li>
+</ul>
 <h4 id="overview">Overview</h4>
 <p>The dissimilarity matrix validates that the clusters are fairly different. <code class="narrative-rap">Narrative-Rap</code> and <code class="mellow">Mellow</code> are the closest pair (d = 0.59), both introspective and emotionally weighted. <code class="hard-rap">Hard-Rap</code> and <code class="narrative-rap">Narrative-Rap</code> are also close (d = 0.67), sharing rap conventions despite diverging in lyrical tone. This matters because the clustering respects the gradients I actually perceive: rap stays near rap, reflective stays near reflective. <code class="mellow-sadcore">Mellow-Sadcore</code> is even closer to <code class="narrative-rap">Narrative-Rap</code>.</p>
 <p><code class="hard-rap">Hard-Rap</code> and <code class="jazz-fusion">Jazz-Fusion</code> are the most distant pair (d = 1.51). The features driving this are instrumentalness (<em>Cohen's d</em> = -6.37), language (3.63), lyric explicitness (3.34), and lyric arousal (2.95). One cluster is vocal-heavy, English-dominant, explicit, and high-energy. The other is instrumental, language-neutral, clean, and calm. They represent opposite ends of the feature space, which is exactly what I'd expect given how differently they function in my listening habits.</p>

@@ -228,11 +228,11 @@ function RailGroupBlock({
         onClick={onToggleOpen}
         aria-expanded={open}
         data-testid="experience-group-toggle"
-        className="grid grid-cols-[1.25rem_minmax(0,1fr)] items-center pb-2.5 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        className="grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] items-center pb-2.5 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring"
       >
         <Chevron
           className="relative bottom-px text-muted-foreground"
-          size={11}
+          size={12}
           strokeWidth={1.8}
           aria-hidden
         />
@@ -262,42 +262,6 @@ function RailGroupBlock({
   );
 }
 
-function ExperienceLegend() {
-  const items = [
-    {
-      label: 'incoming',
-      className: 'border border-roy-o bg-transparent',
-    },
-    {
-      label: 'active',
-      className: 'bg-roy-o',
-    },
-    {
-      label: 'past',
-      className: 'bg-foreground/75',
-    },
-  ];
-
-  return (
-    <div
-      data-testid="experience-legend"
-      className="flex flex-wrap justify-end gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
-    >
-      {items.map((item) => (
-        <span key={item.label} className="inline-flex items-center gap-1.5">
-          <span
-            aria-hidden
-            aria-label={item.label}
-            data-testid="legend-dot"
-            className={cn('h-2 w-2 shrink-0', item.className)}
-          />
-          {item.label}
-        </span>
-      ))}
-    </div>
-  );
-}
-
 export function Experience({
   boxedAdvisorLabels = false,
 }: {
@@ -319,13 +283,7 @@ export function Experience({
   });
 
   return (
-    <Section
-      id="experience"
-      index="2"
-      title="Experience"
-      accent="text-roy-o"
-      headerExtra={<ExperienceLegend />}
-    >
+    <Section id="experience" index="2" title="Experience" accent="text-roy-o">
       <BorderedPanel>
         <div className="flex w-full flex-col">
           {experienceGroups.map((group) => (

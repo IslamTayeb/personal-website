@@ -177,6 +177,11 @@ async function assertScrollbarStyles() {
       !css.includes('--section-highlight'),
     'link hover highlight should use section color at 20% alpha'
   );
+  assert.ok(
+    css.includes('--rail-gutter: 1.75rem') &&
+      css.includes('--rail-marker-size: 0.75rem'),
+    'rail gutter and marker sizing should be centralized as root tokens'
+  );
 }
 
 async function assertHome(page: Page) {
@@ -190,20 +195,98 @@ async function assertHome(page: Page) {
           .join(' ')
       : '';
     const heroSection = document.querySelector('[data-testid="hero-section"]');
+    const heroPortrait = document.querySelector<HTMLElement>(
+      '[data-testid="hero-portrait"]'
+    );
+    const heroPortraitStyle = heroPortrait
+      ? getComputedStyle(heroPortrait)
+      : null;
+    const heroPortraitRect = heroPortrait?.getBoundingClientRect();
     const experienceSection = document.querySelector('#experience');
     const experienceTitle = experienceSection?.querySelector('header h2');
     const firstGroupLabel = experienceSection?.querySelector(
       '[data-testid="experience-group-label"]'
     );
-    const experienceLegend = experienceSection?.querySelector(
-      '[data-testid="experience-legend"]'
-    );
     const firstRailTitle = experienceSection?.querySelector(
       '[data-testid="rail-title"]'
     );
     const footer = document.querySelector('[data-testid="site-footer"]');
-    const footerQuote = footer?.querySelector('span');
+    const footerSpans = [...(footer?.querySelectorAll('span') ?? [])];
+    const footerUpdate = footerSpans[0];
+    const footerQuote = footerSpans[1];
     const topLevelSections = [...document.querySelectorAll('main > section')];
+    const rootStyle = getComputedStyle(document.documentElement);
+    const sectionMarkerData = topLevelSections.map((section) => {
+      const marker = section.querySelector<HTMLElement>('header span');
+      const style = marker ? getComputedStyle(marker) : null;
+      const rect = marker?.getBoundingClientRect();
+
+      return {
+        left: rect?.left ?? 0,
+        right: rect?.right ?? 0,
+        width: rect?.width ?? 0,
+        center: rect ? rect.left + rect.width / 2 : 0,
+        fontSize: Number.parseFloat(style?.fontSize ?? '0'),
+      };
+    });
+    const sectionLabelLefts = topLevelSections.map(
+      (section) =>
+        section.querySelector<HTMLElement>('header h2')?.getBoundingClientRect()
+          .left ?? 0
+    );
+    const sectionLefts = topLevelSections.map(
+      (section) => section.getBoundingClientRect().left
+    );
+    const sharedRowTitleLefts = [
+      experienceSection
+        ?.querySelector<HTMLElement>('[data-testid="experience-group-label"]')
+        ?.getBoundingClientRect().left ?? 0,
+      experienceSection
+        ?.querySelector<HTMLElement>('[data-testid="rail-title"]')
+        ?.getBoundingClientRect().left ?? 0,
+      document
+        .querySelector<HTMLElement>(
+          '#publications [data-testid="publication-title-wrap"]'
+        )
+        ?.getBoundingClientRect().left ?? 0,
+      document
+        .querySelector<HTMLElement>('#writing [data-testid="rail-title"]')
+        ?.getBoundingClientRect().left ?? 0,
+    ].filter((left) => left > 0);
+    const markerData = [
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-testid="rail-dot"], [data-testid="publication-dot"]'
+      ),
+    ].map((dot) => {
+      const rect = dot.getBoundingClientRect();
+
+      return {
+        left: rect.left,
+        width: rect.width,
+        center: rect.left + rect.width / 2,
+      };
+    });
+    const connectorCenters = [
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-testid="rail-connector"], [data-testid="publication-connector"]'
+      ),
+    ].map((connector) => {
+      const rect = connector.getBoundingClientRect();
+
+      return rect.left + rect.width / 2;
+    });
+    const groupChevronData = [
+      ...document.querySelectorAll<SVGElement>(
+        '[data-testid="experience-group-toggle"] svg'
+      ),
+    ].map((icon) => {
+      const rect = icon.getBoundingClientRect();
+
+      return {
+        width: rect.width,
+        center: rect.left + rect.width / 2,
+      };
+    });
     const groups = [
       ...document.querySelectorAll('[data-testid="experience-group"]'),
     ].map((group) => ({
@@ -227,14 +310,6 @@ async function assertHome(page: Page) {
         backgroundColor: getComputedStyle(dot).backgroundColor,
       })
     );
-    const legendDots = [
-      ...(experienceLegend?.querySelectorAll('[data-testid="legend-dot"]') ??
-        []),
-    ].map((dot) => ({
-      label: dot.getAttribute('aria-label'),
-      backgroundColor: getComputedStyle(dot).backgroundColor,
-      border: Number.parseFloat(getComputedStyle(dot).borderTopWidth),
-    }));
     const publicationButtons = document.querySelectorAll(
       '[data-testid="publication-row-button"]'
     );
@@ -337,6 +412,10 @@ async function assertHome(page: Page) {
           .trim() ?? '',
       heroContactText:
         heroSection?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      heroPortraitWidth: heroPortraitRect?.width ?? 0,
+      heroPortraitHeight: heroPortraitRect?.height ?? 0,
+      heroPortraitBorderTop: heroPortraitStyle?.borderTopWidth ?? '',
+      heroPortraitObjectFit: heroPortraitStyle?.objectFit ?? '',
       sectionMarkers: topLevelSections.map(
         (section) =>
           section
@@ -354,13 +433,30 @@ async function assertHome(page: Page) {
       sectionBorders: topLevelSections.map((section) =>
         Number.parseFloat(getComputedStyle(section).borderTopWidth)
       ),
+      railGutter: rootStyle.getPropertyValue('--rail-gutter').trim(),
+      railMarkerSize: rootStyle.getPropertyValue('--rail-marker-size').trim(),
+      sectionLabelLefts,
+      sectionLefts,
+      sectionMarkerLefts: sectionMarkerData.map((marker) => marker.left),
+      sectionMarkerRights: sectionMarkerData.map((marker) => marker.right),
+      sectionMarkerWidths: sectionMarkerData.map((marker) => marker.width),
+      sectionMarkerCenters: sectionMarkerData.map((marker) => marker.center),
+      sectionMarkerFontSizes: sectionMarkerData.map(
+        (marker) => marker.fontSize
+      ),
+      sharedRowTitleLefts,
+      markerLefts: markerData.map((marker) => marker.left),
+      markerWidths: markerData.map((marker) => marker.width),
+      markerCenters: markerData.map((marker) => marker.center),
+      connectorCenters,
+      groupChevronWidths: groupChevronData.map((icon) => icon.width),
+      groupChevronCenters: groupChevronData.map((icon) => icon.center),
       experienceTitleLeft: experienceTitle?.getBoundingClientRect().left ?? 0,
       firstGroupLabelLeft: firstGroupLabel?.getBoundingClientRect().left ?? 0,
       firstRailTitleLeft: firstRailTitle?.getBoundingClientRect().left ?? 0,
-      experienceLegendLabels: [...(experienceLegend?.children ?? [])].map(
-        (item) => item.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      experienceLegendExists: Boolean(
+        experienceSection?.querySelector('[data-testid="experience-legend"]')
       ),
-      legendDots,
       groups,
       dots,
       writingDots,
@@ -406,13 +502,26 @@ async function assertHome(page: Page) {
         ? Number.parseFloat(getComputedStyle(footer).borderTopWidth)
         : 0,
       footerRight: footer?.getBoundingClientRect().right ?? 0,
+      footerUpdateLeft: footerUpdate?.getBoundingClientRect().left ?? 0,
+      footerLeft: footer?.getBoundingClientRect().left ?? 0,
       footerQuoteRight: footerQuote?.getBoundingClientRect().right ?? 0,
+      footerUpdateText:
+        footerUpdate?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      footerQuoteText:
+        footerQuote?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       footerText: footer?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
     };
   });
 
   assert.ok(result.mainWidth <= 800, 'main document should stay narrow');
   assert.equal(result.heroTitle, 'Islam Tayeb');
+  assert.ok(result.heroPortraitWidth > 0, 'hero portrait should render');
+  assert.ok(
+    Math.abs(result.heroPortraitWidth - result.heroPortraitHeight) <= 1,
+    'hero portrait should be square'
+  );
+  assert.equal(result.heroPortraitBorderTop, '0px');
+  assert.equal(result.heroPortraitObjectFit, 'cover');
   assert.deepEqual(result.sectionMarkers, ['§1', '§2', '§3', '§4']);
   assert.deepEqual(result.sectionLabels, [
     'About',
@@ -424,6 +533,76 @@ async function assertHome(page: Page) {
     result.sectionBorders,
     result.sectionBorders.map(() => 0),
     'top-level section dividers should stay disabled'
+  );
+  assert.equal(Number.parseFloat(result.railGutter), 1.75);
+  assert.equal(Number.parseFloat(result.railMarkerSize), 0.75);
+  assert.ok(
+    result.sectionLabelLefts.every(
+      (left) => Math.abs(left - result.sectionLabelLefts[0]) <= 1
+    ),
+    'top-level section labels should share one content edge'
+  );
+  assert.ok(
+    result.sharedRowTitleLefts.every(
+      (left) => Math.abs(left - result.sectionLabelLefts[0]) <= 1
+    ),
+    'rail row titles should align with top-level section labels'
+  );
+  assert.ok(
+    result.sectionLefts.every(
+      (left) => Math.abs(left - result.sectionLefts[0]) <= 1
+    ),
+    'top-level sections should share one left edge'
+  );
+  assert.ok(
+    result.sectionMarkerLefts.every(
+      (left) => Math.abs(left - result.sectionLefts[0]) <= 1
+    ),
+    'section markers should touch the section left edge'
+  );
+  assert.ok(
+    result.markerLefts.every(
+      (left) => Math.abs(left - result.sectionLefts[0]) <= 1
+    ),
+    'rail markers should touch the section left edge'
+  );
+  assert.ok(
+    result.sectionMarkerRights.every(
+      (right) => result.sectionLabelLefts[0] - right >= 8
+    ),
+    'section markers should remain in the rail gutter before content text'
+  );
+  assert.ok(
+    result.sectionMarkerFontSizes.every((size) => Math.round(size) === 12),
+    'section markers should stay at the same 12px bottleneck size'
+  );
+  assert.ok(
+    result.markerWidths.every((width) => Math.round(width) === 12),
+    'rail markers should match the shared 12px marker size'
+  );
+  assert.ok(
+    result.groupChevronWidths.every((width) => Math.round(width) === 12),
+    'experience group chevrons should match the shared marker size'
+  );
+  const expectedAxis = result.sectionLefts[0] + result.markerWidths[0] / 2;
+
+  assert.ok(
+    result.markerCenters.every(
+      (center) => Math.abs(center - expectedAxis) <= 1
+    ),
+    'rail marker centers should share the left-flush rail axis'
+  );
+  assert.ok(
+    result.connectorCenters.every(
+      (center) => Math.abs(center - expectedAxis) <= 1
+    ),
+    'rail connectors should share the left-flush rail axis'
+  );
+  assert.ok(
+    result.groupChevronCenters.every(
+      (center) => Math.abs(center - expectedAxis) <= 1
+    ),
+    'experience chevrons should share the left-flush rail axis'
   );
   assert.equal(result.hasCoursesSection, false, 'Courses should stay hidden');
   assert.ok(
@@ -440,7 +619,7 @@ async function assertHome(page: Page) {
     assert.ok(result.bodyText.includes(copy), `hero should include: ${copy}`);
   }
   assert.ok(
-    !result.bodyText.includes('Finding the right answer was never the point'),
+    !result.bodyText.includes('Finding the Right Answer Was Never the Point'),
     'external writing should stay off the home writing preview'
   );
   assert.ok(result.bodyText.includes('islam.moh.islamm@gmail.com'));
@@ -515,20 +694,7 @@ async function assertHome(page: Page) {
   );
   assert.ok(presentDots.every((dot) => dot.className.includes('bg-roy-o')));
   assert.ok(endedDots.every((dot) => dot.className.includes('bg-foreground')));
-  assert.deepEqual(result.experienceLegendLabels, [
-    'incoming',
-    'active',
-    'past',
-  ]);
-  assert.ok(
-    result.legendDots.some(
-      (dot) =>
-        dot.label === 'incoming' &&
-        dot.border >= 1 &&
-        dot.backgroundColor === 'rgba(0, 0, 0, 0)'
-    ),
-    'experience legend incoming marker should be hollow and transparent'
-  );
+  assert.equal(result.experienceLegendExists, false);
   assert.ok(result.writingDots[0]?.includes('bg-roy-b'));
   assert.ok(
     result.writingDots.slice(1).every((dot) => dot.includes('bg-foreground/75'))
@@ -655,12 +821,37 @@ async function assertHome(page: Page) {
   assert.equal(result.footerBorderTopWidth, 1);
   assert.ok(result.bodyText.includes('See more on Scholar'));
   assert.ok(result.bodyText.includes('See more on blog'));
-  assert.ok(result.footerText.includes('plz enjoy game'));
+  assert.equal(result.footerUpdateText, 'Last updated 06/21/2026');
+  assert.ok(result.footerQuoteText.includes('plz enjoy game'));
+  assert.ok(result.footerQuoteText.includes('rrtyui'));
   assert.ok(!result.footerText.includes('Links:'));
+  assert.ok(
+    Math.abs(result.footerLeft - result.footerUpdateLeft) <= 1,
+    'footer update text should sit at the left edge'
+  );
   assert.ok(
     Math.abs(result.footerRight - result.footerQuoteRight) <= 1,
     'footer quote should sit at the right edge'
   );
+}
+
+async function assertMobileHeroPortraitHidden(page: Page) {
+  const result = await page.evaluate(() => {
+    const heroPortrait = document.querySelector<HTMLElement>(
+      '[data-testid="hero-portrait"]'
+    );
+    const rect = heroPortrait?.getBoundingClientRect();
+
+    return {
+      exists: Boolean(heroPortrait),
+      width: rect?.width ?? 0,
+      height: rect?.height ?? 0,
+    };
+  });
+
+  assert.equal(result.exists, true);
+  assert.equal(result.width, 0);
+  assert.equal(result.height, 0);
 }
 
 async function assertPublicationTitleUnderline(page: Page) {
@@ -693,9 +884,9 @@ async function assertPublicationTitleUnderline(page: Page) {
     };
   });
 
-  assert.equal(result.backgroundImage, 'none');
+  assert.notEqual(result.backgroundImage, 'none');
   assert.equal(result.color, result.yellowToken);
-  assert.equal(result.decoration, 'underline');
+  assert.equal(result.decoration, 'none');
   assert.equal(result.skipInk, 'auto');
 }
 
@@ -805,6 +996,9 @@ async function assertBlogIndex(page: Page) {
         .querySelector('#posts h2')
         ?.textContent?.replace(/\s+/g, ' ')
         .trim() ?? '';
+    const headingLeft =
+      document.querySelector<HTMLElement>('#posts h2')?.getBoundingClientRect()
+        .left ?? 0;
     const marker =
       document
         .querySelector('#posts header span')
@@ -812,6 +1006,39 @@ async function assertBlogIndex(page: Page) {
         .trim() ?? '';
     const rail = document.querySelector('[data-testid="blog-index-rail"]');
     const items = [...(rail?.querySelectorAll<HTMLElement>('li') ?? [])];
+    const legend = document.querySelector<HTMLElement>(
+      '[data-testid="blog-index-legend"]'
+    );
+    const legendItems = [
+      ...(legend?.querySelectorAll<HTMLElement>('span.inline-flex') ?? []),
+    ].map((item) => {
+      const dot = item.querySelector<HTMLElement>(
+        '[data-testid="blog-index-legend-dot"]'
+      );
+      const dotStyle = dot ? getComputedStyle(dot) : null;
+
+      return {
+        text: item.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+        border: Number.parseFloat(dotStyle?.borderTopWidth ?? '0'),
+        backgroundColor: dotStyle?.backgroundColor ?? '',
+        width: dot?.getBoundingClientRect().width ?? 0,
+      };
+    });
+    const itemMarkers = items.map((item) => {
+      const dot = item.querySelector<HTMLElement>('[data-testid="rail-dot"]');
+      const dotStyle = dot ? getComputedStyle(dot) : null;
+
+      return {
+        title:
+          item
+            .querySelector('[data-testid="rail-title"]')
+            ?.textContent?.replace(/\s+/g, ' ')
+            .trim() ?? '',
+        border: Number.parseFloat(dotStyle?.borderTopWidth ?? '0'),
+        backgroundColor: dotStyle?.backgroundColor ?? '',
+        width: dot?.getBoundingClientRect().width ?? 0,
+      };
+    });
     const firstFooter = items[0]?.querySelector(
       '[data-testid="blog-index-row-meta"]'
     );
@@ -832,9 +1059,9 @@ async function assertBlogIndex(page: Page) {
         '[data-testid="external-writing-title"]'
       ),
     ];
-    const externalSources = [
+    const externalMetas = [
       ...document.querySelectorAll<HTMLElement>(
-        '[data-testid="external-writing-source"]'
+        '[data-testid="external-writing-meta"]'
       ),
     ];
     const footer = document.querySelector('footer');
@@ -842,7 +1069,11 @@ async function assertBlogIndex(page: Page) {
     return {
       header,
       heading,
+      headingLeft,
       marker,
+      legendText: legend?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      legendItems,
+      itemMarkers,
       itemCount: items.length,
       dotCount: rail?.querySelectorAll('[data-testid="rail-dot"]').length ?? 0,
       connectorCount:
@@ -855,12 +1086,16 @@ async function assertBlogIndex(page: Page) {
         (link) => link.textContent?.replace(/\s+/g, ' ').trim() ?? ''
       ),
       externalHrefs: externalTitleLinks.map((link) => link.href),
-      externalSources: externalSources.map(
-        (source) => source.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      externalMetas: externalMetas.map(
+        (meta) => meta.textContent?.replace(/\s+/g, ' ').trim() ?? ''
       ),
       firstFooterText:
         firstFooter?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       postDates,
+      firstRailTitleLeft:
+        items[0]
+          ?.querySelector<HTMLElement>('[data-testid="rail-title"]')
+          ?.getBoundingClientRect().left ?? 0,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       descriptionCount: descriptions?.length ?? 0,
       footerBottom: footer?.getBoundingClientRect().bottom ?? 0,
@@ -871,6 +1106,60 @@ async function assertBlogIndex(page: Page) {
   assert.equal(result.header, '', 'blog header should only contain ROYB band');
   assert.equal(result.marker, '§1');
   assert.equal(result.heading, `Index (${result.itemCount})`);
+  assert.ok(
+    Math.abs(result.headingLeft - result.firstRailTitleLeft) <= 1,
+    'blog index heading should align with blog rail row titles'
+  );
+  assert.deepEqual(
+    result.legendItems.map((item) => item.text),
+    ['opinion', 'technical']
+  );
+  assert.ok(!/new/i.test(result.legendText), 'blog legend should omit new');
+  assert.ok(
+    result.legendItems[0]?.border >= 1 &&
+      result.legendItems[0]?.backgroundColor === 'rgba(0, 0, 0, 0)',
+    'opinion legend marker should be hollow'
+  );
+  assert.ok(
+    result.legendItems[1]?.border === 0 &&
+      result.legendItems[1]?.backgroundColor !== 'rgba(0, 0, 0, 0)',
+    'technical legend marker should be filled'
+  );
+  assert.ok(
+    result.legendItems.every((item) => Math.round(item.width) === 12),
+    'blog legend markers should match the rail marker size'
+  );
+  const filledBlogRows = result.itemMarkers.filter(
+    (item) => item.border === 0 && item.backgroundColor !== 'rgba(0, 0, 0, 0)'
+  );
+  const hollowBlogRows = result.itemMarkers.filter(
+    (item) => item.border >= 1 && item.backgroundColor === 'rgba(0, 0, 0, 0)'
+  );
+
+  assert.equal(
+    filledBlogRows.length,
+    2,
+    'only Decant and Harmonia should be technical filled rows'
+  );
+  assert.ok(
+    filledBlogRows.some((item) =>
+      item.title.includes('On Agent Memory Fidelity (Decant)')
+    )
+  );
+  assert.ok(
+    filledBlogRows.some((item) =>
+      item.title.includes('On Dimensions of Taste (Harmonia)')
+    )
+  );
+  assert.equal(
+    hollowBlogRows.length,
+    result.itemCount - filledBlogRows.length,
+    'all nontechnical blog rows should be opinion hollow rows'
+  );
+  assert.ok(
+    result.itemMarkers.every((item) => Math.round(item.width) === 12),
+    'blog row markers should match the shared marker size'
+  );
   assert.ok(result.itemCount >= 3);
   assert.equal(result.dotCount, result.itemCount);
   assert.equal(result.connectorCount, result.itemCount - 1);
@@ -883,8 +1172,8 @@ async function assertBlogIndex(page: Page) {
     externalWriting.map((item) => item.href)
   );
   assert.deepEqual(
-    result.externalSources,
-    externalWriting.map((item) => item.source)
+    result.externalMetas,
+    externalWriting.map((item) => item.meta)
   );
   assert.deepEqual(
     result.externalRows.map((row) => row?.includes('Nov 2024')),
@@ -910,9 +1199,10 @@ async function assertBlogIndex(page: Page) {
   assert.ok(!result.bodyText.includes('Updated'));
   assert.ok(!result.bodyText.includes('GitHub'));
   assert.ok(
-    result.bodyText.includes('Finding the right answer was never the point')
+    result.bodyText.includes('Finding the Right Answer Was Never the Point')
   );
-  assert.ok(result.bodyText.includes('Duke Chronicle'));
+  assert.ok(result.bodyText.includes('894 words, 4 min'));
+  assert.ok(!result.bodyText.includes('Duke Chronicle'));
   assert.ok(
     Math.abs(result.viewportHeight - result.footerBottom) <= 1,
     'short blog index pages should pin the footer to the viewport bottom'
@@ -936,6 +1226,13 @@ async function assertArticle(page: Page) {
     const header = document.querySelector('article > header');
     const toc = document.querySelector<HTMLElement>('.article-toc');
     const tocText = toc?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    const tocMeta = toc?.querySelector<HTMLElement>('.toc-meta');
+    const tocMetaLabel = tocMeta?.querySelector<HTMLElement>(
+      '.toc-meta-row > span:first-child'
+    );
+    const tocMetaValue = tocMeta?.querySelector<HTMLElement>(
+      '.toc-meta-row > span:last-child'
+    );
     const tocFirstSection = toc?.querySelector<HTMLElement>('.toc-section');
     const tocFirstNum = tocFirstSection?.querySelector<HTMLElement>('.toc-num');
     const tocFirstLink = toc?.querySelector<HTMLElement>('.toc-section > a');
@@ -979,6 +1276,13 @@ async function assertArticle(page: Page) {
     const mainContentLeft =
       (mainRect?.left ?? 0) + Number.parseFloat(mainStyle?.paddingLeft ?? '0');
     const titleStyle = title ? getComputedStyle(title) : null;
+    const tocMetaStyle = tocMeta ? getComputedStyle(tocMeta) : null;
+    const tocMetaLabelStyle = tocMetaLabel
+      ? getComputedStyle(tocMetaLabel)
+      : null;
+    const tocMetaValueStyle = tocMetaValue
+      ? getComputedStyle(tocMetaValue)
+      : null;
     const tocFirstLinkStyle = tocFirstLink
       ? getComputedStyle(tocFirstLink)
       : null;
@@ -1026,6 +1330,10 @@ async function assertArticle(page: Page) {
       mainContentLeft,
       titleWeight: Number.parseInt(titleStyle?.fontWeight ?? '0', 10),
       tocText,
+      tocMetaFontVariantCaps: tocMetaStyle?.fontVariantCaps ?? '',
+      tocMetaLetterSpacing: tocMetaStyle?.letterSpacing ?? '',
+      tocMetaLabelTransform: tocMetaLabelStyle?.textTransform ?? '',
+      tocMetaValueTransform: tocMetaValueStyle?.textTransform ?? '',
       tocFirstLinkText:
         tocFirstLink?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       tocFirstNumText:
@@ -1100,6 +1408,13 @@ async function assertArticle(page: Page) {
   }
   assert.ok(!result.tocText.includes('Reading time'));
   assert.ok(!result.tocText.includes('~'));
+  assert.equal(result.tocMetaFontVariantCaps, 'all-small-caps');
+  assert.equal(result.tocMetaLabelTransform, 'none');
+  assert.equal(result.tocMetaValueTransform, 'none');
+  assert.ok(
+    Number.parseFloat(result.tocMetaLetterSpacing) > 0,
+    'TOC metadata should use tracked small-caps'
+  );
   assert.equal(result.tocFirstNumText, '0');
   assert.equal(result.tocFirstLinkText, 'Background');
   assert.equal(result.tocFirstLinkDecoration, 'underline');
@@ -1184,6 +1499,150 @@ async function assertArticle(page: Page) {
   );
   assert.equal(result.prototypeCount, 0);
   assert.ok(!result.bodyText.toLowerCase().includes('prototyping'));
+}
+
+async function assertHarmoniaArticle(page: Page) {
+  const result = await page.evaluate(() => {
+    const prose = document.querySelector<HTMLElement>('.article-prose');
+    const proseRect = prose?.getBoundingClientRect();
+    const paragraphs = [
+      ...document.querySelectorAll<HTMLElement>('.article-prose p'),
+    ].map((paragraph) => paragraph.textContent?.trim() ?? '');
+    const mellowListItems = [
+      ...document.querySelectorAll<HTMLElement>('.article-prose ul li'),
+    ].filter((item) => item.textContent?.includes('Mellow-'));
+    const outputHeader = [...document.querySelectorAll<HTMLElement>('th')].find(
+      (header) => header.textContent?.replace(/\s+/g, ' ').trim() === 'Output'
+    );
+    const outputHeaderStyle = outputHeader
+      ? getComputedStyle(outputHeader)
+      : null;
+    const outputHeaderRect = outputHeader?.getBoundingClientRect();
+    const outputLineHeight = Number.parseFloat(
+      outputHeaderStyle?.lineHeight ?? '0'
+    );
+    const outputPaddingY =
+      Number.parseFloat(outputHeaderStyle?.paddingTop ?? '0') +
+      Number.parseFloat(outputHeaderStyle?.paddingBottom ?? '0');
+    const tableCells = [
+      ...document.querySelectorAll<HTMLElement>(
+        '.article-table th, .article-table td'
+      ),
+    ];
+    const tableHeaders = [
+      ...document.querySelectorAll<HTMLElement>('.article-table th'),
+    ];
+    const tableDataCells = [
+      ...document.querySelectorAll<HTMLElement>('.article-table td'),
+    ];
+    const tableCodes = [
+      ...document.querySelectorAll<HTMLElement>(
+        '.article-table th code, .article-table td code'
+      ),
+    ];
+    const tableWraps = [
+      ...document.querySelectorAll<HTMLElement>('.article-table .table-wrap'),
+    ];
+
+    return {
+      hasPronounParagraph: paragraphs.some((text) =>
+        text.startsWith('It assumes clusters are')
+      ),
+      hasRepeatedHdbscanStart: paragraphs.some((text) =>
+        text.startsWith('HDBSCAN assumes')
+      ),
+      mellowListCount: mellowListItems.length,
+      mellowListParentTag: mellowListItems[0]?.parentElement?.tagName ?? '',
+      outputHeight: outputHeaderRect?.height ?? 0,
+      outputLineHeight,
+      outputPaddingY,
+      outputWhiteSpace: outputHeaderStyle?.whiteSpace ?? '',
+      outputWordBreak: outputHeaderStyle?.wordBreak ?? '',
+      outputOverflowWrap: outputHeaderStyle?.overflowWrap ?? '',
+      tableCellWordBreaks: tableCells.map(
+        (cell) => getComputedStyle(cell).wordBreak
+      ),
+      tableCellOverflowWraps: tableCells.map(
+        (cell) => getComputedStyle(cell).overflowWrap
+      ),
+      tableHeaderWhiteSpaces: tableHeaders.map(
+        (cell) => getComputedStyle(cell).whiteSpace
+      ),
+      tableDataCellWhiteSpaces: tableDataCells.map(
+        (cell) => getComputedStyle(cell).whiteSpace
+      ),
+      tableCodeWhiteSpaces: tableCodes.map(
+        (code) => getComputedStyle(code).whiteSpace
+      ),
+      tableWrapData: tableWraps.map((wrap) => {
+        const style = getComputedStyle(wrap);
+        const rect = wrap.getBoundingClientRect();
+
+        return {
+          right: rect.right,
+          overflowX: style.overflowX,
+          position: style.position,
+          scrollWidth: wrap.scrollWidth,
+          clientWidth: wrap.clientWidth,
+        };
+      }),
+      proseRight: proseRect?.right ?? 0,
+    };
+  });
+
+  assert.equal(result.hasPronounParagraph, true);
+  assert.equal(result.hasRepeatedHdbscanStart, false);
+  assert.equal(result.mellowListCount, 2);
+  assert.equal(result.mellowListParentTag, 'UL');
+  assert.equal(result.outputWhiteSpace, 'nowrap');
+  assert.equal(result.outputWordBreak, 'normal');
+  assert.equal(result.outputOverflowWrap, 'normal');
+  assert.ok(
+    result.outputHeight <= result.outputLineHeight + result.outputPaddingY + 2,
+    'Output table header should not split across multiple lines'
+  );
+  assert.ok(
+    result.tableCellWordBreaks.every((wordBreak) => wordBreak === 'normal'),
+    'article table cells should not break single words'
+  );
+  assert.ok(
+    result.tableCellOverflowWraps.every(
+      (overflowWrap) => overflowWrap === 'normal'
+    ),
+    'article table cells should use shadcn-like normal wrapping'
+  );
+  assert.ok(
+    result.tableHeaderWhiteSpaces.every(
+      (whiteSpace) => whiteSpace === 'nowrap'
+    ),
+    'article table headers should stay intact'
+  );
+  assert.ok(
+    result.tableDataCellWhiteSpaces.every(
+      (whiteSpace) => whiteSpace === 'normal'
+    ),
+    'article table body cells should keep normal multi-word wrapping'
+  );
+  assert.ok(
+    result.tableCodeWhiteSpaces.every((whiteSpace) => whiteSpace === 'nowrap'),
+    'article table code tokens should stay intact'
+  );
+  assert.ok(
+    result.tableWrapData.every((wrap) => wrap.overflowX === 'auto'),
+    'article table wrappers should expose horizontal overflow only when needed'
+  );
+  assert.ok(
+    result.tableWrapData.every((wrap) => wrap.position === 'relative'),
+    'article table wrappers should use the shadcn relative wrapper pattern'
+  );
+  assert.ok(
+    result.tableWrapData.every((wrap) => wrap.scrollWidth >= wrap.clientWidth),
+    'article table wrappers should preserve intrinsic table width'
+  );
+  assert.ok(
+    result.tableWrapData.every((wrap) => wrap.right <= result.proseRight + 1),
+    'article table wrappers should stay inside prose width'
+  );
 }
 
 async function assertLegacyMediaArticle(page: Page) {
@@ -1358,6 +1817,7 @@ async function main() {
     });
     await mobile.goto(baseUrl, { waitUntil: 'networkidle' });
     await assertRoybBandPlacement(mobile);
+    await assertMobileHeroPortraitHidden(mobile);
     await screenshot(mobile, 'home-mobile');
 
     const blog = await browser.newPage({
@@ -1380,6 +1840,16 @@ async function main() {
     await assertArticle(article);
     await assertVisibleOneLineDescriptions(article);
     await screenshot(article, 'blog-article');
+
+    const harmoniaArticle = await browser.newPage({
+      viewport: { width: 1280, height: 900 },
+    });
+    await harmoniaArticle.goto(`${baseUrl}/blog/on-dimensions-of-taste`, {
+      waitUntil: 'networkidle',
+    });
+    await assertRoybBandPlacement(harmoniaArticle);
+    await assertHarmoniaArticle(harmoniaArticle);
+    await screenshot(harmoniaArticle, 'blog-dimensions');
 
     const legacyArticle = await browser.newPage({
       viewport: { width: 1280, height: 900 },

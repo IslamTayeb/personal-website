@@ -1,6 +1,8 @@
+import Image from 'next/image';
 import { contactLinks } from '@/data/links';
 import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
+import { SectionHeader } from '@/components/primitives/section';
 
 function ContactIndex() {
   return (
@@ -65,20 +67,27 @@ export function Hero() {
       className="pb-3 pt-0 md:pb-3.5 md:pt-0"
     >
       <div className="flex w-full flex-col gap-2">
-        <header className="mb-1 grid grid-cols-[1.25rem_minmax(0,1fr)] items-baseline">
-          <span className="font-mono text-xs text-roy-r">§1</span>
-          <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
-            About
-          </h2>
-        </header>
+        <SectionHeader index="1" title="About" accent="text-roy-r" />
         <h1
           data-testid="hero-title"
           className="w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"
         >
           Islam Tayeb
         </h1>
-        <div className="flex flex-col gap-3 md:grid md:grid-cols-[20%_minmax(0,1fr)] md:gap-4">
-          <div className="min-w-0 md:border-r md:border-border md:pr-4">
+        <div className="flex flex-col gap-3 md:grid md:grid-cols-[20%_minmax(0,1fr)] md:gap-3">
+          <div className="min-w-0 md:border-r md:border-border md:pr-3">
+            <div className="mb-3 hidden md:block">
+              <Image
+                src="/myphoto.webp"
+                alt="Portrait of Islam Tayeb"
+                width={510}
+                height={510}
+                priority
+                data-testid="hero-portrait"
+                className="aspect-square w-full object-cover"
+                sizes="(min-width: 768px) 20vw, 0px"
+              />
+            </div>
             <ContactIndex />
           </div>
           <HeroStory />

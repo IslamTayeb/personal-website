@@ -1,6 +1,28 @@
+import {
+  Building2,
+  Code2,
+  FlaskConical,
+  GraduationCap,
+  type LucideIcon,
+} from 'lucide-react';
 import { publications } from '@/lib/lab-data';
 import { Section, Variant } from './frame';
 import { RailItem, RailList } from './rail';
+
+type IconExperienceRowData = {
+  org: string;
+  pi?: string;
+  date: string;
+  desc: string;
+  incoming?: boolean;
+};
+
+type IconExperienceGroup = {
+  kind: string;
+  icon: LucideIcon;
+  accent: string;
+  rows: IconExperienceRowData[];
+};
 
 const researchRows = [
   {
@@ -14,7 +36,7 @@ const researchRows = [
     org: 'Duke University',
     pi: 'Matthew Lentz',
     date: 'Apr 2026 — Present',
-    desc: 'Token mining and codegen correctness for agents with runtime-error repair feedback loops.',
+    desc: 'Tokenminning and codegen correctness for agents with runtime-error repair feedback loops.',
   },
   {
     org: 'Duke University',
@@ -32,6 +54,63 @@ const researchRows = [
     org: 'Saudi Aramco',
     date: 'Jul 2022 — Sep 2023',
     desc: 'Polymer property prediction and synthesis for CO₂ capture.',
+  },
+];
+
+const iconExperienceGroups: IconExperienceGroup[] = [
+  {
+    kind: 'Research',
+    icon: FlaskConical,
+    accent: 'text-roy-o',
+    rows: researchRows.slice(0, 3),
+  },
+  {
+    kind: 'Engineering',
+    icon: Code2,
+    accent: 'text-foreground',
+    rows: [
+      {
+        org: 'Soff (YC S24)',
+        date: 'May 2025 — Oct 2025',
+        desc: 'Agentic sales intelligence for manufacturers; employee #2.',
+      },
+      {
+        org: 'Life Edit',
+        date: 'Sep 2024 — May 2025',
+        desc: 'Non-linear RNA-seq analysis and dashboarding for CRISPR experiments.',
+      },
+      {
+        org: 'DIHI',
+        date: 'Jun 2024 — Aug 2024',
+        desc: 'Automated literature review workflow for clinical research intake.',
+      },
+    ],
+  },
+  {
+    kind: 'Teaching',
+    icon: GraduationCap,
+    accent: 'text-muted-foreground',
+    rows: [
+      {
+        org: 'Operating Systems',
+        pi: 'Matthew Lentz',
+        date: 'Incoming Aug 2026',
+        desc: 'Duke University.',
+        incoming: true,
+      },
+      {
+        org: 'Computer Systems',
+        pi: 'Matthew Lentz',
+        date: 'Jan 2026 — May 2026',
+        desc: 'Duke University.',
+      },
+      {
+        org: 'Organic Chemistry I',
+        pi: 'SAGE Tutoring',
+        date: 'Jan 2025 — May 2025',
+        desc: 'Duke University.',
+      },
+    ],
   },
 ];
 
@@ -395,6 +474,141 @@ export function LayoutRhythmLabSection() {
           </p>
           <PublicationInlineDateVariant />
         </div>
+      </Variant>
+    </Section>
+  );
+}
+
+function IconExperienceRow({
+  row,
+  icon: Icon,
+  accent,
+  connector,
+}: {
+  row: IconExperienceRowData;
+  icon: LucideIcon;
+  accent: string;
+  connector: 'solid' | 'none';
+}) {
+  return (
+    <li className="relative grid grid-cols-[1.75rem_minmax(0,1fr)] pb-2 last:pb-0">
+      {connector === 'solid' ? (
+        <span className="absolute left-[5.5px] top-5 bottom-0 w-px bg-border" />
+      ) : null}
+      <span
+        className={
+          row.incoming
+            ? 'relative mt-1 h-3 w-3 border border-roy-o bg-background'
+            : 'relative mt-1 h-3 w-3 bg-foreground/75'
+        }
+      />
+      <div className="grid min-w-0 grid-cols-[1rem_minmax(0,1fr)_8.5rem] items-start gap-3">
+        <Icon
+          aria-hidden
+          className={`mt-px ${accent}`}
+          size={14}
+          strokeWidth={1.8}
+        />
+        <div className="min-w-0">
+          <div className="inline-flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5 text-sm font-medium leading-tight text-foreground">
+            <span>{row.org}</span>
+            {row.pi ? (
+              <span className="font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-muted-foreground">
+                {row.pi}
+              </span>
+            ) : null}
+          </div>
+          <p className="truncate text-xs leading-snug text-muted-foreground">
+            {row.desc}
+          </p>
+        </div>
+        <span className="font-mono text-[10px] leading-tight text-muted-foreground">
+          {row.date}
+        </span>
+      </div>
+    </li>
+  );
+}
+
+function IconExperienceVariant() {
+  return (
+    <div className="flex w-full flex-col gap-4">
+      {iconExperienceGroups.map((group) => {
+        const GroupIcon = group.icon;
+
+        return (
+          <div key={group.kind} className="min-w-0">
+            <div className="grid grid-cols-[1.75rem_minmax(0,1fr)] items-center pb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+              <GroupIcon
+                aria-hidden
+                className={group.accent}
+                size={12}
+                strokeWidth={1.8}
+              />
+              <span>
+                {group.kind} ({group.rows.length})
+              </span>
+            </div>
+            <ul className="flex w-full flex-col">
+              {group.rows.map((row, index) => (
+                <IconExperienceRow
+                  key={`${group.kind}-${row.org}-${row.pi ?? 'none'}`}
+                  row={row}
+                  icon={group.icon}
+                  accent={group.accent}
+                  connector={index < group.rows.length - 1 ? 'solid' : 'none'}
+                />
+              ))}
+            </ul>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function CompanyIconExperienceVariant() {
+  return (
+    <div className="flex w-full flex-col gap-4">
+      {iconExperienceGroups.map((group) => (
+        <div key={group.kind}>
+          <div className="grid grid-cols-[1.75rem_minmax(0,1fr)] items-center pb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <span aria-hidden>⌄</span>
+            <span>
+              {group.kind} ({group.rows.length})
+            </span>
+          </div>
+          <ul className="flex w-full flex-col">
+            {group.rows.map((row, index) => (
+              <IconExperienceRow
+                key={`${group.kind}-${row.org}-${row.pi ?? 'none'}-company`}
+                row={row}
+                icon={Building2}
+                accent="text-muted-foreground"
+                connector={index < group.rows.length - 1 ? 'solid' : 'none'}
+              />
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function ExperienceIconRailLabSection() {
+  return (
+    <Section
+      index="11"
+      title="Experience icon lab"
+      accent="text-roy-o"
+      cols={1}
+      note="A copied experience section for testing whether a tiny semantic icon can sit left of the company/description chunk while the rail marker and shared content edge stay disciplined."
+    >
+      <Variant label="A — row icon column" tag="selected">
+        <IconExperienceVariant />
+      </Variant>
+      <Variant label="B — company icon column">
+        <CompanyIconExperienceVariant />
       </Variant>
     </Section>
   );

@@ -89,13 +89,16 @@ export function RailItem({
   return (
     <li
       data-testid={testId}
-      className={cn('relative flex gap-3 pb-1.5 last:pb-0', className)}
+      className={cn(
+        'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pb-1.5 last:pb-0',
+        className
+      )}
     >
       {connector !== 'none' ? (
         <span
           data-testid={connectorTestId}
           className={cn(
-            'absolute left-[3.5px] top-[19px] bottom-[5px] w-px',
+            'absolute left-[calc(var(--rail-marker-size)/2-0.5px)] top-[21px] bottom-[5px] w-px',
             connector === 'solid' ? 'bg-border' : 'text-border',
             connectorClassName
           )}
@@ -113,7 +116,10 @@ export function RailItem({
         data-testid={dotTestId}
         data-incoming={incoming ? 'true' : undefined}
         data-state={state}
-        className={cn('relative mt-1 h-2 w-2 shrink-0', dotClassName)}
+        className={cn(
+          'relative mt-1 h-[var(--rail-marker-size)] w-[var(--rail-marker-size)] shrink-0',
+          dotClassName
+        )}
       />
       <div className="flex w-full min-w-0 flex-col gap-1">
         {onActivate ? (

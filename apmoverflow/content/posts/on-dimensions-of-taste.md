@@ -214,7 +214,7 @@ With 33 interpretable dimensions, I needed a clustering algorithm. I tried 3. Do
 
 *HDBSCAN* was my first choice. It had worked well for me on biological data before: density-based, no need to specify k, finds arbitrary shapes. On music, HDBSCAN labeled 90% of tracks as noise.
 
-*HDBSCAN* assumes clusters are "regions of the data that are denser than the surrounding space"; the mental model is "trying to separate the islands from the sea." But music taste barely has any density gaps. Chill pop gradates into bedroom pop gradates into lo-fi. There are no valleys to cut.
+It assumes clusters are "regions of the data that are denser than the surrounding space"; the mental model is "trying to separate the islands from the sea." But music taste barely has any density gaps. Chill pop gradates into bedroom pop gradates into lo-fi. There are no valleys to cut.
 
 #### KNN
 
@@ -311,9 +311,9 @@ Soft, reflective, acoustic-leaning.
 
 Although I saw the high `mood_sad`, shuffling through the playlist made me feel like it's mellow with 2 moods. Subclustering with KNN (k=2) further revealed:
 
-**<code class="mellow-hopecore">Mellow-Hopecore</code> (Cluster 4.0, [Playlist](https://open.spotify.com/playlist/0xe4HFUZ0EefL4542Fcext)) — 97 songs, 62.2%:** Hopeful calm. On God Kanye, SDP Interlude Travis, Latin folk. Lower `mood_sad`, lower `danceability` (in the *Essentia* sense), less `electronic_acoustic` than 4.1. The "things will be okay" playlist. One of my favorite (sub)clusters.
+- **<code class="mellow-hopecore">Mellow-Hopecore</code> (Cluster 4.0, [Playlist](https://open.spotify.com/playlist/0xe4HFUZ0EefL4542Fcext)) — 97 songs, 62.2%:** Hopeful calm. On God Kanye, SDP Interlude Travis, Latin folk. Lower `mood_sad`, lower `danceability` (in the *Essentia* sense), less `electronic_acoustic` than 4.1. The "things will be okay" playlist. One of my favorite (sub)clusters.
 
-**<code class="mellow-sadcore">Mellow-Sadcore</code> (Cluster 4.1, [Playlist](https://open.spotify.com/playlist/5TxF9kfvBJlyiRKpLoAbwK)) — 59 songs, 37.8%:** Sad calm. JANNABI, Glass Animals, Mustafa. Higher `mood_sad`, higher `danceability`, more `electronic_acoustic`. The "things are not okay but at least the music is pretty" playlist.
+- **<code class="mellow-sadcore">Mellow-Sadcore</code> (Cluster 4.1, [Playlist](https://open.spotify.com/playlist/5TxF9kfvBJlyiRKpLoAbwK)) — 59 songs, 37.8%:** Sad calm. JANNABI, Glass Animals, Mustafa. Higher `mood_sad`, higher `danceability`, more `electronic_acoustic`. The "things are not okay but at least the music is pretty" playlist.
 
 #### Overview
 

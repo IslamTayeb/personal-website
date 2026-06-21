@@ -82,6 +82,15 @@ Section markers on the unified Islam and blog index surfaces are one-indexed
 (`§1`, `§2`, ...). Article-local indexes/TOCs can preserve APM Overflow source
 numbering when that is part of the writing structure.
 
+Unified-site rail/header alignment is centralized through `--rail-gutter` and
+`--rail-marker-size` in `unified-site/app/globals.css`. Top-level section labels,
+rail row titles, experience group labels, and blog index rows should share that
+content edge, while section markers and rail markers touch the section's left
+edge with no extra left padding. Adjust the variables and shared primitives
+before hand-tuning individual sections. Blog index rail semantics are hollow
+marker = opinion and filled marker = technical; only Decant and Harmonia are
+technical unless the content taxonomy explicitly changes.
+
 ## Main site commands
 
 All commands must run from `islamtayeb/`:

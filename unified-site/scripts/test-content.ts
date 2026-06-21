@@ -111,9 +111,9 @@ async function main() {
   assertDescendingDates(listedPosts);
   assert.deepEqual(externalWriting, [
     {
-      title: 'Finding the right answer was never the point',
+      title: 'Finding the Right Answer Was Never the Point',
       href: 'https://www.dukechronicle.com/article/daf941cd-e431-4e71-a282-5f7da9a56c28',
-      source: 'Duke Chronicle',
+      meta: '894 words, 4 min',
       date: 'Nov 2024',
     },
   ]);
@@ -207,6 +207,21 @@ async function main() {
     }
 
     if (post.manifest.slug === 'on-dimensions-of-taste') {
+      assert.doesNotMatch(
+        post.html,
+        /<p><em>HDBSCAN<\/em> assumes/,
+        'Harmonia should avoid starting consecutive paragraphs with HDBSCAN'
+      );
+      assert.match(
+        post.html,
+        /<p>It assumes clusters are/,
+        'Harmonia HDBSCAN follow-up paragraph should start with a pronoun'
+      );
+      assert.match(
+        post.html,
+        /<ul>\s*<li>\s*<p><strong><code class="mellow-hopecore">Mellow-Hopecore<\/code>/,
+        'Harmonia mellow subclusters should render as bullet points'
+      );
       assert.equal(
         countMatches(post.html, /class="article-media iframe-figure"/g),
         13,
@@ -262,7 +277,7 @@ async function main() {
       `<title>${listedPosts[0].manifest.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</title>`
     )
   );
-  assert.doesNotMatch(feed, /Finding the right answer was never the point/);
+  assert.doesNotMatch(feed, /Finding the Right Answer Was Never the Point/);
   assert.doesNotMatch(feed, /dukechronicle\.com/);
 
   console.log(

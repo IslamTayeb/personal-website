@@ -7,6 +7,7 @@ import { CoursesSection } from '@/components/lab/courses';
 import { WritingSection } from '@/components/lab/writing';
 import { ArticlePrimitivesSection } from '@/components/lab/article-primitives';
 import {
+  ExperienceIconRailLabSection,
   ExperienceGroupingLabSection,
   LayoutRhythmLabSection,
   PublicationRhythmLabSection,
@@ -35,7 +36,7 @@ export default function Page() {
             Islam Tayeb
           </span>
           <span className="font-mono text-xs text-muted-foreground">
-            v.10 — 2026
+            v.11 — 2026
           </span>
         </div>
         <div className="royb-band h-1 w-full" />
@@ -45,9 +46,8 @@ export default function Page() {
           <span className="text-roy-b">APM Overflow</span>.
         </h1>
         <p className="max-w-2xl text-sm font-normal leading-relaxed text-foreground/80 text-pretty">
-          Sharp corners, monochrome paper, mono metadata. v.10 drops settled
-          type specimens, adds real course content, and keeps only the active
-          component directions.
+          Sharp corners, monochrome paper, mono metadata. v.11 adds the copied
+          experience icon rail so row anatomy can be compared before porting.
         </p>
       </header>
 
@@ -62,6 +62,7 @@ export default function Page() {
       <ExperienceGroupingLabSection />
       <PublicationRhythmLabSection />
       <LayoutRhythmLabSection />
+      <ExperienceIconRailLabSection />
 
       <footer className="flex items-center justify-between border-t border-border py-7 font-mono text-xs text-muted-foreground">
         <span className="flex items-center gap-2">

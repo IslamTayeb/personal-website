@@ -53,6 +53,8 @@
   --code-string: #4070a0;
   --code-comment: #60a0b0;
   --code-block-background: #f3f3f1;
+  --rail-gutter: 1.75rem;
+  --rail-marker-size: 0.75rem;
 }
 
 .dark {
@@ -101,6 +103,8 @@
   }
   html {
     @apply scroll-pt-16 font-sans;
+    --rail-gutter: 1.75rem;
+    --rail-marker-size: 0.75rem;
     scrollbar-color: color-mix(
         in oklch,
         var(--foreground) 76%,
@@ -197,18 +201,6 @@
     background-size: 100% 100%;
     color: var(--section-color, var(--roy-b));
     text-decoration-line: none;
-  }
-  .royb-link.publication-title-link {
-    background-image: none;
-    text-decoration-line: underline;
-    text-decoration-skip-ink: auto;
-  }
-  .royb-link.publication-title-link.royb-link-highlight:hover {
-    background-image: none;
-    background-size: auto;
-    color: var(--section-color, var(--roy-y));
-    text-decoration-line: underline;
-    text-decoration-skip-ink: auto;
   }
   .section-color-r {
     --section-color: var(--roy-r);
@@ -484,15 +476,22 @@
   }
   .article-prose .toc-meta {
     @apply flex shrink-0 flex-col gap-2 border-t border-border pt-3 font-mono text-xs leading-snug md:w-56 md:border-l md:border-t-0 md:pl-4 md:pt-0;
+    font-feature-settings:
+      'c2sc' 1,
+      'smcp' 1;
+    font-variant-caps: all-small-caps;
+    letter-spacing: 0.08em;
   }
   .article-prose .toc-meta-row {
     @apply flex justify-between gap-4;
   }
   .article-prose .toc-meta-row > span:first-child {
-    @apply font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground;
+    @apply font-mono text-[10px] text-muted-foreground;
+    text-transform: none;
   }
   .article-prose .toc-meta-row > span:last-child {
     @apply text-right text-foreground;
+    text-transform: none;
   }
   .article-prose .toc-meta strong {
     @apply text-foreground;
@@ -513,7 +512,7 @@
     @apply mt-2 block text-center text-xs italic leading-snug text-muted-foreground;
   }
   .article-prose .table-wrap {
-    @apply max-w-full overflow-x-auto;
+    @apply relative w-full max-w-full overflow-x-auto;
     scrollbar-color: var(--roy-o) transparent;
     scrollbar-gutter: auto;
     scrollbar-width: thin;
@@ -528,15 +527,21 @@
     @apply mt-2 text-muted-foreground;
   }
   .article-prose table {
-    @apply w-full min-w-full table-auto border-collapse text-xs;
+    @apply w-full min-w-full caption-bottom table-auto border-collapse text-xs;
   }
   .article-prose th,
   .article-prose td {
-    @apply min-w-[6ch] px-2 py-1.5 align-top;
-    overflow-wrap: anywhere;
+    @apply min-w-[6ch] px-2 py-1.5 align-middle;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+  .article-prose th code,
+  .article-prose td code {
+    white-space: nowrap;
   }
   .article-prose th {
     @apply border-b border-border bg-muted/65 text-left font-semibold text-foreground;
+    white-space: nowrap;
   }
   .article-prose tbody tr:nth-child(odd) {
     @apply bg-muted/45;
