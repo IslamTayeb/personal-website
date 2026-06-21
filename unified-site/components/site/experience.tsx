@@ -1,12 +1,23 @@
 'use client';
 
-import { useState } from 'react';
+import { type ReactNode, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { experienceGroups, type ExperienceGroup } from '@/data/experience';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { SectionActionButton } from '@/components/primitives/section-action';
 import { BorderedPanel, Section } from '@/components/primitives/section';
+
+type DescriptionSegment =
+  | {
+      type: 'text';
+      text: string;
+    }
+  | {
+      type: 'link';
+      text: string;
+      href: string;
+    };
 
 const hollowDots: Record<string, string> = {
   'bg-roy-y': 'border border-roy-y bg-background',
@@ -28,6 +39,26 @@ function RailGroup({
   return (
     <RailList>
       {roles.map((role, index) => {
+        const titleContent: ReactNode = role.piName ? (
+          <span className="inline-flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+            <span>{role.org}</span>
+            {role.href ? (
+              <ExternalLink
+                href={role.href}
+                section={group.kind === 'Research' ? 'o' : 'y'}
+                className="font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-muted-foreground"
+              >
+                {role.piName}
+              </ExternalLink>
+            ) : (
+              <span className="font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-muted-foreground">
+                {role.piName}
+              </span>
+            )}
+          </span>
+        ) : (
+          role.org
+        );
         const isLastVisibleRole = index === roles.length - 1;
         const connector =
           index < roles.length - 1
@@ -38,28 +69,118 @@ function RailGroup({
 
         return (
           <RailItem
-            key={`${group.kind}-${role.org}-${role.date}`}
+            key={`${group.kind}-${role.org}-${role.piName ?? role.org}-${role.date}`}
             dotClassName={role.incoming ? hollowDots[group.dot] : group.dot}
+            incoming={role.incoming}
             title={
-              role.href ? (
+              role.href && !role.piName ? (
                 <ExternalLink
                   href={role.href}
                   section={group.kind === 'Research' ? 'o' : 'y'}
                   className="text-foreground"
                 >
-                  {role.org}
+                  {titleContent}
                 </ExternalLink>
               ) : (
-                role.org
+                titleContent
               )
             }
             meta={role.date}
-            description={role.desc}
+            description={
+              role.descLinks?.length ? (
+                <LinkedDescription
+                  text={role.desc}
+                  links={role.descLinks}
+                  section={group.kind === 'Research' ? 'o' : 'y'}
+                />
+              ) : (
+                role.desc
+              )
+            }
             connector={connector}
           />
         );
       })}
     </RailList>
+  );
+}
+
+function LinkedDescription({
+  text,
+  links,
+  section,
+}: {
+  text: string;
+  links: NonNullable<ExperienceGroup['roles'][number]['descLinks']>;
+  section: 'o' | 'y';
+}) {
+  const renderStaticText = (value: string) => {
+    if (value.includes('% Microsoft Research')) {
+      const [before, after] = value.split('% Microsoft Research');
+
+      return (
+        <>
+          {before}
+          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+            % Microsoft Research
+          </span>
+          {after}
+        </>
+      );
+    }
+
+    if (!value.includes('Microsoft Research')) {
+      return value;
+    }
+
+    const [before, after] = value.split('Microsoft Research');
+
+    return (
+      <>
+        {before.replace(/\s+and\s*$/, ' ')}
+        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+          % Microsoft Research
+        </span>
+        {after}
+      </>
+    );
+  };
+
+  const segments = links.reduce<DescriptionSegment[]>(
+    (currentSegments, link) =>
+      currentSegments.flatMap((segment) => {
+        if (segment.type === 'link' || !segment.text.includes(link.text)) {
+          return [segment];
+        }
+
+        const [before, ...afterParts] = segment.text.split(link.text);
+        const after = afterParts.join(link.text);
+
+        return [
+          ...(before ? [{ type: 'text' as const, text: before }] : []),
+          { type: 'link' as const, text: link.text, href: link.href },
+          ...(after ? [{ type: 'text' as const, text: after }] : []),
+        ];
+      }),
+    [{ type: 'text', text }]
+  );
+
+  return (
+    <>
+      {segments.map((segment, index) =>
+        segment.type === 'link' ? (
+          <ExternalLink
+            key={`${segment.text}-${index}`}
+            href={segment.href}
+            section={section}
+          >
+            {segment.text}
+          </ExternalLink>
+        ) : (
+          <span key={`text-${index}`}>{renderStaticText(segment.text)}</span>
+        )
+      )}
+    </>
   );
 }
 
@@ -109,7 +230,12 @@ function RailGroupBlock({
 }
 
 export function Experience() {
-  const [expanded, setExpanded] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<
+    Record<ExperienceGroup['kind'], boolean>
+  >({
+    Research: false,
+    Engineering: false,
+  });
 
   return (
     <Section id="experience" index="1" title="Experience" accent="text-roy-o">
@@ -119,8 +245,13 @@ export function Experience() {
             <RailGroupBlock
               key={group.kind}
               group={group}
-              expanded={expanded}
-              onToggleExpanded={() => setExpanded((value) => !value)}
+              expanded={expandedGroups[group.kind]}
+              onToggleExpanded={() =>
+                setExpandedGroups((current) => ({
+                  ...current,
+                  [group.kind]: !current[group.kind],
+                }))
+              }
             />
           ))}
         </div>

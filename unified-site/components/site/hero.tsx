@@ -1,26 +1,10 @@
 import { contactLinks } from '@/data/links';
-import { heroParagraphs, profile, type TextSegment } from '@/data/profile';
+import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
 
 function ContactIndex() {
   return (
     <div className="flex flex-col gap-2.5 font-mono text-xs leading-snug">
-      <div className="flex justify-between gap-4">
-        <span className="whitespace-nowrap text-muted-foreground">
-          location
-        </span>
-        <span className="whitespace-nowrap text-right text-foreground">
-          {profile.location}
-        </span>
-      </div>
-      <div className="flex justify-between gap-4">
-        <span className="whitespace-nowrap text-muted-foreground">
-          hometown
-        </span>
-        <span className="whitespace-nowrap text-right text-foreground">
-          {profile.hometown}
-        </span>
-      </div>
       <div className="flex flex-col gap-1">
         <span className="text-muted-foreground">contact</span>
         <ul className="flex flex-wrap text-foreground">

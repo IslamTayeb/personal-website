@@ -8,9 +8,7 @@ import { RoybBand } from '@/components/primitives/royb-band';
 export default function Home() {
   return (
     <>
-      <div className="pt-3 md:pt-3.5">
-        <RoybBand />
-      </div>
+      <RoybBand />
       <Hero />
       <Experience />
       <Publications />

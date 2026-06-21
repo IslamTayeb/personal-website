@@ -43,10 +43,41 @@ async function screenshot(page: Page, name: string) {
   });
 }
 
+async function assertRoybBandPlacement(page: Page) {
+  const placement = await page.evaluate(() => {
+    const header = document.querySelector('[data-testid="site-header"]');
+    const wrap = document.querySelector('[data-testid="royb-band-wrap"]');
+    const band = document.querySelector('[data-testid="royb-band"]');
+    const wrapStyle = wrap ? getComputedStyle(wrap) : null;
+
+    return {
+      headerBottom: header?.getBoundingClientRect().bottom ?? 0,
+      wrapTop: wrap?.getBoundingClientRect().top ?? 0,
+      bandHeight: band?.getBoundingClientRect().height ?? 0,
+      paddingTop: wrapStyle ? Number.parseFloat(wrapStyle.paddingTop) : 0,
+      paddingBottom: wrapStyle ? Number.parseFloat(wrapStyle.paddingBottom) : 0,
+    };
+  });
+
+  assert.equal(placement.bandHeight, 4, 'ROYB bar should be 4px tall');
+  assert.equal(
+    placement.paddingTop,
+    placement.paddingBottom,
+    'ROYB band wrapper should use equal top and bottom padding'
+  );
+  assert.ok(
+    placement.paddingTop > 0,
+    'ROYB band should have visible vertical padding'
+  );
+  assert.ok(
+    Math.abs(placement.wrapTop - placement.headerBottom) <= 1,
+    `ROYB band should start immediately after the site header: ${placement.wrapTop} / ${placement.headerBottom}`
+  );
+}
+
 async function assertHomeMeasurements(page: Page) {
   const measurements = await page.evaluate(() => {
     const main = document.querySelector('main');
-    const band = document.querySelector('[data-testid="royb-band"]');
     const title = document.querySelector('[data-testid="hero-title"]');
     const header = document.querySelector('[data-testid="site-header"]');
     const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
@@ -58,6 +89,8 @@ async function assertHomeMeasurements(page: Page) {
     const heroSection = document.querySelector('[data-testid="hero-section"]');
     const heroBody = heroSection?.querySelector('h1 + div');
     const heroMeta = heroBody?.children[0];
+    const heroContactText =
+      heroMeta?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
     const heroSectionMarker =
       heroSection
         ?.querySelector('header span')
@@ -89,10 +122,20 @@ async function assertHomeMeasurements(page: Page) {
     const readAllPosts = [...document.querySelectorAll<HTMLElement>('a')].find(
       (link) => link.textContent?.toLowerCase().includes('read all posts')
     );
+    const anthropicProgram = [
+      ...document.querySelectorAll<HTMLAnchorElement>('a'),
+    ].find((link) =>
+      link.textContent?.includes("Anthropic's AI for Science Program")
+    );
     const detail = document.querySelector('[data-testid="course-detail"]');
     const detailText = document.querySelector(
       '[data-testid="course-detail-text"]'
     );
+    const courseSkeletonLines = [
+      ...document.querySelectorAll(
+        '[data-testid="course-detail"] [aria-label="No course selected"] span'
+      ),
+    ].map((line) => line.getBoundingClientRect());
     const section = document.querySelector('section');
     const panel = document.querySelector('[data-testid="bordered-panel"]');
     const panelStyle = panel ? getComputedStyle(panel) : null;
@@ -110,6 +153,7 @@ async function assertHomeMeasurements(page: Page) {
         '[data-testid="experience-group-label"]'
       );
       const railTitle = group.querySelector('[data-testid="rail-title"]');
+      const railRows = group.querySelectorAll('[data-testid="rail-title"]');
       const labelRect = label?.getBoundingClientRect();
       const railTitleRect = railTitle?.getBoundingClientRect();
 
@@ -119,16 +163,22 @@ async function assertHomeMeasurements(page: Page) {
         railTitleLeft: railTitleRect
           ? Number(railTitleRect.left.toFixed(2))
           : null,
+        visibleRows: railRows.length,
+        text: group.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       };
     });
+    const incomingDot = document.querySelector(
+      '[data-testid="rail-dot"][data-incoming="true"]'
+    );
+    const incomingDotStyle = incomingDot ? getComputedStyle(incomingDot) : null;
 
     return {
       mainWidth: main?.getBoundingClientRect().width ?? 0,
-      bandHeight: band?.getBoundingClientRect().height ?? 0,
       heroTitleText: title?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       titleRight: title?.getBoundingClientRect().right ?? 0,
       heroBodyWidth: heroBody?.getBoundingClientRect().width ?? 0,
       heroMetaWidth: heroMeta?.getBoundingClientRect().width ?? 0,
+      heroContactText,
       heroMetaWidthPercent:
         heroBody && heroMeta
           ? (heroMeta.getBoundingClientRect().width /
@@ -175,6 +225,11 @@ async function assertHomeMeasurements(page: Page) {
         themeToggle?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       publicationMetaLineText:
         publicationMetaLine?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      publicationsTitle:
+        document
+          .querySelector('#publications header h2')
+          ?.textContent?.replace(/\s+/g, ' ')
+          .trim() ?? '',
       viewportWidth: window.innerWidth,
       courseDetailHeight: detail?.getBoundingClientRect().height ?? 0,
       showMoreText: moreControl?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
@@ -183,9 +238,34 @@ async function assertHomeMeasurements(page: Page) {
       seeMoreScholarClassName: seeMoreScholar?.className ?? '',
       seeMoreScholarRight: seeMoreScholar?.getBoundingClientRect().right ?? 0,
       readAllPostsClassName: readAllPosts?.className ?? '',
+      anthropicProgramHref: anthropicProgram?.href ?? '',
       experienceGroups,
+      incomingDotClassName: incomingDot?.className ?? '',
+      incomingDotBorderWidth: incomingDotStyle
+        ? Number.parseFloat(incomingDotStyle.borderTopWidth)
+        : 0,
       courseDetailText:
         detailText?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      hasEmptyCourseState: Boolean(
+        detail?.querySelector('[aria-label="No course selected"]')
+      ),
+      courseSkeletonLineCount: courseSkeletonLines.length,
+      courseSkeletonTopGap:
+        detail && courseSkeletonLines[0]
+          ? Math.round(
+              courseSkeletonLines[0].top - detail.getBoundingClientRect().top
+            )
+          : null,
+      courseSkeletonBottomGap:
+        detail && courseSkeletonLines[courseSkeletonLines.length - 1]
+          ? Math.round(
+              detail.getBoundingClientRect().bottom -
+                courseSkeletonLines[courseSkeletonLines.length - 1].bottom
+            )
+          : null,
+      pressedCourseCount: [
+        ...document.querySelectorAll('button[aria-pressed="true"]'),
+      ].length,
       sectionPaddingTop: section
         ? Number.parseFloat(getComputedStyle(section).paddingTop)
         : 0,
@@ -214,7 +294,6 @@ async function assertHomeMeasurements(page: Page) {
   });
 
   assert.ok(measurements.mainWidth <= 800, 'main document should stay narrow');
-  assert.equal(measurements.bandHeight, 4, 'ROYB bar should be 4px tall');
   assert.equal(
     measurements.heroTitleText,
     'Islam Tayeb',
@@ -225,8 +304,9 @@ async function assertHomeMeasurements(page: Page) {
     'hero title should not overflow'
   );
   assert.ok(
-    Math.abs(measurements.heroMetaWidthPercent - 20) < 0.5,
-    `hero metadata column should stay near 20% of the hero body, got ${measurements.heroMetaWidthPercent.toFixed(2)}%`
+    !measurements.heroContactText.includes('location') &&
+      !measurements.heroContactText.includes('hometown'),
+    `hero contact rail should not render location/hometown labels: ${measurements.heroContactText}`
   );
   assert.equal(
     measurements.heroBorderTopWidth,
@@ -251,8 +331,8 @@ async function assertHomeMeasurements(page: Page) {
   );
   assert.equal(
     measurements.footerBorderTopWidth,
-    0,
-    'footer divider should be disabled with section dividers'
+    1,
+    'footer should keep a divider matching the header language'
   );
   assert.ok(measurements.hasThemeToggle, 'header should include theme toggle');
   assert.equal(
@@ -299,7 +379,7 @@ async function assertHomeMeasurements(page: Page) {
     );
   }
   for (const phrase of [
-    "Hey! I'm a Duke CS student researching ML systems, particularly agent correctness and efficiency.",
+    "Hey! I'm a Duke CS student based in Durham, NC, researching ML systems, particularly agent correctness and efficiency.",
     'I was born and raised in Egypt, but later moved to Taif, Saudi Arabia during high school.',
     'I play Tetris and Monkeytype in my free time. I also enjoy writing technical and opinion pieces.',
   ]) {
@@ -318,6 +398,66 @@ async function assertHomeMeasurements(page: Page) {
     measurements.showMoreText,
     'show more',
     'collapsed experience control should not include a count'
+  );
+  assert.ok(
+    measurements.engineeringText.includes('Engineering (3)'),
+    'Engineering group should keep total count'
+  );
+  const research = measurements.experienceGroups.find(
+    (group) => group.group === 'Research'
+  );
+  assert.equal(
+    research?.visibleRows,
+    3,
+    'Research should show 3 collapsed rows'
+  );
+  assert.ok(
+    research?.text.includes('Research (5)'),
+    'Research group should count all 5 rows'
+  );
+  assert.ok(
+    research?.text.includes('Christian Dallago') &&
+      research?.text.includes('Matthew Lentz') &&
+      research?.text.includes('Philip Romero'),
+    'Duke research rows should render advisor names as a separate label'
+  );
+  assert.ok(
+    research?.text.includes('Incoming Aug 2026'),
+    'incoming research row should say Incoming Aug 2026'
+  );
+  for (const label of [
+    'Dallago Lab',
+    'Lentz Lab',
+    'Romero Lab',
+    'NaderiAlizadeh Lab',
+    'PI Christian',
+    'PI Matthew',
+    'PI Philip',
+    'PI Navid',
+  ]) {
+    assert.ok(
+      !measurements.bodyText.includes(label),
+      `experience rows should not render stale advisor label copy: ${label}`
+    );
+  }
+  assert.ok(
+    research?.text.includes('show more'),
+    'Research group should have show more when collapsed'
+  );
+  assert.equal(
+    measurements.anthropicProgramHref,
+    'https://www.anthropic.com/news/ai-for-science-program',
+    "Romero description should link Anthropic's AI for Science Program"
+  );
+  assert.ok(
+    research?.text.includes('% Microsoft Research') &&
+      !research?.text.includes(['and', 'Microsoft Research'].join(' ')),
+    'Romero description should use percent marker for Microsoft Research'
+  );
+  assert.ok(
+    measurements.incomingDotClassName.includes('bg-background') &&
+      measurements.incomingDotBorderWidth >= 1,
+    'incoming role marker should render as a hollow dot'
   );
   assert.ok(
     Math.abs(measurements.showMoreRight - measurements.seeMoreScholarRight) <=
@@ -347,15 +487,46 @@ async function assertHomeMeasurements(page: Page) {
       `experience rail should not render role label: ${role}`
     );
   }
+  for (const stackTerm of ['PyTorch', 'FastAPI', 'Next.js', 'tRPC', 'Python']) {
+    assert.ok(
+      !measurements.bodyText.includes(stackTerm),
+      `experience copy should not mention implementation stack term: ${stackTerm}`
+    );
+  }
   assert.equal(
     measurements.courseDetailHeight,
     42,
     'course detail height should be stable'
   );
   assert.ok(
-    measurements.courseDetailText.includes('Memory management') &&
-      measurements.courseDetailText.includes('magic'),
-    'course detail should preserve the personal old-site course note'
+    measurements.hasEmptyCourseState,
+    'courses should load with no selected course'
+  );
+  assert.equal(
+    measurements.courseSkeletonLineCount,
+    2,
+    'empty course detail should render a two-line skeleton'
+  );
+  if (
+    measurements.courseSkeletonTopGap !== null &&
+    measurements.courseSkeletonBottomGap !== null
+  ) {
+    assert.ok(
+      Math.abs(
+        measurements.courseSkeletonTopGap - measurements.courseSkeletonBottomGap
+      ) <= 1,
+      `course skeleton should be vertically centered: ${measurements.courseSkeletonTopGap} / ${measurements.courseSkeletonBottomGap}`
+    );
+  }
+  assert.equal(
+    measurements.pressedCourseCount,
+    0,
+    'courses should not have an active selected pill on first load'
+  );
+  assert.equal(
+    measurements.publicationsTitle,
+    'Selected Publications',
+    'publications section title should be specific'
   );
   assert.ok(
     measurements.publicationMetaLineText.includes('Research Article') &&
@@ -460,19 +631,69 @@ async function assertVisibleOneLineDescriptions(page: Page) {
 }
 
 async function assertCourseHeightIsStable(page: Page) {
+  const emptyVisible = await page
+    .locator('[data-testid="course-detail"] [aria-label="No course selected"]')
+    .count();
   const before = await page
     .locator('[data-testid="course-detail"]')
     .boundingBox();
+  const initiallyPressed = await page
+    .locator('button[aria-pressed="true"]')
+    .count();
+
+  assert.equal(emptyVisible, 1, 'course detail should start empty');
+  assert.equal(initiallyPressed, 0, 'no course pill should start selected');
+
   await page.getByRole('button', { name: 'Operating Systems' }).click();
   const after = await page
     .locator('[data-testid="course-detail"]')
     .boundingBox();
+  const selectedText = await page
+    .locator('[data-testid="course-detail-text"]')
+    .textContent();
 
   assert.equal(
     before?.height,
     after?.height,
     'course selected and empty states should match height'
   );
+  assert.ok(
+    selectedText?.includes('Memory management') &&
+      selectedText.includes('magic'),
+    'selected Operating Systems detail should preserve the personal old-site note'
+  );
+}
+
+async function assertExperienceGroupExpansionIsScoped(page: Page) {
+  const groupRows = async (group: string) =>
+    page
+      .locator(`[data-testid="experience-group"][data-group="${group}"]`)
+      .locator('[data-testid="rail-title"]')
+      .count();
+
+  assert.equal(await groupRows('Research'), 3);
+  assert.equal(await groupRows('Engineering'), 1);
+
+  await page
+    .locator('[data-testid="experience-group"][data-group="Research"]')
+    .getByRole('button', { name: 'show more' })
+    .click();
+
+  assert.equal(
+    await groupRows('Research'),
+    5,
+    'Research show more should reveal all research rows'
+  );
+  assert.equal(
+    await groupRows('Engineering'),
+    1,
+    'Research show more should not expand Engineering'
+  );
+
+  await page
+    .locator('[data-testid="experience-group"][data-group="Research"]')
+    .getByRole('button', { name: 'show less' })
+    .click();
 }
 
 async function assertThemeToggleIsStable(page: Page) {
@@ -947,15 +1168,21 @@ async function main() {
     });
     await page.goto(baseUrl, { waitUntil: 'networkidle' });
     await screenshot(page, 'home-desktop');
+    await assertRoybBandPlacement(page);
     await assertHomeMeasurements(page);
     await assertScrollbarStyles(page);
     await assertVisibleOneLineDescriptions(page);
     await assertHeroLinksHoverRed(page);
     await assertThemeToggleIsStable(page);
-    await assertCourseHeightIsStable(page);
     await screenshot(page, 'home-course-deselected');
+    await assertCourseHeightIsStable(page);
+    await screenshot(page, 'home-course-selected');
 
-    await page.getByRole('button', { name: 'show more' }).click();
+    await assertExperienceGroupExpansionIsScoped(page);
+    await page
+      .locator('[data-testid="experience-group"][data-group="Engineering"]')
+      .getByRole('button', { name: 'show more' })
+      .click();
     await screenshot(page, 'home-experience-expanded');
 
     await page
@@ -974,6 +1201,7 @@ async function main() {
       viewport: { width: 1280, height: 900 },
     });
     await blog.goto(`${baseUrl}/blog`, { waitUntil: 'networkidle' });
+    await assertRoybBandPlacement(blog);
     await assertVisibleOneLineDescriptions(blog);
     await assertBlogIndexRail(blog);
     await screenshot(blog, 'blog-index');
@@ -985,6 +1213,7 @@ async function main() {
     await article.goto(`${baseUrl}/blog/${firstPost.manifest.slug}`, {
       waitUntil: 'networkidle',
     });
+    await assertRoybBandPlacement(article);
     await assertVisibleOneLineDescriptions(article);
     await assertArticleRendering(article);
     await screenshot(article, 'blog-article');

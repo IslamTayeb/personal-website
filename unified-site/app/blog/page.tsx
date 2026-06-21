@@ -16,7 +16,7 @@ export default async function BlogIndexPage() {
 
   return (
     <>
-      <header data-testid="blog-index-header" className="pt-3 md:pt-3.5">
+      <header data-testid="blog-index-header">
         <RoybBand />
       </header>
       <Section

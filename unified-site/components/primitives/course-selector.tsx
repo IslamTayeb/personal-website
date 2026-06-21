@@ -135,10 +135,12 @@ export function CourseSelector({
 }: {
   coursework: Course[];
   teaching: Course[];
-  defaultCourseCode: string;
+  defaultCourseCode?: string | null;
   institution: string;
 }) {
-  const [active, setActive] = useState<string | null>(defaultCourseCode);
+  const [active, setActive] = useState<string | null>(
+    defaultCourseCode ?? null
+  );
   const allItems = [...coursework, ...teaching];
   const activeItem = active
     ? allItems.find((course) => course.code === active)
@@ -182,8 +184,12 @@ export function CourseSelector({
             {activeItem.desc || 'Details pending.'}
           </p>
         ) : (
-          <div aria-label="No course selected">
-            <span className="block h-3 w-2/3 bg-muted" />
+          <div
+            aria-label="No course selected"
+            className="flex flex-col gap-1.5"
+          >
+            <span className="block h-2.5 w-2/3 bg-muted" />
+            <span className="block h-2.5 w-1/2 bg-muted" />
           </div>
         )}
       </div>

@@ -1,4 +1,4 @@
-import { profileLinks, type LinkItem } from './links';
+import { profileLinks } from './links';
 
 export type TextSegment = {
   text: string;
@@ -17,7 +17,7 @@ export const profile = {
 export const heroParagraphs: TextSegment[][] = [
   [
     {
-      text: "Hey! I'm a Duke CS student researching ML systems, particularly agent correctness and efficiency.",
+      text: "Hey! I'm a Duke CS student based in Durham, NC, researching ML systems, particularly agent correctness and efficiency.",
     },
   ],
   [
@@ -51,12 +51,4 @@ export const heroParagraphs: TextSegment[][] = [
     },
     { text: '!' },
   ],
-];
-
-export const heroMeta: LinkItem[] = [
-  {
-    label: 'location',
-    href: '#',
-    external: false,
-  },
 ];

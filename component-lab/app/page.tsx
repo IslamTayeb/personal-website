@@ -6,6 +6,11 @@ import { PublicationsSection } from '@/components/lab/publications';
 import { CoursesSection } from '@/components/lab/courses';
 import { WritingSection } from '@/components/lab/writing';
 import { ArticlePrimitivesSection } from '@/components/lab/article-primitives';
+import {
+  ExperienceGroupingLabSection,
+  LayoutRhythmLabSection,
+  PublicationRhythmLabSection,
+} from '@/components/lab/layout-prototypes';
 import { ThemeToggle } from '@/components/lab/theme-toggle';
 import { MoonGlyph, SparkleGlyph } from '@/components/lab/glyphs';
 
@@ -54,6 +59,9 @@ export default function Page() {
       <CoursesSection />
       <WritingSection />
       <ArticlePrimitivesSection />
+      <ExperienceGroupingLabSection />
+      <PublicationRhythmLabSection />
+      <LayoutRhythmLabSection />
 
       <footer className="flex items-center justify-between border-t border-border py-7 font-mono text-xs text-muted-foreground">
         <span className="flex items-center gap-2">

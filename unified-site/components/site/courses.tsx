@@ -1,6 +1,6 @@
 import { CourseSelector } from '@/components/primitives/course-selector';
 import { BorderedPanel, Section } from '@/components/primitives/section';
-import { courses, defaultCourseCode, teaching } from '@/data/courses';
+import { courses, teaching } from '@/data/courses';
 
 export function Courses() {
   return (
@@ -9,7 +9,7 @@ export function Courses() {
         <CourseSelector
           coursework={courses}
           teaching={teaching}
-          defaultCourseCode={defaultCourseCode}
+          defaultCourseCode={null}
           institution="Duke University"
         />
       </BorderedPanel>

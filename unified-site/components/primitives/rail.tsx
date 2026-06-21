@@ -30,6 +30,7 @@ export function RailItem({
   className,
   titleClassName,
   descriptionClassName,
+  incoming,
 }: {
   dotClassName: string;
   title: ReactNode;
@@ -41,6 +42,7 @@ export function RailItem({
   className?: string;
   titleClassName?: string;
   descriptionClassName?: string;
+  incoming?: boolean;
 }) {
   return (
     <li className={cn('relative flex gap-3 pb-1.5 last:pb-0', className)}>
@@ -64,6 +66,7 @@ export function RailItem({
       ) : null}
       <span
         data-testid="rail-dot"
+        data-incoming={incoming ? 'true' : undefined}
         className={cn('relative mt-1 h-2 w-2 shrink-0', dotClassName)}
       />
       <div className="flex w-full min-w-0 flex-col gap-1">

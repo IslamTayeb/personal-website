@@ -7,7 +7,7 @@ export function Publications() {
     <Section
       id="publications"
       index="2"
-      title="Publications"
+      title="Selected Publications"
       accent="text-roy-y"
     >
       <BorderedPanel>

@@ -52,20 +52,22 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   return (
-    <article className="py-7 md:py-8">
-      <header className="mb-7 flex flex-col gap-2.5">
-        <RoybBand />
-        <h1 className="text-2xl font-semibold leading-tight tracking-tight text-foreground text-balance md:text-3xl">
-          {post.manifest.title}
-        </h1>
-        <time
-          dateTime={post.manifest.publishedAt}
-          className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground"
-        >
-          {formatDate(post.manifest.publishedAt)}
-        </time>
-      </header>
-      <ArticleProse html={post.html} />
-    </article>
+    <>
+      <RoybBand />
+      <article className="py-7 md:py-8">
+        <header className="mb-7 flex flex-col gap-2.5">
+          <h1 className="text-2xl font-semibold leading-tight tracking-tight text-foreground text-balance md:text-3xl">
+            {post.manifest.title}
+          </h1>
+          <time
+            dateTime={post.manifest.publishedAt}
+            className="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground"
+          >
+            {formatDate(post.manifest.publishedAt)}
+          </time>
+        </header>
+        <ArticleProse html={post.html} />
+      </article>
+    </>
   );
 }

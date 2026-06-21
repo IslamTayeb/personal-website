@@ -1,7 +1,12 @@
 export type ExperienceRole = {
   org: string;
+  piName?: string;
   date: string;
   desc: string;
+  descLinks?: {
+    text: string;
+    href: string;
+  }[];
   href?: string;
   incoming?: boolean;
 };
@@ -21,21 +26,44 @@ export const experienceGroups: ExperienceGroup[] = [
     roles: [
       {
         org: 'Duke University',
-        date: 'Aug 2025 - Present',
-        href: 'https://www.romerolab.org/',
-        desc: 'Enzyme protocol mining tools using PyTorch and services in FastAPI.',
+        piName: 'Christian Dallago',
+        date: 'Incoming Aug 2026',
+        href: 'https://machine.learning.bio/',
+        incoming: true,
+        desc: 'GPU systems for protein homology search and sequence alignment.',
       },
       {
         org: 'Duke University',
+        piName: 'Matthew Lentz',
+        date: 'Apr 2026 - Present',
+        href: 'https://users.cs.duke.edu/~mlentz/',
+        desc: 'Token mining and codegen correctness for agents with runtime-error repair feedback loops.',
+      },
+      {
+        org: 'Duke University',
+        piName: 'Philip Romero',
+        date: 'Aug 2025 - Present',
+        href: 'https://www.romerolab.org/',
+        desc: "Chemistry data-mining with Anthropic's AI for Science Program % Microsoft Research.",
+        descLinks: [
+          {
+            text: "Anthropic's AI for Science Program",
+            href: 'https://www.anthropic.com/news/ai-for-science-program',
+          },
+        ],
+      },
+      {
+        org: 'Duke University',
+        piName: 'Navid NaderiAlizadeh',
         date: 'Oct 2024 - Apr 2025',
         href: 'https://sites.duke.edu/navid/',
-        desc: 'Continual learning model for antibody affinity prediction using PyTorch.',
+        desc: 'Continual learning for antibody affinity prediction.',
       },
       {
         org: 'Saudi Aramco',
         date: 'Jul 2022 - Sep 2023',
         href: 'https://www.aramco.com/',
-        desc: 'Traditional ML polymer synthesis for CO2 capture using Python.',
+        desc: 'Polymer property prediction and synthesis for CO₂ capture.',
       },
     ],
   },
@@ -48,19 +76,19 @@ export const experienceGroups: ExperienceGroup[] = [
         org: 'Soff (YC S24)',
         date: 'May 2025 - Oct 2025',
         href: 'https://soff.ai/',
-        desc: 'Sales intelligence for manufacturers using Next.js and tRPC, as employee #2.',
+        desc: 'Agentic sales intelligence for manufacturers; employee #2.',
       },
       {
         org: 'Life Edit',
         date: 'Sep 2024 - May 2025',
         href: 'https://lifeeditinc.com/',
-        desc: 'Non-linear RNA-seq analysis and dashboard for CRISPR experiments using Python.',
+        desc: 'Non-linear RNA-seq analysis and dashboarding for CRISPR experiments.',
       },
       {
         org: 'DIHI',
         date: 'Jun 2024 - Aug 2024',
         href: 'https://dihi.org/',
-        desc: 'Automated literature review system using React and FastAPI.',
+        desc: 'Automated literature review workflow for clinical research intake.',
       },
     ],
   },
