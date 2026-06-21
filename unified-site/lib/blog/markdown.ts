@@ -18,8 +18,25 @@ type MarkdownEnv = {
   headings: Heading[];
 };
 
+const articleLinkClasses = [
+  'royb-link',
+  'royb-link-highlight',
+  'section-color-b',
+];
+const articleExternalLinkClasses = [...articleLinkClasses, 'external-link'];
+
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function mergeClasses(className: string, requiredClasses: string[]) {
+  return Array.from(
+    new Set(
+      [...className.split(/\s+/), ...requiredClasses]
+        .map((item) => item.trim())
+        .filter(Boolean)
+    )
+  ).join(' ');
 }
 
 function withoutFootnoteDefinitions(markdown: string) {
@@ -40,7 +57,7 @@ export function readingMeta(markdown: string) {
     .filter(Boolean).length;
   const rounded =
     words >= 1000
-      ? `${(Math.round(words / 100) / 10).toFixed(1)}K`
+      ? `${(Math.round(words / 100) / 10).toFixed(1)}k`
       : `${words}`;
   const minutes = Math.max(1, Math.round(words / 250));
 
@@ -158,19 +175,19 @@ function buildToc(
     .join('');
 
   const metaItems = [
-    `<div class="toc-meta-row"><span>Time</span><span>${escapeHtml(
+    `<div class="toc-meta-row"><span>time</span><span>${escapeHtml(
       readingMeta(sourceMarkdown)
     )}</span></div>`,
-    `<div class="toc-meta-row"><span>Last updated</span><span>${escapeHtml(
+    `<div class="toc-meta-row"><span>last updated</span><span>${escapeHtml(
       formatDate(manifest.updatedAt)
     )}</span></div>`,
   ];
 
   if (manifest.codeLink) {
     metaItems.push(
-      `<div class="toc-meta-row"><span>Code</span><span><a href="${escapeHtml(
+      `<div class="toc-meta-row"><span>code</span><span><a href="${escapeHtml(
         manifest.codeLink.href
-      )}" class="toc-link royb-link royb-link-highlight section-color-b">${escapeHtml(manifest.codeLink.label)}</a></span></div>`
+      )}" class="toc-link royb-link royb-link-highlight section-color-b">${escapeHtml(manifest.codeLink.label.toLowerCase())}</a></span></div>`
     );
   }
 
@@ -221,12 +238,10 @@ function normalizeExternalAnchors(html: string) {
         nextAttrs = nextAttrs.replace(
           /\bclass="([^"]*)"/,
           (_, className: string) =>
-            className.split(/\s+/).includes('external-link')
-              ? `class="${className}"`
-              : `class="${className} external-link"`
+            `class="${mergeClasses(className, articleExternalLinkClasses)}"`
         );
       } else {
-        nextAttrs += ' class="external-link"';
+        nextAttrs += ` class="${articleExternalLinkClasses.join(' ')}"`;
       }
 
       return `<a${nextAttrs}>`;
@@ -421,7 +436,9 @@ function configureMarkdown(manifest: PostManifest) {
     if (href && /^https?:\/\//.test(href)) {
       tokens[idx].attrSet('target', '_blank');
       tokens[idx].attrSet('rel', 'noreferrer external');
-      tokens[idx].attrJoin('class', 'external-link');
+      tokens[idx].attrJoin('class', articleExternalLinkClasses.join(' '));
+    } else {
+      tokens[idx].attrJoin('class', articleLinkClasses.join(' '));
     }
 
     return self.renderToken(tokens, idx, options);

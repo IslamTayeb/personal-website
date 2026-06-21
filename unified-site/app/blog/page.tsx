@@ -34,7 +34,7 @@ function BlogIndexLegend() {
   return (
     <div
       data-testid="blog-index-legend"
-      className="flex flex-wrap justify-end gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+      className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
     >
       {items.map((item) => (
         <span key={item.label} className="inline-flex items-center gap-1.5">

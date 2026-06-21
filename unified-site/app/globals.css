@@ -171,10 +171,11 @@
     );
   }
   .royb-link {
-    display: inline-block;
+    display: inline;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
     text-decoration-thickness: 1.5px;
+    text-decoration-skip-ink: auto;
     text-underline-offset: 0.18em;
   }
   .royb-link-fragment {
@@ -200,6 +201,14 @@
   .royb-link.royb-link-highlight:hover {
     background-size: 100% 100%;
     color: var(--section-color, var(--roy-b));
+    text-decoration-line: none;
+  }
+  .royb-link-plain {
+    background-image: none;
+    text-decoration-line: none;
+  }
+  .royb-link-plain:hover {
+    color: var(--section-color, currentColor);
     text-decoration-line: none;
   }
   .section-color-r {
@@ -276,6 +285,7 @@
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
     text-decoration-thickness: 1.5px;
+    text-decoration-skip-ink: auto;
     text-underline-offset: 0.18em;
   }
   .article-prose a:hover {
@@ -342,20 +352,29 @@
     @apply block min-w-max bg-transparent p-0 font-mono;
     color: inherit;
     font-size: inherit;
+    font-weight: 400;
     line-height: inherit;
   }
   .article-prose :not(pre) > code {
     @apply bg-muted px-1 py-0.5 font-mono text-[0.9em];
   }
   .article-prose kbd {
-    @apply inline-block whitespace-nowrap border border-border bg-muted px-1.5 py-0.5 font-mono text-[0.85em] leading-none text-foreground;
+    @apply inline-block whitespace-nowrap border border-border px-1.5 py-0.5 font-mono text-[0.85em] leading-none text-foreground;
+    background:
+      linear-gradient(
+        to bottom,
+        color-mix(in oklch, var(--background) 88%, white) 0 2px,
+        transparent 2px 100%
+      ),
+      var(--muted);
     border-bottom-color: color-mix(
       in oklch,
       var(--muted-foreground) 58%,
       transparent
     );
-    box-shadow: 0 1px 0
-      color-mix(in oklch, var(--muted-foreground) 38%, transparent);
+    box-shadow:
+      inset 0 1px 0 color-mix(in oklch, white 72%, var(--background)),
+      0 1px 0 color-mix(in oklch, var(--muted-foreground) 38%, transparent);
   }
   .article-prose .hljs-comment,
   .article-prose .hljs-quote {
@@ -369,13 +388,13 @@
   .article-prose .hljs-strong,
   .article-prose .hljs-type {
     color: var(--code-keyword);
-    font-weight: 600;
+    font-weight: 400;
   }
   .article-prose .hljs-title,
   .article-prose .hljs-class .hljs-title,
   .article-prose .hljs-function .hljs-title {
     color: var(--code-title);
-    font-weight: 600;
+    font-weight: 400;
   }
   .article-prose .hljs-attr,
   .article-prose .hljs-attribute,
@@ -410,12 +429,12 @@
   .article-prose .highlight .kt,
   .article-prose .highlight .ow {
     color: var(--code-keyword);
-    font-weight: 600;
+    font-weight: 400;
   }
   .article-prose .highlight .nc,
   .article-prose .highlight .nf {
     color: var(--code-title);
-    font-weight: 600;
+    font-weight: 400;
   }
   .article-prose .highlight .m,
   .article-prose .highlight .mf,
@@ -434,11 +453,11 @@
   }
   .article-prose .highlight .o,
   .article-prose .highlight .p {
-    color: var(--muted-foreground);
+    color: inherit;
   }
   .article-prose .hljs-punctuation,
   .article-prose .hljs-operator {
-    color: var(--muted-foreground);
+    color: inherit;
   }
   .article-prose .article-toc {
     @apply my-6 flex flex-col gap-5 border border-border bg-muted/45 p-4 md:flex-row md:justify-between;
@@ -461,6 +480,7 @@
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
     text-decoration-thickness: 1.5px;
+    text-decoration-skip-ink: auto;
     text-underline-offset: 0.18em;
   }
   .article-prose .toc-num {
@@ -473,20 +493,19 @@
     @apply w-fit max-w-full text-xs text-muted-foreground;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 36%, transparent);
+    text-decoration-skip-ink: auto;
   }
   .article-prose .toc-meta {
-    @apply flex shrink-0 flex-col gap-2 border-t border-border pt-3 font-mono text-xs leading-snug md:w-56 md:border-l md:border-t-0 md:pl-4 md:pt-0;
-    font-feature-settings:
-      'c2sc' 1,
-      'smcp' 1;
-    font-variant-caps: all-small-caps;
-    letter-spacing: 0.08em;
+    @apply flex shrink-0 flex-col gap-1.5 border-t border-border pt-3 font-mono text-xs leading-snug md:w-56 md:border-l md:border-t-0 md:pl-4 md:pt-0;
+    font-feature-settings: normal;
+    font-variant-caps: normal;
+    letter-spacing: normal;
   }
   .article-prose .toc-meta-row {
     @apply flex justify-between gap-4;
   }
   .article-prose .toc-meta-row > span:first-child {
-    @apply font-mono text-[10px] text-muted-foreground;
+    @apply font-mono text-xs text-muted-foreground;
     text-transform: none;
   }
   .article-prose .toc-meta-row > span:last-child {

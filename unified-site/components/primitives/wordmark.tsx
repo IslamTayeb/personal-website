@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { ExternalLink } from '@/components/primitives/external-link';
 import { cn } from '@/lib/utils';
 import { MoonGlyph, SparkleGlyph } from './glyphs';
 
@@ -15,30 +15,34 @@ export function Wordmark() {
       aria-label="Site surfaces"
       data-testid="wordmark"
     >
-      <Link
+      <ExternalLink
         href="/"
+        section="r"
+        variant="plain"
         className={cn(
           'flex items-center gap-2',
           active === 'islam' ? 'text-roy-r' : 'text-muted-foreground'
         )}
       >
         <MoonGlyph size={14} /> islam
-      </Link>
+      </ExternalLink>
       <span
         aria-hidden
         className="text-[#DFDEDB] dark:text-muted-foreground/45"
       >
         /
       </span>
-      <Link
+      <ExternalLink
         href="/blog"
+        section="b"
+        variant="plain"
         className={cn(
           'flex items-center gap-2',
           active === 'blog' ? 'text-roy-b' : 'text-muted-foreground'
         )}
       >
         <SparkleGlyph size={13} /> blog
-      </Link>
+      </ExternalLink>
     </div>
   );
 }

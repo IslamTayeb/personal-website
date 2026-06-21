@@ -188,6 +188,9 @@ async function assertHome(page: Page) {
   const result = await page.evaluate(() => {
     const main = document.querySelector('main');
     const header = document.querySelector('[data-testid="site-header"]');
+    const wordmarkLinks = [
+      ...document.querySelectorAll<HTMLElement>('[data-testid="wordmark"] a'),
+    ];
     const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
     const themeToggleClassName = themeToggle
       ? [themeToggle, ...themeToggle.querySelectorAll('*')]
@@ -268,12 +271,46 @@ async function assertHome(page: Page) {
     });
     const connectorCenters = [
       ...document.querySelectorAll<HTMLElement>(
-        '[data-testid="rail-connector"], [data-testid="publication-connector"]'
+        [
+          '[data-testid="rail-connector"]',
+          '[data-testid="publication-connector"]',
+          '[data-testid="writing-action-connector"]',
+          '[data-testid="publication-action-connector"]',
+        ].join(', ')
       ),
     ].map((connector) => {
       const rect = connector.getBoundingClientRect();
 
       return rect.left + rect.width / 2;
+    });
+    const [writingActionRail, publicationActionRail] = [
+      '#writing',
+      '#publications',
+    ].map((selector) => {
+      const row = document.querySelector<HTMLElement>(
+        `${selector} [data-testid$="action-row"]`
+      );
+      const connector = document.querySelector<HTMLElement>(
+        `${selector} [data-testid$="action-connector"]`
+      );
+      const link = row?.querySelector<HTMLElement>('a, button');
+      const rowRect = row?.getBoundingClientRect();
+      const connectorRect = connector?.getBoundingClientRect();
+      const linkRect = link?.getBoundingClientRect();
+      const connectorStyle = connector ? getComputedStyle(connector) : null;
+
+      return {
+        rowExists: Boolean(row),
+        connectorBackgroundImage: connectorStyle?.backgroundImage ?? '',
+        connectorCenter: connectorRect
+          ? connectorRect.left + connectorRect.width / 2
+          : 0,
+        connectorTop: connectorRect?.top ?? 0,
+        connectorBottom: connectorRect?.bottom ?? 0,
+        rowTop: rowRect?.top ?? 0,
+        rowBottom: rowRect?.bottom ?? 0,
+        linkBottom: linkRect?.bottom ?? 0,
+      };
     });
     const groupChevronData = [
       ...document.querySelectorAll<SVGElement>(
@@ -355,11 +392,36 @@ async function assertHome(page: Page) {
         .querySelector('#writing')
         ?.querySelectorAll('p[data-one-line="true"]') ?? []),
     ];
+    const writingConnectors = [
+      ...(document
+        .querySelector('#writing')
+        ?.querySelectorAll<HTMLElement>('[data-testid="rail-connector"]') ??
+        []),
+    ].map((connector) => {
+      const style = getComputedStyle(connector);
+
+      return {
+        backgroundImage: style.backgroundImage,
+        backgroundColor: style.backgroundColor,
+      };
+    });
     const publicationDots = [
       ...(document
         .querySelector('#publications')
         ?.querySelectorAll('[data-testid="publication-dot"]') ?? []),
     ].map((dot) => dot.className);
+    const publicationConnectors = [
+      ...document.querySelectorAll<HTMLElement>(
+        '#publications [data-testid="publication-connector"]'
+      ),
+    ].map((connector) => {
+      const style = getComputedStyle(connector);
+
+      return {
+        backgroundImage: style.backgroundImage,
+        backgroundColor: style.backgroundColor,
+      };
+    });
     const publicationMetaLines = [
       ...(document
         .querySelector('#publications')
@@ -386,16 +448,29 @@ async function assertHome(page: Page) {
     const mutedToken = getComputedStyle(mutedProbe).color;
     mutedProbe.remove();
 
-    const seeMoreActionColors = [...document.querySelectorAll('a, button')]
+    const seeMoreActionStyles = [...document.querySelectorAll('a, button')]
       .filter((element) =>
         /see more/i.test(element.textContent?.replace(/\s+/g, ' ') ?? '')
       )
-      .map((element) => getComputedStyle(element).color);
+      .map((element) => {
+        const style = getComputedStyle(element);
+
+        return {
+          text: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+          color: style.color,
+          fontSize: Number.parseFloat(style.fontSize),
+          fontVariantCaps: style.fontVariantCaps,
+          textTransform: style.textTransform,
+        };
+      });
 
     return {
       mainWidth: main?.getBoundingClientRect().width ?? 0,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      wordmarkLinkDisplays: wordmarkLinks.map(
+        (link) => getComputedStyle(link).display
+      ),
       headerPaddingLeft: header
         ? Number.parseFloat(getComputedStyle(header).paddingLeft)
         : 0,
@@ -464,7 +539,11 @@ async function assertHome(page: Page) {
       writingMeta,
       writingDates,
       writingDescriptionCount: writingDescriptions.length,
+      writingConnectors,
+      writingActionRail,
       publicationDots,
+      publicationConnectors,
+      publicationActionRail,
       publicationMetaLines,
       publicationDateStyles,
       publicationAuthors,
@@ -497,7 +576,7 @@ async function assertHome(page: Page) {
       ),
       publicationTitleClassName: publicationTitles[0]?.className ?? '',
       mutedToken,
-      seeMoreActionColors,
+      seeMoreActionStyles,
       footerBorderTopWidth: footer
         ? Number.parseFloat(getComputedStyle(footer).borderTopWidth)
         : 0,
@@ -636,6 +715,11 @@ async function assertHome(page: Page) {
       !result.themeToggleClassName.includes('active:'),
     'theme toggle should not have hover or active visual classes'
   );
+  assert.deepEqual(
+    result.wordmarkLinkDisplays,
+    ['flex', 'flex'],
+    'wordmark links should preserve their icon/text flex layout'
+  );
   assert.equal(
     result.headerPaddingLeft + result.headerPaddingRight,
     0,
@@ -714,6 +798,33 @@ async function assertHome(page: Page) {
     0,
     'writing preview should not render post descriptions'
   );
+  assert.ok(
+    result.writingConnectors
+      .at(-1)
+      ?.backgroundImage.includes('repeating-linear-gradient'),
+    'writing rail should dash into the see-more action'
+  );
+  assert.ok(
+    result.writingActionRail.rowExists,
+    'writing see-more action should be a rail row'
+  );
+  assert.ok(
+    result.writingActionRail.connectorBackgroundImage.includes(
+      'repeating-linear-gradient'
+    ),
+    'writing see-more action row should continue the dashed rail'
+  );
+  assert.ok(
+    Math.abs(result.writingActionRail.connectorCenter - expectedAxis) <= 1,
+    'writing action connector should stay on the shared rail axis'
+  );
+  assert.ok(
+    Math.abs(
+      result.writingActionRail.connectorBottom -
+        result.writingActionRail.rowBottom
+    ) <= 1,
+    'writing dashed connector should reach the end of the action row'
+  );
 
   for (const term of [
     'PyTorch',
@@ -745,6 +856,33 @@ async function assertHome(page: Page) {
   assert.ok(
     result.publicationDots.every((dot) => dot.includes('bg-foreground/75')),
     'publication rail markers should be neutral'
+  );
+  assert.ok(
+    result.publicationConnectors
+      .at(-1)
+      ?.backgroundImage.includes('repeating-linear-gradient'),
+    'publication rail should dash into the see-more action'
+  );
+  assert.ok(
+    result.publicationActionRail.rowExists,
+    'publication see-more action should be a rail row'
+  );
+  assert.ok(
+    result.publicationActionRail.connectorBackgroundImage.includes(
+      'repeating-linear-gradient'
+    ),
+    'publication see-more action row should continue the dashed rail'
+  );
+  assert.ok(
+    Math.abs(result.publicationActionRail.connectorCenter - expectedAxis) <= 1,
+    'publication action connector should stay on the shared rail axis'
+  );
+  assert.ok(
+    Math.abs(
+      result.publicationActionRail.connectorBottom -
+        result.publicationActionRail.rowBottom
+    ) <= 1,
+    'publication dashed connector should reach the end of the action row'
   );
   assert.ok(
     result.publicationMetaLines.every(
@@ -815,13 +953,25 @@ async function assertHome(page: Page) {
     'publication dates should not use wide tracking'
   );
   assert.ok(
-    result.seeMoreActionColors.every((color) => color === result.mutedToken),
+    result.seeMoreActionStyles.every(
+      (style) => style.color === result.mutedToken
+    ),
     'see more actions should use the same muted grey as metadata labels'
   );
+  assert.ok(
+    result.seeMoreActionStyles.every(
+      (style) =>
+        style.text === style.text.toLowerCase() &&
+        style.fontVariantCaps === 'normal' &&
+        style.fontSize >= 12 &&
+        style.textTransform === 'none'
+    ),
+    'see more actions should stay lowercase normal text'
+  );
   assert.equal(result.footerBorderTopWidth, 1);
-  assert.ok(result.bodyText.includes('See more on Scholar'));
-  assert.ok(result.bodyText.includes('See more on blog'));
-  assert.equal(result.footerUpdateText, 'Last updated 06/21/2026');
+  assert.ok(result.bodyText.includes('see more on scholar'));
+  assert.ok(result.bodyText.includes('see more on blog'));
+  assert.equal(result.footerUpdateText, 'Last updated Jun 21, 2026');
   assert.ok(result.footerQuoteText.includes('plz enjoy game'));
   assert.ok(result.footerQuoteText.includes('rrtyui'));
   assert.ok(!result.footerText.includes('Links:'));
@@ -877,6 +1027,7 @@ async function assertPublicationTitleUnderline(page: Page) {
 
     return {
       backgroundImage: style?.backgroundImage ?? '',
+      backgroundSize: style?.backgroundSize ?? '',
       color: style?.color ?? '',
       decoration: style?.textDecorationLine ?? '',
       skipInk: style?.textDecorationSkipInk ?? '',
@@ -885,6 +1036,7 @@ async function assertPublicationTitleUnderline(page: Page) {
   });
 
   assert.notEqual(result.backgroundImage, 'none');
+  assert.equal(result.backgroundSize, '100% 100%');
   assert.equal(result.color, result.yellowToken);
   assert.equal(result.decoration, 'none');
   assert.equal(result.skipInk, 'auto');
@@ -976,16 +1128,22 @@ async function assertHeroLinksHoverHighlight(page: Page) {
       redToken,
       backgroundSize: link ? getComputedStyle(link).backgroundSize : '',
       textDecorationLine: link ? getComputedStyle(link).textDecorationLine : '',
+      textDecorationSkipInk: link
+        ? getComputedStyle(link).textDecorationSkipInk
+        : '',
     };
   });
 
   assert.equal(colors.linkColor, colors.redToken);
   assert.equal(colors.backgroundSize, '100% 100%');
   assert.equal(colors.textDecorationLine, 'none');
+  assert.equal(colors.textDecorationSkipInk, 'auto');
 }
 
 async function assertBlogIndex(page: Page) {
   const result = await page.evaluate(() => {
+    const main = document.querySelector<HTMLElement>('main');
+    const mainStyle = main ? getComputedStyle(main) : null;
     const header =
       document
         .querySelector('[data-testid="blog-index-header"]')
@@ -999,6 +1157,13 @@ async function assertBlogIndex(page: Page) {
     const headingLeft =
       document.querySelector<HTMLElement>('#posts h2')?.getBoundingClientRect()
         .left ?? 0;
+    const sectionLeft =
+      document.querySelector<HTMLElement>('#posts')?.getBoundingClientRect()
+        .left ?? 0;
+    const headerRow = document.querySelector<HTMLElement>(
+      '#posts header > div'
+    );
+    const headerRowRect = headerRow?.getBoundingClientRect();
     const marker =
       document
         .querySelector('#posts header span')
@@ -1009,6 +1174,7 @@ async function assertBlogIndex(page: Page) {
     const legend = document.querySelector<HTMLElement>(
       '[data-testid="blog-index-legend"]'
     );
+    const legendRect = legend?.getBoundingClientRect();
     const legendItems = [
       ...(legend?.querySelectorAll<HTMLElement>('span.inline-flex') ?? []),
     ].map((item) => {
@@ -1068,9 +1234,18 @@ async function assertBlogIndex(page: Page) {
 
     return {
       header,
+      mainLeft: main?.getBoundingClientRect().left ?? 0,
+      mainContentLeft:
+        (main?.getBoundingClientRect().left ?? 0) +
+        Number.parseFloat(mainStyle?.paddingLeft ?? '0'),
       heading,
       headingLeft,
+      sectionLeft,
       marker,
+      headerRowCenter: headerRowRect
+        ? headerRowRect.top + headerRowRect.height / 2
+        : 0,
+      legendCenter: legendRect ? legendRect.top + legendRect.height / 2 : 0,
       legendText: legend?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       legendItems,
       itemMarkers,
@@ -1107,8 +1282,16 @@ async function assertBlogIndex(page: Page) {
   assert.equal(result.marker, '§1');
   assert.equal(result.heading, `Index (${result.itemCount})`);
   assert.ok(
+    Math.abs(result.sectionLeft - result.mainContentLeft) <= 1,
+    'blog index section should touch the main document content edge'
+  );
+  assert.ok(
     Math.abs(result.headingLeft - result.firstRailTitleLeft) <= 1,
     'blog index heading should align with blog rail row titles'
+  );
+  assert.ok(
+    Math.abs(result.headerRowCenter - result.legendCenter) <= 1,
+    'blog index legend should be vertically centered on the heading row'
   );
   assert.deepEqual(
     result.legendItems.map((item) => item.text),
@@ -1224,6 +1407,7 @@ async function assertArticle(page: Page) {
       '[data-testid="blog-article-title"]'
     );
     const header = document.querySelector('article > header');
+    const headerDate = header?.querySelector<HTMLElement>('time');
     const toc = document.querySelector<HTMLElement>('.article-toc');
     const tocText = toc?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
     const tocMeta = toc?.querySelector<HTMLElement>('.toc-meta');
@@ -1250,6 +1434,13 @@ async function assertArticle(page: Page) {
     const h3 = document.querySelector<HTMLElement>('.article-prose > h3');
     const token = document.querySelector<HTMLElement>(
       '.article-prose .highlight .hljs-keyword, .article-prose .highlight .hljs-string'
+    );
+    const codeTokenWeights = [
+      ...document.querySelectorAll<HTMLElement>(
+        '.article-prose .highlight span'
+      ),
+    ].map((element) =>
+      Number.parseInt(getComputedStyle(element).fontWeight, 10)
     );
     const code = document.querySelector<HTMLElement>(
       '.article-prose .highlight code'
@@ -1283,6 +1474,7 @@ async function assertArticle(page: Page) {
     const tocMetaValueStyle = tocMetaValue
       ? getComputedStyle(tocMetaValue)
       : null;
+    const headerDateStyle = headerDate ? getComputedStyle(headerDate) : null;
     const tocFirstLinkStyle = tocFirstLink
       ? getComputedStyle(tocFirstLink)
       : null;
@@ -1325,6 +1517,9 @@ async function assertArticle(page: Page) {
     return {
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      headerDateText:
+        headerDate?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      headerDateTransform: headerDateStyle?.textTransform ?? '',
       titleText: title?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       titleLeft: title?.getBoundingClientRect().left ?? 0,
       mainContentLeft,
@@ -1332,6 +1527,8 @@ async function assertArticle(page: Page) {
       tocText,
       tocMetaFontVariantCaps: tocMetaStyle?.fontVariantCaps ?? '',
       tocMetaLetterSpacing: tocMetaStyle?.letterSpacing ?? '',
+      tocMetaLabelSize: Number.parseFloat(tocMetaLabelStyle?.fontSize ?? '0'),
+      tocMetaValueSize: Number.parseFloat(tocMetaValueStyle?.fontSize ?? '0'),
       tocMetaLabelTransform: tocMetaLabelStyle?.textTransform ?? '',
       tocMetaValueTransform: tocMetaValueStyle?.textTransform ?? '',
       tocFirstLinkText:
@@ -1351,6 +1548,8 @@ async function assertArticle(page: Page) {
       blueToken,
       hoveredArticleLinkDecoration:
         hoveredArticleLinkStyle?.textDecorationLine ?? '',
+      hoveredArticleLinkSkipInk:
+        hoveredArticleLinkStyle?.textDecorationSkipInk ?? '',
       imageBorderTop: imageStyle?.borderTopWidth ?? '',
       captionAlign: captionStyle?.textAlign ?? '',
       captionSize: Number.parseFloat(captionStyle?.fontSize ?? '0'),
@@ -1366,6 +1565,7 @@ async function assertArticle(page: Page) {
       h3Weight: Number.parseInt(h3Style?.fontWeight ?? '0', 10),
       h3Transform: h3Style?.textTransform ?? '',
       tokenColor: tokenStyle?.color ?? '',
+      maxCodeTokenWeight: Math.max(0, ...codeTokenWeights),
       codeColor: codeStyle?.color ?? '',
       codeBackground: highlightStyle?.backgroundColor ?? '',
       footnoteRefFamily: footnoteRefStyle?.fontFamily ?? '',
@@ -1403,17 +1603,27 @@ async function assertArticle(page: Page) {
   );
   assert.ok(!result.headerText.includes('GitHub'));
   assert.ok(!result.headerText.includes('Why agent context should be'));
-  for (const text of ['Time', 'Last updated', 'Code', 'GitHub']) {
+  assert.match(result.headerDateText, /^[A-Z][a-z]{2} \d{2}, \d{4}$/);
+  assert.equal(result.headerDateTransform, 'none');
+  for (const text of ['time', 'last updated', 'code', 'github']) {
     assert.ok(result.tocText.includes(text), `TOC should include ${text}`);
+  }
+  for (const text of ['Time', 'Last updated', 'Code', 'GitHub']) {
+    assert.ok(!result.tocText.includes(text), `TOC should lowercase ${text}`);
   }
   assert.ok(!result.tocText.includes('Reading time'));
   assert.ok(!result.tocText.includes('~'));
-  assert.equal(result.tocMetaFontVariantCaps, 'all-small-caps');
+  assert.equal(result.tocMetaFontVariantCaps, 'normal');
   assert.equal(result.tocMetaLabelTransform, 'none');
   assert.equal(result.tocMetaValueTransform, 'none');
+  assert.equal(result.tocMetaLetterSpacing, 'normal');
   assert.ok(
-    Number.parseFloat(result.tocMetaLetterSpacing) > 0,
-    'TOC metadata should use tracked small-caps'
+    result.tocMetaLabelSize >= 12 && result.tocMetaLabelSize < 13,
+    'TOC metadata labels should match the hero contact scale'
+  );
+  assert.ok(
+    result.tocMetaValueSize >= 12 && result.tocMetaValueSize < 13,
+    'TOC metadata values should match the hero contact scale'
   );
   assert.equal(result.tocFirstNumText, '0');
   assert.equal(result.tocFirstLinkText, 'Background');
@@ -1430,6 +1640,7 @@ async function assertArticle(page: Page) {
   assert.equal(result.hoveredArticleLinkBackground, '100% 100%');
   assert.equal(result.hoveredArticleLinkColor, result.blueToken);
   assert.equal(result.hoveredArticleLinkDecoration, 'none');
+  assert.equal(result.hoveredArticleLinkSkipInk, 'auto');
 
   const tocGithubLink = page
     .locator('.article-toc .toc-meta a[href*="github"]')
@@ -1456,6 +1667,7 @@ async function assertArticle(page: Page) {
         color: style?.color ?? '',
         backgroundSize: style?.backgroundSize ?? '',
         decoration: style?.textDecorationLine ?? '',
+        skipInk: style?.textDecorationSkipInk ?? '',
         blueToken,
       };
     });
@@ -1463,6 +1675,7 @@ async function assertArticle(page: Page) {
     assert.equal(tocGithubHover.color, tocGithubHover.blueToken);
     assert.equal(tocGithubHover.backgroundSize, '100% 100%');
     assert.equal(tocGithubHover.decoration, 'none');
+    assert.equal(tocGithubHover.skipInk, 'auto');
   }
 
   assert.equal(result.imageBorderTop, '0px');
@@ -1479,6 +1692,10 @@ async function assertArticle(page: Page) {
   assert.ok(result.h3Weight < result.h2Weight);
   assert.equal(result.h3Transform, 'none');
   assert.notEqual(result.tokenColor, result.codeColor);
+  assert.ok(
+    result.maxCodeTokenWeight <= 400,
+    'article code highlighting should not bold tokens'
+  );
   assert.equal(result.codeBackground, 'rgb(243, 243, 241)');
   assert.equal(result.articleListStyle, 'decimal');
   assert.ok(result.articleListPadding >= 28);
@@ -1545,6 +1762,7 @@ async function assertHarmoniaArticle(page: Page) {
     ];
 
     return {
+      bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       hasPronounParagraph: paragraphs.some((text) =>
         text.startsWith('It assumes clusters are')
       ),
@@ -1591,6 +1809,8 @@ async function assertHarmoniaArticle(page: Page) {
   });
 
   assert.equal(result.hasPronounParagraph, true);
+  assert.ok(result.bodyText.includes('math.pi'));
+  assert.ok(!result.bodyText.includes('π'));
   assert.equal(result.hasRepeatedHdbscanStart, false);
   assert.equal(result.mellowListCount, 2);
   assert.equal(result.mellowListParentTag, 'UL');
@@ -1716,6 +1936,7 @@ async function assertLegacyMediaArticle(page: Page) {
       keycapDisplay: keycapStyle?.display ?? '',
       keycapBorderTop: keycapStyle?.borderTopWidth ?? '',
       keycapBoxShadow: keycapStyle?.boxShadow ?? '',
+      keycapBackgroundImage: keycapStyle?.backgroundImage ?? '',
       listData,
       maxListOverflow,
     };
@@ -1758,6 +1979,8 @@ async function assertLegacyMediaArticle(page: Page) {
   assert.equal(result.keycapDisplay, 'inline-block');
   assert.notEqual(result.keycapBorderTop, '0px');
   assert.notEqual(result.keycapBoxShadow, 'none');
+  assert.notEqual(result.keycapBackgroundImage, 'none');
+  assert.match(result.keycapBoxShadow, /inset/);
   assert.ok(result.listData.length > 0, 'legacy article should include lists');
   assert.ok(
     result.listData.every((list) => list.paddingLeft >= 28),

@@ -1,7 +1,11 @@
 import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
 import { formatMonthYear } from '@/lib/blog/date';
 import { ExternalLink } from '@/components/primitives/external-link';
-import { RailItem, RailList } from '@/components/primitives/rail';
+import {
+  RailActionItem,
+  RailItem,
+  RailList,
+} from '@/components/primitives/rail';
 import { SectionActionLink } from '@/components/primitives/section-action';
 import { BorderedPanel, Section } from '@/components/primitives/section';
 
@@ -11,7 +15,7 @@ export async function WritingPreview() {
   return (
     <Section id="writing" index="4" title="Writing" accent="text-roy-b">
       <BorderedPanel>
-        <div className="flex w-full flex-col gap-3.5">
+        <div className="flex w-full flex-col">
           <RailList>
             {posts.map((post, index) => {
               const isNew = isNewPost(index);
@@ -45,16 +49,19 @@ export async function WritingPreview() {
                       {post.readingMeta}
                     </div>
                   }
-                  connector={index < posts.length - 1 ? 'solid' : 'none'}
+                  connector={index < posts.length - 1 ? 'solid' : 'dashed'}
                 />
               );
             })}
+            <RailActionItem
+              testId="writing-action-row"
+              connectorTestId="writing-action-connector"
+            >
+              <SectionActionLink href="/blog" section="b">
+                see more on blog
+              </SectionActionLink>
+            </RailActionItem>
           </RailList>
-          <div className="flex justify-end">
-            <SectionActionLink href="/blog" section="b">
-              See more on blog
-            </SectionActionLink>
-          </div>
         </div>
       </BorderedPanel>
     </Section>

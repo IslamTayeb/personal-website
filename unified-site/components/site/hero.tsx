@@ -66,7 +66,7 @@ export function Hero() {
       data-testid="hero-section"
       className="pb-3 pt-0 md:pb-3.5 md:pt-0"
     >
-      <div className="flex w-full flex-col gap-2">
+      <div className="flex w-full flex-col">
         <SectionHeader index="1" title="About" accent="text-roy-r" />
         <h1
           data-testid="hero-title"

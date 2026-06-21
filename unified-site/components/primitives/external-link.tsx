@@ -11,16 +11,20 @@ export function ExternalLink({
   children,
   className,
   section = 'b',
+  variant = 'highlight',
   ...props
 }: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'children'> & {
   href: string;
   children: ReactNode;
   className?: string;
   section?: 'r' | 'o' | 'y' | 'b';
+  variant?: 'highlight' | 'plain';
 }) {
   const external = isExternalHref(href);
   const classes = cn(
-    'royb-link royb-link-highlight',
+    variant === 'highlight'
+      ? 'royb-link royb-link-highlight'
+      : 'royb-link-plain',
     `section-color-${section}`,
     external && 'external-link',
     className

@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import { ExternalLink } from '@/components/primitives/external-link';
 
 export default function NotFound() {
   return (
@@ -12,12 +12,13 @@ export default function NotFound() {
       <p className="mt-2 text-sm text-muted-foreground">
         This page does not exist.
       </p>
-      <Link
+      <ExternalLink
         href="/"
-        className="mt-5 inline-block font-mono text-xs uppercase tracking-[0.14em] underline underline-offset-4"
+        section="b"
+        className="mt-5 font-mono text-xs uppercase tracking-[0.14em]"
       >
         Back home
-      </Link>
+      </ExternalLink>
     </div>
   );
 }

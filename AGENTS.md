@@ -197,6 +197,17 @@ Only commit when all three pass. Include meaningful commit messages that describ
   hover. Anything present but locked/unavailable should show the not-allowed
   cursor. Any link that opens elsewhere should be visibly underlined; color is
   optional, but the underline is not.
+- **Unified-site links:** React-rendered hyperlinks should use
+  `components/primitives/external-link.tsx`; Markdown-rendered article links
+  should receive the same `royb-link royb-link-highlight section-color-*`
+  classes in the renderer. Keep links on native `text-decoration` with
+  `text-decoration-skip-ink: auto` so descenders and punctuation interrupt the
+  underline naturally at rest; hover may hide the underline when the ROYB
+  highlight is active.
+- **Unified-site section actions:** "see more" actions are lowercase normal
+  text, not tracked uppercase or small-caps. When an action logically continues
+  a rail list, render it through `RailActionItem` so the dashed rail extends to
+  the action row on the same rail axis.
 - **Component library:** shadcn/ui (new-york style, slate base, RSC enabled). Config in `components.json`. UI primitives live in `components/ui/`.
 - **Fonts:** Geist Sans, Geist Mono, and Anek Telugu (as `--font-caption`). Default body font is `font-mono`.
 - **Formatting:** Prettier config is at repo root (`prettier.config.js`): single quotes, semicolons, trailing commas `es5`, 80-char width, 2-space indent, LF endings.

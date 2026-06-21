@@ -61,7 +61,7 @@ export function SectionHeader({
         <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
           {title}
         </h2>
-        {extra ? <div className="min-w-0">{extra}</div> : null}
+        {extra ? <div className="min-w-0 self-center">{extra}</div> : null}
       </div>
     </header>
   );

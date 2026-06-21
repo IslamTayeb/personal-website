@@ -231,7 +231,7 @@ function RailGroupBlock({
         className="grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] items-center pb-2.5 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring"
       >
         <Chevron
-          className="relative bottom-px text-muted-foreground"
+          className="relative bottom-px left-px text-muted-foreground"
           size={12}
           strokeWidth={1.8}
           aria-hidden

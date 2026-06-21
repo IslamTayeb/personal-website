@@ -45,6 +45,17 @@ function assertRenderedExternalLinks(postSlug: string, html: string) {
       /class="[^"]*\bexternal-link\b[^"]*"/,
       `${postSlug} external link is missing external-link class`
     );
+    for (const className of [
+      'royb-link',
+      'royb-link-highlight',
+      'section-color-b',
+    ]) {
+      assert.match(
+        attrs,
+        new RegExp(`class="[^"]*\\b${className}\\b[^"]*"`),
+        `${postSlug} external link is missing ${className} class`
+      );
+    }
   }
 }
 
@@ -159,10 +170,12 @@ async function main() {
 
     if (post.manifest.slug === 'on-agent-memory-fidelity') {
       assert.match(post.html, /class="article-toc"/);
-      assert.match(post.html, /<span>Time<\/span>/);
+      assert.match(post.html, /<span>time<\/span>/);
       assert.doesNotMatch(post.html, /Reading time/);
-      assert.match(post.html, /Last updated/);
-      assert.match(post.html, /GitHub/);
+      assert.match(post.html, /last updated/);
+      assert.match(post.html, /github/);
+      assert.doesNotMatch(post.html, /<span>Time<\/span>/);
+      assert.doesNotMatch(post.html, /GitHub/);
       assert.match(post.html, /class="toc-subs"/);
       assert.match(
         post.html,

@@ -1,6 +1,6 @@
 import type { Publication } from '@/types/content';
 import { ExternalLink } from './external-link';
-import { RailItem, RailList } from './rail';
+import { RailActionItem, RailItem, RailList } from './rail';
 import { RichText } from './rich-text';
 import { SectionActionLink } from './section-action';
 
@@ -29,10 +29,10 @@ function PublicationAuthors({ authors }: { authors: string }) {
 
 function PublicationRow({
   publication,
-  isLast,
+  connector,
 }: {
   publication: Publication;
-  isLast: boolean;
+  connector: 'solid' | 'dashed' | 'none';
 }) {
   return (
     <RailItem
@@ -42,7 +42,7 @@ function PublicationRow({
       titleTestId="publication-title-wrap"
       dotClassName="bg-foreground/75"
       className="pb-2.5"
-      connector={isLast ? 'none' : 'solid'}
+      connector={connector}
       title={
         <span className="block min-w-0">
           <ExternalLink
@@ -78,30 +78,37 @@ function PublicationRow({
 export function PublicationDisclosure({
   publications,
   moreHref,
-  moreLabel = 'See more',
+  moreLabel = 'see more',
 }: {
   publications: Publication[];
   moreHref?: string;
   moreLabel?: string;
 }) {
   return (
-    <div className="flex w-full flex-col gap-2.5">
+    <div className="flex w-full flex-col">
       <RailList testId="publication-rail">
-        {publications.map((publication, index) => (
-          <PublicationRow
-            key={publication.title}
-            publication={publication}
-            isLast={index === publications.length - 1}
-          />
-        ))}
+        {publications.map((publication, index) => {
+          const isLast = index === publications.length - 1;
+
+          return (
+            <PublicationRow
+              key={publication.title}
+              publication={publication}
+              connector={isLast ? (moreHref ? 'dashed' : 'none') : 'solid'}
+            />
+          );
+        })}
+        {moreHref ? (
+          <RailActionItem
+            testId="publication-action-row"
+            connectorTestId="publication-action-connector"
+          >
+            <SectionActionLink href={moreHref} section="y">
+              {moreLabel}
+            </SectionActionLink>
+          </RailActionItem>
+        ) : null}
       </RailList>
-      {moreHref ? (
-        <div className="flex justify-end">
-          <SectionActionLink href={moreHref} section="y">
-            {moreLabel}
-          </SectionActionLink>
-        </div>
-      ) : null}
     </div>
   );
 }

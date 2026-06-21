@@ -2,8 +2,7 @@ import type { ReactNode } from 'react';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { cn } from '@/lib/utils';
 
-const actionClassName =
-  'font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground';
+const actionClassName = 'font-mono text-xs text-muted-foreground';
 
 export function SectionActionLink({
   href,
