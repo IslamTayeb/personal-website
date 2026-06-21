@@ -109,10 +109,26 @@ async function main() {
 
     if (post.manifest.slug === 'on-agent-memory-fidelity') {
       assert.match(post.html, /class="article-toc"/);
-      assert.match(post.html, /Reading time/);
+      assert.match(post.html, /<span>Time<\/span>/);
+      assert.doesNotMatch(post.html, /Reading time/);
       assert.match(post.html, /Last updated/);
       assert.match(post.html, /GitHub/);
       assert.match(post.html, /class="toc-subs"/);
+      assert.match(
+        post.html,
+        /RGB-agent\.<sup class="footnote-ref">/,
+        'sentence-end footnote refs should move after punctuation'
+      );
+      assert.match(
+        post.html,
+        /<code>fidelity<\/code><sup class="footnote-ref">[\s\S]*?<\/sup> settings/,
+        'mid-sentence footnote refs should stay attached to the word'
+      );
+      assert.match(
+        post.html,
+        /<ol>\s*<li><code>Topic<\/code>:/,
+        'control layer markdown should render as a real ordered list'
+      );
       assert.match(post.html, /class="article-media"/);
       assert.match(post.html, /<figcaption><em>/);
       assert.doesNotMatch(post.html, /data-prototype=/);

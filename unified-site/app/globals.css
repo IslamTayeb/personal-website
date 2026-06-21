@@ -219,7 +219,29 @@
     @apply mt-8 text-xl font-semibold leading-tight tracking-tight text-foreground;
   }
   .article-prose h3 {
-    @apply mt-5 font-mono text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground;
+    @apply mt-5 text-lg font-semibold leading-tight tracking-tight text-foreground;
+  }
+  .article-prose > ol,
+  .article-prose > ul {
+    @apply list-outside pl-5 leading-relaxed;
+  }
+  .article-prose > ol {
+    @apply list-decimal;
+  }
+  .article-prose > ul {
+    @apply list-disc;
+  }
+  .article-prose > ol li,
+  .article-prose > ul li {
+    @apply pl-1;
+  }
+  .article-prose > ol li::marker,
+  .article-prose > ul li::marker {
+    @apply font-mono font-semibold text-muted-foreground;
+  }
+  .article-prose > ol li + li,
+  .article-prose > ul li + li {
+    @apply mt-1;
   }
   .article-prose a {
     text-decoration-line: underline;
@@ -401,21 +423,24 @@
     @apply my-6 border-0 border-t border-dashed border-border;
   }
   .article-prose .footnotes {
-    @apply text-xs leading-relaxed text-muted-foreground;
+    @apply text-xs leading-snug text-muted-foreground;
   }
   .article-prose .footnotes ol {
-    @apply pl-5;
+    @apply m-0 list-decimal pl-5;
   }
   .article-prose .footnotes li {
-    @apply mb-3;
+    @apply mb-2 pl-1;
+  }
+  .article-prose .footnotes li::marker {
+    @apply font-mono font-semibold text-muted-foreground;
   }
   .article-prose .footnotes li p {
-    @apply m-0;
+    @apply m-0 inline;
   }
   .article-prose .footnote-ref a {
-    @apply font-mono text-[0.85em] text-roy-b no-underline;
+    @apply font-mono text-[0.85em] font-semibold text-roy-b no-underline;
   }
   .article-prose .footnote-backref {
-    @apply ml-1 text-muted-foreground no-underline;
+    @apply ml-1 font-mono text-muted-foreground no-underline;
   }
 }

@@ -188,6 +188,9 @@ Only commit when all three pass. Include meaningful commit messages that describ
 - **Fonts:** Geist Sans, Geist Mono, and Anek Telugu (as `--font-caption`). Default body font is `font-mono`.
 - **Formatting:** Prettier config is at repo root (`prettier.config.js`): single quotes, semicolons, trailing commas `es5`, 80-char width, 2-space indent, LF endings.
 - **`cn()` helper:** `lib/utils.ts` exports `cn()` (clsx + tailwind-merge). Use it for conditional class merging.
+- **Repeated UI:** if something is used more than once, make it a component.
+  Do not be afraid to merge, split, or edit existing components when that makes
+  the code cleaner and keeps shared behavior from drifting.
 - **`apmoverflow` posts:** publish from checked-in Markdown under `apmoverflow/content/posts/` plus a JSON manifest for slug/date/links/media/alt text. Keep authored prose out of frontmatter and preserve it verbatim. For migrated posts, treat this repo's Markdown as newer than any stale Obsidian copy; if linking Obsidian, point the Obsidian note at the repo Markdown source.
 - **`apmoverflow` generated outputs:** slug `index.html` files, `blog/index.html`, and `feed/*.xml` are generated from the modular pipeline. Do not hand-edit generated HTML for source-backed posts; edit Markdown/manifests and rebuild.
 - **`apmoverflow` manifests:** use `listed: false` for source-backed pages that should exist at their slug but stay out of `/blog/` and feeds. Use `allowHtml: true` only for legacy posts that need raw HTML blocks such as iframes, hand-built TOCs, tables, or footnote sections. Use `wrapTables: false` when the Markdown already contains preserved table wrappers/raw HTML.

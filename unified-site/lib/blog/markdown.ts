@@ -155,7 +155,7 @@ function buildToc(
     .join('');
 
   const metaItems = [
-    `<div class="toc-meta-row"><span>Reading time</span><span>${escapeHtml(
+    `<div class="toc-meta-row"><span>Time</span><span>${escapeHtml(
       readingMeta(sourceMarkdown)
     )}</span></div>`,
     `<div class="toc-meta-row"><span>Last updated</span><span>${escapeHtml(
@@ -228,6 +228,13 @@ function normalizeExternalAnchors(html: string) {
 
       return `<a${nextAttrs}>`;
     }
+  );
+}
+
+function normalizeSentenceFootnotes(html: string) {
+  return html.replace(
+    /(<sup class="footnote-ref">[\s\S]*?<\/sup>)([.,;:!?])/g,
+    '$2$1'
   );
 }
 
@@ -394,7 +401,7 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
   }
 
   return {
-    html: normalizeExternalAnchors(html),
+    html: normalizeExternalAnchors(normalizeSentenceFootnotes(html)),
     headings: env.headings,
     readingMeta: readingMeta(markdown),
   };

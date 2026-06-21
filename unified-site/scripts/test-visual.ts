@@ -599,6 +599,9 @@ async function assertArticleRendering(page: Page) {
     const footnotes = document.querySelector<HTMLElement>('.footnotes');
     const footnoteList = document.querySelector<HTMLElement>('.footnotes ol');
     const footnoteRef = document.querySelector<HTMLElement>('.footnote-ref a');
+    const firstArticleList = document.querySelector<HTMLElement>(
+      '.article-prose > ol'
+    );
     const tableFigure = document.querySelector<HTMLElement>('.article-table');
     const table = document.querySelector<HTMLElement>('.table-wrap table');
     const firstBodyRow = document.querySelector<HTMLElement>(
@@ -619,6 +622,9 @@ async function assertArticleRendering(page: Page) {
     const highlightStyle = highlight ? getComputedStyle(highlight) : null;
     const footnotesStyle = footnotes ? getComputedStyle(footnotes) : null;
     const footnoteRefStyle = footnoteRef ? getComputedStyle(footnoteRef) : null;
+    const firstArticleListStyle = firstArticleList
+      ? getComputedStyle(firstArticleList)
+      : null;
     const tableStyle = table ? getComputedStyle(table) : null;
     const firstBodyRowStyle = firstBodyRow
       ? getComputedStyle(firstBodyRow)
@@ -646,13 +652,22 @@ async function assertArticleRendering(page: Page) {
       h2Size: Number.parseFloat(h2Style?.fontSize ?? '0'),
       h3Size: Number.parseFloat(h3Style?.fontSize ?? '0'),
       h2Weight: Number.parseInt(h2Style?.fontWeight ?? '0', 10),
+      h3Weight: Number.parseInt(h3Style?.fontWeight ?? '0', 10),
       h3Transform: h3Style?.textTransform ?? '',
       tokenColor: tokenStyle?.color ?? '',
       codeColor: codeStyle?.color ?? '',
       codeBackground: highlightStyle?.backgroundColor ?? '',
       footnotesSize: Number.parseFloat(footnotesStyle?.fontSize ?? '0'),
       footnoteRefFamily: footnoteRefStyle?.fontFamily ?? '',
+      footnoteRefWeight: Number.parseInt(
+        footnoteRefStyle?.fontWeight ?? '0',
+        10
+      ),
       footnoteListTag: footnoteList?.tagName ?? '',
+      firstArticleListStyle: firstArticleListStyle?.listStyleType ?? '',
+      firstArticleListPadding: Number.parseFloat(
+        firstArticleListStyle?.paddingLeft ?? '0'
+      ),
       tableDisplay: tableStyle?.display ?? '',
       tableFigureExists: Boolean(tableFigure),
       tableCaptionCount:
@@ -676,12 +691,16 @@ async function assertArticleRendering(page: Page) {
     result.dateTop >= result.titleBottom,
     'article date should render under the title'
   );
-  for (const text of ['Reading time', 'Last updated', 'Code', 'GitHub']) {
+  for (const text of ['Time', 'Last updated', 'Code', 'GitHub']) {
     assert.ok(
       result.tocText.includes(text),
       `article index should include ${text}`
     );
   }
+  assert.ok(
+    !result.tocText.includes('Reading time'),
+    'article index should shorten Reading time to Time'
+  );
   assert.ok(result.tocHasSublinks, 'article index should include H3 sublinks');
   assert.equal(
     result.imageBorderTop,
@@ -709,10 +728,20 @@ async function assertArticleRendering(page: Page) {
     'H2 should be visually stronger than H3'
   );
   assert.ok(result.h2Weight >= 600, 'H2 should have strong weight');
+  assert.ok(result.h3Weight >= 600, 'H3 should have heading weight');
   assert.equal(
     result.h3Transform,
-    'uppercase',
-    'H3 should be a distinct mono label'
+    'none',
+    'H3 should read like a real subheading, not a metadata label'
+  );
+  assert.equal(
+    result.firstArticleListStyle,
+    'decimal',
+    'article ordered lists should show list structure'
+  );
+  assert.ok(
+    result.firstArticleListPadding > 0,
+    'article lists should reserve marker space'
   );
   assert.notEqual(
     result.tokenColor,
@@ -728,6 +757,10 @@ async function assertArticleRendering(page: Page) {
   assert.ok(
     result.footnoteRefFamily.includes('DM Mono'),
     'footnote reference numbers should use the mono face'
+  );
+  assert.ok(
+    result.footnoteRefWeight >= 600,
+    'footnote reference numbers should be slightly bolder'
   );
   assert.equal(result.footnoteListTag, 'OL', 'footnotes should be ordered');
   assert.ok(result.tableFigureExists, 'article table figure should render');
