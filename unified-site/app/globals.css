@@ -219,11 +219,11 @@
     @apply mt-8 text-xl font-semibold leading-tight tracking-tight text-foreground;
   }
   .article-prose h3 {
-    @apply mt-5 text-lg font-semibold leading-tight tracking-tight text-foreground;
+    @apply mt-5 font-mono text-xs font-medium uppercase leading-snug tracking-[0.18em] text-muted-foreground;
   }
   .article-prose > ol,
   .article-prose > ul {
-    @apply list-outside pl-5 leading-relaxed;
+    @apply list-outside pl-7 leading-relaxed md:pl-8;
   }
   .article-prose > ol {
     @apply list-decimal;
@@ -233,15 +233,19 @@
   }
   .article-prose > ol li,
   .article-prose > ul li {
-    @apply pl-1;
+    @apply pl-1.5;
   }
   .article-prose > ol li::marker,
   .article-prose > ul li::marker {
-    @apply font-mono font-semibold text-muted-foreground;
+    @apply font-mono font-normal text-muted-foreground;
   }
   .article-prose > ol li + li,
   .article-prose > ul li + li {
     @apply mt-1;
+  }
+  .article-prose li > ol,
+  .article-prose li > ul {
+    @apply mt-1 pl-6;
   }
   .article-prose a {
     display: inline-block;
@@ -274,6 +278,9 @@
   .article-prose figure img,
   .article-prose figure video {
     @apply mx-auto block h-auto max-w-full border-0;
+  }
+  .article-prose video {
+    @apply mx-auto block h-auto w-full max-w-full border-0;
   }
   .article-prose figcaption {
     @apply mt-2 block text-center text-xs leading-snug text-muted-foreground;
@@ -326,6 +333,16 @@
   .article-prose :not(pre) > code {
     @apply bg-muted px-1 py-0.5 font-mono text-[0.9em];
   }
+  .article-prose kbd {
+    @apply inline-block whitespace-nowrap border border-border bg-muted px-1.5 py-0.5 font-mono text-[0.85em] leading-none text-foreground;
+    border-bottom-color: color-mix(
+      in oklch,
+      var(--muted-foreground) 58%,
+      transparent
+    );
+    box-shadow: 0 1px 0
+      color-mix(in oklch, var(--muted-foreground) 38%, transparent);
+  }
   .article-prose .hljs-comment,
   .article-prose .hljs-quote {
     color: var(--code-comment);
@@ -377,8 +394,11 @@
   .article-prose .toc-sections {
     @apply mt-3 flex flex-col gap-2 text-sm;
   }
+  .article-prose .toc-section {
+    @apply grid grid-cols-[1.25rem_minmax(0,1fr)] items-baseline gap-x-2;
+  }
   .article-prose .toc-section > a {
-    @apply text-foreground;
+    @apply w-fit max-w-full text-foreground;
     display: inline-block;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
@@ -389,10 +409,10 @@
     @apply font-mono text-xs text-muted-foreground;
   }
   .article-prose .toc-subs {
-    @apply ml-5 mt-1 flex flex-col gap-0.5 border-l border-border pl-3;
+    @apply col-start-2 mt-1 flex flex-col items-start gap-0.5 border-l border-border pl-3;
   }
   .article-prose .toc-subs a {
-    @apply text-xs text-muted-foreground;
+    @apply w-fit max-w-full text-xs text-muted-foreground;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 36%, transparent);
   }
@@ -403,7 +423,7 @@
     @apply flex justify-between gap-4;
   }
   .article-prose .toc-meta-row > span:first-child {
-    @apply text-muted-foreground;
+    @apply font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground;
   }
   .article-prose .toc-meta-row > span:last-child {
     @apply text-right text-foreground;
@@ -459,7 +479,7 @@
     @apply mb-3 pl-1;
   }
   .article-prose .footnotes li::marker {
-    @apply font-mono font-semibold text-muted-foreground;
+    @apply font-mono font-normal text-muted-foreground;
   }
   .article-prose .footnotes li p {
     @apply m-0 inline;
@@ -469,6 +489,10 @@
     background-image: none;
   }
   .article-prose .footnote-backref {
+    @apply ml-1 font-mono text-[0.9em] text-muted-foreground no-underline;
+    background-image: none;
+  }
+  .article-prose .footnotes a.footnote {
     @apply ml-1 font-mono text-[0.9em] text-muted-foreground no-underline;
     background-image: none;
   }

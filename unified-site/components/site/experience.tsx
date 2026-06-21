@@ -280,7 +280,7 @@ export function Experience({
   });
 
   return (
-    <Section id="experience" index="1" title="Experience" accent="text-roy-o">
+    <Section id="experience" index="2" title="Experience" accent="text-roy-o">
       <BorderedPanel>
         <div className="flex w-full flex-col">
           {experienceGroups.map((group) => (

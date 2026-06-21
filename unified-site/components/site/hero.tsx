@@ -66,7 +66,7 @@ export function Hero() {
     >
       <div className="flex w-full flex-col gap-2">
         <header className="mb-1 grid grid-cols-[1.25rem_minmax(0,1fr)] items-baseline">
-          <span className="font-mono text-xs text-roy-r">§0</span>
+          <span className="font-mono text-xs text-roy-r">§1</span>
           <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
             About
           </h2>

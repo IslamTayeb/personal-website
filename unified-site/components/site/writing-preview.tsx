@@ -9,7 +9,7 @@ export async function WritingPreview() {
   const posts = (await getListedPosts()).slice(0, 3);
 
   return (
-    <Section id="writing" index="3" title="Writing" accent="text-roy-b">
+    <Section id="writing" index="4" title="Writing" accent="text-roy-b">
       <BorderedPanel>
         <div className="flex w-full flex-col gap-3.5">
           <RailList>

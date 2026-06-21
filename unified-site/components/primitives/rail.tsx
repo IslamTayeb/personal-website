@@ -122,12 +122,12 @@ export function RailItem({
             onClick={onActivate}
             aria-expanded={ariaExpanded}
             data-testid={rowButtonTestId}
-            className="flex w-full min-w-0 cursor-pointer items-baseline justify-between gap-3 text-left outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="flex w-full min-w-0 cursor-pointer items-start justify-between gap-3 text-left outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
             {topRow}
           </button>
         ) : (
-          <div className="flex min-w-0 items-baseline justify-between gap-3">
+          <div className="flex min-w-0 items-start justify-between gap-3">
             {topRow}
           </div>
         )}

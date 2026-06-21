@@ -21,7 +21,7 @@ export default async function BlogIndexPage() {
       </header>
       <Section
         id="posts"
-        index="0"
+        index="1"
         title={`Index (${posts.length})`}
         accent="text-roy-b"
         className="pt-0 md:pt-0"

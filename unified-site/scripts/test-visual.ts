@@ -392,7 +392,7 @@ async function assertHome(page: Page) {
 
   assert.ok(result.mainWidth <= 800, 'main document should stay narrow');
   assert.equal(result.heroTitle, 'Islam Tayeb');
-  assert.deepEqual(result.sectionMarkers, ['§0', '§1', '§2', '§3']);
+  assert.deepEqual(result.sectionMarkers, ['§1', '§2', '§3', '§4']);
   assert.deepEqual(result.sectionLabels, [
     'About',
     'Experience',
@@ -764,7 +764,7 @@ async function assertBlogIndex(page: Page) {
   });
 
   assert.equal(result.header, '', 'blog header should only contain ROYB band');
-  assert.equal(result.marker, '§0');
+  assert.equal(result.marker, '§1');
   assert.equal(result.heading, `Index (${result.itemCount})`);
   assert.ok(result.itemCount >= 3);
   assert.equal(result.dotCount, result.itemCount);
@@ -805,6 +805,8 @@ async function assertArticle(page: Page) {
     const header = document.querySelector('article > header');
     const toc = document.querySelector<HTMLElement>('.article-toc');
     const tocText = toc?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
+    const tocFirstSection = toc?.querySelector<HTMLElement>('.toc-section');
+    const tocFirstNum = tocFirstSection?.querySelector<HTMLElement>('.toc-num');
     const tocFirstLink = toc?.querySelector<HTMLElement>('.toc-section > a');
     const hoveredArticleLink = document.querySelector<HTMLElement>(
       '.article-prose p a:hover'
@@ -828,8 +830,10 @@ async function assertArticle(page: Page) {
       '.article-prose .highlight'
     );
     const footnoteRef = document.querySelector<HTMLElement>('.footnote-ref a');
+    const footnotesSep = document.querySelector<HTMLElement>('.footnotes-sep');
     const footnotes = document.querySelector<HTMLElement>('.footnotes');
     const footnoteList = document.querySelector<HTMLElement>('.footnotes ol');
+    const footnoteItem = footnotes?.querySelector<HTMLElement>('li');
     const articleList = document.querySelector<HTMLElement>(
       '.article-prose > ol'
     );
@@ -847,6 +851,7 @@ async function assertArticle(page: Page) {
     const tocFirstLinkStyle = tocFirstLink
       ? getComputedStyle(tocFirstLink)
       : null;
+    const tocFirstNumStyle = tocFirstNum ? getComputedStyle(tocFirstNum) : null;
     const hoveredArticleLinkStyle = hoveredArticleLink
       ? getComputedStyle(hoveredArticleLink)
       : null;
@@ -861,6 +866,12 @@ async function assertArticle(page: Page) {
     const footnotesStyle = footnotes ? getComputedStyle(footnotes) : null;
     const footnoteListStyle = footnoteList
       ? getComputedStyle(footnoteList)
+      : null;
+    const footnotesSepStyle = footnotesSep
+      ? getComputedStyle(footnotesSep)
+      : null;
+    const footnoteItemMarkerStyle = footnoteItem
+      ? getComputedStyle(footnoteItem, '::marker')
       : null;
     const articleListStyle = articleList ? getComputedStyle(articleList) : null;
     const firstBodyRowStyle = firstBodyRow
@@ -886,7 +897,15 @@ async function assertArticle(page: Page) {
       tocText,
       tocFirstLinkText:
         tocFirstLink?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      tocFirstNumText:
+        tocFirstNum?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       tocFirstLinkDecoration: tocFirstLinkStyle?.textDecorationLine ?? '',
+      tocFirstLinkWidth: tocFirstLink?.getBoundingClientRect().width ?? 0,
+      tocWidth: toc?.getBoundingClientRect().width ?? 0,
+      tocFirstGap:
+        (tocFirstLink?.getBoundingClientRect().left ?? 0) -
+        (tocFirstNum?.getBoundingClientRect().right ?? 0),
+      tocFirstNumDecoration: tocFirstNumStyle?.textDecorationLine ?? '',
       hoveredArticleLinkBackground:
         hoveredArticleLinkStyle?.backgroundSize ?? '',
       hoveredArticleLinkColor: hoveredArticleLinkStyle?.color ?? '',
@@ -919,6 +938,11 @@ async function assertArticle(page: Page) {
       footnoteListPadding: Number.parseFloat(
         footnoteListStyle?.paddingLeft ?? '0'
       ),
+      footnotesSepStyle: footnotesSepStyle?.borderTopStyle ?? '',
+      footnoteMarkerWeight: Number.parseInt(
+        footnoteItemMarkerStyle?.fontWeight ?? '0',
+        10
+      ),
       footnoteListTag: footnoteList?.tagName ?? '',
       articleListStyle: articleListStyle?.listStyleType ?? '',
       articleListPadding: Number.parseFloat(
@@ -945,11 +969,56 @@ async function assertArticle(page: Page) {
   }
   assert.ok(!result.tocText.includes('Reading time'));
   assert.ok(!result.tocText.includes('~'));
-  assert.ok(/^0\s+Background/.test(result.tocFirstLinkText));
+  assert.equal(result.tocFirstNumText, '0');
+  assert.equal(result.tocFirstLinkText, 'Background');
   assert.equal(result.tocFirstLinkDecoration, 'underline');
+  assert.equal(result.tocFirstNumDecoration, 'none');
+  assert.ok(
+    result.tocFirstGap >= 7,
+    `TOC number/title gap should visually read as two spaces: ${result.tocFirstGap}`
+  );
+  assert.ok(
+    result.tocFirstLinkWidth < result.tocWidth * 0.4,
+    'TOC hover/click area should stay close to the text, not full width'
+  );
   assert.equal(result.hoveredArticleLinkBackground, '100% 100%');
   assert.equal(result.hoveredArticleLinkColor, result.blueToken);
   assert.equal(result.hoveredArticleLinkDecoration, 'none');
+
+  const tocGithubLink = page
+    .locator('.article-toc .toc-meta a[href*="github"]')
+    .first();
+
+  if ((await tocGithubLink.count()) > 0) {
+    await tocGithubLink.hover();
+
+    const tocGithubHover = await page.evaluate(() => {
+      const link = document.querySelector<HTMLElement>(
+        '.article-toc .toc-meta a[href*="github"]:hover'
+      );
+      const probe = document.createElement('span');
+
+      probe.style.color = 'var(--roy-b)';
+      document.body.append(probe);
+
+      const blueToken = getComputedStyle(probe).color;
+      const style = link ? getComputedStyle(link) : null;
+
+      probe.remove();
+
+      return {
+        color: style?.color ?? '',
+        backgroundSize: style?.backgroundSize ?? '',
+        decoration: style?.textDecorationLine ?? '',
+        blueToken,
+      };
+    });
+
+    assert.equal(tocGithubHover.color, tocGithubHover.blueToken);
+    assert.equal(tocGithubHover.backgroundSize, '100% 100%');
+    assert.equal(tocGithubHover.decoration, 'none');
+  }
+
   assert.equal(result.imageBorderTop, '0px');
   assert.equal(result.captionAlign, 'center');
   assert.ok(result.captionSize < 14);
@@ -961,16 +1030,21 @@ async function assertArticle(page: Page) {
   assert.equal(result.videoPreload, 'auto');
   assert.ok(result.h2Size > result.h3Size);
   assert.ok(result.h2Weight >= 600);
-  assert.ok(result.h3Weight >= 600);
-  assert.equal(result.h3Transform, 'none');
+  assert.ok(result.h3Weight < result.h2Weight);
+  assert.equal(result.h3Transform, 'uppercase');
   assert.notEqual(result.tokenColor, result.codeColor);
   assert.equal(result.codeBackground, 'rgb(243, 243, 241)');
   assert.equal(result.articleListStyle, 'decimal');
-  assert.ok(result.articleListPadding > 0);
+  assert.ok(result.articleListPadding >= 28);
   assert.ok(result.footnotesSize <= 13);
   assert.ok(result.footnoteListPadding >= 24);
   assert.ok(result.footnoteRefFamily.includes('DM Mono'));
   assert.ok(result.footnoteRefWeight >= 600);
+  assert.equal(result.footnotesSepStyle, 'dashed');
+  assert.ok(
+    result.footnoteMarkerWeight <= 500,
+    'bottom footnote list markers should not be bold'
+  );
   assert.equal(result.footnoteListTag, 'OL');
   assert.equal(result.tableCaptionCount, 0);
   assert.notEqual(
@@ -979,6 +1053,130 @@ async function assertArticle(page: Page) {
   );
   assert.equal(result.prototypeCount, 0);
   assert.ok(!result.bodyText.toLowerCase().includes('prototyping'));
+}
+
+async function assertLegacyMediaArticle(page: Page) {
+  const result = await page.evaluate(() => {
+    const prose = document.querySelector<HTMLElement>('.article-prose');
+    const proseRect = prose?.getBoundingClientRect();
+    const videos = [...document.querySelectorAll<HTMLVideoElement>('video')];
+    const mediaFigures = [
+      ...document.querySelectorAll<HTMLElement>('.article-media'),
+    ];
+    const captions = [
+      ...document.querySelectorAll<HTMLElement>('.article-media figcaption'),
+    ];
+    const keycap = document.querySelector<HTMLElement>('kbd');
+    const lists = [
+      ...document.querySelectorAll<HTMLElement>(
+        '.article-prose > ol, .article-prose > ul'
+      ),
+    ];
+
+    const captionStyles = captions.map((caption) => {
+      const style = getComputedStyle(caption);
+
+      return {
+        align: style.textAlign,
+        size: Number.parseFloat(style.fontSize),
+        color: style.color,
+      };
+    });
+    const videoData = videos.map((video) => {
+      const style = getComputedStyle(video);
+
+      return {
+        autoplay: video.autoplay,
+        controls: video.controls,
+        loop: video.loop,
+        muted: video.muted,
+        playsInline: video.playsInline,
+        preload: video.preload,
+        borderTop: style.borderTopWidth,
+        width: video.getBoundingClientRect().width,
+        source: video.currentSrc || video.querySelector('source')?.src || '',
+      };
+    });
+    const keycapStyle = keycap ? getComputedStyle(keycap) : null;
+    const listData = lists.map((list) => {
+      const style = getComputedStyle(list);
+      const rect = list.getBoundingClientRect();
+
+      return {
+        paddingLeft: Number.parseFloat(style.paddingLeft),
+        left: rect.left,
+        right: rect.right,
+      };
+    });
+    const maxListOverflow = proseRect
+      ? Math.max(
+          0,
+          ...listData.map((list) =>
+            Math.max(proseRect.left - list.left, list.right - proseRect.right)
+          )
+        )
+      : 0;
+
+    return {
+      videoData,
+      captionStyles,
+      mediaBorderWidths: mediaFigures.map(
+        (figure) => getComputedStyle(figure).borderTopWidth
+      ),
+      keycapDisplay: keycapStyle?.display ?? '',
+      keycapBorderTop: keycapStyle?.borderTopWidth ?? '',
+      keycapBoxShadow: keycapStyle?.boxShadow ?? '',
+      listData,
+      maxListOverflow,
+    };
+  });
+
+  assert.ok(
+    result.videoData.length >= 2,
+    'legacy article should render videos'
+  );
+  assert.ok(
+    result.videoData.every((video) => video.source.includes('/static/media/')),
+    'legacy videos should load copied /static/media assets'
+  );
+  assert.ok(
+    result.videoData.every(
+      (video) =>
+        video.autoplay &&
+        video.controls &&
+        video.loop &&
+        video.muted &&
+        video.playsInline &&
+        video.preload === 'auto'
+    ),
+    'legacy videos should use native APM-like media attributes'
+  );
+  assert.ok(
+    result.videoData.every((video) => video.borderTop === '0px'),
+    'legacy videos should be borderless'
+  );
+  assert.ok(
+    result.captionStyles.length >= result.videoData.length,
+    'legacy media should keep visible captions'
+  );
+  assert.ok(
+    result.captionStyles.every(
+      (caption) => caption.align === 'center' && caption.size < 14
+    ),
+    'legacy captions should be centered and caption-sized'
+  );
+  assert.equal(result.keycapDisplay, 'inline-block');
+  assert.notEqual(result.keycapBorderTop, '0px');
+  assert.notEqual(result.keycapBoxShadow, 'none');
+  assert.ok(result.listData.length > 0, 'legacy article should include lists');
+  assert.ok(
+    result.listData.every((list) => list.paddingLeft >= 28),
+    'article lists should be indented enough to read as lists'
+  );
+  assert.ok(
+    result.maxListOverflow <= 1,
+    `article lists should stay inside prose width: ${result.maxListOverflow}`
+  );
 }
 
 async function main() {
@@ -1050,6 +1248,16 @@ async function main() {
     await assertArticle(article);
     await assertVisibleOneLineDescriptions(article);
     await screenshot(article, 'blog-article');
+
+    const legacyArticle = await browser.newPage({
+      viewport: { width: 1280, height: 900 },
+    });
+    await legacyArticle.goto(`${baseUrl}/blog/on-using-computers`, {
+      waitUntil: 'networkidle',
+    });
+    await assertRoybBandPlacement(legacyArticle);
+    await assertLegacyMediaArticle(legacyArticle);
+    await screenshot(legacyArticle, 'blog-using-computers');
 
     assert.deepEqual(
       [homeBand.topGap, blogBand.topGap, articleBand.topGap],

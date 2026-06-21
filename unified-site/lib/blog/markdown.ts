@@ -149,9 +149,9 @@ function buildToc(
         .join('');
       const subs = sublinks ? `<div class="toc-subs">${sublinks}</div>` : '';
 
-      return `<div class="toc-section"><a href="#${escapeHtml(
+      return `<div class="toc-section"><span class="toc-num">${index}</span><a href="#${escapeHtml(
         section.id
-      )}" class="toc-link royb-link royb-link-highlight section-color-b"><span class="toc-num">${index}</span> ${escapeHtml(tocLabel(section))}</a>${subs}</div>`;
+      )}" class="toc-link royb-link royb-link-highlight section-color-b">${escapeHtml(tocLabel(section))}</a>${subs}</div>`;
     })
     .join('');
 
@@ -168,7 +168,7 @@ function buildToc(
     metaItems.push(
       `<div class="toc-meta-row"><span>Code</span><span><a href="${escapeHtml(
         manifest.codeLink.href
-      )}">${escapeHtml(manifest.codeLink.label)}</a></span></div>`
+      )}" class="toc-link royb-link royb-link-highlight section-color-b">${escapeHtml(manifest.codeLink.label)}</a></span></div>`
     );
   }
 
@@ -230,6 +230,32 @@ function normalizeExternalAnchors(html: string) {
       return `<a${nextAttrs}>`;
     }
   );
+}
+
+function normalizeLegacyVideos(html: string) {
+  return html.replace(/<video\b([^>]*)>/g, (_match, attrs: string) => {
+    let nextAttrs = attrs;
+
+    for (const attr of [
+      'autoplay',
+      'controls',
+      'loop',
+      'muted',
+      'playsinline',
+    ]) {
+      if (!new RegExp(`(?:^|\\s)${attr}(?:\\s|=|$)`, 'i').test(nextAttrs)) {
+        nextAttrs += ` ${attr}`;
+      }
+    }
+
+    if (/\bpreload=/i.test(nextAttrs)) {
+      nextAttrs = nextAttrs.replace(/\bpreload="[^"]*"/i, 'preload="auto"');
+    } else {
+      nextAttrs += ' preload="auto"';
+    }
+
+    return `<video${nextAttrs}>`;
+  });
 }
 
 function normalizeSentenceFootnotes(html: string) {
@@ -379,6 +405,14 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
       '<figure class="article-media">$1<figcaption><em>$2</em></figcaption></figure>'
     )
     .replace(
+      /<p>\s*(<video\b[\s\S]*?<\/video>)\s*<em>([\s\S]*?)<\/em>\s*<\/p>/g,
+      '<figure class="article-media video-figure">$1<figcaption><em>$2</em></figcaption></figure>'
+    )
+    .replace(
+      /<p>\s*(<video\b[\s\S]*?<\/video>)\s*<\/p>\s*<p>\s*<em>([\s\S]*?)<\/em>\s*<\/p>/g,
+      '<figure class="article-media video-figure">$1<figcaption><em>$2</em></figcaption></figure>'
+    )
+    .replace(
       /<hr>\s*<hr class="footnotes-sep">/g,
       '<hr class="footnotes-sep">'
     );
@@ -400,7 +434,9 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
   }
 
   return {
-    html: normalizeExternalAnchors(normalizeSentenceFootnotes(html)),
+    html: normalizeExternalAnchors(
+      normalizeSentenceFootnotes(normalizeLegacyVideos(html))
+    ),
     headings: env.headings,
     readingMeta: readingMeta(markdown),
   };

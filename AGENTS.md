@@ -78,6 +78,10 @@ motionless: no transitions, no hover animations, no delayed state correction
 after hydration. Prefer shared primitives for repeated actions so hover/pressed
 behavior does not drift across sections.
 
+Section markers on the unified Islam and blog index surfaces are one-indexed
+(`§1`, `§2`, ...). Article-local indexes/TOCs can preserve APM Overflow source
+numbering when that is part of the writing structure.
+
 ## Main site commands
 
 All commands must run from `islamtayeb/`:
