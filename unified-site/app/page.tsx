@@ -1,4 +1,3 @@
-import { Courses } from '@/components/site/courses';
 import { Experience } from '@/components/site/experience';
 import { Hero } from '@/components/site/hero';
 import { Publications } from '@/components/site/publications';
@@ -12,7 +11,6 @@ export default function Home() {
       <Hero />
       <Experience />
       <Publications />
-      <Courses />
       <WritingPreview />
     </>
   );

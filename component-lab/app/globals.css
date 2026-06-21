@@ -259,7 +259,7 @@
   .royb-link-highlight-blue {
     --link-hover-highlight: color-mix(
       in oklch,
-      var(--section-color, var(--roy-b)) 11%,
+      var(--section-color, var(--roy-b)) 20%,
       transparent
     );
 
@@ -279,19 +279,6 @@
   }
   .royb-link-highlight-blue:hover {
     color: var(--section-color, var(--roy-b));
-  }
-  .dark .royb-link-highlight-blue:hover {
-    background-image: linear-gradient(
-      to top,
-      oklch(1 0 0 / 14%) 0 42%,
-      transparent 42% 100%
-    );
-    color: var(--foreground);
-    text-decoration-color: color-mix(
-      in oklch,
-      var(--foreground) 55%,
-      transparent
-    );
   }
   .section-color-r {
     --section-color: var(--roy-r);

@@ -9,14 +9,14 @@ export async function WritingPreview() {
   const posts = (await getListedPosts()).slice(0, 3);
 
   return (
-    <Section id="writing" index="4" title="Writing" accent="text-roy-b">
+    <Section id="writing" index="3" title="Writing" accent="text-roy-b">
       <BorderedPanel>
         <div className="flex w-full flex-col gap-3.5">
           <RailList>
             {posts.map((post, index) => (
               <RailItem
                 key={post.manifest.slug}
-                dotClassName={index === 0 ? 'bg-roy-b' : 'bg-foreground'}
+                dotClassName="bg-foreground/75"
                 title={
                   <ExternalLink
                     href={postHref(post)}
@@ -27,14 +27,21 @@ export async function WritingPreview() {
                   </ExternalLink>
                 }
                 meta={formatDate(post.manifest.publishedAt)}
-                description={post.summary}
+                footer={
+                  <div
+                    data-testid="writing-row-meta"
+                    className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+                  >
+                    {post.readingMeta}
+                  </div>
+                }
                 connector={index < posts.length - 1 ? 'solid' : 'none'}
               />
             ))}
           </RailList>
           <div className="flex justify-end">
             <SectionActionLink href="/blog" section="b">
-              Read all posts
+              See more on blog
             </SectionActionLink>
           </div>
         </div>

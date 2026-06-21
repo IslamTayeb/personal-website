@@ -5,6 +5,7 @@ import { escapeHtml, stripTags } from './html';
 import { filenameFromUrl, mediaBaseUrl, mediaUrl } from './media';
 import { slugify } from './slug';
 import { formatDate } from './date';
+import { codeBlockHtml } from './code-block';
 import type { PostManifest } from './manifest';
 
 export type Heading = {
@@ -39,11 +40,11 @@ export function readingMeta(markdown: string) {
     .filter(Boolean).length;
   const rounded =
     words >= 1000
-      ? `~${(Math.round(words / 100) / 10).toFixed(1)}K`
-      : `~${words}`;
+      ? `${(Math.round(words / 100) / 10).toFixed(1)}K`
+      : `${words}`;
   const minutes = Math.max(1, Math.round(words / 250));
 
-  return `${rounded} words, ~${minutes} min`;
+  return `${rounded} words, ${minutes} min`;
 }
 
 function normalizeFootnoteOrder(markdown: string) {
@@ -139,7 +140,9 @@ function buildToc(
       const sublinks = (subsectionsByParent.get(section.id) ?? [])
         .map(
           (subsection) =>
-            `<a href="#${escapeHtml(subsection.id)}">${escapeHtml(
+            `<a href="#${escapeHtml(
+              subsection.id
+            )}" class="toc-link royb-link royb-link-highlight section-color-b">${escapeHtml(
               tocLabel(subsection)
             )}</a>`
         )
@@ -148,9 +151,7 @@ function buildToc(
 
       return `<div class="toc-section"><a href="#${escapeHtml(
         section.id
-      )}"><span class="toc-num">${index}</span>${escapeHtml(
-        tocLabel(section)
-      )}</a>${subs}</div>`;
+      )}" class="toc-link royb-link royb-link-highlight section-color-b"><span class="toc-num">${index}</span> ${escapeHtml(tocLabel(section))}</a>${subs}</div>`;
     })
     .join('');
 
@@ -334,9 +335,7 @@ function configureMarkdown(manifest: PostManifest) {
           }).value
         : md.utils.escapeHtml(token.content);
 
-    return `<div class="highlight"><pre><code class="hljs language-${escapeHtml(
-      lang
-    )}">${highlighted}</code></pre></div>\n`;
+    return codeBlockHtml({ highlighted, lang });
   };
 
   md.renderer.rules.image = (tokens, idx, options, env, self) => {

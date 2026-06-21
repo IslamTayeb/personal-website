@@ -2,46 +2,63 @@
 
 import { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-import { cn } from '@/lib/utils';
 import type { Publication } from '@/types/content';
 import { ExternalLink } from './external-link';
+import { RailItem, RailList } from './rail';
 import { SectionActionLink } from './section-action';
 
 function PublicationRow({
   publication,
   open,
+  isLast,
   onToggle,
 }: {
   publication: Publication;
   open: boolean;
+  isLast: boolean;
   onToggle: () => void;
 }) {
-  return (
-    <li
-      className={cn(
-        'border-t border-border first:border-t-0',
-        open && 'bg-muted/45'
+  const chevron = (
+    <span className="text-muted-foreground" aria-hidden>
+      {open ? (
+        <ChevronDown
+          className="relative bottom-px"
+          size={11}
+          strokeWidth={1.8}
+        />
+      ) : (
+        <ChevronRight
+          className="relative bottom-px"
+          size={11}
+          strokeWidth={1.8}
+        />
       )}
-    >
-      <button
-        type="button"
-        onClick={onToggle}
-        aria-expanded={open}
-        className={cn(
-          'grid w-full gap-2 px-2 py-2 text-left md:grid-cols-[5.5rem_1fr_auto]',
-          !open && 'hover:bg-muted/45'
-        )}
-      >
-        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-          {publication.date}
-        </span>
-        <span className="flex min-w-0 flex-col gap-1">
-          <span className="text-sm font-medium leading-tight text-foreground">
+    </span>
+  );
+
+  return (
+    <RailItem
+      testId="publication-row"
+      connectorTestId="publication-connector"
+      dotTestId="publication-dot"
+      titleTestId="publication-title-wrap"
+      rowButtonTestId="publication-row-button"
+      dotClassName="bg-foreground/75"
+      className="pb-2.5"
+      connector={isLast ? 'none' : 'solid'}
+      onActivate={onToggle}
+      ariaExpanded={open}
+      title={
+        <span className="block min-w-0">
+          <span
+            data-testid="publication-title"
+            className="block text-sm font-medium leading-tight text-foreground"
+          >
             {publication.title}
           </span>
           <span
             data-testid="publication-meta-line"
-            className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-y"
+            className="mt-1 block truncate font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
           >
             {publication.type}
             {publication.venue ? (
@@ -53,36 +70,23 @@ function PublicationRow({
               </>
             ) : null}
           </span>
-          <span className="text-xs leading-snug text-muted-foreground text-pretty">
-            {publication.authors}
-          </span>
         </span>
-        <span
-          className="flex items-start pt-0.5 text-muted-foreground"
-          aria-hidden
-        >
-          {open ? (
-            <ChevronDown
-              className="relative bottom-px"
-              size={11}
-              strokeWidth={1.8}
-            />
-          ) : (
-            <ChevronRight
-              className="relative bottom-px"
-              size={11}
-              strokeWidth={1.8}
-            />
-          )}
+      }
+      meta={
+        <span className="flex items-center gap-3">
+          <span data-testid="publication-date">{publication.date}</span>
+          {chevron}
         </span>
-      </button>
-      {open ? (
-        <div
-          data-testid="publication-open"
-          className="grid gap-2 px-2 pb-2.5 md:grid-cols-[5.5rem_1fr]"
-        >
-          <span aria-hidden />
-          <div className="flex min-w-0 flex-col gap-2">
+      }
+      footer={
+        open ? (
+          <div
+            data-testid="publication-open"
+            className="flex min-w-0 flex-col gap-2"
+          >
+            <p className="text-xs leading-snug text-muted-foreground text-pretty">
+              {publication.authors}
+            </p>
             <div className="grid gap-1 text-xs leading-snug text-muted-foreground text-pretty">
               {publication.desc.map((paragraph) => (
                 <p key={paragraph} data-one-line="true" className="truncate">
@@ -109,9 +113,9 @@ function PublicationRow({
               ) : null}
             </div>
           </div>
-        </div>
-      ) : null}
-    </li>
+        ) : null
+      }
+    />
   );
 }
 
@@ -128,12 +132,13 @@ export function PublicationDisclosure({
 
   return (
     <div className="flex w-full flex-col gap-2.5">
-      <ul className="flex w-full flex-col">
-        {publications.map((publication) => (
+      <RailList testId="publication-rail">
+        {publications.map((publication, index) => (
           <PublicationRow
             key={publication.title}
             publication={publication}
             open={openTitle === publication.title}
+            isLast={index === publications.length - 1}
             onToggle={() =>
               setOpenTitle((current) =>
                 current === publication.title ? null : publication.title
@@ -141,7 +146,7 @@ export function PublicationDisclosure({
             }
           />
         ))}
-      </ul>
+      </RailList>
       {moreHref ? (
         <div className="flex justify-end">
           <SectionActionLink href={moreHref} section="y">

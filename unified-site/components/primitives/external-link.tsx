@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { ReactNode } from 'react';
+import type { AnchorHTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 function isExternalHref(href: string) {
@@ -11,7 +11,8 @@ export function ExternalLink({
   children,
   className,
   section = 'b',
-}: {
+  ...props
+}: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, 'href' | 'children'> & {
   href: string;
   children: ReactNode;
   className?: string;
@@ -28,6 +29,7 @@ export function ExternalLink({
   if (external) {
     return (
       <a
+        {...props}
         href={href}
         target="_blank"
         rel="noreferrer external"
@@ -39,7 +41,7 @@ export function ExternalLink({
   }
 
   return (
-    <Link href={href} className={classes}>
+    <Link href={href} className={classes} {...props}>
       {children}
     </Link>
   );

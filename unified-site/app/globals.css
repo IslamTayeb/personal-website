@@ -177,7 +177,7 @@
   .royb-link-highlight {
     --link-hover-highlight: color-mix(
       in oklch,
-      var(--section-color, var(--roy-b)) 18%,
+      var(--section-color, var(--roy-b)) 20%,
       transparent
     );
     background-image: linear-gradient(
@@ -189,7 +189,7 @@
     background-position: left bottom;
     background-size: 0 100%;
   }
-  .royb-link-highlight:hover {
+  .royb-link.royb-link-highlight:hover {
     background-size: 100% 100%;
     color: var(--section-color, var(--roy-b));
     text-decoration-line: none;
@@ -208,6 +208,7 @@
   }
   .article-prose {
     @apply text-sm leading-relaxed text-foreground;
+    --section-color: var(--roy-b);
   }
   .article-prose > * + * {
     margin-top: 1rem;
@@ -244,9 +245,26 @@
     @apply mt-1;
   }
   .article-prose a {
+    display: inline-block;
+    color: inherit;
+    background-image: linear-gradient(
+      to top,
+      color-mix(in oklch, var(--section-color, var(--roy-b)) 20%, transparent) 0
+        42%,
+      transparent 42% 100%
+    );
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    background-size: 0 100%;
     text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
     text-decoration-thickness: 1.5px;
     text-underline-offset: 0.18em;
+  }
+  .article-prose a:hover {
+    background-size: 100% 100%;
+    color: var(--section-color, var(--roy-b));
+    text-decoration-line: none;
   }
   .article-prose blockquote {
     @apply border-l-2 border-roy-b pl-3 text-muted-foreground;
@@ -264,13 +282,19 @@
   .article-prose figcaption em {
     @apply italic;
   }
-  .article-prose .highlight {
+  .article-prose .article-code-block {
     @apply my-4 max-w-full overflow-x-auto px-3 font-mono text-xs leading-snug text-foreground;
     background: var(--code-block-background);
     color: var(--ink);
     scrollbar-color: var(--roy-b) transparent;
     scrollbar-gutter: auto;
     scrollbar-width: thin;
+  }
+  .article-prose .article-code-block[data-code-theme='blue'] {
+    --code-keyword: #007020;
+    --code-title: #06287e;
+    --code-string: #4070a0;
+    --code-comment: #60a0b0;
   }
   .article-prose .highlight pre {
     @apply m-0 overflow-x-visible bg-transparent py-2;
@@ -355,22 +379,23 @@
     @apply mt-3 flex flex-col gap-2 text-sm;
   }
   .article-prose .toc-section > a {
-    @apply text-foreground no-underline;
-  }
-  .article-prose .toc-section > a:hover {
-    @apply underline;
+    @apply text-foreground;
+    display: inline-block;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.18em;
   }
   .article-prose .toc-num {
-    @apply mr-2 font-mono text-xs text-muted-foreground;
+    @apply font-mono text-xs text-muted-foreground;
   }
   .article-prose .toc-subs {
     @apply ml-5 mt-1 flex flex-col gap-0.5 border-l border-border pl-3;
   }
   .article-prose .toc-subs a {
-    @apply text-xs text-muted-foreground no-underline;
-  }
-  .article-prose .toc-subs a:hover {
-    @apply underline;
+    @apply text-xs text-muted-foreground;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklch, currentColor 36%, transparent);
   }
   .article-prose .toc-meta {
     @apply flex shrink-0 flex-col gap-2 border-t border-border pt-3 font-mono text-xs leading-snug md:w-56 md:border-l md:border-t-0 md:pl-4 md:pt-0;
@@ -423,13 +448,16 @@
     @apply my-6 border-0 border-t border-dashed border-border;
   }
   .article-prose .footnotes {
-    @apply text-xs leading-snug text-muted-foreground;
+    @apply leading-snug text-muted-foreground;
+    font-size: 0.9em;
+    opacity: 0.85;
   }
   .article-prose .footnotes ol {
-    @apply m-0 list-decimal pl-5;
+    @apply m-0 list-decimal;
+    padding-left: 2em;
   }
   .article-prose .footnotes li {
-    @apply mb-2 pl-1;
+    @apply mb-3 pl-1;
   }
   .article-prose .footnotes li::marker {
     @apply font-mono font-semibold text-muted-foreground;
@@ -438,9 +466,11 @@
     @apply m-0 inline;
   }
   .article-prose .footnote-ref a {
-    @apply font-mono text-[0.85em] font-semibold text-roy-b no-underline;
+    @apply font-mono text-[0.85em] font-bold text-roy-b no-underline;
+    background-image: none;
   }
   .article-prose .footnote-backref {
-    @apply ml-1 font-mono text-muted-foreground no-underline;
+    @apply ml-1 font-mono text-[0.9em] text-muted-foreground no-underline;
+    background-image: none;
   }
 }

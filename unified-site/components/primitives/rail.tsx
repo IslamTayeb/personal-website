@@ -29,8 +29,17 @@ export function RailItem({
   footer,
   className,
   titleClassName,
+  metaClassName,
   descriptionClassName,
   incoming,
+  state,
+  testId,
+  connectorTestId = 'rail-connector',
+  dotTestId = 'rail-dot',
+  titleTestId = 'rail-title',
+  rowButtonTestId,
+  onActivate,
+  ariaExpanded,
 }: {
   dotClassName: string;
   title: ReactNode;
@@ -41,14 +50,50 @@ export function RailItem({
   footer?: ReactNode;
   className?: string;
   titleClassName?: string;
+  metaClassName?: string;
   descriptionClassName?: string;
   incoming?: boolean;
+  state?: 'incoming' | 'present' | 'ended';
+  testId?: string;
+  connectorTestId?: string;
+  dotTestId?: string;
+  titleTestId?: string;
+  rowButtonTestId?: string;
+  onActivate?: () => void;
+  ariaExpanded?: boolean;
 }) {
+  const topRow = (
+    <>
+      <span
+        data-testid={titleTestId}
+        className={cn(
+          'min-w-0 text-sm font-medium leading-tight text-foreground',
+          titleClassName
+        )}
+      >
+        {title}
+      </span>
+      {meta ? (
+        <span
+          className={cn(
+            'shrink-0 font-mono text-[10px] text-muted-foreground',
+            metaClassName
+          )}
+        >
+          {meta}
+        </span>
+      ) : null}
+    </>
+  );
+
   return (
-    <li className={cn('relative flex gap-3 pb-1.5 last:pb-0', className)}>
+    <li
+      data-testid={testId}
+      className={cn('relative flex gap-3 pb-1.5 last:pb-0', className)}
+    >
       {connector !== 'none' ? (
         <span
-          data-testid="rail-connector"
+          data-testid={connectorTestId}
           className={cn(
             'absolute left-[3.5px] top-[19px] bottom-[5px] w-px',
             connector === 'solid' ? 'bg-border' : 'text-border',
@@ -65,27 +110,27 @@ export function RailItem({
         />
       ) : null}
       <span
-        data-testid="rail-dot"
+        data-testid={dotTestId}
         data-incoming={incoming ? 'true' : undefined}
+        data-state={state}
         className={cn('relative mt-1 h-2 w-2 shrink-0', dotClassName)}
       />
       <div className="flex w-full min-w-0 flex-col gap-1">
-        <div className="flex min-w-0 items-baseline justify-between gap-3">
-          <span
-            data-testid="rail-title"
-            className={cn(
-              'min-w-0 text-sm font-medium leading-tight text-foreground',
-              titleClassName
-            )}
+        {onActivate ? (
+          <button
+            type="button"
+            onClick={onActivate}
+            aria-expanded={ariaExpanded}
+            data-testid={rowButtonTestId}
+            className="flex w-full min-w-0 cursor-pointer items-baseline justify-between gap-3 text-left outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
-            {title}
-          </span>
-          {meta ? (
-            <span className="shrink-0 font-mono text-[10px] text-muted-foreground">
-              {meta}
-            </span>
-          ) : null}
-        </div>
+            {topRow}
+          </button>
+        ) : (
+          <div className="flex min-w-0 items-baseline justify-between gap-3">
+            {topRow}
+          </div>
+        )}
         {description ? (
           <p
             data-one-line="true"

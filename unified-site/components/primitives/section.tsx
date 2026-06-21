@@ -24,7 +24,7 @@ export function Section({
       className={cn('py-3 md:py-3.5', className)}
     >
       <header className="mb-3 flex flex-col gap-1">
-        <div className="flex items-baseline gap-3">
+        <div className="grid grid-cols-[1.25rem_minmax(0,1fr)] items-baseline">
           <span className={cn('font-mono text-xs', accent)}>§{index}</span>
           <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
             {title}

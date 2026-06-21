@@ -93,6 +93,11 @@ async function main() {
       post.readingMeta.includes('min'),
       `${post.manifest.slug} needs reading meta`
     );
+    assert.doesNotMatch(
+      post.readingMeta,
+      /~/,
+      `${post.manifest.slug} reading metadata should not use approximation markers`
+    );
     assert.equal(
       postHref(post),
       `/blog/${post.manifest.slug}`,
@@ -143,6 +148,11 @@ async function main() {
         post.html,
         /<figure class="article-table[\s\S]*?<figcaption>/,
         'past blog tables should not get synthetic captions'
+      );
+      assert.match(
+        post.html,
+        /class="article-code-block article-code-block-blue highlight" data-code-theme="blue"/,
+        'code blocks should render through the default blue code-block primitive'
       );
       assert.match(post.html, /class="hljs-keyword"/);
       assert.match(

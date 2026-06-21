@@ -1,12 +1,13 @@
 'use client';
 
 import { type ReactNode, useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { experienceGroups, type ExperienceGroup } from '@/data/experience';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { SectionActionButton } from '@/components/primitives/section-action';
 import { BorderedPanel, Section } from '@/components/primitives/section';
+import { cn } from '@/lib/utils';
 
 type DescriptionSegment =
   | {
@@ -20,16 +21,44 @@ type DescriptionSegment =
     };
 
 const hollowDots: Record<string, string> = {
-  'bg-roy-y': 'border border-roy-y bg-background',
   'bg-roy-o': 'border border-roy-o bg-background',
 };
+
+function AdvisorLabel({
+  role,
+  boxed,
+}: {
+  role: ExperienceGroup['roles'][number];
+  boxed: boolean;
+}) {
+  if (!role.piName) {
+    return null;
+  }
+
+  const className = cn(
+    'font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-muted-foreground',
+    boxed && 'border border-border px-1'
+  );
+
+  return (
+    <span
+      className={className}
+      data-testid="advisor-label"
+      data-boxed={boxed ? 'true' : undefined}
+    >
+      {role.piName}
+    </span>
+  );
+}
 
 function RailGroup({
   group,
   expanded,
+  boxedAdvisorLabels,
 }: {
   group: ExperienceGroup;
   expanded: boolean;
+  boxedAdvisorLabels: boolean;
 }) {
   const roles = expanded
     ? group.roles
@@ -39,22 +68,27 @@ function RailGroup({
   return (
     <RailList>
       {roles.map((role, index) => {
+        const state = role.state ?? (role.incoming ? 'incoming' : 'ended');
+        const dotClassName =
+          state === 'incoming'
+            ? hollowDots['bg-roy-o']
+            : state === 'present'
+              ? 'bg-roy-o'
+              : 'bg-foreground/75';
         const titleContent: ReactNode = role.piName ? (
           <span className="inline-flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
-            <span>{role.org}</span>
             {role.href ? (
               <ExternalLink
                 href={role.href}
-                section={group.kind === 'Research' ? 'o' : 'y'}
-                className="font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-muted-foreground"
+                section="o"
+                className="text-foreground"
               >
-                {role.piName}
+                {role.org}
               </ExternalLink>
             ) : (
-              <span className="font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-muted-foreground">
-                {role.piName}
-              </span>
+              <span>{role.org}</span>
             )}
+            <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
           </span>
         ) : (
           role.org
@@ -70,13 +104,14 @@ function RailGroup({
         return (
           <RailItem
             key={`${group.kind}-${role.org}-${role.piName ?? role.org}-${role.date}`}
-            dotClassName={role.incoming ? hollowDots[group.dot] : group.dot}
+            dotClassName={dotClassName}
             incoming={role.incoming}
+            state={state}
             title={
               role.href && !role.piName ? (
                 <ExternalLink
                   href={role.href}
-                  section={group.kind === 'Research' ? 'o' : 'y'}
+                  section="o"
                   className="text-foreground"
                 >
                   {titleContent}
@@ -91,7 +126,7 @@ function RailGroup({
                 <LinkedDescription
                   text={role.desc}
                   links={role.descLinks}
-                  section={group.kind === 'Research' ? 'o' : 'y'}
+                  section="o"
                 />
               ) : (
                 role.desc
@@ -115,35 +150,7 @@ function LinkedDescription({
   section: 'o' | 'y';
 }) {
   const renderStaticText = (value: string) => {
-    if (value.includes('% Microsoft Research')) {
-      const [before, after] = value.split('% Microsoft Research');
-
-      return (
-        <>
-          {before}
-          <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-            % Microsoft Research
-          </span>
-          {after}
-        </>
-      );
-    }
-
-    if (!value.includes('Microsoft Research')) {
-      return value;
-    }
-
-    const [before, after] = value.split('Microsoft Research');
-
-    return (
-      <>
-        {before.replace(/\s+and\s*$/, ' ')}
-        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-          % Microsoft Research
-        </span>
-        {after}
-      </>
-    );
+    return value;
   };
 
   const segments = links.reduce<DescriptionSegment[]>(
@@ -186,15 +193,23 @@ function LinkedDescription({
 
 function RailGroupBlock({
   group,
+  open,
+  onToggleOpen,
   expanded,
   onToggleExpanded,
+  boxedAdvisorLabels,
 }: {
   group: ExperienceGroup;
+  open: boolean;
+  onToggleOpen: () => void;
   expanded: boolean;
   onToggleExpanded: () => void;
+  boxedAdvisorLabels: boolean;
 }) {
   const hasHidden = group.roles.length > group.visibleCount;
-  const actionSection = group.kind === 'Research' ? 'o' : 'y';
+  const allowShowMore = group.kind !== 'Teaching';
+  const showAllRows = group.kind === 'Teaching' ? true : expanded;
+  const Chevron = open ? ChevronDown : ChevronRight;
 
   return (
     <div
@@ -202,8 +217,14 @@ function RailGroupBlock({
       data-group={group.kind}
       className="flex flex-col"
     >
-      <div className="grid grid-cols-[1.25rem_minmax(0,1fr)] items-center pb-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-        <ChevronDown
+      <button
+        type="button"
+        onClick={onToggleOpen}
+        aria-expanded={open}
+        data-testid="experience-group-toggle"
+        className="grid grid-cols-[1.25rem_minmax(0,1fr)] items-center pb-2.5 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring"
+      >
+        <Chevron
           className="relative bottom-px text-muted-foreground"
           size={11}
           strokeWidth={1.8}
@@ -212,16 +233,22 @@ function RailGroupBlock({
         <span data-testid="experience-group-label" data-group={group.kind}>
           {group.kind} ({group.roles.length})
         </span>
-      </div>
-      <RailGroup group={group} expanded={expanded} />
-      {hasHidden ? (
+      </button>
+      {open ? (
+        <RailGroup
+          group={group}
+          expanded={showAllRows}
+          boxedAdvisorLabels={boxedAdvisorLabels}
+        />
+      ) : null}
+      {open && hasHidden && allowShowMore ? (
         <div className="flex justify-end pt-1">
           <SectionActionButton
-            section={actionSection}
+            section="o"
             onClick={onToggleExpanded}
             testId="experience-more-control"
           >
-            {expanded ? 'show less' : 'show more'}
+            {expanded ? 'show less' : 'see more'}
           </SectionActionButton>
         </div>
       ) : null}
@@ -229,12 +256,24 @@ function RailGroupBlock({
   );
 }
 
-export function Experience() {
+export function Experience({
+  boxedAdvisorLabels = false,
+}: {
+  boxedAdvisorLabels?: boolean;
+} = {}) {
+  const [openGroups, setOpenGroups] = useState<
+    Record<ExperienceGroup['kind'], boolean>
+  >({
+    Research: true,
+    Engineering: true,
+    Teaching: false,
+  });
   const [expandedGroups, setExpandedGroups] = useState<
     Record<ExperienceGroup['kind'], boolean>
   >({
     Research: false,
     Engineering: false,
+    Teaching: false,
   });
 
   return (
@@ -245,7 +284,15 @@ export function Experience() {
             <RailGroupBlock
               key={group.kind}
               group={group}
+              open={openGroups[group.kind]}
+              onToggleOpen={() =>
+                setOpenGroups((current) => ({
+                  ...current,
+                  [group.kind]: !current[group.kind],
+                }))
+              }
               expanded={expandedGroups[group.kind]}
+              boxedAdvisorLabels={boxedAdvisorLabels}
               onToggleExpanded={() =>
                 setExpandedGroups((current) => ({
                   ...current,

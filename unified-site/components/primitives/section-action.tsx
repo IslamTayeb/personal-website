@@ -3,7 +3,7 @@ import { ExternalLink } from '@/components/primitives/external-link';
 import { cn } from '@/lib/utils';
 
 const actionClassName =
-  'font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground';
+  'font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground/75';
 
 export function SectionActionLink({
   href,
@@ -49,7 +49,7 @@ export function SectionActionButton({
         'royb-link royb-link-highlight',
         `section-color-${section}`,
         actionClassName,
-        'outline-none active:text-foreground focus-visible:ring-1 focus-visible:ring-ring',
+        'outline-none focus-visible:ring-1 focus-visible:ring-ring',
         className
       )}
     >

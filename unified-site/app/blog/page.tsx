@@ -24,13 +24,14 @@ export default async function BlogIndexPage() {
         index="0"
         title={`Index (${posts.length})`}
         accent="text-roy-b"
+        className="pt-0 md:pt-0"
       >
         <BorderedPanel>
           <RailList testId="blog-index-rail">
             {posts.map((post, index) => (
               <RailItem
                 key={post.manifest.slug}
-                dotClassName={index === 0 ? 'bg-roy-b' : 'bg-foreground'}
+                dotClassName="bg-foreground/75"
                 title={
                   <div className="flex min-w-0 items-baseline gap-2">
                     <ExternalLink
@@ -48,7 +49,6 @@ export default async function BlogIndexPage() {
                   </div>
                 }
                 meta={formatDate(post.manifest.publishedAt)}
-                description={post.summary}
                 footer={
                   <div
                     data-testid="blog-index-row-meta"

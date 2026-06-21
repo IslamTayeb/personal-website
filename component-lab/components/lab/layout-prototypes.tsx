@@ -20,7 +20,7 @@ const researchRows = [
     org: 'Duke University',
     pi: 'Philip Romero',
     date: 'Aug 2025 — Present',
-    desc: "Chemistry data-mining with Anthropic's AI for Science Program % Microsoft Research.",
+    desc: "Chemistry data-mining with Anthropic's AI for Science Program + Microsoft Research.",
   },
   {
     org: 'Duke University',
@@ -205,13 +205,13 @@ export function ExperienceGroupingLabSection() {
       cols={1}
       note="Additive prototypes for the repeated-Duke problem: keep institution and advisor context without letting long project names become the row title."
     >
-      <Variant label="A — inline advisor side-label" tag="candidate">
+      <Variant label="A — inline advisor side-label" tag="selected">
         <CombinedRailVariant />
       </Variant>
       <Variant label="B — advisor under institution">
         <UmbrellaVariant />
       </Variant>
-      <Variant label="C — boxed advisor tag + compressed date gutter">
+      <Variant label="C — boxed advisor tag toggle">
         <CompressedGutterVariant />
       </Variant>
     </Section>
@@ -294,10 +294,10 @@ export function PublicationRhythmLabSection() {
       cols={1}
       note="Spacing prototypes for the publication rows. The goal is not just a smaller date column; it is a proportional rhythm that feels related to the rest of the document."
     >
-      <Variant label="A — rail-like metadata">
+      <Variant label="A — rail-like metadata" tag="selected">
         <PublicationRailVariant />
       </Variant>
-      <Variant label="B — compact disclosure ledger" tag="candidate">
+      <Variant label="B — compact disclosure ledger">
         <PublicationDenseVariant />
       </Variant>
       <Variant label="C — inline date, no side gutter">
@@ -311,12 +311,12 @@ export function LayoutRhythmLabSection() {
   return (
     <Section
       index="10"
-      title="Shared layout rhythm"
+      title="Layout diagnosis"
       accent="text-roy-r"
       cols={1}
-      note="Static layout sketches for the unresolved global spacing issue: hero contact width, section marker gutter, rail marker gutter, and publication dates should not each invent a different grid."
+      note="This is not a port candidate yet. It is a diagnostic section for the unresolved spacing problem: hero contact width, section markers, rail dots, and publication dates should not each invent a different grid."
     >
-      <Variant label="A — shared rail gutter" tag="candidate">
+      <Variant label="A — shared rail gutter sketch">
         <div className="flex w-full flex-col gap-3">
           <MiniSectionLabel index="0" title="About" />
           <div className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-3">
