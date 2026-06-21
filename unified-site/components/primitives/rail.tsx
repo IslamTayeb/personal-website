@@ -67,7 +67,7 @@ export function RailItem({
       <span
         data-testid={titleTestId}
         className={cn(
-          'min-w-0 text-sm font-medium leading-tight text-foreground',
+          'min-w-0 text-base font-medium leading-tight text-foreground',
           titleClassName
         )}
       >
@@ -141,7 +141,7 @@ export function RailItem({
           <p
             data-one-line="true"
             className={cn(
-              'truncate text-sm leading-snug text-foreground',
+              'truncate text-base leading-snug text-foreground',
               descriptionClassName
             )}
           >

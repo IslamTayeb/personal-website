@@ -251,7 +251,7 @@
     --section-color: var(--roy-b);
   }
   .article-prose {
-    @apply text-sm leading-relaxed text-foreground;
+    @apply text-base leading-relaxed text-foreground;
     --section-color: var(--roy-b);
   }
   .article-prose > * + * {
@@ -261,13 +261,13 @@
     @apply leading-relaxed;
   }
   .article-prose h2 {
-    @apply mt-8 text-xl font-semibold leading-tight tracking-tight text-foreground;
+    @apply mt-8 text-2xl font-semibold leading-tight tracking-tight text-foreground;
   }
   .article-prose h3 {
-    @apply mt-6 text-base font-medium leading-snug tracking-normal text-foreground;
+    @apply mt-6 text-lg font-medium leading-snug tracking-normal text-foreground;
   }
   .article-prose h4 {
-    @apply mt-4 font-mono text-[11px] font-medium uppercase leading-snug tracking-[0.16em] text-muted-foreground;
+    @apply mt-4 font-mono text-sm font-medium uppercase leading-snug tracking-[0.16em] text-muted-foreground;
   }
   .article-prose > ol,
   .article-prose > ul {
@@ -582,7 +582,7 @@
     scrollbar-width: thin;
   }
   .article-prose .article-details {
-    @apply border-b border-border py-2 text-sm;
+    @apply border-b border-border py-2 text-base;
   }
   .article-prose .article-summary {
     @apply cursor-pointer font-medium text-foreground;

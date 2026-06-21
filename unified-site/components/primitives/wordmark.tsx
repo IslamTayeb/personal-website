@@ -11,7 +11,7 @@ export function Wordmark() {
 
   return (
     <div
-      className="flex items-center gap-4 font-mono text-sm"
+      className="flex items-center gap-4 font-mono text-base"
       aria-label="Site surfaces"
       data-testid="wordmark"
     >
@@ -24,7 +24,7 @@ export function Wordmark() {
           active === 'islam' ? 'text-roy-r' : 'text-muted-foreground'
         )}
       >
-        <MoonGlyph size={14} /> islam
+        <MoonGlyph size={15} /> islam
       </ExternalLink>
       <span
         aria-hidden
@@ -41,7 +41,7 @@ export function Wordmark() {
           active === 'blog' ? 'text-roy-b' : 'text-muted-foreground'
         )}
       >
-        <SparkleGlyph size={13} /> blog
+        <SparkleGlyph size={14} /> blog
       </ExternalLink>
     </div>
   );

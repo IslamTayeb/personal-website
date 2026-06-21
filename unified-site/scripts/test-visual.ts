@@ -246,7 +246,9 @@ async function assertHome(page: Page) {
         color: style?.color ?? '',
       };
     });
-    const bodyColor = getComputedStyle(document.body).color;
+    const bodyStyle = getComputedStyle(document.body);
+    const bodyColor = bodyStyle.color;
+    const bodyFontFamily = bodyStyle.fontFamily;
     const sectionLabelColors = topLevelSections.map((section) => {
       const label = section.querySelector<HTMLElement>('header h2');
 
@@ -574,6 +576,7 @@ async function assertHome(page: Page) {
     return {
       mainWidth: main?.getBoundingClientRect().width ?? 0,
       bodyColor,
+      bodyFontFamily,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       wordmarkLinkDisplays: wordmarkLinks.map(
@@ -780,8 +783,8 @@ async function assertHome(page: Page) {
     'section markers should remain in the rail gutter before content text'
   );
   assert.ok(
-    result.sectionMarkerFontSizes.every((size) => Math.round(size) === 14),
-    'section markers should follow the promoted 14px section label size'
+    result.sectionMarkerFontSizes.every((size) => Math.round(size) === 16),
+    'section markers should follow the promoted 16px section label size'
   );
   assert.deepEqual(
     result.sectionLabelColors,
@@ -911,23 +914,36 @@ async function assertHome(page: Page) {
     'closed groups should use tighter vertical spacing than open groups'
   );
 
-  const descriptionStyle = result.experienceDescriptionStyles[0];
-  const matchesDescriptionStyle = (style: typeof descriptionStyle) =>
-    Boolean(descriptionStyle) &&
-    style.color === descriptionStyle.color &&
-    style.fontFamily === descriptionStyle.fontFamily &&
-    style.fontSize === descriptionStyle.fontSize &&
-    style.fontWeight === descriptionStyle.fontWeight &&
-    style.lineHeight === descriptionStyle.lineHeight &&
-    style.textTransform === descriptionStyle.textTransform;
+  const metadataStyle = {
+    color: result.bodyColor,
+    fontFamily: result.bodyFontFamily,
+    fontSize: 14,
+    fontWeight: 400,
+    textTransform: 'none',
+  };
+  const matchesMetadataStyle = (style: {
+    color: string;
+    fontFamily: string;
+    fontSize: number;
+    fontWeight: number;
+    textTransform: string;
+  }) =>
+    style.color === metadataStyle.color &&
+    style.fontFamily === metadataStyle.fontFamily &&
+    style.fontSize === metadataStyle.fontSize &&
+    style.fontWeight === metadataStyle.fontWeight &&
+    style.textTransform === metadataStyle.textTransform;
 
   assert.ok(
     result.experienceDescriptionStyles.length >= 1 &&
       result.experienceDescriptionStyles.every(
         (style) =>
-          style.color === result.bodyColor && style.textTransform === 'none'
+          style.color === result.bodyColor &&
+          style.fontFamily === result.bodyFontFamily &&
+          style.fontSize === 16 &&
+          style.textTransform === 'none'
       ),
-    'experience descriptions should use the hero/body foreground style'
+    'experience descriptions should use the promoted readable body style'
   );
 
   const incomingDots = result.dots.filter((dot) => dot.state === 'incoming');
@@ -957,8 +973,8 @@ async function assertHome(page: Page) {
     )
   );
   assert.ok(
-    result.writingMetaStyles.every(matchesDescriptionStyle),
-    'writing word/time metadata should match experience description styling'
+    result.writingMetaStyles.every(matchesMetadataStyle),
+    'writing word/time metadata should stay at the compact foreground metadata scale'
   );
   assert.ok(
     result.writingDates.every((date) => /^[A-Z][a-z]{2} \d{4}$/.test(date)),
@@ -1053,12 +1069,12 @@ async function assertHome(page: Page) {
     'publication type/venue metadata should match author styling'
   );
   assert.ok(
-    result.publicationAuthorStyles.every(matchesDescriptionStyle),
-    'publication authors should match experience description styling'
+    result.publicationAuthorStyles.every(matchesMetadataStyle),
+    'publication authors should stay at the compact foreground metadata scale'
   );
   assert.ok(
-    result.publicationMetaLineStyles.every(matchesDescriptionStyle),
-    'publication type and journal should match publication author styling'
+    result.publicationMetaLineStyles.every(matchesMetadataStyle),
+    'publication type and journal should match publication author metadata styling'
   );
   assert.ok(
     result.publicationDateStyles.every((style) => style.fontSize === 14),

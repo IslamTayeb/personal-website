@@ -43,7 +43,7 @@ function HeroSegment({ segment }: { segment: TextSegment }) {
 
 function HeroStory() {
   return (
-    <div className="flex flex-col gap-1.5 text-sm leading-snug text-foreground">
+    <div className="flex flex-col gap-1.5 text-base leading-snug text-foreground">
       {heroParagraphs.map((paragraph, paragraphIndex) => (
         <p key={paragraphIndex}>
           {paragraph.map((segment, segmentIndex) => (
@@ -69,7 +69,7 @@ export function Hero() {
         <SectionHeader index="1" title="About" accent="text-roy-r" />
         <h1
           data-testid="hero-title"
-          className="mb-2 w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"
+          className="mb-2 w-fit font-sans text-3xl font-semibold tracking-tight text-foreground"
         >
           Islam Tayeb
         </h1>

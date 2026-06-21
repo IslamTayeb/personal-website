@@ -49,7 +49,7 @@ function PublicationRow({
             href={publication.href}
             section="y"
             data-testid="publication-title"
-            className="publication-title-link text-sm font-medium leading-tight text-foreground text-balance"
+            className="publication-title-link text-base font-medium leading-tight text-foreground text-balance"
           >
             <RichText text={publication.title} />
           </ExternalLink>

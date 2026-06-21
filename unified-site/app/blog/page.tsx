@@ -44,7 +44,7 @@ export default async function BlogIndexPage() {
                       <ExternalLink
                         href={postHref(post)}
                         section="b"
-                        className="min-w-0 text-sm font-medium leading-tight text-foreground"
+                        className="min-w-0 text-base font-medium leading-tight text-foreground"
                       >
                         {post.manifest.title}
                       </ExternalLink>
@@ -82,7 +82,7 @@ export default async function BlogIndexPage() {
                     href={item.href}
                     section="b"
                     data-testid="external-writing-title"
-                    className="min-w-0 text-sm font-medium leading-tight text-foreground"
+                    className="min-w-0 text-base font-medium leading-tight text-foreground"
                   >
                     {item.title}
                   </ExternalLink>
