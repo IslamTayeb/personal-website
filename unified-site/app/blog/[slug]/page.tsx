@@ -54,7 +54,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   return (
     <>
       <RoybBand />
-      <article data-testid="blog-article" className="pb-7 pt-0 md:pb-8">
+      <article data-testid="blog-article" className="pb-44 pt-0">
         <header className="mb-7 flex flex-col gap-2.5">
           <h1
             data-testid="blog-article-title"

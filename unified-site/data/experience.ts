@@ -26,7 +26,7 @@ export const experienceGroups: ExperienceGroup[] = [
       {
         org: 'Duke University',
         piName: 'Christian Dallago',
-        date: 'Incoming Aug 2026',
+        date: 'incoming Aug 2026',
         href: 'https://machine.learning.bio/',
         incoming: true,
         state: 'incoming',
@@ -105,7 +105,7 @@ export const experienceGroups: ExperienceGroup[] = [
       {
         org: 'Operating Systems',
         piName: 'Matthew Lentz',
-        date: 'Incoming Aug 2026',
+        date: 'incoming Aug 2026',
         state: 'incoming',
         incoming: true,
         desc: 'Duke University.',

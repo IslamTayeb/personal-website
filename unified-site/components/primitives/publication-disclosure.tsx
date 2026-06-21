@@ -94,15 +94,12 @@ export function PublicationDisclosure({
             <PublicationRow
               key={publication.title}
               publication={publication}
-              connector={isLast ? (moreHref ? 'dashed' : 'none') : 'solid'}
+              connector={isLast ? 'none' : 'solid'}
             />
           );
         })}
         {moreHref ? (
-          <RailActionItem
-            testId="publication-action-row"
-            connectorTestId="publication-action-connector"
-          >
+          <RailActionItem testId="publication-action-row">
             <SectionActionLink href={moreHref} section="y">
               {moreLabel}
             </SectionActionLink>

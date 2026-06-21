@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { contactLinks } from '@/data/links';
 import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
@@ -70,24 +69,12 @@ export function Hero() {
         <SectionHeader index="1" title="About" accent="text-roy-r" />
         <h1
           data-testid="hero-title"
-          className="w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"
+          className="mb-2 w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"
         >
           Islam Tayeb
         </h1>
         <div className="flex flex-col gap-3 md:grid md:grid-cols-[20%_minmax(0,1fr)] md:gap-3">
           <div className="min-w-0 md:border-r md:border-border md:pr-3">
-            <div className="mb-3 hidden md:block">
-              <Image
-                src="/myphoto.webp"
-                alt="Portrait of Islam Tayeb"
-                width={510}
-                height={510}
-                priority
-                data-testid="hero-portrait"
-                className="aspect-square w-full object-cover"
-                sizes="(min-width: 768px) 20vw, 0px"
-              />
-            </div>
             <ContactIndex />
           </div>
           <HeroStory />

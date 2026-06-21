@@ -198,6 +198,13 @@ async function assertHome(page: Page) {
           .join(' ')
       : '';
     const heroSection = document.querySelector('[data-testid="hero-section"]');
+    const heroHeader = heroSection?.querySelector<HTMLElement>('header');
+    const heroTitleElement = document.querySelector<HTMLElement>(
+      '[data-testid="hero-title"]'
+    );
+    const heroTitleRect = heroTitleElement?.getBoundingClientRect();
+    const heroContentRect =
+      heroTitleElement?.nextElementSibling?.getBoundingClientRect();
     const heroPortrait = document.querySelector<HTMLElement>(
       '[data-testid="hero-portrait"]'
     );
@@ -481,12 +488,15 @@ async function assertHome(page: Page) {
         themeToggle?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       themeToggleClassName,
       heroTitle:
-        document
-          .querySelector('[data-testid="hero-title"]')
-          ?.textContent?.replace(/\s+/g, ' ')
-          .trim() ?? '',
+        heroTitleElement?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       heroContactText:
         heroSection?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      heroHeaderTitleGap:
+        (heroTitleRect?.top ?? 0) -
+        (heroHeader?.getBoundingClientRect().bottom ?? 0),
+      heroTitleContentGap:
+        (heroContentRect?.top ?? 0) - (heroTitleRect?.bottom ?? 0),
+      heroPortraitExists: Boolean(heroPortrait),
       heroPortraitWidth: heroPortraitRect?.width ?? 0,
       heroPortraitHeight: heroPortraitRect?.height ?? 0,
       heroPortraitBorderTop: heroPortraitStyle?.borderTopWidth ?? '',
@@ -594,13 +604,21 @@ async function assertHome(page: Page) {
 
   assert.ok(result.mainWidth <= 800, 'main document should stay narrow');
   assert.equal(result.heroTitle, 'Islam Tayeb');
-  assert.ok(result.heroPortraitWidth > 0, 'hero portrait should render');
-  assert.ok(
-    Math.abs(result.heroPortraitWidth - result.heroPortraitHeight) <= 1,
-    'hero portrait should be square'
+  assert.equal(
+    result.heroPortraitExists,
+    false,
+    'hero portrait should be gone'
   );
-  assert.equal(result.heroPortraitBorderTop, '0px');
-  assert.equal(result.heroPortraitObjectFit, 'cover');
+  assert.equal(result.heroPortraitWidth, 0);
+  assert.equal(result.heroPortraitHeight, 0);
+  assert.ok(
+    result.heroHeaderTitleGap >= 11 && result.heroHeaderTitleGap <= 13,
+    `About/title gap should match the blog index header gap: ${result.heroHeaderTitleGap}`
+  );
+  assert.ok(
+    result.heroTitleContentGap >= 7,
+    'hero title should keep a visible bottom gap before contact/body content'
+  );
   assert.deepEqual(result.sectionMarkers, ['§1', '§2', '§3', '§4']);
   assert.deepEqual(result.sectionLabels, [
     'About',
@@ -747,7 +765,8 @@ async function assertHome(page: Page) {
   assert.ok(research?.text.includes('Christian Dallago'));
   assert.ok(research?.text.includes('Matthew Lentz'));
   assert.ok(research?.text.includes('Philip Romero'));
-  assert.ok(research?.text.includes('Incoming Aug 2026'));
+  assert.ok(research?.text.includes('incoming Aug 2026'));
+  assert.ok(!research?.text.includes('Incoming Aug 2026'));
   assert.ok(research?.text.includes('+ Microsoft Research'));
   assert.ok(!research?.text.includes('% Microsoft Research'));
   assert.ok(!result.bodyText.includes('Dallago Lab'));
@@ -799,31 +818,19 @@ async function assertHome(page: Page) {
     'writing preview should not render post descriptions'
   );
   assert.ok(
-    result.writingConnectors
-      .at(-1)
-      ?.backgroundImage.includes('repeating-linear-gradient'),
-    'writing rail should dash into the see-more action'
+    result.writingConnectors.every(
+      (connector) => connector.backgroundImage === 'none'
+    ),
+    'writing rail should stop after the final visible row'
   );
   assert.ok(
     result.writingActionRail.rowExists,
     'writing see-more action should be a rail row'
   );
-  assert.ok(
-    result.writingActionRail.connectorBackgroundImage.includes(
-      'repeating-linear-gradient'
-    ),
-    'writing see-more action row should continue the dashed rail'
-  );
-  assert.ok(
-    Math.abs(result.writingActionRail.connectorCenter - expectedAxis) <= 1,
-    'writing action connector should stay on the shared rail axis'
-  );
-  assert.ok(
-    Math.abs(
-      result.writingActionRail.connectorBottom -
-        result.writingActionRail.rowBottom
-    ) <= 1,
-    'writing dashed connector should reach the end of the action row'
+  assert.equal(
+    result.writingActionRail.connectorBackgroundImage,
+    '',
+    'writing see-more action should not draw a rail connector'
   );
 
   for (const term of [
@@ -858,31 +865,19 @@ async function assertHome(page: Page) {
     'publication rail markers should be neutral'
   );
   assert.ok(
-    result.publicationConnectors
-      .at(-1)
-      ?.backgroundImage.includes('repeating-linear-gradient'),
-    'publication rail should dash into the see-more action'
+    result.publicationConnectors.every(
+      (connector) => connector.backgroundImage === 'none'
+    ),
+    'publication rail should stop after the final visible row'
   );
   assert.ok(
     result.publicationActionRail.rowExists,
     'publication see-more action should be a rail row'
   );
-  assert.ok(
-    result.publicationActionRail.connectorBackgroundImage.includes(
-      'repeating-linear-gradient'
-    ),
-    'publication see-more action row should continue the dashed rail'
-  );
-  assert.ok(
-    Math.abs(result.publicationActionRail.connectorCenter - expectedAxis) <= 1,
-    'publication action connector should stay on the shared rail axis'
-  );
-  assert.ok(
-    Math.abs(
-      result.publicationActionRail.connectorBottom -
-        result.publicationActionRail.rowBottom
-    ) <= 1,
-    'publication dashed connector should reach the end of the action row'
+  assert.equal(
+    result.publicationActionRail.connectorBackgroundImage,
+    '',
+    'publication see-more action should not draw a rail connector'
   );
   assert.ok(
     result.publicationMetaLines.every(
@@ -963,10 +958,10 @@ async function assertHome(page: Page) {
       (style) =>
         style.text === style.text.toLowerCase() &&
         style.fontVariantCaps === 'normal' &&
-        style.fontSize >= 12 &&
+        style.fontSize === 10 &&
         style.textTransform === 'none'
     ),
-    'see more actions should stay lowercase normal text'
+    'see more actions should stay lowercase date-sized normal text'
   );
   assert.equal(result.footerBorderTopWidth, 1);
   assert.ok(result.bodyText.includes('see more on scholar'));
@@ -999,7 +994,7 @@ async function assertMobileHeroPortraitHidden(page: Page) {
     };
   });
 
-  assert.equal(result.exists, true);
+  assert.equal(result.exists, false);
   assert.equal(result.width, 0);
   assert.equal(result.height, 0);
 }
@@ -1245,6 +1240,9 @@ async function assertBlogIndex(page: Page) {
       headerRowCenter: headerRowRect
         ? headerRowRect.top + headerRowRect.height / 2
         : 0,
+      headerFirstRowGap:
+        (items[0]?.getBoundingClientRect().top ?? 0) -
+        (headerRowRect?.bottom ?? 0),
       legendCenter: legendRect ? legendRect.top + legendRect.height / 2 : 0,
       legendText: legend?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       legendItems,
@@ -1292,6 +1290,10 @@ async function assertBlogIndex(page: Page) {
   assert.ok(
     Math.abs(result.headerRowCenter - result.legendCenter) <= 1,
     'blog index legend should be vertically centered on the heading row'
+  );
+  assert.ok(
+    result.headerFirstRowGap >= 11 && result.headerFirstRowGap <= 13,
+    `blog index header/list gap should match About/title spacing: ${result.headerFirstRowGap}`
   );
   assert.deepEqual(
     result.legendItems.map((item) => item.text),
@@ -1403,6 +1405,10 @@ async function assertArticle(page: Page) {
     const main = document.querySelector('main');
     const mainRect = main?.getBoundingClientRect();
     const mainStyle = main ? getComputedStyle(main) : null;
+    const article = document.querySelector<HTMLElement>(
+      '[data-testid="blog-article"]'
+    );
+    const articleStyle = article ? getComputedStyle(article) : null;
     const title = document.querySelector<HTMLElement>(
       '[data-testid="blog-article-title"]'
     );
@@ -1531,6 +1537,9 @@ async function assertArticle(page: Page) {
       tocMetaValueSize: Number.parseFloat(tocMetaValueStyle?.fontSize ?? '0'),
       tocMetaLabelTransform: tocMetaLabelStyle?.textTransform ?? '',
       tocMetaValueTransform: tocMetaValueStyle?.textTransform ?? '',
+      articlePaddingBottom: Number.parseFloat(
+        articleStyle?.paddingBottom ?? '0'
+      ),
       tocFirstLinkText:
         tocFirstLink?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       tocFirstNumText:
@@ -1630,8 +1639,8 @@ async function assertArticle(page: Page) {
   assert.equal(result.tocFirstLinkDecoration, 'underline');
   assert.equal(result.tocFirstNumDecoration, 'none');
   assert.ok(
-    result.tocFirstGap >= 7,
-    `TOC number/title gap should visually read as two spaces: ${result.tocFirstGap}`
+    result.tocFirstGap >= 2 && result.tocFirstGap <= 5,
+    `TOC number/title gap should be tight: ${result.tocFirstGap}`
   );
   assert.ok(
     result.tocFirstLinkWidth < result.tocWidth * 0.4,
@@ -1697,8 +1706,12 @@ async function assertArticle(page: Page) {
     'article code highlighting should not bold tokens'
   );
   assert.equal(result.codeBackground, 'rgb(243, 243, 241)');
+  assert.ok(
+    result.articlePaddingBottom >= 170 && result.articlePaddingBottom <= 178,
+    `articles should keep a fixed bottom reading buffer: ${result.articlePaddingBottom}`
+  );
   assert.equal(result.articleListStyle, 'decimal');
-  assert.ok(result.articleListPadding >= 28);
+  assert.ok(result.articleListPadding >= 39 && result.articleListPadding <= 41);
   assert.ok(result.footnotesSize <= 13);
   assert.ok(result.footnoteListPadding >= 24);
   assert.ok(result.footnoteRefFamily.includes('DM Mono'));
@@ -1716,6 +1729,50 @@ async function assertArticle(page: Page) {
   );
   assert.equal(result.prototypeCount, 0);
   assert.ok(!result.bodyText.toLowerCase().includes('prototyping'));
+
+  const darkCode = await page.evaluate(() => {
+    const root = document.documentElement;
+    const originalClassName = root.className;
+
+    root.classList.remove('light');
+    root.classList.add('dark');
+
+    const block = document.querySelector<HTMLElement>(
+      '.article-prose .article-code-block'
+    );
+    const keyword = document.querySelector<HTMLElement>(
+      '.article-prose .highlight .hljs-keyword, .article-prose .highlight .k'
+    );
+    const kbd = document.querySelector<HTMLElement>('.article-prose kbd');
+    const code = document.querySelector<HTMLElement>(
+      '.article-prose .highlight code'
+    );
+    const blockStyle = block ? getComputedStyle(block) : null;
+    const keywordStyle = keyword ? getComputedStyle(keyword) : null;
+    const kbdStyle = kbd ? getComputedStyle(kbd) : null;
+    const codeStyle = code ? getComputedStyle(code) : null;
+    const result = {
+      background: blockStyle?.backgroundColor ?? '',
+      color: codeStyle?.color ?? blockStyle?.color ?? '',
+      keywordColor: keywordStyle?.color ?? '',
+      kbdBackground: kbdStyle?.backgroundColor ?? '',
+      kbdBackgroundImage: kbdStyle?.backgroundImage ?? '',
+      kbdBorderTop: kbdStyle?.borderTopColor ?? '',
+      kbdColor: kbdStyle?.color ?? '',
+    };
+
+    root.className = originalClassName;
+
+    return result;
+  });
+
+  assert.equal(darkCode.background, 'rgb(28, 28, 28)');
+  assert.notEqual(darkCode.color, 'rgb(28, 28, 28)');
+  assert.notEqual(darkCode.keywordColor, 'rgb(28, 28, 28)');
+  assert.equal(darkCode.kbdBackground, 'rgb(36, 36, 36)');
+  assert.notEqual(darkCode.kbdBackgroundImage, 'none');
+  assert.notEqual(darkCode.kbdColor, darkCode.kbdBackground);
+  assert.notEqual(darkCode.kbdBorderTop, darkCode.kbdBackground);
 }
 
 async function assertHarmoniaArticle(page: Page) {
@@ -1877,11 +1934,53 @@ async function assertLegacyMediaArticle(page: Page) {
       ...document.querySelectorAll<HTMLElement>('.article-media figcaption'),
     ];
     const keycap = document.querySelector<HTMLElement>('kbd');
+    const detailSummaries = [
+      ...document.querySelectorAll<HTMLElement>('.article-summary'),
+    ];
     const lists = [
       ...document.querySelectorAll<HTMLElement>(
         '.article-prose > ol, .article-prose > ul'
       ),
     ];
+    const orderedItem = document.querySelector('.article-prose > ol > li');
+    const unorderedItem = document.querySelector('.article-prose > ul > li');
+    const orderedWalker = orderedItem
+      ? document.createTreeWalker(orderedItem, NodeFilter.SHOW_TEXT)
+      : null;
+    const unorderedWalker = unorderedItem
+      ? document.createTreeWalker(unorderedItem, NodeFilter.SHOW_TEXT)
+      : null;
+    let orderedNode = orderedWalker?.nextNode() ?? null;
+    let unorderedNode = unorderedWalker?.nextNode() ?? null;
+
+    while (orderedNode && !orderedNode.textContent?.trim()) {
+      orderedNode = orderedWalker?.nextNode() ?? null;
+    }
+
+    while (unorderedNode && !unorderedNode.textContent?.trim()) {
+      unorderedNode = unorderedWalker?.nextNode() ?? null;
+    }
+
+    const orderedRange = document.createRange();
+    const unorderedRange = document.createRange();
+
+    if (orderedNode) {
+      orderedRange.selectNodeContents(orderedNode);
+    }
+
+    if (unorderedNode) {
+      unorderedRange.selectNodeContents(unorderedNode);
+    }
+
+    const orderedTextLeft = orderedNode
+      ? orderedRange.getBoundingClientRect().left
+      : 0;
+    const unorderedTextLeft = unorderedNode
+      ? unorderedRange.getBoundingClientRect().left
+      : 0;
+
+    orderedRange.detach();
+    unorderedRange.detach();
 
     const captionStyles = captions.map((caption) => {
       const style = getComputedStyle(caption);
@@ -1913,6 +2012,7 @@ async function assertLegacyMediaArticle(page: Page) {
       const rect = list.getBoundingClientRect();
 
       return {
+        tag: list.tagName,
         paddingLeft: Number.parseFloat(style.paddingLeft),
         left: rect.left,
         right: rect.right,
@@ -1938,7 +2038,19 @@ async function assertLegacyMediaArticle(page: Page) {
       keycapBoxShadow: keycapStyle?.boxShadow ?? '',
       keycapBackgroundImage: keycapStyle?.backgroundImage ?? '',
       listData,
+      orderedTextLeft,
+      unorderedTextLeft,
       maxListOverflow,
+      detailSummaryTexts: detailSummaries.map(
+        (summary) => summary.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      ),
+      detailSummaryEmTexts: detailSummaries.map(
+        (summary) =>
+          summary
+            .querySelector('em')
+            ?.textContent?.replace(/\s+/g, ' ')
+            .trim() ?? ''
+      ),
     };
   });
 
@@ -1983,12 +2095,34 @@ async function assertLegacyMediaArticle(page: Page) {
   assert.match(result.keycapBoxShadow, /inset/);
   assert.ok(result.listData.length > 0, 'legacy article should include lists');
   assert.ok(
-    result.listData.every((list) => list.paddingLeft >= 28),
-    'article lists should be indented enough to read as lists'
+    result.listData.some(
+      (list) =>
+        list.tag === 'OL' && list.paddingLeft >= 39 && list.paddingLeft <= 41
+    ),
+    'ordered article lists should keep an APM-like outside-marker indent'
+  );
+  assert.ok(
+    result.listData.some(
+      (list) =>
+        list.tag === 'UL' && list.paddingLeft >= 32 && list.paddingLeft <= 34
+    ),
+    'unordered article lists should compensate bullet spacing into the same text column'
+  );
+  assert.ok(
+    Math.abs(result.orderedTextLeft - result.unorderedTextLeft) <= 1,
+    `ordered/unordered list text should share a vertical line: ${result.orderedTextLeft} / ${result.unorderedTextLeft}`
   );
   assert.ok(
     result.maxListOverflow <= 1,
     `article lists should stay inside prose width: ${result.maxListOverflow}`
+  );
+  assert.ok(
+    result.detailSummaryTexts.includes('tmux: Terminal multiplexer'),
+    'details summaries should preserve the visible label text'
+  );
+  assert.ok(
+    result.detailSummaryEmTexts.every((text) => text.endsWith(':')),
+    'details summary colons should live inside the emphasized/link label'
   );
 }
 

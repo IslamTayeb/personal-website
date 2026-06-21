@@ -156,12 +156,10 @@ export function RailItem({
 
 export function RailActionItem({
   children,
-  connectorTestId = 'rail-action-connector',
   testId = 'rail-action-row',
   className,
 }: {
   children: ReactNode;
-  connectorTestId?: string;
   testId?: string;
   className?: string;
 }) {
@@ -173,14 +171,6 @@ export function RailActionItem({
         className
       )}
     >
-      <span
-        data-testid={connectorTestId}
-        className="absolute bottom-0 left-[calc(var(--rail-marker-size)/2-0.5px)] top-0 w-px text-border"
-        style={{
-          backgroundImage:
-            'repeating-linear-gradient(to bottom, currentColor 0 4px, transparent 4px 9px)',
-        }}
-      />
       <span aria-hidden />
       <div className="flex min-w-0 justify-end">{children}</div>
     </li>

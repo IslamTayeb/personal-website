@@ -49,14 +49,11 @@ export async function WritingPreview() {
                       {post.readingMeta}
                     </div>
                   }
-                  connector={index < posts.length - 1 ? 'solid' : 'dashed'}
+                  connector={index < posts.length - 1 ? 'solid' : 'none'}
                 />
               );
             })}
-            <RailActionItem
-              testId="writing-action-row"
-              connectorTestId="writing-action-connector"
-            >
+            <RailActionItem testId="writing-action-row">
               <SectionActionLink href="/blog" section="b">
                 see more on blog
               </SectionActionLink>

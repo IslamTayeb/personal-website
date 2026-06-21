@@ -70,6 +70,13 @@ background-matched tracks and no inset thumb borders. If a scrollbar needs
 accent treatment, keep it to dense internal scrollers like code or table areas,
 not the global page scrollbar.
 
+Article lists in `unified-site/` should keep ordered and unordered item text on
+the same vertical line, following the APM Overflow outside-marker feel. Article
+code blocks should use explicit light/dark code colors; dark mode code blocks
+use `#1C1C1C` as the block background. Rail action rows such as "see more on
+blog" and "see more on scholar" should not continue the dashed rail into the
+action row.
+
 Every clickable control in `unified-site/` should have deliberate default,
 hover, active/pressed, disabled/unavailable, and keyboard-focus states. The
 theme toggle is the narrow exception: it should not have hover or click/active

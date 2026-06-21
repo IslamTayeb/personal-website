@@ -83,7 +83,7 @@ With these principles in mind, I've spent a good chunk of my time on the interne
 These are the applications that fundamentally changed how I interact with my computer. Each one directly supports at least two of my core principles and has become non-negotiable in my workflow. If you agree with this essay, you should try these.
 
 <details>
-<summary><em><a href="https://www.raycast.com/">Raycast</a></em>: Command palette + extension platform</summary>
+<summary><em><a href="https://www.raycast.com/">Raycast:</a></em> Command palette + extension platform</summary>
 
 Quick launcher for apps, clipboard history, tab search, calculations, workflows. Extensions turn GUI apps (e.g. Spotify) fully keyboard-driven.
 
@@ -93,7 +93,7 @@ First app I install on any Mac. No alternatives come close.
 </details>
 
 <details>
-<summary><em><a href="https://github.com/koekeishiya/yabai">Yabai</a></em>: MacOS window tiling manager</summary>
+<summary><em><a href="https://github.com/koekeishiya/yabai">Yabai:</a></em> MacOS window tiling manager</summary>
 
 Enforces grid-based window layouts, auto-arranges on open, space switching via key-binds.
 
@@ -101,7 +101,7 @@ Alternatives: [*Rectangle*](https://rectangleapp.com/)<sup class="footnote-ref" 
 </details>
 
 <details>
-<summary><em><a href="https://obsidian.md/">Obsidian</a></em>: Markdown-based notes</summary>
+<summary><em><a href="https://obsidian.md/">Obsidian:</a></em> Markdown-based notes</summary>
 
 Markdown makes it standardized and simple to write structured notes. Sync requires paid subscription, but worth it for stable vim writing experience.
 
@@ -109,7 +109,7 @@ Alternatives: *Apple Notes* (free sync, lightweight), [*Notion*](https://www.not
 </details>
 
 <details>
-<summary><em><a href="https://neovim.io/">Neovim</a> (<a href="https://www.lazyvim.org/">LazyVim</a>)</em>: Keyboard-driven terminal-based IDE</summary>
+<summary><em><a href="https://neovim.io/">Neovim</a> (<a href="https://www.lazyvim.org/">LazyVim</a>):</em> Keyboard-driven terminal-based IDE</summary>
 
 Keyboard-driven coding with vim motions, no mouse needed. Extremely modular, definitely an investment if new to vim motions. [Primeagen's videos](https://www.youtube.com/watch?v=ZWWxwwUsPNw) convinced me to switch.
 
@@ -121,7 +121,7 @@ Alternatives: [*Athas*](https://athas.dev/) (tried the alpha, loved it), VSC-bas
 These applications aren't as transformative as P1, but they're reliable, well-designed tools that respect keyboard-first workflows and reduce friction in daily tasks. They won't revolutionize your setup, but they'll smooth out rough edges you didn't realize existed.
 
 <details>
-<summary><em><a href="https://helium.computer/">Helium</a></em>: Ungoogled-chromium fork with <code>!bang</code> search</summary>
+<summary><em><a href="https://helium.computer/">Helium:</a></em> Ungoogled-chromium fork with <code>!bang</code> search</summary>
 
 Direct site search from address bar (`!gh` for GitHub, `!y` for YouTube, etc.). Focused on performance + privacy, won back some battery life.
 
@@ -129,7 +129,7 @@ Alternatives: [*Zen*](https://zen-browser.app/) (most stable *[Arc](https://arc.
 </details>
 
 <details>
-<summary><em><a href="https://godspeedapp.com/">Godspeed</a></em>: Keyboard-driven to-do list</summary>
+<summary><em><a href="https://godspeedapp.com/">Godspeed:</a></em> Keyboard-driven to-do list</summary>
 
 Great iPhone widget + global hotkey for adding to-dos. Designed to be fully keyboard-driven. Very fast and lightweight.
 
@@ -137,7 +137,7 @@ Alternatives: Your note-taking app of choice, [*Todoist*](https://www.todoist.co
 </details>
 
 <details>
-<summary><em>Apple Mail</em>: Native mail client</summary>
+<summary><em>Apple Mail:</em> Native mail client</summary>
 
 Lightweight, syncs my Gmail + Outlook emails well with OAuth2, and syncs between my Macbook + iPhone very well. Mostly keyboard-driven, great for inbox zero.
 
@@ -145,13 +145,13 @@ Alternatives: [*Superhuman*](https://superhuman.com/) (big fan of inbox zero-nat
 </details>
 
 <details>
-<summary><em>Apple Calendar</em>: Native calendar client</summary>
+<summary><em>Apple Calendar:</em> Native calendar client</summary>
 
 Much like with Apple Mail, I want sync between my iPhone and Mac with a lightweight app that is keyboard-driven – checks all the boxes. Raycast extension allows me to quickly add events with my keyboard.
 </details>
 
 <details>
-<summary><em><a href="https://github.com/tmux/tmux/wiki">tmux</a></em>: Terminal multiplexer</summary>
+<summary><em><a href="https://github.com/tmux/tmux/wiki">tmux:</a></em> Terminal multiplexer</summary>
 
 Lets you run multiple sessions, detach and reattach to them, and manage multiple panes and windows within a single SSH or local terminal.
 </details>
@@ -161,13 +161,13 @@ Lets you run multiple sessions, detach and reattach to them, and manage multiple
 Smaller utilities and quality-of-life improvements. Each solves a specific annoyance or enables a niche workflow. Not essential, but the kind of thing where once you have it, going back feels wrong.
 
 <details>
-<summary><em><a href="https://ohmyz.sh/">Oh My Zsh</a></em>: Framework for managing zsh configuration</summary>
+<summary><em><a href="https://ohmyz.sh/">Oh My Zsh:</a></em> Framework for managing zsh configuration</summary>
 
 Comes with a lot of neat plugins (auto-suggestions, syntax highlighting). Alternative would be to install your own plugins and manage them yourself.
 </details>
 
 <details>
-<summary><em><a href="https://github.com/ajeetdsouza/zoxide">Zoxide</a></em>: Smarter cd command</summary>
+<summary><em><a href="https://github.com/ajeetdsouza/zoxide">Zoxide:</a></em> Smarter cd command</summary>
 
 Remembers frequently-used directories so you can jump to them with partial matches. Type `z foo` instead of `cd ~/projects/foobar/src`. Works across all major shells, supports interactive selection with fzf.
 
@@ -175,13 +175,13 @@ Remembers frequently-used directories so you can jump to them with partial match
 </details>
 
 <details>
-<summary><em><a href="https://lovable.dev/">Lovable</a></em>: Best no-brain vibe-coding tool</summary>
+<summary><em><a href="https://lovable.dev/">Lovable:</a></em> Best no-brain vibe-coding tool</summary>
 
 Handles frontend/backend, database set-up, and hosting. Great for creating quick internal tooling and automations.
 </details>
 
 <details>
-<summary><em>Quality of Life</em></summary>
+<summary><em>Quality of Life:</em></summary>
 
 <kbd>Caps Lock</kbd> takes up a lot of real estate on your keyboard for an obscure action. I suggest remapping it to either <kbd>Backspace</kbd> or <kbd>Ctrl</kbd> – I personally switch my <kbd>Left Ctrl</kbd> and <kbd>Caps Lock</kbd>. I used [*hidutils*](https://hidutil-generator.netlify.app/) for the keyboard remapping, but you may also use [*Karabiner*](https://karabiner-elements.pqrs.org/)
 
