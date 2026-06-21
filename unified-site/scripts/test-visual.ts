@@ -237,7 +237,13 @@ async function assertHome(page: Page) {
         width: rect?.width ?? 0,
         center: rect ? rect.left + rect.width / 2 : 0,
         fontSize: Number.parseFloat(style?.fontSize ?? '0'),
+        color: style?.color ?? '',
       };
+    });
+    const sectionLabelColors = topLevelSections.map((section) => {
+      const label = section.querySelector<HTMLElement>('header h2');
+
+      return label ? getComputedStyle(label).color : '';
     });
     const sectionLabelLefts = topLevelSections.map(
       (section) =>
@@ -529,6 +535,8 @@ async function assertHome(page: Page) {
       sectionMarkerFontSizes: sectionMarkerData.map(
         (marker) => marker.fontSize
       ),
+      sectionMarkerColors: sectionMarkerData.map((marker) => marker.color),
+      sectionLabelColors,
       sharedRowTitleLefts,
       markerLefts: markerData.map((marker) => marker.left),
       markerWidths: markerData.map((marker) => marker.width),
@@ -672,6 +680,11 @@ async function assertHome(page: Page) {
   assert.ok(
     result.sectionMarkerFontSizes.every((size) => Math.round(size) === 12),
     'section markers should stay at the same 12px bottleneck size'
+  );
+  assert.deepEqual(
+    result.sectionLabelColors,
+    result.sectionMarkerColors,
+    'section title labels should use the same accent color as their § marker'
   );
   assert.ok(
     result.markerWidths.every((width) => Math.round(width) === 12),
@@ -1149,9 +1162,10 @@ async function assertBlogIndex(page: Page) {
         .querySelector('#posts h2')
         ?.textContent?.replace(/\s+/g, ' ')
         .trim() ?? '';
-    const headingLeft =
-      document.querySelector<HTMLElement>('#posts h2')?.getBoundingClientRect()
-        .left ?? 0;
+    const headingElement = document.querySelector<HTMLElement>('#posts h2');
+    const markerElement =
+      document.querySelector<HTMLElement>('#posts header span');
+    const headingLeft = headingElement?.getBoundingClientRect().left ?? 0;
     const sectionLeft =
       document.querySelector<HTMLElement>('#posts')?.getBoundingClientRect()
         .left ?? 0;
@@ -1160,10 +1174,7 @@ async function assertBlogIndex(page: Page) {
     );
     const headerRowRect = headerRow?.getBoundingClientRect();
     const marker =
-      document
-        .querySelector('#posts header span')
-        ?.textContent?.replace(/\s+/g, ' ')
-        .trim() ?? '';
+      markerElement?.textContent?.replace(/\s+/g, ' ').trim() ?? '';
     const rail = document.querySelector('[data-testid="blog-index-rail"]');
     const items = [...(rail?.querySelectorAll<HTMLElement>('li') ?? [])];
     const legend = document.querySelector<HTMLElement>(
@@ -1235,8 +1246,12 @@ async function assertBlogIndex(page: Page) {
         Number.parseFloat(mainStyle?.paddingLeft ?? '0'),
       heading,
       headingLeft,
+      headingColor: headingElement
+        ? getComputedStyle(headingElement).color
+        : '',
       sectionLeft,
       marker,
+      markerColor: markerElement ? getComputedStyle(markerElement).color : '',
       headerRowCenter: headerRowRect
         ? headerRowRect.top + headerRowRect.height / 2
         : 0,
@@ -1279,6 +1294,11 @@ async function assertBlogIndex(page: Page) {
   assert.equal(result.header, '', 'blog header should only contain ROYB band');
   assert.equal(result.marker, '§1');
   assert.equal(result.heading, `Index (${result.itemCount})`);
+  assert.equal(
+    result.headingColor,
+    result.markerColor,
+    'blog index title should use the same accent color as its § marker'
+  );
   assert.ok(
     Math.abs(result.sectionLeft - result.mainContentLeft) <= 1,
     'blog index section should touch the main document content edge'

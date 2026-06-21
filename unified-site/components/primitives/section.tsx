@@ -58,7 +58,9 @@ export function SectionHeader({
         )}
       >
         <span className={cn('w-fit font-mono text-xs', accent)}>§{index}</span>
-        <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
+        <h2
+          className={cn('font-mono text-xs uppercase tracking-[0.2em]', accent)}
+        >
           {title}
         </h2>
         {extra ? <div className="min-w-0 self-center">{extra}</div> : null}
