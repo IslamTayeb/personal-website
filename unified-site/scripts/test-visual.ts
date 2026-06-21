@@ -225,8 +225,8 @@ async function assertHomeMeasurements(page: Page) {
     'hero title should not overflow'
   );
   assert.ok(
-    Math.abs(measurements.heroMetaWidthPercent - 28.26) < 0.5,
-    `hero metadata column should stay near 28.26% of the hero body, got ${measurements.heroMetaWidthPercent.toFixed(2)}%`
+    Math.abs(measurements.heroMetaWidthPercent - 20) < 0.5,
+    `hero metadata column should stay near 20% of the hero body, got ${measurements.heroMetaWidthPercent.toFixed(2)}%`
   );
   assert.equal(
     measurements.heroBorderTopWidth,

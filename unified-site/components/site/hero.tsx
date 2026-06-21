@@ -6,12 +6,20 @@ function ContactIndex() {
   return (
     <div className="flex flex-col gap-2.5 font-mono text-xs leading-snug">
       <div className="flex justify-between gap-4">
-        <span className="text-muted-foreground">location</span>
-        <span className="text-right text-foreground">{profile.location}</span>
+        <span className="whitespace-nowrap text-muted-foreground">
+          location
+        </span>
+        <span className="whitespace-nowrap text-right text-foreground">
+          {profile.location}
+        </span>
       </div>
       <div className="flex justify-between gap-4">
-        <span className="text-muted-foreground">hometown</span>
-        <span className="text-right text-foreground">{profile.hometown}</span>
+        <span className="whitespace-nowrap text-muted-foreground">
+          hometown
+        </span>
+        <span className="whitespace-nowrap text-right text-foreground">
+          {profile.hometown}
+        </span>
       </div>
       <div className="flex flex-col gap-1">
         <span className="text-muted-foreground">contact</span>
@@ -81,7 +89,7 @@ export function Hero() {
         >
           Islam Tayeb
         </h1>
-        <div className="flex flex-col gap-3 md:grid md:grid-cols-[13rem_minmax(0,1fr)] md:gap-4">
+        <div className="flex flex-col gap-3 md:grid md:grid-cols-[20%_minmax(0,1fr)] md:gap-4">
           <div className="min-w-0 md:border-r md:border-border md:pr-4">
             <ContactIndex />
           </div>
