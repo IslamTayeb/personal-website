@@ -10,7 +10,7 @@ export const profile = {
   name: 'Islam Tayeb',
   location: 'Durham, NC',
   hometown: 'Egypt',
-  email: 'islam.tayeb@duke.edu',
+  email: 'islam.moh.islamm@gmail.com',
   role: 'Duke CS student researching ML systems',
 };
 

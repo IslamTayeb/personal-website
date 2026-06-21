@@ -1,5 +1,5 @@
 import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
-import { formatDate } from '@/lib/blog/date';
+import { formatMonthYear } from '@/lib/blog/date';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { SectionActionLink } from '@/components/primitives/section-action';
@@ -36,7 +36,7 @@ export async function WritingPreview() {
                       ) : null}
                     </span>
                   }
-                  meta={formatDate(post.manifest.publishedAt)}
+                  meta={formatMonthYear(post.manifest.publishedAt)}
                   footer={
                     <div
                       data-testid="writing-row-meta"

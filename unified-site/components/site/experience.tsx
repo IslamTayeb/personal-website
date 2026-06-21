@@ -217,7 +217,7 @@ function RailGroupBlock({
       data-group={group.kind}
       className={cn(
         'flex flex-col',
-        open ? 'mb-3.5 last:mb-0' : 'mb-1 last:mb-0'
+        open ? 'mb-2.5 last:mb-0' : 'mb-0.5 last:mb-0'
       )}
     >
       <button

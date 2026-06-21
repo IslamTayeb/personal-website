@@ -32,6 +32,14 @@ export function formatDate(value: string) {
   return `${month} ${day}, ${year}`;
 }
 
+export function formatMonthYear(value: string) {
+  const date = assertValidDate(value, 'date');
+  const month = monthNames[date.getUTCMonth()];
+  const year = date.getUTCFullYear();
+
+  return `${month} ${year}`;
+}
+
 export function datetime(value: string) {
   return assertValidDate(value, 'datetime')
     .toISOString()

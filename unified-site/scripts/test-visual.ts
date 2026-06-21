@@ -223,12 +223,17 @@ async function assertHome(page: Page) {
         backgroundColor: getComputedStyle(dot).backgroundColor,
       })
     );
-    const publicationButton = document.querySelector(
+    const publicationButtons = document.querySelectorAll(
       '[data-testid="publication-row-button"]'
     );
-    const publicationTitle = document.querySelector(
-      '[data-testid="publication-title"]'
+    const publicationOpenDetails = document.querySelectorAll(
+      '[data-testid="publication-open"]'
     );
+    const publicationTitles = [
+      ...document.querySelectorAll<HTMLElement>(
+        '#publications [data-testid="publication-title"]'
+      ),
+    ];
     const publicationAuthors = [
       ...document.querySelectorAll('[data-testid="publication-authors"]'),
     ].map((authors) => authors.textContent?.replace(/\s+/g, ' ').trim() ?? '');
@@ -250,6 +255,14 @@ async function assertHome(page: Page) {
         .querySelector('#writing')
         ?.querySelectorAll('[data-testid="writing-row-meta"]') ?? []),
     ].map((meta) => meta.textContent?.replace(/\s+/g, ' ').trim() ?? '');
+    const writingDates = [
+      ...(document
+        .querySelector('#writing')
+        ?.querySelectorAll('[data-testid="rail-title"]') ?? []),
+    ].map(
+      (title) =>
+        title.nextElementSibling?.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+    );
     const writingDescriptions = [
       ...(document
         .querySelector('#writing')
@@ -337,6 +350,7 @@ async function assertHome(page: Page) {
       writingDots,
       writingNewTags,
       writingMeta,
+      writingDates,
       writingDescriptionCount: writingDescriptions.length,
       publicationDots,
       publicationMetaLines,
@@ -352,14 +366,19 @@ async function assertHome(page: Page) {
       publicationRailExists: Boolean(
         document.querySelector('[data-testid="publication-rail"]')
       ),
-      publicationButtonClassName: publicationButton?.className ?? '',
-      publicationTitleDecoration: publicationTitle
-        ? getComputedStyle(publicationTitle).textDecorationLine
-        : '',
-      publicationTitleClassName:
-        publicationTitle instanceof HTMLElement
-          ? publicationTitle.className
-          : '',
+      publicationButtonCount: publicationButtons.length,
+      publicationOpenDetailCount: publicationOpenDetails.length,
+      publicationTitleCount: publicationTitles.length,
+      publicationTitleTexts: publicationTitles.map(
+        (title) => title.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      ),
+      publicationTitleHrefs: publicationTitles.map((title) =>
+        title instanceof HTMLAnchorElement ? title.href : ''
+      ),
+      publicationTitleDecorations: publicationTitles.map(
+        (title) => getComputedStyle(title).textDecorationLine
+      ),
+      publicationTitleClassName: publicationTitles[0]?.className ?? '',
       mutedToken,
       seeMoreActionColors,
       footerBorderTopWidth: footer
@@ -398,6 +417,8 @@ async function assertHome(page: Page) {
   ]) {
     assert.ok(result.bodyText.includes(copy), `hero should include: ${copy}`);
   }
+  assert.ok(result.bodyText.includes('islam.moh.islamm@gmail.com'));
+  assert.ok(!result.bodyText.includes('islam.tayeb@duke.edu'));
   for (const label of ['experience', 'publications', 'courses', 'writing']) {
     assert.ok(
       !result.headerText.includes(label),
@@ -474,6 +495,10 @@ async function assertHome(page: Page) {
       (meta) => meta.includes('words') && meta.includes('min')
     )
   );
+  assert.ok(
+    result.writingDates.every((date) => /^[A-Z][a-z]{2} \d{4}$/.test(date)),
+    'home writing dates should use month-year only'
+  );
   assert.equal(
     result.writingDescriptionCount,
     0,
@@ -497,6 +522,16 @@ async function assertHome(page: Page) {
     result.publicationRailExists,
     'publications should use rail layout'
   );
+  assert.equal(
+    result.publicationButtonCount,
+    0,
+    'publication rows should not render disclosure buttons'
+  );
+  assert.equal(
+    result.publicationOpenDetailCount,
+    0,
+    'publication rows should not render explanatory detail paragraphs'
+  );
   assert.ok(
     result.publicationDots.every((dot) => dot.includes('bg-foreground/75')),
     'publication rail markers should be neutral'
@@ -518,6 +553,28 @@ async function assertHome(page: Page) {
       authors.includes('Islam Tayeb')
     )
   );
+  assert.equal(
+    result.publicationTitleCount,
+    result.publicationAuthors.length,
+    'each publication title should be the row link'
+  );
+  assert.ok(
+    result.publicationTitleHrefs.every((href) => href.startsWith('https://')),
+    'publication titles should link externally'
+  );
+  assert.ok(
+    result.publicationTitleDecorations.every((decoration) =>
+      decoration.includes('underline')
+    ),
+    'publication title links should stay visibly underlined'
+  );
+  assert.deepEqual(result.publicationTitleTexts, [
+    'Machine learning for predicting and optimizing the CO₂ uptake in porous organic polymers',
+    'Primal dual continual learning for robust antibody design',
+    'Post-synthetic modification of UiO-66 analogue metal-organic framework as potential solid sorbent for direct air capture',
+  ]);
+  assert.ok(!result.bodyText.includes('CO2'));
+  assert.ok(result.bodyText.includes('CO₂'));
   assert.equal(
     result.publicationSelfAuthors.length,
     result.publicationAuthors.length,
@@ -547,15 +604,6 @@ async function assertHome(page: Page) {
       return Number.isFinite(tracking) && tracking < 1;
     }),
     'publication dates should not use wide tracking'
-  );
-  assert.ok(
-    !result.publicationButtonClassName.includes('hover:bg'),
-    'publications should not use a full-row hover slab'
-  );
-  assert.equal(
-    result.publicationTitleDecoration,
-    'none',
-    'publication disclosure titles should not look like underlined links'
   );
   assert.ok(
     result.seeMoreActionColors.every((color) => color === result.mutedToken),
@@ -689,6 +737,12 @@ async function assertBlogIndex(page: Page) {
       '[data-testid="blog-index-row-meta"]'
     );
     const descriptions = rail?.querySelectorAll('p[data-one-line="true"]');
+    const postDates = [
+      ...(rail?.querySelectorAll('[data-testid="rail-title"]') ?? []),
+    ].map(
+      (title) =>
+        title.nextElementSibling?.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+    );
     const footer = document.querySelector('footer');
 
     return {
@@ -701,6 +755,7 @@ async function assertBlogIndex(page: Page) {
         rail?.querySelectorAll('[data-testid="rail-connector"]').length ?? 0,
       firstFooterText:
         firstFooter?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      postDates,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       descriptionCount: descriptions?.length ?? 0,
       footerBottom: footer?.getBoundingClientRect().bottom ?? 0,
@@ -715,6 +770,10 @@ async function assertBlogIndex(page: Page) {
   assert.equal(result.dotCount, result.itemCount);
   assert.equal(result.connectorCount, result.itemCount - 1);
   assert.equal(result.descriptionCount, 0);
+  assert.ok(
+    result.postDates.every((date) => /^[A-Z][a-z]{2} \d{4}$/.test(date)),
+    'blog index dates should use month-year only'
+  );
   assert.ok(result.firstFooterText.includes('words'));
   assert.ok(result.firstFooterText.includes('min'));
   assert.ok(

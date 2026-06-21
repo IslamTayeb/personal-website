@@ -4,7 +4,7 @@ import { BorderedPanel, Section } from '@/components/primitives/section';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
-import { formatDate } from '@/lib/blog/date';
+import { formatMonthYear } from '@/lib/blog/date';
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -48,7 +48,7 @@ export default async function BlogIndexPage() {
                     ) : null}
                   </div>
                 }
-                meta={formatDate(post.manifest.publishedAt)}
+                meta={formatMonthYear(post.manifest.publishedAt)}
                 footer={
                   <div
                     data-testid="blog-index-row-meta"

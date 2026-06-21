@@ -7,7 +7,7 @@ export type LinkItem = {
 export const contactLinks: LinkItem[] = [
   {
     label: 'email',
-    href: 'mailto:islam.tayeb@duke.edu',
+    href: 'mailto:islam.moh.islamm@gmail.com',
     external: false,
   },
   {
