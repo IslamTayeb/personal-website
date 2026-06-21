@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readdir } from 'node:fs/promises';
 import path from 'node:path';
+import { externalWriting } from '../data/external-writing';
 import { buildAtomFeed } from '../lib/blog/feed';
 import {
   contentRoot,
@@ -59,6 +60,41 @@ function assertImagesHaveAlt(postSlug: string, html: string) {
   }
 }
 
+function countMatches(value: string, pattern: RegExp) {
+  return Array.from(value.matchAll(pattern)).length;
+}
+
+function assertArticlePrimitiveNormalization(postSlug: string, html: string) {
+  assert.doesNotMatch(
+    html,
+    /<div class="table-pair">/,
+    `${postSlug} should normalize legacy table-pair wrappers`
+  );
+  assert.doesNotMatch(
+    html,
+    /<div class="highlight">\s*<pre>/,
+    `${postSlug} should normalize legacy highlight code blocks`
+  );
+  assert.doesNotMatch(
+    html,
+    /<p>\s*<img\b/,
+    `${postSlug} should wrap images in article media figures`
+  );
+  assert.doesNotMatch(
+    html,
+    /<hr>\s*<section class="footnotes">/,
+    `${postSlug} should use the dashed footnotes separator`
+  );
+
+  const ids = Array.from(html.matchAll(/\bid="([^"]+)"/g)).map(([, id]) => id);
+
+  assert.equal(
+    new Set(ids).size,
+    ids.length,
+    `${postSlug} should not render duplicate HTML ids`
+  );
+}
+
 async function main() {
   const manifestFiles = (await readdir(contentRoot)).filter((file) =>
     file.endsWith('.json')
@@ -73,6 +109,14 @@ async function main() {
   );
   assert.ok(listedPosts.length > 0, 'at least one listed post should load');
   assertDescendingDates(listedPosts);
+  assert.deepEqual(externalWriting, [
+    {
+      title: 'Finding the right answer was never the point',
+      href: 'https://www.dukechronicle.com/article/daf941cd-e431-4e71-a282-5f7da9a56c28',
+      source: 'Duke Chronicle',
+      date: 'Nov 2024',
+    },
+  ]);
 
   for (const post of posts) {
     assert.ok(post.manifest.title, `${post.manifest.slug} needs a title`);
@@ -111,6 +155,7 @@ async function main() {
     );
     assertImagesHaveAlt(post.manifest.slug, post.html);
     assertRenderedExternalLinks(post.manifest.slug, post.html);
+    assertArticlePrimitiveNormalization(post.manifest.slug, post.html);
 
     if (post.manifest.slug === 'on-agent-memory-fidelity') {
       assert.match(post.html, /class="article-toc"/);
@@ -160,6 +205,52 @@ async function main() {
         /<video autoplay controls loop muted playsinline preload="auto"/
       );
     }
+
+    if (post.manifest.slug === 'on-dimensions-of-taste') {
+      assert.equal(
+        countMatches(post.html, /class="article-media iframe-figure"/g),
+        13,
+        'Harmonia should render each iframe as a separate media figure'
+      );
+      assert.equal(
+        countMatches(post.html, /class="article-media iframe-figure"/g),
+        countMatches(post.html, /<iframe\b/g),
+        'Harmonia should not leave bare iframe elements outside article media figures'
+      );
+      assert.equal(
+        countMatches(post.html, /class="article-table-pair"/g),
+        2,
+        'Harmonia table pairs should normalize to shared article table pairs'
+      );
+      assert.match(
+        post.html,
+        /<figure class="article-media iframe-figure"><iframe src="https:\/\/islamtayeb\.github\.io\/harmonia\/export\/visualizations\/genre\/genre_family_pie\/index\.html"[^>]*><\/iframe><\/figure>/,
+        'bare Harmonia iframes should become figure-wrapped media'
+      );
+      assert.match(
+        post.html,
+        /<figure class="article-media iframe-figure"><iframe width="100%" height="600px" src="https:\/\/islamtayeb\.github\.io\/harmonia\/export\/visualizations\/temporal\/genre_trends_proportion\/index\.html"><\/iframe><figcaption><em>Genre trends by quarter<\/em><\/figcaption><\/figure>/,
+        'captioned Harmonia iframes should keep their own captioned figures'
+      );
+      assert.match(
+        post.html,
+        /class="article-code-block article-code-block-blue highlight"/,
+        'Harmonia code blocks should use the shared code block primitive'
+      );
+    }
+
+    if (post.manifest.slug === 'on-using-computers') {
+      assert.equal(
+        countMatches(post.html, /class="article-details"/g),
+        13,
+        'Using Computers tool notes should normalize to article details'
+      );
+      assert.match(
+        post.html,
+        /<hr class="footnotes-sep"><section class="footnotes">/,
+        'Using Computers should use dashed footnote separator'
+      );
+    }
   }
 
   const feed = await buildAtomFeed();
@@ -171,6 +262,8 @@ async function main() {
       `<title>${listedPosts[0].manifest.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</title>`
     )
   );
+  assert.doesNotMatch(feed, /Finding the right answer was never the point/);
+  assert.doesNotMatch(feed, /dukechronicle\.com/);
 
   console.log(
     `content ok: ${posts.length} posts loaded, ${listedPosts.length} listed, feed generated`

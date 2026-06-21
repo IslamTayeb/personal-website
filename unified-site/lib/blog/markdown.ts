@@ -92,7 +92,9 @@ function prepareMarkdown(markdown: string, manifest: PostManifest) {
     );
   }
 
-  prepared = prepared.replace(/^## Index[ \t]*$/m, '%%GENERATED_TOC%%');
+  prepared = prepared
+    .replace(/<div class="toc">[\s\S]*?\n(?=##\s+)/, '%%GENERATED_TOC%%\n\n')
+    .replace(/^## Index[ \t]*$/m, '%%GENERATED_TOC%%');
 
   for (const insert of manifest.videoInserts) {
     const targetHeading = headingTextForId(prepared, insert.beforeHeadingId);
@@ -258,6 +260,82 @@ function normalizeLegacyVideos(html: string) {
   });
 }
 
+function normalizeLegacyCodeBlocks(html: string) {
+  return html.replace(
+    /<div class="highlight">\s*<pre>([\s\S]*?)<\/pre>\s*<\/div>/g,
+    (_match, highlighted: string) =>
+      codeBlockHtml({
+        highlighted: highlighted.replace(/^\s*<span><\/span>/, ''),
+        lang: 'text',
+      }).trim()
+  );
+}
+
+function wrapArticleTable(tableHtml: string) {
+  return `<figure class="article-table article-table-plain"><div class="table-wrap">${tableHtml}</div></figure>`;
+}
+
+function normalizeLegacyTables(html: string) {
+  let normalized = html.replace(
+    /<div class="table-pair">([\s\S]*?)<\/div>/g,
+    (_match, inner: string) => {
+      const tables = Array.from(inner.matchAll(/<table\b[\s\S]*?<\/table>/g))
+        .map(([table]) => wrapArticleTable(table))
+        .join('');
+
+      return `<div class="article-table-pair">${tables}</div>`;
+    }
+  );
+
+  normalized = normalized.replace(
+    /(?<!<div class="table-wrap">)(<table\b[\s\S]*?<\/table>)/g,
+    (_match, table: string) => wrapArticleTable(table)
+  );
+
+  return normalized;
+}
+
+function normalizeLegacyIframes(html: string) {
+  const iframePattern = '<iframe\\b(?:(?!<iframe\\b)[\\s\\S])*?<\\/iframe>';
+
+  return html
+    .replace(
+      new RegExp(
+        `(${iframePattern})\\s*<p>\\s*<em>([\\s\\S]*?)<\\/em>\\s*<\\/p>`,
+        'g'
+      ),
+      '<figure class="article-media iframe-figure">$1<figcaption><em>$2</em></figcaption></figure>'
+    )
+    .replace(
+      new RegExp(
+        `<p>\\s*(${iframePattern})\\s*<em>([\\s\\S]*?)<\\/em>\\s*<\\/p>`,
+        'g'
+      ),
+      '<figure class="article-media iframe-figure">$1<figcaption><em>$2</em></figcaption></figure>'
+    )
+    .replace(
+      /(?<!<figure class="article-media iframe-figure">)(<iframe\b(?:(?!<iframe\b)[\s\S])*?<\/iframe>)/g,
+      '<figure class="article-media iframe-figure">$1</figure>'
+    );
+}
+
+function normalizeLegacyDetails(html: string) {
+  return html
+    .replace(/<details>/g, '<details class="article-details">')
+    .replace(/<summary>/g, '<summary class="article-summary">');
+}
+
+function dedupeHtmlIds(html: string) {
+  const seen = new Map<string, number>();
+
+  return html.replace(/\bid="([^"]+)"/g, (match, id: string) => {
+    const count = seen.get(id) ?? 0;
+    seen.set(id, count + 1);
+
+    return count === 0 ? match : `id="${id}-${count + 1}"`;
+  });
+}
+
 function normalizeSentenceFootnotes(html: string) {
   return html.replace(
     /(<sup class="footnote-ref">[\s\S]*?<\/sup>)([.,;:!?])/g,
@@ -397,12 +475,16 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
   html = html
     .replace('<p>%%GENERATED_TOC%%</p>', toc)
     .replace(
-      /<p>\s*(<img\b[^>]*>)\s*\n<em>([\s\S]*?)<\/em>\s*<\/p>/g,
+      /<p>\s*(<img\b[^>]*>)\s+<em>([\s\S]*?)<\/em>\s*<\/p>/g,
       '<figure class="article-media">$1<figcaption><em>$2</em></figcaption></figure>'
     )
     .replace(
       /<p>\s*(<img\b[^>]*>)\s*<\/p>\s*<p>\s*<em>([\s\S]*?)<\/em>\s*<\/p>/g,
       '<figure class="article-media">$1<figcaption><em>$2</em></figcaption></figure>'
+    )
+    .replace(
+      /<p>\s*(<img\b[^>]*>)\s*<\/p>/g,
+      '<figure class="article-media">$1</figure>'
     )
     .replace(
       /<p>\s*(<video\b[\s\S]*?<\/video>)\s*<em>([\s\S]*?)<\/em>\s*<\/p>/g,
@@ -412,19 +494,17 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
       /<p>\s*(<video\b[\s\S]*?<\/video>)\s*<\/p>\s*<p>\s*<em>([\s\S]*?)<\/em>\s*<\/p>/g,
       '<figure class="article-media video-figure">$1<figcaption><em>$2</em></figcaption></figure>'
     )
+    .replace(/<hr>\s*<hr class="footnotes-sep">/g, '<hr class="footnotes-sep">')
     .replace(
-      /<hr>\s*<hr class="footnotes-sep">/g,
-      '<hr class="footnotes-sep">'
+      /<hr>\s*(<section class="footnotes">)/g,
+      '<hr class="footnotes-sep">$1'
     );
 
-  if (manifest.wrapTables) {
-    html = html
-      .replace(
-        /<table>/g,
-        '<figure class="article-table article-table-plain"><div class="table-wrap"><table>'
-      )
-      .replace(/<\/table>/g, '</table></div></figure>');
-  }
+  html = normalizeLegacyDetails(
+    normalizeLegacyCodeBlocks(
+      normalizeLegacyIframes(normalizeLegacyTables(html))
+    )
+  );
 
   for (const insert of manifest.videoInserts) {
     html = html.replace(
@@ -434,8 +514,10 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
   }
 
   return {
-    html: normalizeExternalAnchors(
-      normalizeSentenceFootnotes(normalizeLegacyVideos(html))
+    html: dedupeHtmlIds(
+      normalizeExternalAnchors(
+        normalizeSentenceFootnotes(normalizeLegacyVideos(html))
+      )
     ),
     headings: env.headings,
     readingMeta: readingMeta(markdown),

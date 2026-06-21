@@ -1,6 +1,7 @@
 import type { Publication } from '@/types/content';
 import { ExternalLink } from './external-link';
 import { RailItem, RailList } from './rail';
+import { RichText } from './rich-text';
 import { SectionActionLink } from './section-action';
 
 function PublicationAuthors({ authors }: { authors: string }) {
@@ -48,9 +49,9 @@ function PublicationRow({
             href={publication.href}
             section="y"
             data-testid="publication-title"
-            className="block text-sm font-medium leading-tight text-foreground text-pretty"
+            className="publication-title-link royb-link-fragment text-sm font-medium leading-tight text-foreground text-pretty"
           >
-            {publication.title}
+            <RichText text={publication.title} />
           </ExternalLink>
           <span
             data-testid="publication-meta-line"
@@ -61,7 +62,7 @@ function PublicationRow({
               <>
                 <span className="px-1 text-muted-foreground">/</span>
                 <span className="text-muted-foreground">
-                  {publication.venue}
+                  <RichText text={publication.venue} />
                 </span>
               </>
             ) : null}

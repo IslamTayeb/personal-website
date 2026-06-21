@@ -3,6 +3,7 @@ import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { chromium, type Browser, type Page } from '@playwright/test';
+import { externalWriting } from '../data/external-writing';
 import { getListedPosts } from '../lib/blog/posts';
 
 const root = process.cwd();
@@ -194,6 +195,9 @@ async function assertHome(page: Page) {
     const firstGroupLabel = experienceSection?.querySelector(
       '[data-testid="experience-group-label"]'
     );
+    const experienceLegend = experienceSection?.querySelector(
+      '[data-testid="experience-legend"]'
+    );
     const firstRailTitle = experienceSection?.querySelector(
       '[data-testid="rail-title"]'
     );
@@ -223,6 +227,14 @@ async function assertHome(page: Page) {
         backgroundColor: getComputedStyle(dot).backgroundColor,
       })
     );
+    const legendDots = [
+      ...(experienceLegend?.querySelectorAll('[data-testid="legend-dot"]') ??
+        []),
+    ].map((dot) => ({
+      label: dot.getAttribute('aria-label'),
+      backgroundColor: getComputedStyle(dot).backgroundColor,
+      border: Number.parseFloat(getComputedStyle(dot).borderTopWidth),
+    }));
     const publicationButtons = document.querySelectorAll(
       '[data-testid="publication-row-button"]'
     );
@@ -345,6 +357,10 @@ async function assertHome(page: Page) {
       experienceTitleLeft: experienceTitle?.getBoundingClientRect().left ?? 0,
       firstGroupLabelLeft: firstGroupLabel?.getBoundingClientRect().left ?? 0,
       firstRailTitleLeft: firstRailTitle?.getBoundingClientRect().left ?? 0,
+      experienceLegendLabels: [...(experienceLegend?.children ?? [])].map(
+        (item) => item.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      ),
+      legendDots,
       groups,
       dots,
       writingDots,
@@ -371,6 +387,11 @@ async function assertHome(page: Page) {
       publicationTitleCount: publicationTitles.length,
       publicationTitleTexts: publicationTitles.map(
         (title) => title.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      ),
+      publicationTitleSubscripts: publicationTitles.map((title) =>
+        [...title.querySelectorAll('sub')].map(
+          (subscript) => subscript.textContent ?? ''
+        )
       ),
       publicationTitleHrefs: publicationTitles.map((title) =>
         title instanceof HTMLAnchorElement ? title.href : ''
@@ -413,10 +434,15 @@ async function assertHome(page: Page) {
   for (const copy of [
     "Hey! I'm a Duke CS student based in Durham, NC, researching ML systems, particularly agent correctness and efficiency.",
     'I was born and raised in Egypt, but later moved to Taif, Saudi Arabia during high school.',
-    'I play Tetris and Monkeytype in my free time. I also enjoy writing technical and opinion pieces.',
+    'I also enjoy writing technical and opinion pieces.',
+    'I play Tetris and Monkeytype in my free time.',
   ]) {
     assert.ok(result.bodyText.includes(copy), `hero should include: ${copy}`);
   }
+  assert.ok(
+    !result.bodyText.includes('Finding the right answer was never the point'),
+    'external writing should stay off the home writing preview'
+  );
   assert.ok(result.bodyText.includes('islam.moh.islamm@gmail.com'));
   assert.ok(!result.bodyText.includes('islam.tayeb@duke.edu'));
   for (const label of ['experience', 'publications', 'courses', 'writing']) {
@@ -483,8 +509,26 @@ async function assertHome(page: Page) {
 
   assert.ok(incomingDots.length >= 1, 'incoming marker should render');
   assert.ok(incomingDots.every((dot) => dot.border >= 1));
+  assert.ok(
+    incomingDots.every((dot) => dot.backgroundColor === 'rgba(0, 0, 0, 0)'),
+    'incoming rail markers should be transparent inside'
+  );
   assert.ok(presentDots.every((dot) => dot.className.includes('bg-roy-o')));
   assert.ok(endedDots.every((dot) => dot.className.includes('bg-foreground')));
+  assert.deepEqual(result.experienceLegendLabels, [
+    'incoming',
+    'active',
+    'past',
+  ]);
+  assert.ok(
+    result.legendDots.some(
+      (dot) =>
+        dot.label === 'incoming' &&
+        dot.border >= 1 &&
+        dot.backgroundColor === 'rgba(0, 0, 0, 0)'
+    ),
+    'experience legend incoming marker should be hollow and transparent'
+  );
   assert.ok(result.writingDots[0]?.includes('bg-roy-b'));
   assert.ok(
     result.writingDots.slice(1).every((dot) => dot.includes('bg-foreground/75'))
@@ -569,12 +613,11 @@ async function assertHome(page: Page) {
     'publication title links should stay visibly underlined'
   );
   assert.deepEqual(result.publicationTitleTexts, [
-    'Machine learning for predicting and optimizing the CO₂ uptake in porous organic polymers',
+    'Machine learning for predicting and optimizing the CO2 uptake in porous organic polymers',
     'Primal dual continual learning for robust antibody design',
     'Post-synthetic modification of UiO-66 analogue metal-organic framework as potential solid sorbent for direct air capture',
   ]);
-  assert.ok(!result.bodyText.includes('CO2'));
-  assert.ok(result.bodyText.includes('CO₂'));
+  assert.deepEqual(result.publicationTitleSubscripts, [['2'], [], []]);
   assert.equal(
     result.publicationSelfAuthors.length,
     result.publicationAuthors.length,
@@ -618,6 +661,42 @@ async function assertHome(page: Page) {
     Math.abs(result.footerRight - result.footerQuoteRight) <= 1,
     'footer quote should sit at the right edge'
   );
+}
+
+async function assertPublicationTitleUnderline(page: Page) {
+  const firstTitle = page
+    .locator('#publications [data-testid="publication-title"]')
+    .first();
+
+  await firstTitle.hover();
+
+  const result = await page.evaluate(() => {
+    const title = document.querySelector<HTMLElement>(
+      '#publications [data-testid="publication-title"]:hover'
+    );
+    const style = title ? getComputedStyle(title) : null;
+    const probe = document.createElement('span');
+
+    probe.style.color = 'var(--roy-y)';
+    document.body.append(probe);
+
+    const yellowToken = getComputedStyle(probe).color;
+
+    probe.remove();
+
+    return {
+      backgroundImage: style?.backgroundImage ?? '',
+      color: style?.color ?? '',
+      decoration: style?.textDecorationLine ?? '',
+      skipInk: style?.textDecorationSkipInk ?? '',
+      yellowToken,
+    };
+  });
+
+  assert.equal(result.backgroundImage, 'none');
+  assert.equal(result.color, result.yellowToken);
+  assert.equal(result.decoration, 'underline');
+  assert.equal(result.skipInk, 'auto');
 }
 
 async function assertExperienceInteractions(page: Page) {
@@ -732,7 +811,7 @@ async function assertBlogIndex(page: Page) {
         ?.textContent?.replace(/\s+/g, ' ')
         .trim() ?? '';
     const rail = document.querySelector('[data-testid="blog-index-rail"]');
-    const items = [...(rail?.querySelectorAll('li') ?? [])];
+    const items = [...(rail?.querySelectorAll<HTMLElement>('li') ?? [])];
     const firstFooter = items[0]?.querySelector(
       '[data-testid="blog-index-row-meta"]'
     );
@@ -743,6 +822,21 @@ async function assertBlogIndex(page: Page) {
       (title) =>
         title.nextElementSibling?.textContent?.replace(/\s+/g, ' ').trim() ?? ''
     );
+    const externalRows = [
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-testid="external-writing-row"]'
+      ),
+    ];
+    const externalTitleLinks = [
+      ...document.querySelectorAll<HTMLAnchorElement>(
+        '[data-testid="external-writing-title"]'
+      ),
+    ];
+    const externalSources = [
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-testid="external-writing-source"]'
+      ),
+    ];
     const footer = document.querySelector('footer');
 
     return {
@@ -753,6 +847,17 @@ async function assertBlogIndex(page: Page) {
       dotCount: rail?.querySelectorAll('[data-testid="rail-dot"]').length ?? 0,
       connectorCount:
         rail?.querySelectorAll('[data-testid="rail-connector"]').length ?? 0,
+      externalRows: externalRows.map((row) =>
+        row.textContent?.replace(/\s+/g, ' ').trim()
+      ),
+      externalRowIndexes: externalRows.map((row) => items.indexOf(row)),
+      externalTitleTexts: externalTitleLinks.map(
+        (link) => link.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      ),
+      externalHrefs: externalTitleLinks.map((link) => link.href),
+      externalSources: externalSources.map(
+        (source) => source.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      ),
       firstFooterText:
         firstFooter?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       postDates,
@@ -769,6 +874,28 @@ async function assertBlogIndex(page: Page) {
   assert.ok(result.itemCount >= 3);
   assert.equal(result.dotCount, result.itemCount);
   assert.equal(result.connectorCount, result.itemCount - 1);
+  assert.deepEqual(
+    result.externalTitleTexts,
+    externalWriting.map((item) => item.title)
+  );
+  assert.deepEqual(
+    result.externalHrefs,
+    externalWriting.map((item) => item.href)
+  );
+  assert.deepEqual(
+    result.externalSources,
+    externalWriting.map((item) => item.source)
+  );
+  assert.deepEqual(
+    result.externalRows.map((row) => row?.includes('Nov 2024')),
+    externalWriting.map(() => true)
+  );
+  assert.deepEqual(
+    result.externalRowIndexes,
+    externalWriting.map(
+      (_, index) => result.itemCount - externalWriting.length + index
+    )
+  );
   assert.equal(result.descriptionCount, 0);
   assert.ok(
     result.postDates.every((date) => /^[A-Z][a-z]{2} \d{4}$/.test(date)),
@@ -782,6 +909,10 @@ async function assertBlogIndex(page: Page) {
   );
   assert.ok(!result.bodyText.includes('Updated'));
   assert.ok(!result.bodyText.includes('GitHub'));
+  assert.ok(
+    result.bodyText.includes('Finding the right answer was never the point')
+  );
+  assert.ok(result.bodyText.includes('Duke Chronicle'));
   assert.ok(
     Math.abs(result.viewportHeight - result.footerBottom) <= 1,
     'short blog index pages should pin the footer to the viewport bottom'
@@ -1031,7 +1162,7 @@ async function assertArticle(page: Page) {
   assert.ok(result.h2Size > result.h3Size);
   assert.ok(result.h2Weight >= 600);
   assert.ok(result.h3Weight < result.h2Weight);
-  assert.equal(result.h3Transform, 'uppercase');
+  assert.equal(result.h3Transform, 'none');
   assert.notEqual(result.tokenColor, result.codeColor);
   assert.equal(result.codeBackground, 'rgb(243, 243, 241)');
   assert.equal(result.articleListStyle, 'decimal');
@@ -1216,6 +1347,7 @@ async function main() {
     await assertHome(home);
     await assertVisibleOneLineDescriptions(home);
     await assertHeroLinksHoverHighlight(home);
+    await assertPublicationTitleUnderline(home);
     await assertThemeToggleIsStable(home);
     await screenshot(home, 'home-desktop');
     await assertExperienceInteractions(home);

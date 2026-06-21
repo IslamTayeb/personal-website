@@ -6,6 +6,7 @@ export function Section({
   index,
   title,
   accent = 'text-roy-o',
+  headerExtra,
   children,
   className,
 }: {
@@ -13,6 +14,7 @@ export function Section({
   index: string;
   title: string;
   accent?: string;
+  headerExtra?: ReactNode;
   children: ReactNode;
   className?: string;
 }) {
@@ -24,11 +26,19 @@ export function Section({
       className={cn('py-3 md:py-3.5', className)}
     >
       <header className="mb-3 flex flex-col gap-1">
-        <div className="grid grid-cols-[1.25rem_minmax(0,1fr)] items-baseline">
+        <div
+          className={cn(
+            'grid items-baseline',
+            headerExtra
+              ? 'grid-cols-[1.25rem_minmax(0,1fr)_auto]'
+              : 'grid-cols-[1.25rem_minmax(0,1fr)]'
+          )}
+        >
           <span className={cn('font-mono text-xs', accent)}>§{index}</span>
           <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
             {title}
           </h2>
+          {headerExtra ? <div className="min-w-0">{headerExtra}</div> : null}
         </div>
       </header>
       {children}

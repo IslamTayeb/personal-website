@@ -46,7 +46,7 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Aug 2025 - Present',
         href: 'https://www.romerolab.org/',
         state: 'present',
-        desc: "Chemistry data-mining with Anthropic's AI for Science Program + Microsoft Research.",
+        desc: "Chemistry data-mining from research papers with Anthropic's AI for Science Program + Microsoft Research.",
         descLinks: [
           {
             text: "Anthropic's AI for Science Program",

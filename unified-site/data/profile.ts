@@ -19,6 +19,9 @@ export const heroParagraphs: TextSegment[][] = [
     {
       text: "Hey! I'm a Duke CS student based in Durham, NC, researching ML systems, particularly agent correctness and efficiency.",
     },
+    { text: ' I also enjoy ' },
+    { text: 'writing', href: profileLinks.apmOverflow, external: false },
+    { text: ' technical and opinion pieces.' },
   ],
   [
     {
@@ -27,9 +30,7 @@ export const heroParagraphs: TextSegment[][] = [
     { text: 'Tetris', href: profileLinks.tetris },
     { text: ' and ' },
     { text: 'Monkeytype', href: profileLinks.monkeytype },
-    { text: ' in my free time. I also enjoy ' },
-    { text: 'writing', href: profileLinks.apmOverflow, external: false },
-    { text: ' technical and opinion pieces.' },
+    { text: ' in my free time.' },
   ],
   [
     { text: 'In high school, I worked as a graphic designer for an ' },
