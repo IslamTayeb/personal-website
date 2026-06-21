@@ -82,7 +82,7 @@ export default function RootLayout({
     >
       <body className="bg-background font-sans text-foreground antialiased">
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <main className="mx-auto min-h-screen max-w-3xl px-4">
+        <main className="mx-auto flex min-h-screen max-w-3xl flex-col px-4">
           <SiteHeader />
           {children}
           <SiteFooter />

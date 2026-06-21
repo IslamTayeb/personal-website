@@ -68,6 +68,7 @@ async function assertHomeMeasurements(page: Page) {
         .trim() ?? '';
     const topLevelSections = [...document.querySelectorAll('main > section')];
     const footer = document.querySelector('footer');
+    const footerQuote = footer?.querySelector('span');
     const experienceSection = document.querySelector('#experience');
     const publicationMetaLine = document.querySelector(
       '[data-testid="publication-meta-line"]'
@@ -143,6 +144,8 @@ async function assertHomeMeasurements(page: Page) {
         : 0,
       headerHeight: header?.getBoundingClientRect().height ?? 0,
       footerHeight: footer?.getBoundingClientRect().height ?? 0,
+      footerRight: footer?.getBoundingClientRect().right ?? 0,
+      footerQuoteRight: footerQuote?.getBoundingClientRect().right ?? 0,
       footerText: footer?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       themeToggleClassName: themeToggleStateClassName,
@@ -260,10 +263,23 @@ async function assertHomeMeasurements(page: Page) {
     'One document surface',
     'Portfolio sections',
     'Hero',
+    'Duke student finding lazy automations',
+    'I also enjoy playing',
+    "I've also been writing on",
   ]) {
     assert.ok(
       !measurements.bodyText.includes(phrase),
       `public page should not leak internal copy: ${phrase}`
+    );
+  }
+  for (const phrase of [
+    "Hey! I'm a Duke CS student researching ML systems, particularly agent correctness and efficiency.",
+    'I was born and raised in Egypt, but later moved to Taif, Saudi Arabia during high school.',
+    'I play Tetris and Monkeytype in my free time. I also enjoy writing technical and opinion pieces.',
+  ]) {
+    assert.ok(
+      measurements.bodyText.includes(phrase),
+      `hero should render updated copy: ${phrase}`
     );
   }
   for (const label of ['experience', 'publications', 'courses', 'writing']) {
@@ -294,10 +310,15 @@ async function assertHomeMeasurements(page: Page) {
       'section actions should share the same compact highlighted action style'
     );
   }
-  for (const role of ['Software Engineer Intern', 'ML Engineer Intern']) {
+  for (const role of [
+    'ML Research Assistant',
+    'Research Assistant',
+    'Software Engineer Intern',
+    'ML Engineer Intern',
+  ]) {
     assert.ok(
-      !measurements.engineeringText.includes(role),
-      `engineering rail should not render role label: ${role}`
+      !measurements.bodyText.includes(role),
+      `experience rail should not render role label: ${role}`
     );
   }
   assert.equal(
@@ -351,6 +372,10 @@ async function assertHomeMeasurements(page: Page) {
       `footer should not include removed link cluster: ${text}`
     );
   }
+  assert.ok(
+    Math.abs(measurements.footerRight - measurements.footerQuoteRight) <= 1,
+    'footer quote should sit at the right edge'
+  );
 
   if (measurements.railTopGap !== null && measurements.railBottomGap !== null) {
     assert.ok(
@@ -568,16 +593,20 @@ async function assertArticleRendering(page: Page) {
     const code = document.querySelector<HTMLElement>(
       '.article-prose .highlight code'
     );
+    const highlight = document.querySelector<HTMLElement>(
+      '.article-prose .highlight'
+    );
     const footnotes = document.querySelector<HTMLElement>('.footnotes');
     const footnoteList = document.querySelector<HTMLElement>('.footnotes ol');
+    const footnoteRef = document.querySelector<HTMLElement>('.footnote-ref a');
+    const tableFigure = document.querySelector<HTMLElement>('.article-table');
     const table = document.querySelector<HTMLElement>('.table-wrap table');
-    const prototypeTags = [
-      ...document.querySelectorAll<HTMLElement>('[data-prototype]'),
-    ].map((element) => ({
-      kind: element.getAttribute('data-prototype'),
-      text: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
-      tagName: element.tagName,
-    }));
+    const firstBodyRow = document.querySelector<HTMLElement>(
+      '.article-table tbody tr:nth-child(1)'
+    );
+    const secondBodyRow = document.querySelector<HTMLElement>(
+      '.article-table tbody tr:nth-child(2)'
+    );
 
     const titleRect = title?.getBoundingClientRect();
     const dateRect = date?.getBoundingClientRect();
@@ -587,10 +616,19 @@ async function assertArticleRendering(page: Page) {
     const h3Style = h3 ? getComputedStyle(h3) : null;
     const tokenStyle = token ? getComputedStyle(token) : null;
     const codeStyle = code ? getComputedStyle(code) : null;
+    const highlightStyle = highlight ? getComputedStyle(highlight) : null;
     const footnotesStyle = footnotes ? getComputedStyle(footnotes) : null;
+    const footnoteRefStyle = footnoteRef ? getComputedStyle(footnoteRef) : null;
     const tableStyle = table ? getComputedStyle(table) : null;
+    const firstBodyRowStyle = firstBodyRow
+      ? getComputedStyle(firstBodyRow)
+      : null;
+    const secondBodyRowStyle = secondBodyRow
+      ? getComputedStyle(secondBodyRow)
+      : null;
 
     return {
+      bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       titleBottom: titleRect?.bottom ?? 0,
       dateTop: dateRect?.top ?? 0,
@@ -611,10 +649,18 @@ async function assertArticleRendering(page: Page) {
       h3Transform: h3Style?.textTransform ?? '',
       tokenColor: tokenStyle?.color ?? '',
       codeColor: codeStyle?.color ?? '',
+      codeBackground: highlightStyle?.backgroundColor ?? '',
       footnotesSize: Number.parseFloat(footnotesStyle?.fontSize ?? '0'),
+      footnoteRefFamily: footnoteRefStyle?.fontFamily ?? '',
       footnoteListTag: footnoteList?.tagName ?? '',
       tableDisplay: tableStyle?.display ?? '',
-      prototypeTags,
+      tableFigureExists: Boolean(tableFigure),
+      tableCaptionCount:
+        tableFigure?.querySelectorAll('figcaption').length ?? 0,
+      firstBodyRowBackground: firstBodyRowStyle?.backgroundColor ?? '',
+      secondBodyRowBackground: secondBodyRowStyle?.backgroundColor ?? '',
+      dataPrototypeCount: document.querySelectorAll('[data-prototype]').length,
+      prototypeCardCount: document.querySelectorAll('.prototype-card').length,
     };
   });
 
@@ -673,25 +719,43 @@ async function assertArticleRendering(page: Page) {
     result.codeColor,
     'syntax tokens should not collapse to plain code color'
   );
-  assert.ok(result.footnotesSize <= 13, 'footnotes should stay compact');
-  assert.equal(result.footnoteListTag, 'OL', 'footnotes should be ordered');
-  assert.ok(result.tableDisplay.length > 0, 'article tables should render');
-  assert.ok(
-    result.prototypeTags.some(
-      (item) =>
-        item.kind === 'article-index' &&
-        item.tagName === 'DIV' &&
-        item.text.includes('prototyping') &&
-        item.text.includes('component lab')
-    ),
-    'article index should have a separate prototyping card above the TOC'
+  assert.equal(
+    result.codeBackground,
+    'rgb(243, 243, 241)',
+    'code block background should be #F3F3F1'
   );
-  for (const kind of ['code', 'table', 'references']) {
-    assert.ok(
-      result.prototypeTags.some((item) => item.kind === kind),
-      `article ${kind} primitive should carry a data prototype marker`
-    );
-  }
+  assert.ok(result.footnotesSize <= 13, 'footnotes should stay compact');
+  assert.ok(
+    result.footnoteRefFamily.includes('DM Mono'),
+    'footnote reference numbers should use the mono face'
+  );
+  assert.equal(result.footnoteListTag, 'OL', 'footnotes should be ordered');
+  assert.ok(result.tableFigureExists, 'article table figure should render');
+  assert.ok(result.tableDisplay.length > 0, 'article tables should render');
+  assert.equal(
+    result.tableCaptionCount,
+    0,
+    'past blog tables should not render synthetic captions'
+  );
+  assert.notEqual(
+    result.firstBodyRowBackground,
+    result.secondBodyRowBackground,
+    'plain article tables should use the no-caption alternating row treatment'
+  );
+  assert.equal(
+    result.dataPrototypeCount,
+    0,
+    'article output should not include prototyping data attributes'
+  );
+  assert.equal(
+    result.prototypeCardCount,
+    0,
+    'article output should not include prototyping cards'
+  );
+  assert.ok(
+    !result.bodyText.toLowerCase().includes('prototyping'),
+    'article output should not mention prototyping'
+  );
 }
 
 async function assertBlogIndexRail(page: Page) {
@@ -717,6 +781,7 @@ async function assertBlogIndexRail(page: Page) {
     const firstFooter = firstItem?.querySelector(
       '[data-testid="blog-index-row-meta"]'
     );
+    const footer = document.querySelector('footer');
 
     return {
       blogHeader,
@@ -735,6 +800,8 @@ async function assertBlogIndexRail(page: Page) {
       firstFooterText:
         firstFooter?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       hasDivideYClass: rail?.className.includes('divide-y') ?? false,
+      footerBottom: footer?.getBoundingClientRect().bottom ?? 0,
+      viewportHeight: window.innerHeight,
     };
   });
 
@@ -770,15 +837,22 @@ async function assertBlogIndexRail(page: Page) {
     'blog rail connector should use the shared rail spacing'
   );
   assert.ok(
-    result.firstFooterText.includes('Updated') &&
-      result.firstFooterText.includes('min') &&
-      result.firstFooterText.includes('GitHub'),
-    'blog rail row should keep reading time, updated date, and code link metadata'
+    result.firstFooterText.includes('min'),
+    'blog rail row should keep reading time metadata'
+  );
+  assert.ok(
+    !result.firstFooterText.includes('Updated') &&
+      !result.firstFooterText.includes('GitHub'),
+    'blog rail row should omit updated date and code link metadata'
   );
   assert.equal(
     result.hasDivideYClass,
     false,
     'blog index should not use the old divided ledger class'
+  );
+  assert.ok(
+    Math.abs(result.viewportHeight - result.footerBottom) <= 1,
+    'short blog index pages should pin the footer to the viewport bottom'
   );
 }
 

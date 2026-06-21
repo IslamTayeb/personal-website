@@ -16,7 +16,7 @@ export default async function BlogIndexPage() {
 
   return (
     <>
-      <header data-testid="blog-index-header" className="py-2.5 md:py-3">
+      <header data-testid="blog-index-header" className="pt-3 md:pt-3.5">
         <RoybBand />
       </header>
       <Section
@@ -55,16 +55,6 @@ export default async function BlogIndexPage() {
                     className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
                   >
                     <span>{post.readingMeta}</span>
-                    <span>Updated {formatDate(post.manifest.updatedAt)}</span>
-                    {post.manifest.codeLink ? (
-                      <ExternalLink
-                        href={post.manifest.codeLink.href}
-                        section="b"
-                        className="text-muted-foreground"
-                      >
-                        {post.manifest.codeLink.label}
-                      </ExternalLink>
-                    ) : null}
                   </div>
                 }
                 connector={index < posts.length - 1 ? 'solid' : 'none'}

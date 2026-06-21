@@ -24,7 +24,6 @@ function RailGroup({
     ? group.roles
     : group.roles.slice(0, group.visibleCount);
   const hasHidden = group.roles.length > group.visibleCount;
-  const showRoleLabel = group.kind !== 'Engineering';
 
   return (
     <RailList>
@@ -55,18 +54,7 @@ function RailGroup({
               )
             }
             meta={role.date}
-            description={
-              showRoleLabel ? (
-                <>
-                  <strong className="font-medium text-foreground/90">
-                    {role.role}
-                  </strong>
-                  . {role.desc}
-                </>
-              ) : (
-                role.desc
-              )
-            }
+            description={role.desc}
             connector={connector}
           />
         );

@@ -11,29 +11,25 @@ export const profile = {
   location: 'Durham, NC',
   hometown: 'Egypt',
   email: 'islam.tayeb@duke.edu',
-  role: 'Duke student finding lazy automations',
+  role: 'Duke CS student researching ML systems',
 };
 
 export const heroParagraphs: TextSegment[][] = [
   [
-    { text: 'Duke student finding lazy automations. Love reading about ' },
-    { text: 'cool', href: profileLinks.coolInfraStory },
-    { text: ' ' },
-    { text: 'infra', href: profileLinks.notionInfra },
-    { text: ' ' },
-    { text: 'stories', href: profileLinks.sqliteStory },
     {
-      text: ' and over-optimizing configs. Also interested in building for science. Currently based in Durham, NC.',
+      text: "Hey! I'm a Duke CS student researching ML systems, particularly agent correctness and efficiency.",
     },
   ],
   [
-    { text: 'I grew up in Egypt. I also enjoy playing ' },
+    {
+      text: 'I was born and raised in Egypt, but later moved to Taif, Saudi Arabia during high school. I play ',
+    },
     { text: 'Tetris', href: profileLinks.tetris },
     { text: ' and ' },
     { text: 'Monkeytype', href: profileLinks.monkeytype },
-    { text: " in my free time. I've also been writing on " },
-    { text: 'APM Overflow', href: profileLinks.apmOverflow, external: false },
-    { text: '.' },
+    { text: ' in my free time. I also enjoy ' },
+    { text: 'writing', href: profileLinks.apmOverflow, external: false },
+    { text: ' technical and opinion pieces.' },
   ],
   [
     { text: 'In high school, I worked as a graphic designer for an ' },

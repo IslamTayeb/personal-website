@@ -36,7 +36,7 @@ export function SiteFooter() {
     <footer
       data-testid="site-footer"
       // Footer divider is disabled with the section dividers for this pass.
-      className="flex min-h-[47px] items-center py-2.5 font-mono text-xs text-muted-foreground"
+      className="mt-auto flex min-h-[47px] items-center justify-end py-2.5 font-mono text-xs text-muted-foreground"
     >
       <span>
         {'"'}

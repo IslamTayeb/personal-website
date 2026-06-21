@@ -155,23 +155,23 @@ function buildToc(
     .join('');
 
   const metaItems = [
-    `<div><strong>Reading time</strong><br />${escapeHtml(
+    `<div class="toc-meta-row"><span>Reading time</span><span>${escapeHtml(
       readingMeta(sourceMarkdown)
-    )}</div>`,
-    `<div><strong>Last updated</strong><br />${escapeHtml(
+    )}</span></div>`,
+    `<div class="toc-meta-row"><span>Last updated</span><span>${escapeHtml(
       formatDate(manifest.updatedAt)
-    )}</div>`,
+    )}</span></div>`,
   ];
 
   if (manifest.codeLink) {
     metaItems.push(
-      `<div><strong>Code</strong><br /><a href="${escapeHtml(
+      `<div class="toc-meta-row"><span>Code</span><span><a href="${escapeHtml(
         manifest.codeLink.href
-      )}">${escapeHtml(manifest.codeLink.label)}</a></div>`
+      )}">${escapeHtml(manifest.codeLink.label)}</a></span></div>`
     );
   }
 
-  return `<div class="prototype-card" data-prototype="article-index"><span>prototyping</span><span>index variants are in the component lab</span></div><nav class="article-toc" aria-label="Article index"><div class="toc-main"><h2 id="index">Index</h2><div class="toc-sections">${sectionHtml}</div></div><div class="toc-meta">${metaItems.join('')}</div></nav>`;
+  return `<nav class="article-toc" aria-label="Article index"><div class="toc-main"><h2 id="index">Index</h2><div class="toc-sections">${sectionHtml}</div></div><div class="toc-meta">${metaItems.join('')}</div></nav>`;
 }
 
 function mediaHtml(manifest: PostManifest, filename: string) {
@@ -327,7 +327,7 @@ function configureMarkdown(manifest: PostManifest) {
           }).value
         : md.utils.escapeHtml(token.content);
 
-    return `<div class="highlight" data-prototype="code"><pre><code class="hljs language-${escapeHtml(
+    return `<div class="highlight"><pre><code class="hljs language-${escapeHtml(
       lang
     )}">${highlighted}</code></pre></div>\n`;
   };
@@ -381,15 +381,10 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
     html = html
       .replace(
         /<table>/g,
-        '<div class="table-wrap" data-prototype="table"><table>'
+        '<figure class="article-table article-table-plain"><div class="table-wrap"><table>'
       )
-      .replace(/<\/table>/g, '</table></div>');
+      .replace(/<\/table>/g, '</table></div></figure>');
   }
-
-  html = html.replace(
-    /<section class="footnotes">/g,
-    '<section class="footnotes" data-prototype="references">'
-  );
 
   for (const insert of manifest.videoInserts) {
     html = html.replace(

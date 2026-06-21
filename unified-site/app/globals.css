@@ -48,6 +48,11 @@
   --roy-y: oklch(0.86 0.17 95);
   --roy-y-band: oklch(0.86 0.17 95);
   --roy-b: oklch(0.55 0.18 250);
+  --code-keyword: #007020;
+  --code-title: #06287e;
+  --code-string: #4070a0;
+  --code-comment: #60a0b0;
+  --code-block-background: #f3f3f1;
 }
 
 .dark {
@@ -62,6 +67,11 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --roy-y: oklch(0.86 0.17 95);
+  --code-keyword: #007020;
+  --code-title: #06287e;
+  --code-string: #4070a0;
+  --code-comment: #60a0b0;
+  --code-block-background: #f3f3f1;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -77,6 +87,11 @@
     --input: oklch(1 0 0 / 15%);
     --ring: oklch(0.556 0 0);
     --roy-y: oklch(0.86 0.17 95);
+    --code-keyword: #007020;
+    --code-title: #06287e;
+    --code-string: #4070a0;
+    --code-comment: #60a0b0;
+    --code-block-background: #f3f3f1;
   }
 }
 
@@ -228,7 +243,9 @@
     @apply italic;
   }
   .article-prose .highlight {
-    @apply my-4 max-w-full overflow-x-auto bg-muted px-3 font-mono text-xs leading-snug text-foreground;
+    @apply my-4 max-w-full overflow-x-auto px-3 font-mono text-xs leading-snug text-foreground;
+    background: var(--code-block-background);
+    color: var(--ink);
     scrollbar-color: var(--roy-b) transparent;
     scrollbar-gutter: auto;
     scrollbar-width: thin;
@@ -266,7 +283,7 @@
   }
   .article-prose .hljs-comment,
   .article-prose .hljs-quote {
-    color: color-mix(in oklch, var(--muted-foreground) 90%, var(--roy-b));
+    color: var(--code-comment);
     font-style: italic;
   }
   .article-prose .hljs-keyword,
@@ -275,39 +292,33 @@
   .article-prose .hljs-selector-tag,
   .article-prose .hljs-strong,
   .article-prose .hljs-type {
-    color: var(--roy-r);
+    color: var(--code-keyword);
     font-weight: 600;
   }
   .article-prose .hljs-title,
   .article-prose .hljs-class .hljs-title,
   .article-prose .hljs-function .hljs-title {
-    color: var(--roy-b);
+    color: var(--code-title);
     font-weight: 600;
   }
   .article-prose .hljs-attr,
   .article-prose .hljs-attribute,
   .article-prose .hljs-number,
   .article-prose .hljs-symbol {
-    color: var(--roy-o);
+    color: var(--code-string);
   }
   .article-prose .hljs-string,
   .article-prose .hljs-template-variable,
   .article-prose .hljs-variable {
-    color: color-mix(in oklch, var(--roy-b) 72%, var(--foreground));
+    color: var(--code-string);
   }
   .article-prose .hljs-built_in,
   .article-prose .hljs-built-in {
-    color: color-mix(in oklch, var(--roy-y) 55%, var(--foreground));
+    color: var(--code-keyword);
   }
   .article-prose .hljs-punctuation,
   .article-prose .hljs-operator {
     color: var(--muted-foreground);
-  }
-  .article-prose .prototype-card {
-    @apply mb-2 flex items-center justify-between gap-3 border border-border bg-muted/35 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground;
-  }
-  .article-prose .prototype-card span:first-child {
-    @apply text-foreground;
   }
   .article-prose .article-toc {
     @apply my-6 flex flex-col gap-5 border border-border bg-muted/45 p-4 md:flex-row md:justify-between;
@@ -340,16 +351,31 @@
     @apply underline;
   }
   .article-prose .toc-meta {
-    @apply flex shrink-0 flex-wrap gap-x-5 gap-y-2 border-t border-border pt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground md:w-48 md:flex-col md:border-l md:border-t-0 md:pl-4 md:pt-0;
+    @apply flex shrink-0 flex-col gap-2 border-t border-border pt-3 font-mono text-xs leading-snug md:w-56 md:border-l md:border-t-0 md:pl-4 md:pt-0;
+  }
+  .article-prose .toc-meta-row {
+    @apply flex justify-between gap-4;
+  }
+  .article-prose .toc-meta-row > span:first-child {
+    @apply text-muted-foreground;
+  }
+  .article-prose .toc-meta-row > span:last-child {
+    @apply text-right text-foreground;
   }
   .article-prose .toc-meta strong {
     @apply text-foreground;
   }
   .article-prose .toc-meta a {
-    @apply text-muted-foreground;
+    @apply text-foreground;
+  }
+  .article-prose .article-table {
+    @apply my-4 max-w-full;
+  }
+  .article-prose .article-table figcaption {
+    @apply mt-2 block text-center text-xs italic leading-snug text-muted-foreground;
   }
   .article-prose .table-wrap {
-    @apply my-4 max-w-full overflow-x-auto;
+    @apply max-w-full overflow-x-auto;
     scrollbar-color: var(--roy-o) transparent;
     scrollbar-gutter: auto;
     scrollbar-width: thin;
@@ -366,7 +392,7 @@
     @apply border-b border-border bg-muted/65 text-left font-semibold text-foreground;
   }
   .article-prose tbody tr:nth-child(odd) {
-    @apply bg-muted/35;
+    @apply bg-muted/45;
   }
   .article-prose tbody tr:nth-child(even) {
     @apply bg-background;

@@ -109,28 +109,25 @@ async function main() {
 
     if (post.manifest.slug === 'on-agent-memory-fidelity') {
       assert.match(post.html, /class="article-toc"/);
-      assert.match(post.html, /data-prototype="article-index"/);
       assert.match(post.html, /Reading time/);
       assert.match(post.html, /Last updated/);
       assert.match(post.html, /GitHub/);
       assert.match(post.html, /class="toc-subs"/);
       assert.match(post.html, /class="article-media"/);
       assert.match(post.html, /<figcaption><em>/);
-      assert.match(post.html, /data-prototype="code"/);
-      assert.match(post.html, /data-prototype="table"/);
-      assert.match(post.html, /data-prototype="references"/);
-      assert.match(
-        post.html,
-        /class="prototype-card" data-prototype="article-index"/
-      );
-      assert.match(post.html, />prototyping<\/span>/);
+      assert.doesNotMatch(post.html, /data-prototype=/);
+      assert.doesNotMatch(post.html, /prototype-card/);
+      assert.doesNotMatch(post.html, />prototyping<\/span>/);
       assert.doesNotMatch(post.html, /prototype-row/);
       assert.doesNotMatch(post.html, /prototype-tag/);
-      assert.match(
-        post.html,
-        /<div class="table-wrap" data-prototype="table">/
-      );
+      assert.match(post.html, /<figure class="article-table/);
+      assert.match(post.html, /<div class="table-wrap">/);
       assert.match(post.html, /<table>/);
+      assert.doesNotMatch(
+        post.html,
+        /<figure class="article-table[\s\S]*?<figcaption>/,
+        'past blog tables should not get synthetic captions'
+      );
       assert.match(post.html, /class="hljs-keyword"/);
       assert.match(
         post.html,
