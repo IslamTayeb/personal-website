@@ -5,6 +5,7 @@ import { ChevronDown, ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Publication } from '@/types/content';
 import { ExternalLink } from './external-link';
+import { SectionActionLink } from './section-action';
 
 function PublicationRow({
   publication,
@@ -143,13 +144,9 @@ export function PublicationDisclosure({
       </ul>
       {moreHref ? (
         <div className="flex justify-end">
-          <ExternalLink
-            href={moreHref}
-            section="y"
-            className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
-          >
+          <SectionActionLink href={moreHref} section="y">
             {moreLabel}
-          </ExternalLink>
+          </SectionActionLink>
         </div>
       ) : null}
     </div>

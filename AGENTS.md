@@ -70,6 +70,12 @@ background-matched tracks and no inset thumb borders. If a scrollbar needs
 accent treatment, keep it to dense internal scrollers like code or table areas,
 not the global page scrollbar.
 
+Every clickable control in `unified-site/` should have deliberate default,
+hover, active/pressed, disabled/unavailable, and keyboard-focus states. Keep
+states static and motionless: no transitions, no hover animations, no delayed
+state correction after hydration. Prefer shared primitives for repeated actions
+so hover/pressed behavior does not drift across sections.
+
 ## Main site commands
 
 All commands must run from `islamtayeb/`:

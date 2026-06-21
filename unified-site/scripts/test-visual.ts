@@ -50,6 +50,9 @@ async function assertHomeMeasurements(page: Page) {
     const title = document.querySelector('[data-testid="hero-title"]');
     const header = document.querySelector('[data-testid="site-header"]');
     const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
+    const heroSection = document.querySelector('[data-testid="hero-section"]');
+    const topLevelSections = [...document.querySelectorAll('main > section')];
+    const footer = document.querySelector('footer');
     const publicationMetaLine = document.querySelector(
       '[data-testid="publication-meta-line"]'
     );
@@ -63,6 +66,9 @@ async function assertHomeMeasurements(page: Page) {
       ...document.querySelectorAll<HTMLElement>('a'),
     ].find((link) =>
       link.textContent?.toLowerCase().includes('see more on scholar')
+    );
+    const readAllPosts = [...document.querySelectorAll<HTMLElement>('a')].find(
+      (link) => link.textContent?.toLowerCase().includes('read all posts')
     );
     const detail = document.querySelector('[data-testid="course-detail"]');
     const detailText = document.querySelector(
@@ -102,7 +108,17 @@ async function assertHomeMeasurements(page: Page) {
       bandHeight: band?.getBoundingClientRect().height ?? 0,
       heroTitleText: title?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       titleRight: title?.getBoundingClientRect().right ?? 0,
+      heroBorderTopWidth: heroSection
+        ? Number.parseFloat(getComputedStyle(heroSection).borderTopWidth)
+        : 0,
+      sectionBorderTopWidths: topLevelSections.map((element) =>
+        Number.parseFloat(getComputedStyle(element).borderTopWidth)
+      ),
+      footerBorderTopWidth: footer
+        ? Number.parseFloat(getComputedStyle(footer).borderTopWidth)
+        : 0,
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      themeToggleClassName: themeToggle?.className ?? '',
       engineeringText:
         engineeringGroup?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
@@ -115,8 +131,11 @@ async function assertHomeMeasurements(page: Page) {
       viewportWidth: window.innerWidth,
       courseDetailHeight: detail?.getBoundingClientRect().height ?? 0,
       showMoreText: moreControl?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      showMoreClassName: moreControl?.className ?? '',
       showMoreRight: moreControl?.getBoundingClientRect().right ?? 0,
+      seeMoreScholarClassName: seeMoreScholar?.className ?? '',
       seeMoreScholarRight: seeMoreScholar?.getBoundingClientRect().right ?? 0,
+      readAllPostsClassName: readAllPosts?.className ?? '',
       experienceGroups,
       courseDetailText:
         detailText?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
@@ -155,12 +174,33 @@ async function assertHomeMeasurements(page: Page) {
     measurements.titleRight < measurements.viewportWidth,
     'hero title should not overflow'
   );
+  assert.equal(
+    measurements.heroBorderTopWidth,
+    0,
+    'there should be no divider between ROYB band and hero'
+  );
+  assert.deepEqual(
+    measurements.sectionBorderTopWidths,
+    measurements.sectionBorderTopWidths.map(() => 0),
+    'top-level section dividers should be disabled for this visual pass'
+  );
+  assert.equal(
+    measurements.footerBorderTopWidth,
+    0,
+    'footer divider should be disabled with section dividers'
+  );
   assert.ok(measurements.hasThemeToggle, 'header should include theme toggle');
   assert.equal(
     measurements.themeToggleText,
     '',
     'theme toggle should use compact icon controls, not Light/Dark text'
   );
+  for (const token of ['hover:', 'active:', 'focus-visible:']) {
+    assert.ok(
+      measurements.themeToggleClassName.includes(token),
+      `theme toggle should include ${token} state styling`
+    );
+  }
   assert.ok(
     !measurements.hasProjectsSection,
     'projects section should not render'
@@ -195,6 +235,18 @@ async function assertHomeMeasurements(page: Page) {
       1,
     'experience show more should align to the same right edge as section actions'
   );
+  for (const className of [
+    measurements.showMoreClassName,
+    measurements.seeMoreScholarClassName,
+    measurements.readAllPostsClassName,
+  ]) {
+    assert.ok(
+      className.includes('royb-link-highlight') &&
+        className.includes('text-muted-foreground') &&
+        className.includes('tracking-[0.12em]'),
+      'section actions should share the same compact highlighted action style'
+    );
+  }
   for (const role of ['Software Engineer Intern', 'ML Engineer Intern']) {
     assert.ok(
       !measurements.engineeringText.includes(role),
@@ -367,6 +419,10 @@ async function assertScrollbarStyles(page: Page) {
   assert.ok(
     css.includes('scrollbar-gutter: auto'),
     'scrollbars should appear only when overflow needs them'
+  );
+  assert.ok(
+    css.includes('var(--section-color, var(--roy-b)) 18%'),
+    'link hover highlight should keep the stronger selected opacity'
   );
 }
 

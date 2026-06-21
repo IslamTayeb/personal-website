@@ -26,17 +26,17 @@ export function ThemeToggle() {
       data-testid="theme-toggle"
       aria-label="Toggle color scheme"
       onClick={toggleTheme}
-      className="inline-flex items-stretch border border-border text-muted-foreground"
+      className="inline-flex items-stretch border border-border text-muted-foreground outline-none hover:border-muted-foreground/70 active:bg-muted focus-visible:ring-1 focus-visible:ring-ring"
     >
       <span
         data-testid="theme-toggle-light"
-        className="grid h-6 w-7 place-items-center bg-foreground text-background dark:bg-transparent dark:text-muted-foreground"
+        className="grid h-6 w-7 place-items-center bg-foreground text-background hover:bg-foreground/85 active:bg-foreground/75 dark:bg-transparent dark:text-muted-foreground dark:hover:bg-muted dark:active:bg-muted/70"
       >
         <Sun size={12} strokeWidth={1.8} aria-hidden />
       </span>
       <span
         data-testid="theme-toggle-dark"
-        className="grid h-6 w-7 place-items-center border-l border-border bg-transparent text-muted-foreground dark:bg-foreground dark:text-background"
+        className="grid h-6 w-7 place-items-center border-l border-border bg-transparent text-muted-foreground hover:bg-muted active:bg-muted/70 dark:bg-foreground dark:text-background dark:hover:bg-foreground/85 dark:active:bg-foreground/75"
       >
         <Moon size={12} strokeWidth={1.8} aria-hidden />
       </span>

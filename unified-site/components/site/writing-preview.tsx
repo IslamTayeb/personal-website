@@ -2,6 +2,7 @@ import { getListedPosts, postHref } from '@/lib/blog/posts';
 import { formatDate } from '@/lib/blog/date';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
+import { SectionActionLink } from '@/components/primitives/section-action';
 import { BorderedPanel, Section } from '@/components/primitives/section';
 
 export async function WritingPreview() {
@@ -32,13 +33,9 @@ export async function WritingPreview() {
             ))}
           </RailList>
           <div className="flex justify-end">
-            <ExternalLink
-              href="/blog"
-              section="b"
-              className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
-            >
+            <SectionActionLink href="/blog" section="b">
               Read all posts
-            </ExternalLink>
+            </SectionActionLink>
           </div>
         </div>
       </BorderedPanel>

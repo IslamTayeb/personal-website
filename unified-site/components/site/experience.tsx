@@ -5,20 +5,12 @@ import { ChevronDown } from 'lucide-react';
 import { experienceGroups, type ExperienceGroup } from '@/data/experience';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
+import { SectionActionButton } from '@/components/primitives/section-action';
 import { BorderedPanel, Section } from '@/components/primitives/section';
 
 const hollowDots: Record<string, string> = {
   'bg-roy-y': 'border border-roy-y bg-background',
   'bg-roy-o': 'border border-roy-o bg-background',
-};
-
-const groupAccents: Record<string, { hover: string }> = {
-  'bg-roy-y': {
-    hover: 'hover:text-roy-y hover:decoration-roy-y',
-  },
-  'bg-roy-o': {
-    hover: 'hover:text-roy-o hover:decoration-roy-o',
-  },
 };
 
 function RailGroup({
@@ -93,7 +85,7 @@ function RailGroupBlock({
   onToggleExpanded: () => void;
 }) {
   const hasHidden = group.roles.length > group.visibleCount;
-  const accent = groupAccents[group.dot] ?? groupAccents['bg-roy-o'];
+  const actionSection = group.kind === 'Research' ? 'o' : 'y';
 
   return (
     <div
@@ -115,14 +107,13 @@ function RailGroupBlock({
       <RailGroup group={group} expanded={expanded} />
       {hasHidden ? (
         <div className="flex justify-end pt-1">
-          <button
-            type="button"
+          <SectionActionButton
+            section={actionSection}
             onClick={onToggleExpanded}
-            data-testid="experience-more-control"
-            className={`font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground underline decoration-border underline-offset-4 ${accent.hover}`}
+            testId="experience-more-control"
           >
             {expanded ? 'show less' : 'show more'}
-          </button>
+          </SectionActionButton>
         </div>
       ) : null}
     </div>

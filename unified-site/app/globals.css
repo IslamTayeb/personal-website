@@ -162,7 +162,7 @@
   .royb-link-highlight {
     --link-hover-highlight: color-mix(
       in oklch,
-      var(--section-color, var(--roy-b)) 11%,
+      var(--section-color, var(--roy-b)) 18%,
       transparent
     );
     background-image: linear-gradient(

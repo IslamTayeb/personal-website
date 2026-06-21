@@ -19,7 +19,9 @@ export function Section({
   return (
     <section
       id={id}
-      className={cn('border-t border-border py-6 md:py-7', className)}
+      // Section dividers are intentionally disabled for this visual pass.
+      // Keep the same vertical padding so the spacing stays comparable.
+      className={cn('py-6 md:py-7', className)}
     >
       <header className="mb-3 flex flex-col gap-1">
         <div className="flex items-baseline gap-3">
