@@ -343,13 +343,13 @@
     @apply mx-auto block h-auto w-full max-w-full border-0;
   }
   .article-prose figcaption {
-    @apply mt-2 block text-center text-xs leading-snug text-muted-foreground;
+    @apply mt-2 block text-center text-sm leading-snug text-muted-foreground;
   }
   .article-prose figcaption em {
     @apply italic;
   }
   .article-prose .article-code-block {
-    @apply my-4 max-w-full overflow-x-auto px-3 font-mono text-xs leading-snug text-foreground;
+    @apply my-4 max-w-full overflow-x-auto px-3 font-mono text-sm leading-snug text-foreground;
     background: var(--code-block-background);
     color: var(--code-foreground);
     scrollbar-color: var(--roy-b) transparent;
@@ -511,7 +511,7 @@
     @apply my-6 flex flex-col gap-5 border border-border bg-muted/45 p-4 md:flex-row md:justify-between;
   }
   .article-prose .article-toc h2 {
-    @apply m-0 font-mono text-xs font-medium uppercase tracking-[0.18em] text-foreground;
+    @apply m-0 font-mono text-sm font-medium uppercase tracking-[0.18em] text-foreground;
   }
   .article-prose .toc-main {
     @apply min-w-0 flex-1;
@@ -532,19 +532,19 @@
     text-underline-offset: 0.18em;
   }
   .article-prose .toc-num {
-    @apply font-mono text-xs text-muted-foreground;
+    @apply font-mono text-sm text-muted-foreground;
   }
   .article-prose .toc-subs {
     @apply col-start-2 mt-1 flex flex-col items-start gap-0.5 border-l border-border pl-3;
   }
   .article-prose .toc-subs a {
-    @apply w-fit max-w-full text-xs text-muted-foreground;
+    @apply w-fit max-w-full text-sm text-muted-foreground;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 36%, transparent);
     text-decoration-skip-ink: auto;
   }
   .article-prose .toc-meta {
-    @apply flex shrink-0 flex-col gap-1.5 border-t border-border pt-3 font-mono text-xs leading-snug md:w-56 md:border-l md:border-t-0 md:pl-4 md:pt-0;
+    @apply flex shrink-0 flex-col gap-1.5 border-t border-border pt-3 font-mono text-sm leading-snug md:w-56 md:border-l md:border-t-0 md:pl-4 md:pt-0;
     font-feature-settings: normal;
     font-variant-caps: normal;
     letter-spacing: normal;
@@ -553,7 +553,7 @@
     @apply flex justify-between gap-4;
   }
   .article-prose .toc-meta-row > span:first-child {
-    @apply font-mono text-xs text-muted-foreground;
+    @apply font-mono text-sm text-muted-foreground;
     text-transform: none;
   }
   .article-prose .toc-meta-row > span:last-child {
@@ -576,7 +576,7 @@
     @apply my-0;
   }
   .article-prose .article-table figcaption {
-    @apply mt-2 block text-center text-xs italic leading-snug text-muted-foreground;
+    @apply mt-2 block text-center text-sm italic leading-snug text-muted-foreground;
   }
   .article-prose .table-wrap {
     @apply relative w-full max-w-full overflow-x-auto;
@@ -594,7 +594,7 @@
     @apply mt-2 text-muted-foreground;
   }
   .article-prose table {
-    @apply w-full min-w-full caption-bottom table-auto border-collapse text-xs;
+    @apply w-full min-w-full caption-bottom table-auto border-collapse text-sm;
   }
   .article-prose th,
   .article-prose td {
@@ -620,8 +620,7 @@
     @apply my-6 border-0 border-t border-dashed border-border;
   }
   .article-prose .footnotes {
-    @apply leading-snug text-muted-foreground;
-    font-size: 0.9em;
+    @apply text-sm leading-snug text-muted-foreground;
     opacity: 0.85;
   }
   .article-prose .footnotes ol {
@@ -657,7 +656,7 @@
     @apply block w-full border-0;
   }
   .article-prose .key-visualizations p {
-    @apply mt-2 text-center text-xs italic leading-snug text-muted-foreground;
+    @apply mt-2 text-center text-sm italic leading-snug text-muted-foreground;
   }
   .article-prose code.hard-rap {
     background: #6ba3e8;

@@ -95,7 +95,7 @@ function CourseCluster({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <div className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
+      <div className="font-mono text-sm uppercase tracking-[0.15em] text-muted-foreground">
         {label}
       </div>
       <div className="flex flex-wrap gap-1">
@@ -116,7 +116,7 @@ function CourseCluster({
 
 function CategoryLegend() {
   return (
-    <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+    <ul className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground">
       {(Object.keys(categoryStyles) as CourseCategory[]).map((category) => (
         <li key={category} className="flex items-center gap-1.5">
           <span className={cn('h-2 w-2', categoryStyles[category].dot)} />
@@ -150,7 +150,7 @@ export function CourseSelector({
     <div className="flex w-full flex-col gap-3.5">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border pb-2.5">
         <CategoryLegend />
-        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+        <span className="font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground">
           {institution}
         </span>
       </div>
@@ -178,7 +178,7 @@ export function CourseSelector({
         {activeItem ? (
           <p
             data-testid="course-detail-text"
-            className="line-clamp-2 text-xs leading-snug text-muted-foreground"
+            className="line-clamp-2 text-sm leading-snug text-muted-foreground"
             title={activeItem.desc || 'Details pending.'}
           >
             {activeItem.desc || 'Details pending.'}

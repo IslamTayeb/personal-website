@@ -57,9 +57,9 @@ export function SectionHeader({
             : 'grid-cols-[var(--rail-gutter)_minmax(0,1fr)]'
         )}
       >
-        <span className={cn('w-fit font-mono text-xs', accent)}>§{index}</span>
+        <span className={cn('w-fit font-mono text-sm', accent)}>§{index}</span>
         <h2
-          className={cn('font-mono text-xs uppercase tracking-[0.2em]', accent)}
+          className={cn('font-mono text-sm uppercase tracking-[0.2em]', accent)}
         >
           {title}
         </h2>

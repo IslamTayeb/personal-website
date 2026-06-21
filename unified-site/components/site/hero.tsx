@@ -5,7 +5,7 @@ import { SectionHeader } from '@/components/primitives/section';
 
 function ContactIndex() {
   return (
-    <div className="flex flex-col gap-2.5 font-mono text-xs leading-snug">
+    <div className="flex flex-col gap-2.5 font-mono text-sm leading-snug">
       <div className="flex flex-col gap-1">
         <span className="text-muted-foreground">contact</span>
         <ul className="flex flex-wrap text-foreground">

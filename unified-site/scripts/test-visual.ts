@@ -678,8 +678,8 @@ async function assertHome(page: Page) {
     'section markers should remain in the rail gutter before content text'
   );
   assert.ok(
-    result.sectionMarkerFontSizes.every((size) => Math.round(size) === 12),
-    'section markers should stay at the same 12px bottleneck size'
+    result.sectionMarkerFontSizes.every((size) => Math.round(size) === 14),
+    'section markers should follow the promoted 14px section label size'
   );
   assert.deepEqual(
     result.sectionLabelColors,
@@ -901,7 +901,7 @@ async function assertHome(page: Page) {
     'publication type/venue metadata should be neutral'
   );
   assert.ok(
-    result.publicationDateStyles.every((style) => style.fontSize === 10),
+    result.publicationDateStyles.every((style) => style.fontSize === 14),
     'publication dates should match rail meta font size'
   );
   assert.ok(
@@ -971,7 +971,7 @@ async function assertHome(page: Page) {
       (style) =>
         style.text === style.text.toLowerCase() &&
         style.fontVariantCaps === 'normal' &&
-        style.fontSize === 10 &&
+        style.fontSize === 14 &&
         style.textTransform === 'none'
     ),
     'see more actions should stay lowercase date-sized normal text'
@@ -1663,11 +1663,11 @@ async function assertArticle(page: Page) {
   assert.equal(result.tocMetaValueTransform, 'none');
   assert.equal(result.tocMetaLetterSpacing, 'normal');
   assert.ok(
-    result.tocMetaLabelSize >= 12 && result.tocMetaLabelSize < 13,
+    result.tocMetaLabelSize >= 14 && result.tocMetaLabelSize < 15,
     'TOC metadata labels should match the hero contact scale'
   );
   assert.ok(
-    result.tocMetaValueSize >= 12 && result.tocMetaValueSize < 13,
+    result.tocMetaValueSize >= 14 && result.tocMetaValueSize < 15,
     'TOC metadata values should match the hero contact scale'
   );
   assert.equal(result.tocFirstNumText, '0');
@@ -1725,7 +1725,7 @@ async function assertArticle(page: Page) {
 
   assert.equal(result.imageBorderTop, '0px');
   assert.equal(result.captionAlign, 'center');
-  assert.ok(result.captionSize < 14);
+  assert.ok(result.captionSize >= 14 && result.captionSize < 15);
   assert.equal(result.videoAutoplay, true);
   assert.equal(result.videoControls, true);
   assert.equal(result.videoLoop, true);
@@ -1748,7 +1748,7 @@ async function assertArticle(page: Page) {
   );
   assert.equal(result.articleListStyle, 'decimal');
   assert.ok(result.articleListPadding >= 39 && result.articleListPadding <= 41);
-  assert.ok(result.footnotesSize <= 13);
+  assert.ok(result.footnotesSize >= 14 && result.footnotesSize < 15);
   assert.ok(result.footnoteListPadding >= 24);
   assert.ok(result.footnoteRefFamily.includes('DM Mono'));
   assert.ok(result.footnoteRefWeight >= 600);
@@ -2120,7 +2120,7 @@ async function assertLegacyMediaArticle(page: Page) {
   );
   assert.ok(
     result.captionStyles.every(
-      (caption) => caption.align === 'center' && caption.size < 14
+      (caption) => caption.align === 'center' && caption.size >= 14
     ),
     'legacy captions should be centered and caption-sized'
   );

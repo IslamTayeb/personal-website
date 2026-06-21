@@ -34,7 +34,7 @@ function BlogIndexLegend() {
   return (
     <div
       data-testid="blog-index-legend"
-      className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+      className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
     >
       {items.map((item) => (
         <span key={item.label} className="inline-flex items-center gap-1.5">
@@ -93,7 +93,7 @@ export default async function BlogIndexPage() {
                         {post.manifest.title}
                       </ExternalLink>
                       {isNew ? (
-                        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-b">
+                        <span className="font-mono text-sm uppercase tracking-[0.12em] text-roy-b">
                           New
                         </span>
                       ) : null}
@@ -103,7 +103,7 @@ export default async function BlogIndexPage() {
                   footer={
                     <div
                       data-testid="blog-index-row-meta"
-                      className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+                      className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
                     >
                       <span>{post.readingMeta}</span>
                     </div>
@@ -135,7 +135,7 @@ export default async function BlogIndexPage() {
                 footer={
                   <div
                     data-testid="external-writing-meta"
-                    className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+                    className="font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
                   >
                     {item.meta}
                   </div>

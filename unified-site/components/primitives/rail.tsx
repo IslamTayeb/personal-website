@@ -76,7 +76,7 @@ export function RailItem({
       {meta ? (
         <span
           className={cn(
-            'shrink-0 font-mono text-[10px] text-muted-foreground',
+            'shrink-0 font-mono text-sm text-muted-foreground',
             metaClassName
           )}
         >
@@ -141,7 +141,7 @@ export function RailItem({
           <p
             data-one-line="true"
             className={cn(
-              'truncate text-xs leading-snug text-muted-foreground',
+              'truncate text-sm leading-snug text-muted-foreground',
               descriptionClassName
             )}
           >

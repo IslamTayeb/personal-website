@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           </h1>
           <time
             dateTime={post.manifest.publishedAt}
-            className="font-mono text-xs tracking-[0.08em] text-muted-foreground"
+            className="font-mono text-sm tracking-[0.08em] text-muted-foreground"
           >
             {formatDate(post.manifest.publishedAt)}
           </time>

@@ -37,7 +37,7 @@ function AdvisorLabel({
   }
 
   const className = cn(
-    'font-mono text-[10px] font-normal uppercase tracking-[0.12em] text-muted-foreground',
+    'font-mono text-sm font-normal uppercase tracking-[0.12em] text-muted-foreground',
     boxed && 'border border-border px-1'
   );
 
@@ -228,7 +228,7 @@ function RailGroupBlock({
         onClick={onToggleOpen}
         aria-expanded={open}
         data-testid="experience-group-toggle"
-        className="grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] items-center pb-2.5 text-left font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        className="grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] items-center pb-2.5 text-left font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring"
       >
         <Chevron
           className="relative bottom-px left-px text-muted-foreground"

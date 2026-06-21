@@ -8,7 +8,7 @@ function PublicationAuthors({ authors }: { authors: string }) {
   return (
     <span
       data-testid="publication-authors"
-      className="mt-1 block truncate text-xs leading-snug text-muted-foreground"
+      className="mt-1 block truncate text-sm leading-snug text-muted-foreground"
     >
       {authors.split(/(Islam Tayeb)/g).map((part, index) =>
         part === 'Islam Tayeb' ? (
@@ -55,7 +55,7 @@ function PublicationRow({
           </ExternalLink>
           <span
             data-testid="publication-meta-line"
-            className="mt-1 block truncate font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+            className="mt-1 block truncate font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
           >
             {publication.type}
             {publication.venue ? (

@@ -34,7 +34,7 @@ export async function WritingPreview() {
                         {post.manifest.title}
                       </ExternalLink>
                       {isNew ? (
-                        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-b">
+                        <span className="font-mono text-sm uppercase tracking-[0.12em] text-roy-b">
                           New
                         </span>
                       ) : null}
@@ -44,7 +44,7 @@ export async function WritingPreview() {
                   footer={
                     <div
                       data-testid="writing-row-meta"
-                      className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+                      className="font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
                     >
                       {post.readingMeta}
                     </div>
