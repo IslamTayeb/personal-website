@@ -1092,6 +1092,22 @@ async function assertExperienceInteractions(page: Page) {
   assert.ok(teachingText?.includes('Operating Systems'));
   assert.ok(teachingText?.includes('Computer Systems'));
   assert.ok(teachingText?.includes('Organic Chemistry I'));
+  assert.ok(
+    teachingText?.includes(
+      'Introduced (more) freshmen to kernels and concurrency; co-led a discussion section.'
+    )
+  );
+  assert.ok(
+    teachingText?.includes(
+      'Introduced freshmen to CPUs and caches; co-led a discussion section.'
+    )
+  );
+  assert.ok(
+    teachingText?.includes(
+      'Led a study group; saw kids quit pre-med as the semester went.'
+    )
+  );
+  assert.ok(!teachingText?.includes('Duke University.'));
   assert.ok(teachingText?.includes('Jan 2025 - May 2025'));
   assert.ok(!teachingText?.includes('Sophomore spring'));
   assert.equal(
