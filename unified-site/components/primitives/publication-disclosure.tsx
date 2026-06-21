@@ -7,6 +7,29 @@ import { ExternalLink } from './external-link';
 import { RailItem, RailList } from './rail';
 import { SectionActionLink } from './section-action';
 
+function PublicationAuthors({ authors }: { authors: string }) {
+  return (
+    <span
+      data-testid="publication-authors"
+      className="mt-1 block truncate text-xs leading-snug text-muted-foreground"
+    >
+      {authors.split(/(Islam Tayeb)/g).map((part, index) =>
+        part === 'Islam Tayeb' ? (
+          <strong
+            key={`${part}-${index}`}
+            data-testid="publication-author-self"
+            className="font-semibold text-foreground"
+          >
+            {part}
+          </strong>
+        ) : (
+          <span key={`${part}-${index}`}>{part}</span>
+        )
+      )}
+    </span>
+  );
+}
+
 function PublicationRow({
   publication,
   open,
@@ -52,7 +75,7 @@ function PublicationRow({
         <span className="block min-w-0">
           <span
             data-testid="publication-title"
-            className="block text-sm font-medium leading-tight text-foreground"
+            className="block text-sm font-medium leading-tight text-foreground text-pretty"
           >
             {publication.title}
           </span>
@@ -70,6 +93,7 @@ function PublicationRow({
               </>
             ) : null}
           </span>
+          <PublicationAuthors authors={publication.authors} />
         </span>
       }
       meta={
@@ -84,9 +108,6 @@ function PublicationRow({
             data-testid="publication-open"
             className="flex min-w-0 flex-col gap-2"
           >
-            <p className="text-xs leading-snug text-muted-foreground text-pretty">
-              {publication.authors}
-            </p>
             <div className="grid gap-1 text-xs leading-snug text-muted-foreground text-pretty">
               {publication.desc.map((paragraph) => (
                 <p key={paragraph} data-one-line="true" className="truncate">

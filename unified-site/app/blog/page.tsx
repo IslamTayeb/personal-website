@@ -3,7 +3,7 @@ import { RoybBand } from '@/components/primitives/royb-band';
 import { BorderedPanel, Section } from '@/components/primitives/section';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
-import { getListedPosts, postHref } from '@/lib/blog/posts';
+import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
 import { formatDate } from '@/lib/blog/date';
 
 export const metadata: Metadata = {
@@ -41,7 +41,7 @@ export default async function BlogIndexPage() {
                     >
                       {post.manifest.title}
                     </ExternalLink>
-                    {index === 0 ? (
+                    {isNewPost(index) ? (
                       <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-b">
                         New
                       </span>

@@ -120,7 +120,7 @@ export const experienceGroups: ExperienceGroup[] = [
       {
         org: 'Organic Chemistry I',
         piName: 'SAGE Tutoring',
-        date: 'Sophomore spring',
+        date: 'Jan 2025 - May 2025',
         state: 'ended',
         desc: 'Duke University.',
       },

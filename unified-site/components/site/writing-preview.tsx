@@ -1,4 +1,4 @@
-import { getListedPosts, postHref } from '@/lib/blog/posts';
+import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
 import { formatDate } from '@/lib/blog/date';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
@@ -13,31 +13,42 @@ export async function WritingPreview() {
       <BorderedPanel>
         <div className="flex w-full flex-col gap-3.5">
           <RailList>
-            {posts.map((post, index) => (
-              <RailItem
-                key={post.manifest.slug}
-                dotClassName="bg-foreground/75"
-                title={
-                  <ExternalLink
-                    href={postHref(post)}
-                    section="b"
-                    className="text-foreground"
-                  >
-                    {post.manifest.title}
-                  </ExternalLink>
-                }
-                meta={formatDate(post.manifest.publishedAt)}
-                footer={
-                  <div
-                    data-testid="writing-row-meta"
-                    className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
-                  >
-                    {post.readingMeta}
-                  </div>
-                }
-                connector={index < posts.length - 1 ? 'solid' : 'none'}
-              />
-            ))}
+            {posts.map((post, index) => {
+              const isNew = isNewPost(index);
+
+              return (
+                <RailItem
+                  key={post.manifest.slug}
+                  dotClassName={isNew ? 'bg-roy-b' : 'bg-foreground/75'}
+                  title={
+                    <span className="inline-flex min-w-0 items-baseline gap-2">
+                      <ExternalLink
+                        href={postHref(post)}
+                        section="b"
+                        className="min-w-0 text-foreground"
+                      >
+                        {post.manifest.title}
+                      </ExternalLink>
+                      {isNew ? (
+                        <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-roy-b">
+                          New
+                        </span>
+                      ) : null}
+                    </span>
+                  }
+                  meta={formatDate(post.manifest.publishedAt)}
+                  footer={
+                    <div
+                      data-testid="writing-row-meta"
+                      className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+                    >
+                      {post.readingMeta}
+                    </div>
+                  }
+                  connector={index < posts.length - 1 ? 'solid' : 'none'}
+                />
+              );
+            })}
           </RailList>
           <div className="flex justify-end">
             <SectionActionLink href="/blog" section="b">

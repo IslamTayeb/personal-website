@@ -213,6 +213,7 @@ async function assertHome(page: Page) {
       hasShowMore: [...group.querySelectorAll('button')].some(
         (button) => button.textContent?.trim() === 'see more'
       ),
+      marginBottom: Number.parseFloat(getComputedStyle(group).marginBottom),
     }));
     const dots = [...document.querySelectorAll('[data-testid="rail-dot"]')].map(
       (dot) => ({
@@ -228,11 +229,22 @@ async function assertHome(page: Page) {
     const publicationTitle = document.querySelector(
       '[data-testid="publication-title"]'
     );
+    const publicationAuthors = [
+      ...document.querySelectorAll('[data-testid="publication-authors"]'),
+    ].map((authors) => authors.textContent?.replace(/\s+/g, ' ').trim() ?? '');
+    const publicationSelfAuthors = [
+      ...document.querySelectorAll('[data-testid="publication-author-self"]'),
+    ].map((author) => author.textContent?.trim() ?? '');
     const writingDots = [
       ...(document
         .querySelector('#writing')
         ?.querySelectorAll('[data-testid="rail-dot"]') ?? []),
     ].map((dot) => dot.className);
+    const writingNewTags = [
+      ...(document.querySelector('#writing')?.querySelectorAll('span') ?? []),
+    ]
+      .map((element) => element.textContent?.trim() ?? '')
+      .filter((text) => text === 'New');
     const writingMeta = [
       ...(document
         .querySelector('#writing')
@@ -267,6 +279,18 @@ async function assertHome(page: Page) {
         color: style.color,
       };
     });
+    const mutedProbe = document.createElement('span');
+
+    mutedProbe.style.color = 'var(--muted-foreground)';
+    document.body.append(mutedProbe);
+    const mutedToken = getComputedStyle(mutedProbe).color;
+    mutedProbe.remove();
+
+    const seeMoreActionColors = [...document.querySelectorAll('a, button')]
+      .filter((element) =>
+        /see more/i.test(element.textContent?.replace(/\s+/g, ' ') ?? '')
+      )
+      .map((element) => getComputedStyle(element).color);
 
     return {
       mainWidth: main?.getBoundingClientRect().width ?? 0,
@@ -311,11 +335,14 @@ async function assertHome(page: Page) {
       groups,
       dots,
       writingDots,
+      writingNewTags,
       writingMeta,
       writingDescriptionCount: writingDescriptions.length,
       publicationDots,
       publicationMetaLines,
       publicationDateStyles,
+      publicationAuthors,
+      publicationSelfAuthors,
       hasCoursesSection: Boolean(document.querySelector('#courses')),
       publicationsTitle:
         document
@@ -329,6 +356,12 @@ async function assertHome(page: Page) {
       publicationTitleDecoration: publicationTitle
         ? getComputedStyle(publicationTitle).textDecorationLine
         : '',
+      publicationTitleClassName:
+        publicationTitle instanceof HTMLElement
+          ? publicationTitle.className
+          : '',
+      mutedToken,
+      seeMoreActionColors,
       footerBorderTopWidth: footer
         ? Number.parseFloat(getComputedStyle(footer).borderTopWidth)
         : 0,
@@ -418,6 +451,10 @@ async function assertHome(page: Page) {
   assert.equal(teaching?.rows, 0, 'Teaching should default collapsed');
   assert.equal(teaching?.hasShowMore, false, 'Teaching should not see more');
   assert.ok(teaching?.text.includes('Teaching (3)'));
+  assert.ok(
+    (teaching?.marginBottom ?? 0) < (research?.marginBottom ?? 0),
+    'closed groups should use tighter vertical spacing than open groups'
+  );
 
   const incomingDots = result.dots.filter((dot) => dot.state === 'incoming');
   const presentDots = result.dots.filter((dot) => dot.state === 'present');
@@ -427,9 +464,11 @@ async function assertHome(page: Page) {
   assert.ok(incomingDots.every((dot) => dot.border >= 1));
   assert.ok(presentDots.every((dot) => dot.className.includes('bg-roy-o')));
   assert.ok(endedDots.every((dot) => dot.className.includes('bg-foreground')));
+  assert.ok(result.writingDots[0]?.includes('bg-roy-b'));
   assert.ok(
-    result.writingDots.every((dot) => dot.includes('bg-foreground/75'))
+    result.writingDots.slice(1).every((dot) => dot.includes('bg-foreground/75'))
   );
+  assert.deepEqual(result.writingNewTags, ['New']);
   assert.ok(
     result.writingMeta.every(
       (meta) => meta.includes('words') && meta.includes('min')
@@ -475,6 +514,24 @@ async function assertHome(page: Page) {
     'publication dates should match rail meta font size'
   );
   assert.ok(
+    result.publicationAuthors.every((authors) =>
+      authors.includes('Islam Tayeb')
+    )
+  );
+  assert.equal(
+    result.publicationSelfAuthors.length,
+    result.publicationAuthors.length,
+    'each publication author row should emphasize Islam Tayeb'
+  );
+  assert.ok(
+    result.publicationSelfAuthors.every((author) => author === 'Islam Tayeb'),
+    'Islam Tayeb should be emphasized in every publication author row'
+  );
+  assert.ok(
+    result.publicationTitleClassName.includes('text-pretty'),
+    'publication titles should use pretty wrapping to avoid lonely final words'
+  );
+  assert.ok(
     result.publicationDateStyles.every(
       (style) => style.textTransform === 'none'
     ),
@@ -499,6 +556,10 @@ async function assertHome(page: Page) {
     result.publicationTitleDecoration,
     'none',
     'publication disclosure titles should not look like underlined links'
+  );
+  assert.ok(
+    result.seeMoreActionColors.every((color) => color === result.mutedToken),
+    'see more actions should use the same muted grey as metadata labels'
   );
   assert.equal(result.footerBorderTopWidth, 1);
   assert.ok(result.bodyText.includes('See more on Scholar'));
@@ -553,6 +614,8 @@ async function assertExperienceInteractions(page: Page) {
   assert.ok(teachingText?.includes('Operating Systems'));
   assert.ok(teachingText?.includes('Computer Systems'));
   assert.ok(teachingText?.includes('Organic Chemistry I'));
+  assert.ok(teachingText?.includes('Jan 2025 - May 2025'));
+  assert.ok(!teachingText?.includes('Sophomore spring'));
   assert.equal(
     (teachingText?.match(/Matthew Lentz/g) ?? []).length,
     2,

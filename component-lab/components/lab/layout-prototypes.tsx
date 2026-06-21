@@ -285,6 +285,44 @@ function PublicationInlineDateVariant() {
   );
 }
 
+function PublicationRailStateVariant() {
+  return (
+    <RailList>
+      {publications.map((publication, index) => {
+        const open = index === 0;
+
+        return (
+          <RailItem
+            key={publication.title}
+            dotClassName={
+              open ? 'bg-roy-y' : 'border border-foreground/50 bg-background'
+            }
+            title={
+              <span className="block min-w-0">
+                <span className="block text-sm font-medium leading-tight text-foreground text-pretty">
+                  {publication.title}
+                </span>
+                <span className="mt-1 block truncate font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                  {publication.type}
+                  {publication.venue ? ` / ${publication.venue}` : ''}
+                </span>
+                {open ? (
+                  <span className="mt-1 block truncate text-xs leading-snug text-muted-foreground">
+                    {publication.authors}
+                  </span>
+                ) : null}
+              </span>
+            }
+            meta={publication.date}
+            description={open ? publication.desc[0] : undefined}
+            connector={index < publications.length - 1 ? 'solid' : 'none'}
+          />
+        );
+      })}
+    </RailList>
+  );
+}
+
 export function PublicationRhythmLabSection() {
   return (
     <Section
@@ -302,6 +340,9 @@ export function PublicationRhythmLabSection() {
       </Variant>
       <Variant label="C — inline date, no side gutter">
         <PublicationInlineDateVariant />
+      </Variant>
+      <Variant label="D — rail marker owns open state">
+        <PublicationRailStateVariant />
       </Variant>
     </Section>
   );

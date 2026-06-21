@@ -168,7 +168,6 @@
   }
   .royb-link {
     display: inline-block;
-    color: inherit;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
     text-decoration-thickness: 1.5px;

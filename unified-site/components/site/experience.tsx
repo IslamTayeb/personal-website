@@ -215,7 +215,10 @@ function RailGroupBlock({
     <div
       data-testid="experience-group"
       data-group={group.kind}
-      className="flex flex-col"
+      className={cn(
+        'flex flex-col',
+        open ? 'mb-3.5 last:mb-0' : 'mb-1 last:mb-0'
+      )}
     >
       <button
         type="button"
@@ -279,7 +282,7 @@ export function Experience({
   return (
     <Section id="experience" index="1" title="Experience" accent="text-roy-o">
       <BorderedPanel>
-        <div className="flex w-full flex-col gap-3.5">
+        <div className="flex w-full flex-col">
           {experienceGroups.map((group) => (
             <RailGroupBlock
               key={group.kind}
