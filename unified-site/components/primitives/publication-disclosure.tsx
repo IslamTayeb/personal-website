@@ -8,7 +8,7 @@ function PublicationAuthors({ authors }: { authors: string }) {
   return (
     <span
       data-testid="publication-authors"
-      className="mt-1 block truncate text-sm leading-snug text-muted-foreground"
+      className="mt-1 block text-sm font-normal leading-snug text-foreground"
     >
       {authors.split(/(Islam Tayeb)/g).map((part, index) =>
         part === 'Islam Tayeb' ? (
@@ -49,25 +49,25 @@ function PublicationRow({
             href={publication.href}
             section="y"
             data-testid="publication-title"
-            className="publication-title-link royb-link-fragment text-sm font-medium leading-tight text-foreground text-pretty"
+            className="publication-title-link text-sm font-medium leading-tight text-foreground text-balance"
           >
             <RichText text={publication.title} />
           </ExternalLink>
+          <PublicationAuthors authors={publication.authors} />
           <span
             data-testid="publication-meta-line"
-            className="mt-1 block truncate font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
+            className="mt-1 block text-sm font-normal leading-snug text-foreground"
           >
             {publication.type}
             {publication.venue ? (
               <>
-                <span className="px-1 text-muted-foreground">/</span>
-                <span className="text-muted-foreground">
+                <span className="px-1 text-foreground">/</span>
+                <span className="text-foreground">
                   <RichText text={publication.venue} />
                 </span>
               </>
             ) : null}
           </span>
-          <PublicationAuthors authors={publication.authors} />
         </span>
       }
       meta={<span data-testid="publication-date">{publication.date}</span>}
@@ -94,7 +94,7 @@ export function PublicationDisclosure({
             <PublicationRow
               key={publication.title}
               publication={publication}
-              connector={isLast ? 'none' : 'solid'}
+              connector={isLast ? (moreHref ? 'dashed' : 'none') : 'solid'}
             />
           );
         })}

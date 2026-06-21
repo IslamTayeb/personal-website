@@ -21,9 +21,12 @@ type MarkdownEnv = {
 const articleLinkClasses = [
   'royb-link',
   'royb-link-highlight',
+  'royb-link-fragment',
   'section-color-b',
 ];
 const articleExternalLinkClasses = [...articleLinkClasses, 'external-link'];
+const articleLinkClassName = articleLinkClasses.join(' ');
+const articleExternalLinkClassName = articleExternalLinkClasses.join(' ');
 
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -161,7 +164,7 @@ function buildToc(
           (subsection) =>
             `<a href="#${escapeHtml(
               subsection.id
-            )}" class="toc-link royb-link royb-link-highlight section-color-b">${escapeHtml(
+            )}" class="toc-link ${articleLinkClassName}">${escapeHtml(
               tocLabel(subsection)
             )}</a>`
         )
@@ -170,7 +173,7 @@ function buildToc(
 
       return `<div class="toc-section"><span class="toc-num">${index}</span><a href="#${escapeHtml(
         section.id
-      )}" class="toc-link royb-link royb-link-highlight section-color-b">${escapeHtml(tocLabel(section))}</a>${subs}</div>`;
+      )}" class="toc-link ${articleLinkClassName}">${escapeHtml(tocLabel(section))}</a>${subs}</div>`;
     })
     .join('');
 
@@ -187,7 +190,7 @@ function buildToc(
     metaItems.push(
       `<div class="toc-meta-row"><span>code</span><span><a href="${escapeHtml(
         manifest.codeLink.href
-      )}" class="toc-link royb-link royb-link-highlight section-color-b">${escapeHtml(manifest.codeLink.label.toLowerCase())}</a></span></div>`
+      )}" class="toc-link ${articleExternalLinkClassName}">${escapeHtml(manifest.codeLink.label.toLowerCase())}</a></span></div>`
     );
   }
 

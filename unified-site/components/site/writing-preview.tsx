@@ -44,12 +44,12 @@ export async function WritingPreview() {
                   footer={
                     <div
                       data-testid="writing-row-meta"
-                      className="font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
+                      className="text-sm leading-snug text-foreground"
                     >
                       {post.readingMeta}
                     </div>
                   }
-                  connector={index < posts.length - 1 ? 'solid' : 'none'}
+                  connector={index < posts.length - 1 ? 'solid' : 'dashed'}
                 />
               );
             })}

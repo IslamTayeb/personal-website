@@ -21,10 +21,6 @@ type DescriptionSegment =
       href: string;
     };
 
-const hollowDots: Record<string, string> = {
-  'bg-roy-o': 'border border-roy-o bg-transparent',
-};
-
 function AdvisorLabel({
   role,
   boxed,
@@ -72,7 +68,7 @@ function RailGroup({
         const state = role.state ?? (role.incoming ? 'incoming' : 'ended');
         const dotClassName =
           state === 'incoming'
-            ? hollowDots['bg-roy-o']
+            ? 'bg-roy-o'
             : state === 'present'
               ? 'bg-roy-o'
               : 'bg-foreground/75';
@@ -248,7 +244,7 @@ function RailGroupBlock({
         />
       ) : null}
       {open && hasHidden && allowShowMore ? (
-        <div className="flex justify-end pt-1">
+        <div className="flex justify-end pt-1.5">
           <SectionActionButton
             section="o"
             onClick={onToggleExpanded}

@@ -30,7 +30,7 @@ export const experienceGroups: ExperienceGroup[] = [
         href: 'https://machine.learning.bio/',
         incoming: true,
         state: 'incoming',
-        desc: 'GPU systems for protein homology search and sequence alignment.',
+        desc: 'GPU systems for protein homology search.',
       },
       {
         org: 'Duke University',
@@ -38,7 +38,7 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Apr 2026 - Present',
         href: 'https://users.cs.duke.edu/~mlentz/',
         state: 'present',
-        desc: 'Tokenminning and codegen correctness for agents with runtime-error repair feedback loops.',
+        desc: 'Tokenminning and correctness for coding agents.',
       },
       {
         org: 'Duke University',
@@ -46,10 +46,10 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Aug 2025 - Present',
         href: 'https://www.romerolab.org/',
         state: 'present',
-        desc: "Chemistry data-mining from research papers with Anthropic's AI for Science Program + Microsoft Research.",
+        desc: 'Chemistry data-mining agents w/ Anthropic (AI for Science Program) + Microsoft Research.',
         descLinks: [
           {
-            text: "Anthropic's AI for Science Program",
+            text: 'Anthropic (AI for Science Program)',
             href: 'https://www.anthropic.com/news/ai-for-science-program',
           },
         ],
@@ -87,14 +87,14 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Sep 2024 - May 2025',
         href: 'https://lifeeditinc.com/',
         state: 'ended',
-        desc: 'Non-linear RNA-seq analysis and dashboarding for CRISPR experiments.',
+        desc: 'Non-linear RNA-seq analysis for CRISPR experiments.',
       },
       {
         org: 'DIHI',
         date: 'Jun 2024 - Aug 2024',
         href: 'https://dihi.org/',
         state: 'ended',
-        desc: 'Automated literature review workflow for clinical research intake.',
+        desc: 'Automated literature review agents + VTE detection.',
       },
     ],
   },

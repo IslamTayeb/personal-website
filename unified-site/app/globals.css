@@ -58,8 +58,7 @@
   --kbd-border: #b9b9b1;
   --kbd-border-bottom: #8f8f86;
   --kbd-foreground: #222222;
-  --kbd-shadow: inset 0 1px 0 rgb(255 255 255 / 72%), 0 1px 0 rgb(0 0 0 / 18%);
-  --kbd-top-highlight: #ffffff;
+  --kbd-shadow: 0 1px 0 rgb(0 0 0 / 22%);
   --rail-gutter: 1.75rem;
   --rail-marker-size: 0.75rem;
 }
@@ -87,9 +86,7 @@
   --kbd-border: #474747;
   --kbd-border-bottom: #6a6a6a;
   --kbd-foreground: #f2f2f2;
-  --kbd-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 12%), 0 1px 0 rgb(255 255 255 / 10%);
-  --kbd-top-highlight: #3a3a3a;
+  --kbd-shadow: 0 1px 0 rgb(255 255 255 / 14%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -116,9 +113,7 @@
     --kbd-border: #474747;
     --kbd-border-bottom: #6a6a6a;
     --kbd-foreground: #f2f2f2;
-    --kbd-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 12%), 0 1px 0 rgb(255 255 255 / 10%);
-    --kbd-top-highlight: #3a3a3a;
+    --kbd-shadow: 0 1px 0 rgb(255 255 255 / 14%);
   }
 }
 
@@ -197,6 +192,8 @@
   }
   .royb-link {
     display: inline;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklch, currentColor 42%, transparent);
     text-decoration-thickness: 1.5px;
@@ -227,6 +224,11 @@
     background-size: 100% 100%;
     color: var(--section-color, var(--roy-b));
     text-decoration-line: none;
+  }
+  .publication-title-link {
+    display: inline-block;
+    max-width: 100%;
+    text-wrap: balance;
   }
   .royb-link-plain {
     background-image: none;
@@ -412,15 +414,10 @@
   }
   .article-prose kbd {
     @apply inline-block whitespace-nowrap border border-border px-1.5 py-0.5 font-mono text-[0.85em] leading-none text-foreground;
-    background:
-      linear-gradient(
-        to bottom,
-        var(--kbd-top-highlight) 0 2px,
-        transparent 2px 100%
-      ),
-      var(--kbd-background);
+    background: var(--kbd-background);
     border-color: var(--kbd-border);
     border-bottom-color: var(--kbd-border-bottom);
+    border-radius: 0;
     box-shadow: var(--kbd-shadow);
     color: var(--kbd-foreground);
   }
@@ -520,7 +517,7 @@
     @apply mt-3 flex flex-col gap-2 text-sm;
   }
   .article-prose .toc-section {
-    @apply grid grid-cols-[0.5rem_minmax(0,1fr)] items-baseline gap-x-0.5;
+    @apply grid grid-cols-[0.5rem_minmax(0,1fr)] items-baseline gap-x-3;
   }
   .article-prose .toc-section > a {
     @apply w-fit max-w-full text-foreground;

@@ -7,48 +7,12 @@ import { externalWriting } from '@/data/external-writing';
 import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
 import { formatMonthYear } from '@/lib/blog/date';
 
-const technicalPostSlugs = new Set([
-  'on-agent-memory-fidelity',
-  'on-dimensions-of-taste',
-]);
-const opinionDotClassName = 'border border-foreground/75 bg-transparent';
-const technicalDotClassName = 'bg-foreground/75';
+const postDotClassName = 'bg-foreground/75';
 
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'APM Overflow writing inside islamtayeb.dev.',
 };
-
-function BlogIndexLegend() {
-  const items = [
-    {
-      label: 'opinion',
-      className: opinionDotClassName,
-    },
-    {
-      label: 'technical',
-      className: technicalDotClassName,
-    },
-  ];
-
-  return (
-    <div
-      data-testid="blog-index-legend"
-      className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
-    >
-      {items.map((item) => (
-        <span key={item.label} className="inline-flex items-center gap-1.5">
-          <span
-            aria-hidden
-            data-testid="blog-index-legend-dot"
-            className={`h-[var(--rail-marker-size)] w-[var(--rail-marker-size)] shrink-0 ${item.className}`}
-          />
-          {item.label}
-        </span>
-      ))}
-    </div>
-  );
-}
 
 export default async function BlogIndexPage() {
   const posts = await getListedPosts();
@@ -64,25 +28,17 @@ export default async function BlogIndexPage() {
         index="1"
         title={`Index (${itemCount})`}
         accent="text-roy-b"
-        headerExtra={<BlogIndexLegend />}
         className="pt-0 md:pt-0"
       >
         <BorderedPanel>
           <RailList testId="blog-index-rail">
             {posts.map((post, index) => {
               const isNew = isNewPost(index);
-              const isTechnical = technicalPostSlugs.has(post.manifest.slug);
 
               return (
                 <RailItem
                   key={post.manifest.slug}
-                  dotClassName={
-                    isTechnical
-                      ? isNew
-                        ? 'bg-roy-b'
-                        : technicalDotClassName
-                      : opinionDotClassName
-                  }
+                  dotClassName={isNew ? 'bg-roy-b' : postDotClassName}
                   title={
                     <div className="flex min-w-0 items-baseline gap-2">
                       <ExternalLink
@@ -103,7 +59,7 @@ export default async function BlogIndexPage() {
                   footer={
                     <div
                       data-testid="blog-index-row-meta"
-                      className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
+                      className="flex flex-wrap gap-x-3 gap-y-1 text-sm leading-snug text-foreground"
                     >
                       <span>{post.readingMeta}</span>
                     </div>
@@ -120,7 +76,7 @@ export default async function BlogIndexPage() {
               <RailItem
                 key={item.href}
                 testId="external-writing-row"
-                dotClassName={opinionDotClassName}
+                dotClassName={postDotClassName}
                 title={
                   <ExternalLink
                     href={item.href}
@@ -135,7 +91,7 @@ export default async function BlogIndexPage() {
                 footer={
                   <div
                     data-testid="external-writing-meta"
-                    className="font-mono text-sm uppercase tracking-[0.12em] text-muted-foreground"
+                    className="text-sm leading-snug text-foreground"
                   >
                     {item.meta}
                   </div>

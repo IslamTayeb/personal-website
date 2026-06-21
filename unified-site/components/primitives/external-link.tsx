@@ -23,7 +23,7 @@ export function ExternalLink({
   const external = isExternalHref(href);
   const classes = cn(
     variant === 'highlight'
-      ? 'royb-link royb-link-highlight'
+      ? 'royb-link royb-link-highlight royb-link-fragment'
       : 'royb-link-plain',
     `section-color-${section}`,
     external && 'external-link',
