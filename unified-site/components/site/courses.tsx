@@ -4,7 +4,7 @@ import { courses, defaultCourseCode, teaching } from '@/data/courses';
 
 export function Courses() {
   return (
-    <Section id="courses" index="3" title="Courses" accent="text-roy-y">
+    <Section id="courses" index="4" title="Courses" accent="text-roy-y">
       <BorderedPanel>
         <CourseSelector
           coursework={courses}

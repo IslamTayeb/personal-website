@@ -6,7 +6,7 @@ export function Publications() {
   return (
     <Section
       id="publications"
-      index="2"
+      index="3"
       title="Publications"
       accent="text-roy-y"
     >

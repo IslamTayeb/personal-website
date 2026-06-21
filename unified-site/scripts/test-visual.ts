@@ -50,9 +50,25 @@ async function assertHomeMeasurements(page: Page) {
     const title = document.querySelector('[data-testid="hero-title"]');
     const header = document.querySelector('[data-testid="site-header"]');
     const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
+    const themeToggleStateClassName = themeToggle
+      ? [themeToggle, ...themeToggle.querySelectorAll('*')]
+          .map((element) => element.className)
+          .join(' ')
+      : '';
     const heroSection = document.querySelector('[data-testid="hero-section"]');
+    const heroSectionMarker =
+      heroSection
+        ?.querySelector('header span')
+        ?.textContent?.replace(/\s+/g, ' ')
+        .trim() ?? '';
+    const heroSectionLabel =
+      heroSection
+        ?.querySelector('header h2')
+        ?.textContent?.replace(/\s+/g, ' ')
+        .trim() ?? '';
     const topLevelSections = [...document.querySelectorAll('main > section')];
     const footer = document.querySelector('footer');
+    const experienceSection = document.querySelector('#experience');
     const publicationMetaLine = document.querySelector(
       '[data-testid="publication-meta-line"]'
     );
@@ -111,14 +127,25 @@ async function assertHomeMeasurements(page: Page) {
       heroBorderTopWidth: heroSection
         ? Number.parseFloat(getComputedStyle(heroSection).borderTopWidth)
         : 0,
+      heroSectionMarker,
+      heroSectionLabel,
       sectionBorderTopWidths: topLevelSections.map((element) =>
         Number.parseFloat(getComputedStyle(element).borderTopWidth)
       ),
       footerBorderTopWidth: footer
         ? Number.parseFloat(getComputedStyle(footer).borderTopWidth)
         : 0,
+      headerPaddingLeft: header
+        ? Number.parseFloat(getComputedStyle(header).paddingLeft)
+        : 0,
+      headerPaddingRight: header
+        ? Number.parseFloat(getComputedStyle(header).paddingRight)
+        : 0,
+      headerHeight: header?.getBoundingClientRect().height ?? 0,
+      footerHeight: footer?.getBoundingClientRect().height ?? 0,
+      footerText: footer?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
-      themeToggleClassName: themeToggle?.className ?? '',
+      themeToggleClassName: themeToggleStateClassName,
       engineeringText:
         engineeringGroup?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
@@ -141,6 +168,9 @@ async function assertHomeMeasurements(page: Page) {
         detailText?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       sectionPaddingTop: section
         ? Number.parseFloat(getComputedStyle(section).paddingTop)
+        : 0,
+      experiencePaddingTop: experienceSection
+        ? Number.parseFloat(getComputedStyle(experienceSection).paddingTop)
         : 0,
       panelPaddingTop: panel
         ? Number.parseFloat(getComputedStyle(panel).paddingTop)
@@ -179,6 +209,12 @@ async function assertHomeMeasurements(page: Page) {
     0,
     'there should be no divider between ROYB band and hero'
   );
+  assert.equal(measurements.heroSectionMarker, '§1');
+  assert.equal(
+    measurements.heroSectionLabel,
+    'About',
+    'hero should be labeled as the first About section'
+  );
   assert.deepEqual(
     measurements.sectionBorderTopWidths,
     measurements.sectionBorderTopWidths.map(() => 0),
@@ -195,12 +231,23 @@ async function assertHomeMeasurements(page: Page) {
     '',
     'theme toggle should use compact icon controls, not Light/Dark text'
   );
-  for (const token of ['hover:', 'active:', 'focus-visible:']) {
-    assert.ok(
-      measurements.themeToggleClassName.includes(token),
-      `theme toggle should include ${token} state styling`
-    );
-  }
+  assert.ok(
+    !measurements.themeToggleClassName.includes('hover:'),
+    'theme toggle should not have hover state classes'
+  );
+  assert.ok(
+    !measurements.themeToggleClassName.includes('active:'),
+    'theme toggle should not have click/active state classes'
+  );
+  assert.ok(
+    measurements.themeToggleClassName.includes('focus-visible:'),
+    'theme toggle should keep keyboard-focus styling'
+  );
+  assert.equal(
+    measurements.headerPaddingLeft + measurements.headerPaddingRight,
+    0,
+    'navbar should not add left/right padding'
+  );
   assert.ok(
     !measurements.hasProjectsSection,
     'projects section should not render'
@@ -274,6 +321,11 @@ async function assertHomeMeasurements(page: Page) {
     measurements.sectionPaddingTop <= 32,
     'section spacing should stay compact'
   );
+  assert.equal(
+    measurements.experiencePaddingTop,
+    14,
+    'standard section vertical padding should be halved on desktop'
+  );
   assert.ok(
     measurements.panelPaddingTop <= 16,
     'panel padding should stay compact'
@@ -283,6 +335,22 @@ async function assertHomeMeasurements(page: Page) {
     0,
     'section panels should not draw full boxes'
   );
+  assert.ok(
+    Math.abs(measurements.footerHeight - measurements.headerHeight) <= 1,
+    `footer should match nav height: ${measurements.footerHeight} / ${measurements.headerHeight}`
+  );
+  for (const text of ['plz enjoy game', 'rrtyui']) {
+    assert.ok(
+      measurements.footerText.includes(text),
+      `footer should include APM Overflow footer content: ${text}`
+    );
+  }
+  for (const text of ['Links:', 'Website', 'LinkedIn', 'GitHub', 'Email']) {
+    assert.ok(
+      !measurements.footerText.includes(text),
+      `footer should not include removed link cluster: ${text}`
+    );
+  }
 
   if (measurements.railTopGap !== null && measurements.railBottomGap !== null) {
     assert.ok(
@@ -626,6 +694,94 @@ async function assertArticleRendering(page: Page) {
   }
 }
 
+async function assertBlogIndexRail(page: Page) {
+  const result = await page.evaluate(() => {
+    const blogHeader =
+      document
+        .querySelector('[data-testid="blog-index-header"]')
+        ?.textContent?.replace(/\s+/g, ' ')
+        .trim() ?? '';
+    const indexHeading =
+      document
+        .querySelector('#posts h2')
+        ?.textContent?.replace(/\s+/g, ' ')
+        .trim() ?? '';
+    const rail = document.querySelector('[data-testid="blog-index-rail"]');
+    const items = [...(rail?.querySelectorAll('li') ?? [])];
+    const firstItem = items[0];
+    const firstTitle = firstItem?.querySelector('[data-testid="rail-title"]');
+    const firstDot = firstItem?.querySelector('[data-testid="rail-dot"]');
+    const firstConnector = firstItem?.querySelector(
+      '[data-testid="rail-connector"]'
+    );
+    const firstFooter = firstItem?.querySelector(
+      '[data-testid="blog-index-row-meta"]'
+    );
+
+    return {
+      blogHeader,
+      indexHeading,
+      hasRail: Boolean(rail),
+      itemCount: items.length,
+      dotCount: rail?.querySelectorAll('[data-testid="rail-dot"]').length ?? 0,
+      connectorCount:
+        rail?.querySelectorAll('[data-testid="rail-connector"]').length ?? 0,
+      firstTitleText:
+        firstTitle?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      firstDotClassName: firstDot?.className ?? '',
+      firstConnectorTop: firstConnector
+        ? Number.parseFloat(getComputedStyle(firstConnector).top)
+        : null,
+      firstFooterText:
+        firstFooter?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      hasDivideYClass: rail?.className.includes('divide-y') ?? false,
+    };
+  });
+
+  assert.ok(result.hasRail, 'blog index should render as a rail list');
+  assert.equal(
+    result.blogHeader,
+    '',
+    'blog header should keep only the ROYB band and no text'
+  );
+  assert.equal(
+    result.indexHeading,
+    `Index (${result.itemCount})`,
+    'blog post count should live in the index heading'
+  );
+  assert.ok(result.itemCount >= 3, 'blog index should render listed posts');
+  assert.equal(
+    result.dotCount,
+    result.itemCount,
+    'each blog index row should have a rail dot'
+  );
+  assert.equal(
+    result.connectorCount,
+    result.itemCount - 1,
+    'blog index should connect rows like the home writing rail'
+  );
+  assert.ok(
+    result.firstDotClassName.includes('bg-roy-b'),
+    'first blog rail dot should carry the writing blue accent'
+  );
+  assert.equal(
+    result.firstConnectorTop,
+    19,
+    'blog rail connector should use the shared rail spacing'
+  );
+  assert.ok(
+    result.firstFooterText.includes('Updated') &&
+      result.firstFooterText.includes('min') &&
+      result.firstFooterText.includes('GitHub'),
+    'blog rail row should keep reading time, updated date, and code link metadata'
+  );
+  assert.equal(
+    result.hasDivideYClass,
+    false,
+    'blog index should not use the old divided ledger class'
+  );
+}
+
 async function main() {
   await mkdir(screenshotDir, { recursive: true });
 
@@ -686,6 +842,7 @@ async function main() {
     });
     await blog.goto(`${baseUrl}/blog`, { waitUntil: 'networkidle' });
     await assertVisibleOneLineDescriptions(blog);
+    await assertBlogIndexRail(blog);
     await screenshot(blog, 'blog-index');
 
     const [firstPost] = await getListedPosts();

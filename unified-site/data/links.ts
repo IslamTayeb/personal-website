@@ -42,3 +42,10 @@ export const profileLinks = {
   skinOne: 'https://skins.osuck.net/skins/1762?v=0',
   skinTwo: 'https://skins.osuck.net/skins/1464?v=0',
 };
+
+export const footerQuote = {
+  label: 'plz enjoy game',
+  href: 'https://image2url.com/images/1759205331642-b0f15abc-1355-44f6-a3fb-22e16aeabc6c.png',
+  credit: 'rrtyui',
+  creditHref: 'https://www.youtube.com/watch?v=FWhwWUOm_Ck',
+};

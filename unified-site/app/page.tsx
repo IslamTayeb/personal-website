@@ -8,7 +8,7 @@ import { RoybBand } from '@/components/primitives/royb-band';
 export default function Home() {
   return (
     <>
-      <div className="py-5 md:py-6">
+      <div className="py-2.5 md:py-3">
         <RoybBand />
       </div>
       <Hero />

@@ -6,11 +6,17 @@ export type RailConnector = 'solid' | 'dashed' | 'none';
 export function RailList({
   children,
   className,
+  testId,
 }: {
   children: ReactNode;
   className?: string;
+  testId?: string;
 }) {
-  return <ul className={cn('flex w-full flex-col', className)}>{children}</ul>;
+  return (
+    <ul data-testid={testId} className={cn('flex w-full flex-col', className)}>
+      {children}
+    </ul>
+  );
 }
 
 export function RailItem({

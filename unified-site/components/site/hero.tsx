@@ -67,8 +67,14 @@ function HeroStory() {
 
 export function Hero() {
   return (
-    <section id="hero" data-testid="hero-section" className="pb-5 md:pb-6">
+    <section id="about" data-testid="hero-section" className="pb-2.5 md:pb-3">
       <div className="flex w-full flex-col gap-2">
+        <header className="mb-1 flex items-baseline gap-3">
+          <span className="font-mono text-xs text-roy-r">§1</span>
+          <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
+            About
+          </h2>
+        </header>
         <h1
           data-testid="hero-title"
           className="w-fit font-sans text-2xl font-semibold tracking-tight text-foreground"

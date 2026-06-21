@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { SparkleGlyph } from '@/components/primitives/glyphs';
 import { RoybBand } from '@/components/primitives/royb-band';
 import { BorderedPanel, Section } from '@/components/primitives/section';
 import { ExternalLink } from '@/components/primitives/external-link';
+import { RailItem, RailList } from '@/components/primitives/rail';
 import { getListedPosts, postHref } from '@/lib/blog/posts';
 import { formatDate } from '@/lib/blog/date';
 
@@ -16,42 +16,23 @@ export default async function BlogIndexPage() {
 
   return (
     <>
-      <header className="flex flex-col gap-3.5 py-7 md:py-8">
-        <div className="flex items-center justify-between">
-          <span className="flex items-center gap-2 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-            <SparkleGlyph size={12} /> Blog
-          </span>
-          <span className="font-mono text-xs text-muted-foreground">
-            {posts.length} posts
-          </span>
-        </div>
+      <header data-testid="blog-index-header" className="py-2.5 md:py-3">
         <RoybBand />
-        <h1 className="max-w-2xl text-xl font-semibold leading-snug tracking-tight text-foreground text-balance md:text-2xl">
-          Notes on agents, taste, and systems.
-        </h1>
-        <p
-          data-one-line="true"
-          className="max-w-2xl truncate text-sm leading-relaxed text-foreground/80"
-        >
-          Small essays and research notes, newest first.
-        </p>
       </header>
-      <Section id="posts" index="0" title="Index" accent="text-roy-b">
+      <Section
+        id="posts"
+        index="0"
+        title={`Index (${posts.length})`}
+        accent="text-roy-b"
+      >
         <BorderedPanel>
-          <ol className="divide-y divide-border">
+          <RailList testId="blog-index-rail">
             {posts.map((post, index) => (
-              <li
+              <RailItem
                 key={post.manifest.slug}
-                className="grid gap-2 py-2.5 first:pt-0 last:pb-0 md:grid-cols-[7.5rem_1fr]"
-              >
-                <time
-                  dateTime={post.manifest.publishedAt}
-                  className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
-                >
-                  {formatDate(post.manifest.publishedAt)}
-                </time>
-                <div className="min-w-0">
-                  <div className="flex items-baseline gap-2">
+                dotClassName={index === 0 ? 'bg-roy-b' : 'bg-foreground'}
+                title={
+                  <div className="flex min-w-0 items-baseline gap-2">
                     <ExternalLink
                       href={postHref(post)}
                       section="b"
@@ -65,16 +46,31 @@ export default async function BlogIndexPage() {
                       </span>
                     ) : null}
                   </div>
-                  <p
-                    data-one-line="true"
-                    className="mt-1 truncate text-xs leading-snug text-muted-foreground"
+                }
+                meta={formatDate(post.manifest.publishedAt)}
+                description={post.summary}
+                footer={
+                  <div
+                    data-testid="blog-index-row-meta"
+                    className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
                   >
-                    {post.summary}
-                  </p>
-                </div>
-              </li>
+                    <span>{post.readingMeta}</span>
+                    <span>Updated {formatDate(post.manifest.updatedAt)}</span>
+                    {post.manifest.codeLink ? (
+                      <ExternalLink
+                        href={post.manifest.codeLink.href}
+                        section="b"
+                        className="text-muted-foreground"
+                      >
+                        {post.manifest.codeLink.label}
+                      </ExternalLink>
+                    ) : null}
+                  </div>
+                }
+                connector={index < posts.length - 1 ? 'solid' : 'none'}
+              />
             ))}
-          </ol>
+          </RailList>
         </BorderedPanel>
       </Section>
     </>
