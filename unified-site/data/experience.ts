@@ -104,6 +104,7 @@ export const experienceGroups: ExperienceGroup[] = [
     roles: [
       {
         org: 'Operating Systems',
+        piName: 'Matthew Lentz',
         date: 'Incoming Aug 2026',
         state: 'incoming',
         incoming: true,
@@ -111,7 +112,15 @@ export const experienceGroups: ExperienceGroup[] = [
       },
       {
         org: 'Computer Systems',
+        piName: 'Matthew Lentz',
         date: 'Jan 2026 - May 2026',
+        state: 'ended',
+        desc: 'Duke University.',
+      },
+      {
+        org: 'Organic Chemistry I',
+        piName: 'SAGE Tutoring',
+        date: 'Sophomore spring',
         state: 'ended',
         desc: 'Duke University.',
       },

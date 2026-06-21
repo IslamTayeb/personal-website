@@ -417,6 +417,7 @@ async function assertHome(page: Page) {
   assert.equal(teaching?.expanded, 'false');
   assert.equal(teaching?.rows, 0, 'Teaching should default collapsed');
   assert.equal(teaching?.hasShowMore, false, 'Teaching should not see more');
+  assert.ok(teaching?.text.includes('Teaching (3)'));
 
   const incomingDots = result.dots.filter((dot) => dot.state === 'incoming');
   const presentDots = result.dots.filter((dot) => dot.state === 'present');
@@ -542,9 +543,22 @@ async function assertExperienceInteractions(page: Page) {
 
   await page
     .locator('[data-testid="experience-group"][data-group="Teaching"]')
-    .getByRole('button', { name: /Teaching \(2\)/ })
+    .getByRole('button', { name: /Teaching \(3\)/ })
     .click();
-  assert.equal(await groupRows('Teaching'), 2);
+  assert.equal(await groupRows('Teaching'), 3);
+  const teachingText = await page
+    .locator('[data-testid="experience-group"][data-group="Teaching"]')
+    .textContent();
+
+  assert.ok(teachingText?.includes('Operating Systems'));
+  assert.ok(teachingText?.includes('Computer Systems'));
+  assert.ok(teachingText?.includes('Organic Chemistry I'));
+  assert.equal(
+    (teachingText?.match(/Matthew Lentz/g) ?? []).length,
+    2,
+    'Matthew Lentz should label both CS teaching rows'
+  );
+  assert.ok(teachingText?.includes('SAGE Tutoring'));
   await expectNoTeachingShowMore(page);
 }
 
