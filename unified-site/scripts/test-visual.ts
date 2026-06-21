@@ -56,6 +56,8 @@ async function assertHomeMeasurements(page: Page) {
           .join(' ')
       : '';
     const heroSection = document.querySelector('[data-testid="hero-section"]');
+    const heroBody = heroSection?.querySelector('h1 + div');
+    const heroMeta = heroBody?.children[0];
     const heroSectionMarker =
       heroSection
         ?.querySelector('header span')
@@ -125,11 +127,26 @@ async function assertHomeMeasurements(page: Page) {
       bandHeight: band?.getBoundingClientRect().height ?? 0,
       heroTitleText: title?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       titleRight: title?.getBoundingClientRect().right ?? 0,
+      heroBodyWidth: heroBody?.getBoundingClientRect().width ?? 0,
+      heroMetaWidth: heroMeta?.getBoundingClientRect().width ?? 0,
+      heroMetaWidthPercent:
+        heroBody && heroMeta
+          ? (heroMeta.getBoundingClientRect().width /
+              heroBody.getBoundingClientRect().width) *
+            100
+          : 0,
       heroBorderTopWidth: heroSection
         ? Number.parseFloat(getComputedStyle(heroSection).borderTopWidth)
         : 0,
       heroSectionMarker,
       heroSectionLabel,
+      sectionMarkers: topLevelSections.map(
+        (element) =>
+          element
+            .querySelector('header span')
+            ?.textContent?.replace(/\s+/g, ' ')
+            .trim() ?? ''
+      ),
       sectionBorderTopWidths: topLevelSections.map((element) =>
         Number.parseFloat(getComputedStyle(element).borderTopWidth)
       ),
@@ -207,12 +224,21 @@ async function assertHomeMeasurements(page: Page) {
     measurements.titleRight < measurements.viewportWidth,
     'hero title should not overflow'
   );
+  assert.ok(
+    Math.abs(measurements.heroMetaWidthPercent - 28.26) < 0.5,
+    `hero metadata column should stay near 28.26% of the hero body, got ${measurements.heroMetaWidthPercent.toFixed(2)}%`
+  );
   assert.equal(
     measurements.heroBorderTopWidth,
     0,
     'there should be no divider between ROYB band and hero'
   );
-  assert.equal(measurements.heroSectionMarker, '§1');
+  assert.equal(measurements.heroSectionMarker, '§0');
+  assert.deepEqual(
+    measurements.sectionMarkers,
+    ['§0', '§1', '§2', '§3', '§4'],
+    'home sections should use zero-based section markers'
+  );
   assert.equal(
     measurements.heroSectionLabel,
     'About',

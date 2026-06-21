@@ -70,7 +70,7 @@ export function Hero() {
     <section id="about" data-testid="hero-section" className="py-3 md:py-3.5">
       <div className="flex w-full flex-col gap-2">
         <header className="mb-1 flex items-baseline gap-3">
-          <span className="font-mono text-xs text-roy-r">§1</span>
+          <span className="font-mono text-xs text-roy-r">§0</span>
           <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-foreground">
             About
           </h2>
