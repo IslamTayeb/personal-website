@@ -63,15 +63,15 @@ export function RailItem({
   ariaExpanded?: boolean;
 }) {
   const topRowClassName = cn(
-    'grid min-w-0 items-start gap-3 text-left',
-    meta ? 'grid-cols-[minmax(0,1fr)_auto]' : 'grid-cols-[minmax(0,1fr)]'
+    'flex min-w-0 items-start gap-3 text-left',
+    meta && 'justify-between'
   );
   const topRow = (
     <>
       <span
         data-testid={titleTestId}
         className={cn(
-          'min-w-0 text-base font-medium leading-tight text-foreground',
+          'min-w-0 flex-auto text-base font-medium leading-tight text-foreground',
           titleClassName
         )}
       >
@@ -80,7 +80,7 @@ export function RailItem({
       {meta ? (
         <span
           className={cn(
-            'min-w-[5.5rem] max-w-[min(48vw,13rem)] whitespace-normal text-right font-mono text-sm leading-tight text-muted-foreground md:min-w-0 md:max-w-none md:shrink-0 md:whitespace-nowrap',
+            'min-w-[4rem] max-w-[min(48vw,13rem)] shrink-[999] whitespace-normal text-right font-mono text-sm leading-tight text-muted-foreground md:min-w-0 md:max-w-none md:shrink-0 md:whitespace-nowrap',
             metaClassName
           )}
         >

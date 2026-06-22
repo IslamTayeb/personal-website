@@ -1601,12 +1601,14 @@ async function assertMobileRailDateLayout({
   selector,
   label,
   singleLineDates = [],
+  wrappedDates = [],
   requireActualWrap = false,
 }: {
   page: Page;
   selector: string;
   label: string;
   singleLineDates?: string[];
+  wrappedDates?: string[];
   requireActualWrap?: boolean;
 }) {
   const result = await page.evaluate((selector) => {
@@ -1655,6 +1657,16 @@ async function assertMobileRailDateLayout({
     assert.ok(
       date.lineHeight > 0 && date.height <= date.lineHeight * 1.5,
       `${label} should keep ${text} on one line when space is available`
+    );
+  }
+
+  for (const text of wrappedDates) {
+    const date = result.dates.find((candidate) => candidate.text === text);
+
+    assert.ok(date, `${label} should include ${text}`);
+    assert.ok(
+      date.lineHeight > 0 && date.height > date.lineHeight * 1.5,
+      `${label} should let ${text} wrap when title space is more valuable`
     );
   }
 
@@ -3293,7 +3305,8 @@ async function main() {
       selector:
         '#experience [data-testid="rail-title"] + span, #writing [data-testid="rail-title"] + span, #publications [data-testid="publication-title-wrap"] + span',
       label: 'mobile home rail dates',
-      singleLineDates: ['May 2025 - Oct 2025', 'Sep 2025'],
+      singleLineDates: ['May 2025 - Oct 2025'],
+      wrappedDates: ['Sep 2025'],
     });
     await assertMobileFooterAlignment(mobile);
     await screenshot(mobile, 'home-mobile');
