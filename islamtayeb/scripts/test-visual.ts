@@ -1522,25 +1522,19 @@ async function assertMobileFooterAlignment(page: Page) {
     const quoteStyle = quote ? getComputedStyle(quote) : null;
     const footerRect = footer?.getBoundingClientRect();
     const updateRect = update?.getBoundingClientRect();
-    const quoteRect = quote?.getBoundingClientRect();
 
     return {
       footerClientWidth: footer?.clientWidth ?? 0,
       footerScrollWidth: footer?.scrollWidth ?? 0,
+      footerVisibleText: footer?.innerText?.replace(/\s+/g, ' ').trim() ?? '',
       footerLeft: footerRect?.left ?? 0,
-      footerRight: footerRect?.right ?? 0,
       updateLeft: updateRect?.left ?? 0,
       updateHeight: updateRect?.height ?? 0,
       updateText: update?.innerText?.replace(/\s+/g, ' ').trim() ?? '',
       updateFontSize: Number.parseFloat(updateStyle?.fontSize ?? '0'),
       updateLineHeight: Number.parseFloat(updateStyle?.lineHeight ?? '0'),
       updateWhiteSpace: updateStyle?.whiteSpace ?? '',
-      quoteRight: quoteRect?.right ?? 0,
-      quoteHeight: quoteRect?.height ?? 0,
-      quoteVisibleText: quote?.innerText?.replace(/\s+/g, ' ').trim() ?? '',
-      quoteFontSize: Number.parseFloat(quoteStyle?.fontSize ?? '0'),
-      quoteLineHeight: Number.parseFloat(quoteStyle?.lineHeight ?? '0'),
-      quoteTextAlign: quoteStyle?.textAlign ?? '',
+      quoteDisplay: quoteStyle?.display ?? '',
     };
   });
 
@@ -1549,27 +1543,19 @@ async function assertMobileFooterAlignment(page: Page) {
     `mobile footer should not overflow horizontally: ${result.footerScrollWidth} / ${result.footerClientWidth}`
   );
   assert.equal(result.updateWhiteSpace, 'nowrap');
-  assert.equal(result.quoteTextAlign, 'right');
   assert.equal(result.updateText, 'Last updated Jun 21, 2026');
   assert.equal(result.updateFontSize, 14);
-  assert.ok(!result.quoteVisibleText.includes('plz enjoy game'));
-  assert.ok(result.quoteVisibleText.includes('rrtyui'));
-  assert.equal(result.quoteFontSize, 14);
+  assert.equal(result.footerVisibleText, 'Last updated Jun 21, 2026');
+  assert.equal(result.quoteDisplay, 'none');
+  assert.ok(!result.footerVisibleText.includes('plz enjoy game'));
+  assert.ok(!result.footerVisibleText.includes('rrtyui'));
   assert.ok(
     Math.abs(result.footerLeft - result.updateLeft) <= 1,
     'mobile footer update should stay on the left edge'
   );
   assert.ok(
-    Math.abs(result.footerRight - result.quoteRight) <= 1,
-    'mobile footer quote should stay on the right edge'
-  );
-  assert.ok(
     result.updateHeight <= result.updateLineHeight * 1.25,
     `mobile footer update should stay one line: ${result.updateHeight} / ${result.updateLineHeight}`
-  );
-  assert.ok(
-    result.quoteHeight <= result.quoteLineHeight * 1.25,
-    `mobile footer credit should stay one line: ${result.quoteHeight} / ${result.quoteLineHeight}`
   );
 }
 

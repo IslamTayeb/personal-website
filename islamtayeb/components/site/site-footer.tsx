@@ -10,8 +10,11 @@ export function SiteFooter() {
       <span data-testid="site-footer-updated" className="whitespace-nowrap">
         Last updated Jun 21, 2026
       </span>
-      <span data-testid="site-footer-quote" className="min-w-0 text-right">
-        <span className="hidden whitespace-nowrap sm:inline">
+      <span
+        data-testid="site-footer-quote"
+        className="hidden min-w-0 text-right sm:block"
+      >
+        <span className="whitespace-nowrap">
           {'"'}
           <ExternalLink
             href={footerQuote.href}
