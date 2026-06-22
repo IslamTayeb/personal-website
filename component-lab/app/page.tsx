@@ -6,6 +6,7 @@ import { PublicationsSection } from '@/components/lab/publications';
 import { CoursesSection } from '@/components/lab/courses';
 import { WritingSection } from '@/components/lab/writing';
 import { ArticlePrimitivesSection } from '@/components/lab/article-primitives';
+import { PortraitDitherLabSection } from '@/components/lab/portrait-dither-lab';
 import {
   ExperienceIconRailLabSection,
   ExperienceGroupingLabSection,
@@ -53,6 +54,7 @@ export default function Page() {
 
       <WordmarkSection />
       <HeroSection />
+      <PortraitDitherLabSection />
       <LinksSection />
       <ExperienceSection />
       <PublicationsSection />

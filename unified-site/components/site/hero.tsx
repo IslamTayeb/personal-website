@@ -10,13 +10,13 @@ function ContactIndex() {
     <div className="flex flex-col gap-2 font-mono text-sm leading-snug">
       <Image
         data-testid="hero-portrait"
-        src="/hero-portrait.png"
+        src="/me.webp"
         alt="Portrait of Islam Tayeb"
         width={384}
         height={384}
         priority
         unoptimized
-        className="aspect-square w-full max-w-48 bg-background object-cover [image-rendering:pixelated] md:max-w-none"
+        className="hidden aspect-square w-full max-w-48 bg-background object-cover [image-rendering:pixelated] md:block md:max-w-none"
       />
       <div className="flex flex-col gap-0.5">
         <span className="text-muted-foreground">contact</span>
