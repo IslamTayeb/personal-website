@@ -67,12 +67,18 @@ export const experienceGroups: ExperienceGroup[] = [
         desc: 'Continual learning for antibody affinity prediction',
       },
       {
-        org: 'Saudi Aramco',
+        org: 'KFUPM',
         piName: 'Mahmoud Abdelnaby',
         date: 'Jul 2022 - Sep 2023',
         href: 'https://scholar.google.com/citations?user=BLMFawMAAAAJ&hl=en',
         state: 'ended',
-        desc: 'Polymer property prediction and synthesis for CO₂ capture',
+        desc: 'Polymer property prediction and synthesis for CO₂ capture w/ Saudi Aramco',
+        descLinks: [
+          {
+            text: 'Saudi Aramco',
+            href: 'https://www.aramco.com/',
+          },
+        ],
       },
     ],
   },
