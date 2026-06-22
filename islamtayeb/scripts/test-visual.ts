@@ -278,9 +278,16 @@ async function assertHome(page: Page) {
       };
     });
     const footer = document.querySelector('[data-testid="site-footer"]');
-    const footerSpans = [...(footer?.querySelectorAll('span') ?? [])];
-    const footerUpdate = footerSpans[0];
-    const footerQuote = footerSpans[1];
+    const footerUpdate = footer?.querySelector<HTMLElement>(
+      '[data-testid="site-footer-updated"]'
+    );
+    const footerQuote = footer?.querySelector<HTMLElement>(
+      '[data-testid="site-footer-quote"]'
+    );
+    const footerUpdateStyle = footerUpdate
+      ? getComputedStyle(footerUpdate)
+      : null;
+    const footerQuoteStyle = footerQuote ? getComputedStyle(footerQuote) : null;
     const topLevelSections = [...document.querySelectorAll('main > section')];
     const rootStyle = getComputedStyle(document.documentElement);
     const sectionMarkerData = topLevelSections.map((section) => {
@@ -828,6 +835,8 @@ async function assertHome(page: Page) {
       footerQuoteText:
         footerQuote?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       footerText: footer?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      footerUpdateWhiteSpace: footerUpdateStyle?.whiteSpace ?? '',
+      footerQuoteTextAlign: footerQuoteStyle?.textAlign ?? '',
     };
   });
 
@@ -1400,6 +1409,8 @@ async function assertHome(page: Page) {
   assert.ok(result.footerQuoteText.includes('plz enjoy game'));
   assert.ok(result.footerQuoteText.includes('rrtyui'));
   assert.ok(!result.footerText.includes('Links:'));
+  assert.equal(result.footerUpdateWhiteSpace, 'nowrap');
+  assert.equal(result.footerQuoteTextAlign, 'right');
   assert.ok(
     Math.abs(result.footerLeft - result.footerUpdateLeft) <= 1,
     'footer update text should sit at the left edge'
@@ -1495,6 +1506,69 @@ async function assertMobileRailDescriptionsWrap(page: Page) {
     ),
     'at least one mobile experience description should wrap across lines'
   );
+}
+
+async function assertMobileFooterAlignment(
+  page: Page,
+  { expectSingleLine }: { expectSingleLine: boolean }
+) {
+  const result = await page.evaluate(() => {
+    const footer = document.querySelector<HTMLElement>(
+      '[data-testid="site-footer"]'
+    );
+    const update = footer?.querySelector<HTMLElement>(
+      '[data-testid="site-footer-updated"]'
+    );
+    const quote = footer?.querySelector<HTMLElement>(
+      '[data-testid="site-footer-quote"]'
+    );
+    const updateStyle = update ? getComputedStyle(update) : null;
+    const quoteStyle = quote ? getComputedStyle(quote) : null;
+    const footerRect = footer?.getBoundingClientRect();
+    const updateRect = update?.getBoundingClientRect();
+    const quoteRect = quote?.getBoundingClientRect();
+
+    return {
+      footerClientWidth: footer?.clientWidth ?? 0,
+      footerScrollWidth: footer?.scrollWidth ?? 0,
+      footerLeft: footerRect?.left ?? 0,
+      footerRight: footerRect?.right ?? 0,
+      updateLeft: updateRect?.left ?? 0,
+      updateHeight: updateRect?.height ?? 0,
+      updateLineHeight: Number.parseFloat(updateStyle?.lineHeight ?? '0'),
+      updateWhiteSpace: updateStyle?.whiteSpace ?? '',
+      quoteRight: quoteRect?.right ?? 0,
+      quoteHeight: quoteRect?.height ?? 0,
+      quoteLineHeight: Number.parseFloat(quoteStyle?.lineHeight ?? '0'),
+      quoteTextAlign: quoteStyle?.textAlign ?? '',
+    };
+  });
+
+  assert.ok(
+    result.footerScrollWidth <= result.footerClientWidth + 1,
+    `mobile footer should not overflow horizontally: ${result.footerScrollWidth} / ${result.footerClientWidth}`
+  );
+  assert.equal(result.updateWhiteSpace, 'nowrap');
+  assert.equal(result.quoteTextAlign, 'right');
+  assert.ok(
+    Math.abs(result.footerLeft - result.updateLeft) <= 1,
+    'mobile footer update should stay on the left edge'
+  );
+  assert.ok(
+    Math.abs(result.footerRight - result.quoteRight) <= 1,
+    'mobile footer quote should stay on the right edge'
+  );
+  assert.ok(
+    result.updateHeight <= result.updateLineHeight * 1.25,
+    `mobile footer update should stay one line: ${result.updateHeight} / ${result.updateLineHeight}`
+  );
+
+  if (expectSingleLine) {
+    assert.ok(
+      result.quoteHeight <= result.quoteLineHeight * 1.25,
+      `phone-width footer quote should stay one line: ${result.quoteHeight} / ${result.quoteLineHeight}`
+    );
+  }
 }
 
 async function assertWrappedInlineHighlight({
@@ -3000,12 +3074,16 @@ async function main() {
     await assertRoybBandPlacement(mobile);
     await assertMobileHeroContactCompact(mobile);
     await assertMobileRailDescriptionsWrap(mobile);
+    await assertMobileFooterAlignment(mobile, { expectSingleLine: true });
     await screenshot(mobile, 'home-mobile');
 
     const narrowMobile = await browser.newPage({
       viewport: { width: 320, height: 844 },
     });
     await narrowMobile.goto(baseUrl, { waitUntil: 'networkidle' });
+    await assertMobileFooterAlignment(narrowMobile, {
+      expectSingleLine: false,
+    });
     await assertMobileHomeWrappedHighlights(narrowMobile);
 
     const mobileBlog = await browser.newPage({
