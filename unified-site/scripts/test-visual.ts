@@ -466,6 +466,18 @@ async function assertHome(page: Page) {
     const publicationSelfAuthors = [
       ...document.querySelectorAll('[data-testid="publication-author-self"]'),
     ].map((author) => author.textContent?.trim() ?? '');
+    const publicationSelfAuthorStyles = [
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-testid="publication-author-self"]'
+      ),
+    ].map((author) => {
+      const style = getComputedStyle(author);
+
+      return {
+        className: author.className,
+        fontWeight: Number.parseInt(style.fontWeight, 10),
+      };
+    });
     const publicationRows = [
       ...(document
         .querySelector('#publications')
@@ -716,6 +728,7 @@ async function assertHome(page: Page) {
       publicationAuthors,
       publicationAuthorStyles,
       publicationSelfAuthors,
+      publicationSelfAuthorStyles,
       publicationRows,
       hasCoursesSection: Boolean(document.querySelector('#courses')),
       publicationsTitle:
@@ -1218,6 +1231,13 @@ async function assertHome(page: Page) {
   assert.ok(
     result.publicationSelfAuthors.every((author) => author === 'Islam Tayeb'),
     'Islam Tayeb should be emphasized in every publication author row'
+  );
+  assert.ok(
+    result.publicationSelfAuthorStyles.every(
+      (style: { className: string; fontWeight: number }) =>
+        style.className.includes('font-medium') && style.fontWeight === 500
+    ),
+    'Islam Tayeb author spans should render at font-medium weight'
   );
   assert.ok(
     !result.publicationTitleClassName.includes('text-balance'),

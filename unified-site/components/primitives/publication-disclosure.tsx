@@ -12,13 +12,13 @@ function PublicationAuthors({ authors }: { authors: string }) {
     >
       {authors.split(/(Islam Tayeb)/g).map((part, index) =>
         part === 'Islam Tayeb' ? (
-          <strong
+          <span
             key={`${part}-${index}`}
             data-testid="publication-author-self"
-            className="font-semibold text-foreground"
+            className="font-medium text-foreground"
           >
             {part}
-          </strong>
+          </span>
         ) : (
           <span key={`${part}-${index}`}>{part}</span>
         )
