@@ -1469,7 +1469,7 @@ async function assertHome(page: Page) {
   assert.equal(result.footerBorderTopWidth, 1);
   assert.ok(result.bodyText.includes('see more on scholar'));
   assert.ok(result.bodyText.includes('see more on blog'));
-  assert.equal(result.footerUpdateText, 'Last updated Jun 21, 2026');
+  assert.equal(result.footerUpdateText, 'Last updated Jun 22, 2026');
   assert.ok(result.footerQuoteText.includes('plz enjoy game'));
   assert.ok(result.footerQuoteText.includes('rrtyui'));
   assert.ok(!result.footerText.includes('Links:'));
@@ -1692,9 +1692,9 @@ async function assertMobileFooterAlignment(page: Page) {
     `mobile footer should not overflow horizontally: ${result.footerScrollWidth} / ${result.footerClientWidth}`
   );
   assert.equal(result.updateWhiteSpace, 'nowrap');
-  assert.equal(result.updateText, 'Last updated Jun 21, 2026');
+  assert.equal(result.updateText, 'Last updated Jun 22, 2026');
   assert.equal(result.updateFontSize, 14);
-  assert.equal(result.footerVisibleText, 'Last updated Jun 21, 2026');
+  assert.equal(result.footerVisibleText, 'Last updated Jun 22, 2026');
   assert.equal(result.quoteDisplay, 'none');
   assert.ok(!result.footerVisibleText.includes('plz enjoy game'));
   assert.ok(!result.footerVisibleText.includes('rrtyui'));
