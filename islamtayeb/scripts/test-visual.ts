@@ -20,6 +20,18 @@ const expectedHeroParagraphs = heroParagraphs.map((paragraph) =>
     .trim()
 );
 
+function colorBrightness(color: string) {
+  const match = color.match(/rgba?\((\d+), (\d+), (\d+)/);
+
+  assert.ok(match, `expected an rgb color, received: ${color}`);
+
+  return (
+    Number.parseInt(match[1], 10) +
+    Number.parseInt(match[2], 10) +
+    Number.parseInt(match[3], 10)
+  );
+}
+
 async function isServerReady(url: string) {
   try {
     const response = await fetch(url);
@@ -2680,6 +2692,8 @@ async function assertArticle(page: Page) {
       kbdBackground: kbdStyle?.backgroundColor ?? '',
       kbdBackgroundImage: kbdStyle?.backgroundImage ?? '',
       kbdBorderTop: kbdStyle?.borderTopColor ?? '',
+      kbdBorderBottom: kbdStyle?.borderBottomColor ?? '',
+      kbdBoxShadow: kbdStyle?.boxShadow ?? '',
       kbdColor: kbdStyle?.color ?? '',
     };
 
@@ -2691,10 +2705,18 @@ async function assertArticle(page: Page) {
   assert.equal(darkCode.background, 'rgb(28, 28, 28)');
   assert.notEqual(darkCode.color, 'rgb(28, 28, 28)');
   assert.notEqual(darkCode.keywordColor, 'rgb(28, 28, 28)');
-  assert.equal(darkCode.kbdBackground, 'rgb(36, 36, 36)');
+  assert.equal(darkCode.kbdBackground, 'rgb(38, 38, 38)');
   assert.match(darkCode.kbdBackgroundImage, /linear-gradient/);
+  assert.match(darkCode.kbdBackgroundImage, /rgba\(255, 255, 255, 0\.07\)/);
   assert.notEqual(darkCode.kbdColor, darkCode.kbdBackground);
   assert.notEqual(darkCode.kbdBorderTop, darkCode.kbdBackground);
+  assert.equal(darkCode.kbdBorderBottom, 'rgb(18, 18, 18)');
+  assert.ok(
+    colorBrightness(darkCode.kbdBorderBottom) <
+      colorBrightness(darkCode.kbdBackground),
+    'dark keycap bottom edge should be darker than the key face'
+  );
+  assert.match(darkCode.kbdBoxShadow, /rgba\(0, 0, 0, 0\.7\)/);
 }
 
 async function assertHarmoniaArticle(page: Page) {
@@ -3027,7 +3049,39 @@ async function assertLegacyMediaArticle(page: Page) {
         source: video.currentSrc || video.querySelector('source')?.src || '',
       };
     });
-    const keycapStyle = keycap ? getComputedStyle(keycap) : null;
+    const root = document.documentElement;
+    const originalClassName = root.className;
+
+    root.classList.remove('dark');
+    root.classList.add('light');
+    const lightKeycapStyle = keycap ? getComputedStyle(keycap) : null;
+    const lightKeycap = {
+      display: lightKeycapStyle?.display ?? '',
+      borderTopWidth: lightKeycapStyle?.borderTopWidth ?? '',
+      borderTopColor: lightKeycapStyle?.borderTopColor ?? '',
+      borderBottomColor: lightKeycapStyle?.borderBottomColor ?? '',
+      boxShadow: lightKeycapStyle?.boxShadow ?? '',
+      backgroundColor: lightKeycapStyle?.backgroundColor ?? '',
+      backgroundImage: lightKeycapStyle?.backgroundImage ?? '',
+      color: lightKeycapStyle?.color ?? '',
+    };
+
+    root.classList.remove('light');
+    root.classList.add('dark');
+    const darkKeycapStyle = keycap ? getComputedStyle(keycap) : null;
+    const darkKeycap = {
+      display: darkKeycapStyle?.display ?? '',
+      borderTopWidth: darkKeycapStyle?.borderTopWidth ?? '',
+      borderTopColor: darkKeycapStyle?.borderTopColor ?? '',
+      borderBottomColor: darkKeycapStyle?.borderBottomColor ?? '',
+      boxShadow: darkKeycapStyle?.boxShadow ?? '',
+      backgroundColor: darkKeycapStyle?.backgroundColor ?? '',
+      backgroundImage: darkKeycapStyle?.backgroundImage ?? '',
+      color: darkKeycapStyle?.color ?? '',
+    };
+
+    root.className = originalClassName;
+
     const listData = lists.map((list) => {
       const style = getComputedStyle(list);
       const rect = list.getBoundingClientRect();
@@ -3054,10 +3108,12 @@ async function assertLegacyMediaArticle(page: Page) {
       mediaBorderWidths: mediaFigures.map(
         (figure) => getComputedStyle(figure).borderTopWidth
       ),
-      keycapDisplay: keycapStyle?.display ?? '',
-      keycapBorderTop: keycapStyle?.borderTopWidth ?? '',
-      keycapBoxShadow: keycapStyle?.boxShadow ?? '',
-      keycapBackgroundImage: keycapStyle?.backgroundImage ?? '',
+      keycapDisplay: lightKeycap.display,
+      keycapBorderTop: lightKeycap.borderTopWidth,
+      keycapBoxShadow: lightKeycap.boxShadow,
+      keycapBackgroundImage: lightKeycap.backgroundImage,
+      lightKeycap,
+      darkKeycap,
       listData,
       orderedTextLeft,
       unorderedTextLeft,
@@ -3114,6 +3170,27 @@ async function assertLegacyMediaArticle(page: Page) {
   assert.notEqual(result.keycapBoxShadow, 'none');
   assert.match(result.keycapBackgroundImage, /linear-gradient/);
   assert.match(result.keycapBoxShadow, /inset/);
+  assert.equal(result.lightKeycap.backgroundColor, 'rgb(236, 236, 234)');
+  assert.equal(result.lightKeycap.borderTopColor, 'rgb(185, 185, 177)');
+  assert.equal(result.lightKeycap.borderBottomColor, 'rgb(143, 143, 134)');
+  assert.equal(result.lightKeycap.color, 'rgb(34, 34, 34)');
+  assert.match(
+    result.lightKeycap.backgroundImage,
+    /rgba\(255, 255, 255, 0\.42\)/
+  );
+  assert.match(result.lightKeycap.boxShadow, /rgba\(0, 0, 0, 0\.22\)/);
+  assert.equal(result.darkKeycap.backgroundColor, 'rgb(38, 38, 38)');
+  assert.equal(result.darkKeycap.borderBottomColor, 'rgb(18, 18, 18)');
+  assert.ok(
+    colorBrightness(result.darkKeycap.borderBottomColor) <
+      colorBrightness(result.darkKeycap.backgroundColor),
+    'dark keycap bottom edge should render darker than the key face'
+  );
+  assert.match(
+    result.darkKeycap.backgroundImage,
+    /rgba\(255, 255, 255, 0\.07\)/
+  );
+  assert.match(result.darkKeycap.boxShadow, /rgba\(0, 0, 0, 0\.7\)/);
   assert.ok(result.listData.length > 0, 'legacy article should include lists');
   assert.ok(
     result.listData.some(
