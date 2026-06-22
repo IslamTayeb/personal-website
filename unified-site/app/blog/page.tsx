@@ -59,7 +59,7 @@ export default async function BlogIndexPage() {
                   footer={
                     <div
                       data-testid="blog-index-row-meta"
-                      className="flex flex-wrap gap-x-3 gap-y-1 text-sm leading-snug text-foreground"
+                      className="reading-copy flex flex-wrap gap-x-3 gap-y-1 text-sm leading-snug text-foreground"
                     >
                       <span>{post.readingMeta}</span>
                     </div>
@@ -91,7 +91,7 @@ export default async function BlogIndexPage() {
                 footer={
                   <div
                     data-testid="external-writing-meta"
-                    className="text-sm leading-snug text-foreground"
+                    className="reading-copy text-sm leading-snug text-foreground"
                   >
                     {item.meta}
                   </div>

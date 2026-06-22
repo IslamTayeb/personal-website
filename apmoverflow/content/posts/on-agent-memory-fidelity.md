@@ -1,4 +1,4 @@
-> tl;dr Context should not be one flat transcript. It should be a structured object of messages, where each message can be *full*, *summarized*, or *hidden*. The agent can tune that detail-level per message per prompt, spending tokens only where needed.
+> tl;dr Context should not be one flat transcript. It should be a structured object of messages, where each message can be `full` / `summary` / `hidden`. The agent can tune that detail-level per message per prompt, spending tokens only where needed.
 
 Since Sonnet 3.7 came out last summer, I've barely hand-written code. Coding agents are getting insanely good, and I (like many others) keep trusting these models to do more and more.
 
@@ -40,7 +40,7 @@ Agent sessions should have the same *adaptive forgetting*. Where it differs from
 
 ## Decant
 
-**Decant allows agents to treat context as a collection of message objects grouped into topics, with knobs to adjust compression.** The agent decides how much of each topic or message should stay in the next prompt.
+Decant allows agents to treat context as a collection of message objects grouped into topics, with knobs to adjust compression. The agent decides how much of each topic or message should stay in the next prompt.
 
 There are two control layers:
 

@@ -10,15 +10,7 @@ export function RichText({ text }: { text: string }) {
           return (
             <span key={`${part}-${index}`}>
               CO
-              <sub className="font-semibold">2</sub>
-            </span>
-          );
-        }
-
-        if (part === 'porous organic polymers') {
-          return (
-            <span key={`${part}-${index}`} className="whitespace-nowrap">
-              {part}
+              <sub>2</sub>
             </span>
           );
         }

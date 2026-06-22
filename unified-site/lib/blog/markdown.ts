@@ -313,10 +313,28 @@ function normalizeLegacyTables(html: string) {
   return normalized;
 }
 
+function withTransparentIframeAttrs(html: string) {
+  return html.replace(/<iframe\b([^>]*)>/g, (_match, attrs: string) => {
+    let nextAttrs = attrs;
+    const isHarmoniaIframe =
+      /\bsrc="https:\/\/islamtayeb\.github\.io\/harmonia\//i.test(nextAttrs);
+
+    if (isHarmoniaIframe && !/\bdata-harmonia-iframe=/i.test(nextAttrs)) {
+      nextAttrs += ' data-harmonia-iframe="true"';
+    }
+
+    if (!/\ballowtransparency=/i.test(nextAttrs)) {
+      nextAttrs += ' allowtransparency="true"';
+    }
+
+    return `<iframe${nextAttrs}>`;
+  });
+}
+
 function normalizeLegacyIframes(html: string) {
   const iframePattern = '<iframe\\b(?:(?!<iframe\\b)[\\s\\S])*?<\\/iframe>';
 
-  return html
+  return withTransparentIframeAttrs(html)
     .replace(
       new RegExp(
         `(${iframePattern})\\s*<p>\\s*<em>([\\s\\S]*?)<\\/em>\\s*<\\/p>`,

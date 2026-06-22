@@ -44,7 +44,7 @@ export async function WritingPreview() {
                   footer={
                     <div
                       data-testid="writing-row-meta"
-                      className="text-sm leading-snug text-foreground"
+                      className="reading-copy text-sm leading-snug text-foreground"
                     >
                       {post.readingMeta}
                     </div>

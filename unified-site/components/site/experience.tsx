@@ -33,7 +33,7 @@ function AdvisorLabel({
   }
 
   const className = cn(
-    'font-mono text-sm font-normal uppercase tracking-[0.12em] text-muted-foreground',
+    'font-mono text-sm font-normal normal-case tracking-normal text-muted-foreground',
     boxed && 'border border-border px-1'
   );
 

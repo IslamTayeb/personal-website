@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { contactLinks } from '@/data/links';
 import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
@@ -6,6 +8,16 @@ import { SectionHeader } from '@/components/primitives/section';
 function ContactIndex() {
   return (
     <div className="flex flex-col gap-2.5 font-mono text-sm leading-snug">
+      <Image
+        data-testid="hero-portrait"
+        src="/hero-portrait.png"
+        alt="Portrait of Islam Tayeb"
+        width={384}
+        height={384}
+        priority
+        unoptimized
+        className="aspect-square w-full max-w-48 bg-background object-cover [image-rendering:pixelated] md:max-w-none"
+      />
       <div className="flex flex-col gap-1">
         <span className="text-muted-foreground">contact</span>
         <ul className="flex flex-wrap text-foreground">
@@ -43,7 +55,7 @@ function HeroSegment({ segment }: { segment: TextSegment }) {
 
 function HeroStory() {
   return (
-    <div className="flex flex-col gap-1.5 text-base leading-snug text-foreground">
+    <div className="reading-copy flex flex-col gap-1.5 text-base leading-snug text-foreground">
       {heroParagraphs.map((paragraph, paragraphIndex) => (
         <p key={paragraphIndex}>
           {paragraph.map((segment, segmentIndex) => (
@@ -69,11 +81,11 @@ export function Hero() {
         <SectionHeader index="1" title="About" accent="text-roy-r" />
         <h1
           data-testid="hero-title"
-          className="mb-2 w-fit font-sans text-3xl font-semibold tracking-tight text-foreground"
+          className="mb-2 w-fit font-sans text-4xl font-semibold tracking-tight text-foreground"
         >
           Islam Tayeb
         </h1>
-        <div className="flex flex-col gap-3 md:grid md:grid-cols-[20%_minmax(0,1fr)] md:gap-3">
+        <div className="flex flex-col gap-3 md:grid md:grid-cols-[25%_minmax(0,1fr)] md:gap-3">
           <div className="min-w-0 md:border-r md:border-border md:pr-3">
             <ContactIndex />
           </div>

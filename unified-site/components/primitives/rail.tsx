@@ -141,7 +141,7 @@ export function RailItem({
           <p
             data-one-line="true"
             className={cn(
-              'truncate text-base leading-snug text-foreground',
+              'reading-copy truncate text-base leading-snug text-foreground',
               descriptionClassName
             )}
           >

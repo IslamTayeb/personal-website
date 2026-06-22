@@ -11,16 +11,16 @@ export const contactLinks: LinkItem[] = [
     external: false,
   },
   {
+    label: 'linkedin',
+    href: 'https://www.linkedin.com/in/islam-tayeb/',
+  },
+  {
     label: 'github',
     href: 'https://github.com/IslamTayeb',
   },
   {
     label: 'x',
     href: 'https://x.com/IslamTyb',
-  },
-  {
-    label: 'linkedin',
-    href: 'https://www.linkedin.com/in/islam-tayeb/',
   },
   {
     label: 'scholar',

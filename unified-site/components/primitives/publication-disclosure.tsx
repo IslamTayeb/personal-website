@@ -8,7 +8,7 @@ function PublicationAuthors({ authors }: { authors: string }) {
   return (
     <span
       data-testid="publication-authors"
-      className="mt-1 block text-sm font-normal leading-snug text-foreground"
+      className="reading-copy mt-1 block text-sm font-normal leading-snug text-foreground"
     >
       {authors.split(/(Islam Tayeb)/g).map((part, index) =>
         part === 'Islam Tayeb' ? (
@@ -49,14 +49,14 @@ function PublicationRow({
             href={publication.href}
             section="y"
             data-testid="publication-title"
-            className="publication-title-link text-base font-medium leading-tight text-foreground text-balance"
+            className="publication-title-link text-base font-medium leading-tight text-foreground"
           >
             <RichText text={publication.title} />
           </ExternalLink>
           <PublicationAuthors authors={publication.authors} />
           <span
             data-testid="publication-meta-line"
-            className="mt-1 block text-sm font-normal leading-snug text-foreground"
+            className="reading-copy mt-1 block text-sm font-normal leading-snug text-foreground"
           >
             {publication.type}
             {publication.venue ? (

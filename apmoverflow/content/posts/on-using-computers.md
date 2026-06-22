@@ -31,12 +31,12 @@ For example, I have key-binds set as follows:
 
 Additionally, I have *[Yabai](https://github.com/koekeishiya/yabai)* set up, which automatically opens 8 spaces when I log into my computer and moves applications to the following:
 
--   `1`: Work (*Helium*, *Obsidian*)
--   `2`: Social (*iMessage*, *Discord*)
--   `3`: Music (*Spotify*)
+-   `1`: Work *(Helium, Obsidian)*
+-   `2`: Social *(iMessage, Discord)*
+-   `3`: Music *(Spotify)*
 -   `4-6`: N/A (Misc.)
--   `7`: To-do (*[Godspeed](https://godspeedapp.com/)*)
--   `8`: Logistics (*Calendar*, *Mail*, *Slack*) And I can switch to different spaces with <kbd>^ + X</kbd> where <kbd>X</kbd> is the # of the space.
+-   `7`: To-do *([Godspeed](https://godspeedapp.com/))*
+-   `8`: Logistics *(Calendar, Mail, Slack)* And I can switch to different spaces with <kbd>^ + X</kbd> where <kbd>X</kbd> is the # of the space.
 
 ![macOS Mission Control view showing multiple desktop spaces](/static/media/pasted-image-20251003215923.webp) *Snapshot of my Mac spaces, never knew they existed until 1 month after getting my laptop.*
 

@@ -26,7 +26,7 @@ But it worked. Ignoring the pattern and focusing on each circle made me less com
 
 Imagine a landscape where your position is how you play and your height is your skill level. You naturally move uphill. But the landscape has multiple peaks. Once you reach the top of the nearest one, small adjustments can't get you any higher. You need to come back down and start climbing a different, taller peak. Think of a basin as a valley. Which valley you're in determines which peaks you can reach.
 
-![Optimization landscape with a capped peak and a higher peak](https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/On%20Fingerspitzengef%C3%BChl-18.png) *An optimization landscape with multiple peaks. Without guidance, a player climbs the nearest local maximum. A good pointer moves them to a starting position with access to a higher peak.*
+![Optimization landscape with a capped peak and a higher peak](/static/media/fingerspitzen-optimization-transparent.png) *An optimization landscape with multiple peaks. Without guidance, a player climbs the nearest local maximum. A good pointer moves them to a starting position with access to a higher peak.*
 
 What bloo and eternum did wasn't teach me technique. They moved me to a different starting position. "Care about every circle" didn't make me better at aiming per se. But it put me in a different basin entirely, one where the peak was higher.
 
@@ -46,7 +46,7 @@ My understanding is high-dimensional. Language is low-dimensional. Most of what 
 
 But even those five words land differently depending on who hears them. A beginner hears "your aim is too stiff" and has nothing to map it to. Someone who's felt their wrist lock up mid-play reconstructs the full picture from the same phrase.
 
-![High-dimensional signal compressed into language, reconstructed differently by unaware vs self-aware receivers](https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/On%20Fingerspitzengef%C3%BChl-20.png) *A high-dimensional understanding gets compressed into words. A self-aware receiver reconstructs a richer signal from the same phrase than a beginner can.*
+![High-dimensional signal compressed into language, reconstructed differently by unaware vs self-aware receivers](/static/media/fingerspitzen-language-transparent.png) *A high-dimensional understanding gets compressed into words. A self-aware receiver reconstructs a richer signal from the same phrase than a beginner can.*
 
 So there are two bottlenecks. The first is articulation: how much the sender preserves when compressing into language. The second is interpretation: how much the receiver reconstructs.
 

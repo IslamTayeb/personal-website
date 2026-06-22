@@ -205,6 +205,12 @@ async function assertHome(page: Page) {
     const heroTitleRect = heroTitleElement?.getBoundingClientRect();
     const heroContentRect =
       heroTitleElement?.nextElementSibling?.getBoundingClientRect();
+    const heroContactColumn = heroTitleElement?.nextElementSibling
+      ?.firstElementChild as HTMLElement | null | undefined;
+    const heroContactColumnRect = heroContactColumn?.getBoundingClientRect();
+    const heroContactLabels = [
+      ...(heroContactColumn?.querySelectorAll('a') ?? []),
+    ].map((link) => link.textContent?.trim() ?? '');
     const heroPortrait = document.querySelector<HTMLElement>(
       '[data-testid="hero-portrait"]'
     );
@@ -226,6 +232,19 @@ async function assertHome(page: Page) {
       text: link.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       href: link.href,
     }));
+    const advisorLabels = [
+      ...(experienceSection?.querySelectorAll<HTMLElement>(
+        '[data-testid="advisor-label"]'
+      ) ?? []),
+    ].map((label) => {
+      const style = getComputedStyle(label);
+
+      return {
+        text: label.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+        textTransform: style.textTransform,
+        letterSpacing: style.letterSpacing,
+      };
+    });
     const footer = document.querySelector('[data-testid="site-footer"]');
     const footerSpans = [...(footer?.querySelectorAll('span') ?? [])];
     const footerUpdate = footerSpans[0];
@@ -249,6 +268,12 @@ async function assertHome(page: Page) {
     const bodyStyle = getComputedStyle(document.body);
     const bodyColor = bodyStyle.color;
     const bodyFontFamily = bodyStyle.fontFamily;
+    const readingProbe = document.createElement('span');
+
+    readingProbe.className = 'reading-copy';
+    document.body.append(readingProbe);
+    const readingFontFamily = getComputedStyle(readingProbe).fontFamily;
+    readingProbe.remove();
     const sectionLabelColors = topLevelSections.map((section) => {
       const label = section.querySelector<HTMLElement>('header h2');
 
@@ -577,6 +602,7 @@ async function assertHome(page: Page) {
       mainWidth: main?.getBoundingClientRect().width ?? 0,
       bodyColor,
       bodyFontFamily,
+      readingFontFamily,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       wordmarkLinkDisplays: wordmarkLinks.map(
@@ -600,6 +626,9 @@ async function assertHome(page: Page) {
         (heroHeader?.getBoundingClientRect().bottom ?? 0),
       heroTitleContentGap:
         (heroContentRect?.top ?? 0) - (heroTitleRect?.bottom ?? 0),
+      heroContentWidth: heroContentRect?.width ?? 0,
+      heroContactColumnWidth: heroContactColumnRect?.width ?? 0,
+      heroContactLabels,
       heroPortraitExists: Boolean(heroPortrait),
       heroPortraitWidth: heroPortraitRect?.width ?? 0,
       heroPortraitHeight: heroPortraitRect?.height ?? 0,
@@ -646,6 +675,7 @@ async function assertHome(page: Page) {
       firstGroupLabelLeft: firstGroupLabel?.getBoundingClientRect().left ?? 0,
       firstRailTitleLeft: firstRailTitle?.getBoundingClientRect().left ?? 0,
       experienceLinks,
+      advisorLabels,
       experienceLegendExists: Boolean(
         experienceSection?.querySelector('[data-testid="experience-legend"]')
       ),
@@ -717,13 +747,18 @@ async function assertHome(page: Page) {
 
   assert.ok(result.mainWidth <= 800, 'main document should stay narrow');
   assert.equal(result.heroTitle, 'Islam Tayeb');
-  assert.equal(
-    result.heroPortraitExists,
-    false,
-    'hero portrait should be gone'
+  assert.equal(result.heroPortraitExists, true, 'hero portrait should render');
+  assert.ok(result.heroPortraitWidth > 0, 'hero portrait should have width');
+  assert.ok(
+    Math.abs(result.heroPortraitWidth - result.heroPortraitHeight) <= 1,
+    `hero portrait should stay square: ${result.heroPortraitWidth} x ${result.heroPortraitHeight}`
   );
-  assert.equal(result.heroPortraitWidth, 0);
-  assert.equal(result.heroPortraitHeight, 0);
+  assert.ok(
+    result.heroPortraitWidth <= result.heroContactColumnWidth,
+    `hero portrait should stay inside the contact column: ${result.heroPortraitWidth} / ${result.heroContactColumnWidth}`
+  );
+  assert.equal(result.heroPortraitBorderTop, '0px');
+  assert.equal(result.heroPortraitObjectFit, 'cover');
   assert.ok(
     result.heroHeaderTitleGap >= 11 && result.heroHeaderTitleGap <= 13,
     `About/title gap should match the blog index header gap: ${result.heroHeaderTitleGap}`
@@ -731,6 +766,13 @@ async function assertHome(page: Page) {
   assert.ok(
     result.heroTitleContentGap >= 7,
     'hero title should keep a visible bottom gap before contact/body content'
+  );
+  assert.ok(
+    result.heroContentWidth > 0 &&
+      Math.abs(
+        result.heroContactColumnWidth / result.heroContentWidth - 0.25
+      ) <= 0.02,
+    `hero contact column should take 25% of the content row: ${result.heroContactColumnWidth} / ${result.heroContentWidth}`
   );
   assert.deepEqual(result.sectionMarkers, ['§1', '§2', '§3', '§4']);
   assert.deepEqual(result.sectionLabels, [
@@ -825,6 +867,13 @@ async function assertHome(page: Page) {
       !result.heroContactText.includes('hometown'),
     'hero metadata should only keep contact links'
   );
+  assert.deepEqual(result.heroContactLabels, [
+    'email',
+    'linkedin',
+    'github',
+    'x',
+    'scholar',
+  ]);
   for (const copy of [
     "Hey! I'm a Duke CS student based in Durham, NC, researching ML systems, particularly agent correctness and efficiency.",
     'I was born and raised in Egypt, but later moved to Taif, Saudi Arabia during high school.',
@@ -884,17 +933,26 @@ async function assertHome(page: Page) {
   assert.ok(research?.text.includes('Christian Dallago'));
   assert.ok(research?.text.includes('Matthew Lentz'));
   assert.ok(research?.text.includes('Philip Romero'));
+  assert.ok(
+    result.advisorLabels.some(
+      (label) =>
+        label.text === 'Christian Dallago' &&
+        label.textTransform === 'none' &&
+        label.letterSpacing === 'normal'
+    ),
+    'advisor labels should render proper names in normal case'
+  );
   assert.ok(research?.text.includes('incoming Aug 2026'));
   assert.ok(!research?.text.includes('Incoming Aug 2026'));
-  assert.ok(research?.text.includes('Anthropic (AI for Science Program)'));
+  assert.ok(research?.text.includes('Anthropic'));
   assert.ok(research?.text.includes('+ Microsoft Research'));
   assert.ok(
     result.experienceLinks.some(
       (link) =>
-        link.text === 'Anthropic (AI for Science Program)' &&
+        link.text === 'Anthropic' &&
         link.href === 'https://www.anthropic.com/news/ai-for-science-program'
     ),
-    'Anthropic (AI for Science Program) should link to the program page'
+    'Anthropic should link to the AI for Science Program page'
   );
   assert.ok(!research?.text.includes('% Microsoft Research'));
   assert.ok(!result.bodyText.includes('Dallago Lab'));
@@ -916,7 +974,7 @@ async function assertHome(page: Page) {
 
   const metadataStyle = {
     color: result.bodyColor,
-    fontFamily: result.bodyFontFamily,
+    fontFamily: result.readingFontFamily,
     fontSize: 14,
     fontWeight: 400,
     textTransform: 'none',
@@ -939,7 +997,7 @@ async function assertHome(page: Page) {
       result.experienceDescriptionStyles.every(
         (style) =>
           style.color === result.bodyColor &&
-          style.fontFamily === result.bodyFontFamily &&
+          style.fontFamily === result.readingFontFamily &&
           style.fontSize === 16 &&
           style.textTransform === 'none'
       ),
@@ -1116,8 +1174,8 @@ async function assertHome(page: Page) {
     'Islam Tayeb should be emphasized in every publication author row'
   );
   assert.ok(
-    result.publicationTitleClassName.includes('text-balance'),
-    'publication titles should use balanced wrapping to avoid lonely final words'
+    !result.publicationTitleClassName.includes('text-balance'),
+    'publication titles should avoid balance wrappers that create awkward short final lines'
   );
   assert.ok(
     result.publicationRows.every((row) => {
@@ -1184,7 +1242,7 @@ async function assertHome(page: Page) {
   );
 }
 
-async function assertMobileHeroPortraitHidden(page: Page) {
+async function assertMobileHeroPortraitContained(page: Page) {
   const result = await page.evaluate(() => {
     const heroPortrait = document.querySelector<HTMLElement>(
       '[data-testid="hero-portrait"]'
@@ -1198,9 +1256,16 @@ async function assertMobileHeroPortraitHidden(page: Page) {
     };
   });
 
-  assert.equal(result.exists, false);
-  assert.equal(result.width, 0);
-  assert.equal(result.height, 0);
+  assert.equal(result.exists, true);
+  assert.ok(result.width > 0);
+  assert.ok(
+    Math.abs(result.width - result.height) <= 1,
+    `mobile hero portrait should stay square: ${result.width} x ${result.height}`
+  );
+  assert.ok(
+    result.width <= 193,
+    `mobile hero portrait should stay compact: ${result.width}`
+  );
 }
 
 async function assertPublicationTitleUnderline(page: Page) {
@@ -1442,6 +1507,13 @@ async function assertBlogIndex(page: Page) {
     });
     const footer = document.querySelector('footer');
     const bodyStyle = getComputedStyle(document.body);
+    const readingProbe = document.createElement('span');
+
+    readingProbe.className = 'reading-copy';
+    document.body.append(readingProbe);
+    const readingFontFamily = getComputedStyle(readingProbe).fontFamily;
+    readingProbe.remove();
+
     const highlightedLinkClassNames = [
       ...document.querySelectorAll<HTMLElement>('a.royb-link-highlight'),
     ].map((link) => link.className);
@@ -1459,6 +1531,7 @@ async function assertBlogIndex(page: Page) {
       headingColor: headingElement
         ? getComputedStyle(headingElement).color
         : '',
+      readingFontFamily,
       sectionLeft,
       marker,
       markerColor: markerElement ? getComputedStyle(markerElement).color : '',
@@ -1593,7 +1666,7 @@ async function assertBlogIndex(page: Page) {
     },
     {
       color: result.bodyColor,
-      fontFamily: result.bodyFontFamily,
+      fontFamily: result.readingFontFamily,
       fontSize: 14,
       fontWeight: 400,
       textTransform: 'none',
@@ -1604,7 +1677,7 @@ async function assertBlogIndex(page: Page) {
     result.externalMetaStyles.every(
       (style) =>
         style.color === result.bodyColor &&
-        style.fontFamily === result.bodyFontFamily &&
+        style.fontFamily === result.readingFontFamily &&
         style.fontSize === 14 &&
         style.fontWeight === 400 &&
         style.textTransform === 'none'
@@ -1674,6 +1747,7 @@ async function assertArticle(page: Page) {
     );
     const h2 = document.querySelector<HTMLElement>('.article-prose > h2');
     const h3 = document.querySelector<HTMLElement>('.article-prose > h3');
+    const h4 = document.querySelector<HTMLElement>('.article-prose > h4');
     const token = document.querySelector<HTMLElement>(
       '.article-prose .highlight .hljs-keyword, .article-prose .highlight .hljs-string'
     );
@@ -1731,6 +1805,7 @@ async function assertArticle(page: Page) {
     const captionStyle = caption ? getComputedStyle(caption) : null;
     const h2Style = h2 ? getComputedStyle(h2) : null;
     const h3Style = h3 ? getComputedStyle(h3) : null;
+    const h4Style = h4 ? getComputedStyle(h4) : null;
     const tokenStyle = token ? getComputedStyle(token) : null;
     const codeStyle = code ? getComputedStyle(code) : null;
     const highlightStyle = highlight ? getComputedStyle(highlight) : null;
@@ -1818,9 +1893,13 @@ async function assertArticle(page: Page) {
       videoPreload: video?.preload ?? '',
       h2Size: Number.parseFloat(h2Style?.fontSize ?? '0'),
       h3Size: Number.parseFloat(h3Style?.fontSize ?? '0'),
+      h4Size: Number.parseFloat(h4Style?.fontSize ?? '0'),
+      h4Family: h4Style?.fontFamily ?? '',
       h2Weight: Number.parseInt(h2Style?.fontWeight ?? '0', 10),
       h3Weight: Number.parseInt(h3Style?.fontWeight ?? '0', 10),
       h3Transform: h3Style?.textTransform ?? '',
+      h4Transform: h4Style?.textTransform ?? '',
+      h4LetterSpacing: h4Style?.letterSpacing ?? '',
       tokenColor: tokenStyle?.color ?? '',
       maxCodeTokenWeight: Math.max(0, ...codeTokenWeights),
       codeColor: codeStyle?.color ?? '',
@@ -1957,8 +2036,18 @@ async function assertArticle(page: Page) {
   assert.equal(result.videoPreload, 'auto');
   assert.ok(result.h2Size > result.h3Size);
   assert.ok(result.h2Weight >= 600);
-  assert.ok(result.h3Weight < result.h2Weight);
+  assert.ok(result.h3Weight >= 600 && result.h3Weight <= result.h2Weight);
   assert.equal(result.h3Transform, 'none');
+  if (result.h4Size > 0) {
+    assert.ok(result.h3Size > result.h4Size);
+    assert.ok(result.h4Size >= 18);
+    assert.equal(result.h4Transform, 'none');
+    assert.equal(result.h4LetterSpacing, 'normal');
+    assert.ok(
+      result.h4Family.includes('Sora'),
+      'article h4 labels should use the site title sans font'
+    );
+  }
   assert.notEqual(result.tokenColor, result.codeColor);
   assert.ok(
     result.maxCodeTokenWeight <= 400,
@@ -2029,7 +2118,7 @@ async function assertArticle(page: Page) {
   assert.notEqual(darkCode.color, 'rgb(28, 28, 28)');
   assert.notEqual(darkCode.keywordColor, 'rgb(28, 28, 28)');
   assert.equal(darkCode.kbdBackground, 'rgb(36, 36, 36)');
-  assert.equal(darkCode.kbdBackgroundImage, 'none');
+  assert.match(darkCode.kbdBackgroundImage, /linear-gradient/);
   assert.notEqual(darkCode.kbdColor, darkCode.kbdBackground);
   assert.notEqual(darkCode.kbdBorderTop, darkCode.kbdBackground);
 }
@@ -2076,9 +2165,28 @@ async function assertHarmoniaArticle(page: Page) {
     const tableWraps = [
       ...document.querySelectorAll<HTMLElement>('.article-table .table-wrap'),
     ];
+    const h4 = document.querySelector<HTMLElement>('.article-prose h4');
+    const h4Style = h4 ? getComputedStyle(h4) : null;
+    const tablePair = document.querySelector<HTMLElement>(
+      '.article-table-pair'
+    );
+    const tablePairStyle = tablePair ? getComputedStyle(tablePair) : null;
+    const keyVisualizations = document.querySelector<HTMLElement>(
+      '.key-visualizations'
+    );
+    const keyVisualizationsStyle = keyVisualizations
+      ? getComputedStyle(keyVisualizations)
+      : null;
+    const iframes = [
+      ...document.querySelectorAll<HTMLIFrameElement>('.article-prose iframe'),
+    ];
 
     return {
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      h4Text: h4?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      h4Transform: h4Style?.textTransform ?? '',
+      h4LetterSpacing: h4Style?.letterSpacing ?? '',
+      h4FontFamily: h4Style?.fontFamily ?? '',
       hasPronounParagraph: paragraphs.some((text) =>
         text.startsWith('It assumes clusters are')
       ),
@@ -2121,10 +2229,29 @@ async function assertHarmoniaArticle(page: Page) {
         };
       }),
       proseRight: proseRect?.right ?? 0,
+      tablePairDisplay: tablePairStyle?.display ?? '',
+      tablePairFlexDirection: tablePairStyle?.flexDirection ?? '',
+      keyVisualizationsDisplay: keyVisualizationsStyle?.display ?? '',
+      keyVisualizationsFlexDirection:
+        keyVisualizationsStyle?.flexDirection ?? '',
+      iframeData: iframes.map((iframe) => ({
+        allowTransparency: iframe.getAttribute('allowtransparency') ?? '',
+        styleAttr: iframe.getAttribute('style') ?? '',
+        isHarmonia: iframe.getAttribute('data-harmonia-iframe') ?? '',
+        background: getComputedStyle(iframe).backgroundColor,
+        opacity: getComputedStyle(iframe).opacity,
+      })),
     };
   });
 
   assert.equal(result.hasPronounParagraph, true);
+  assert.equal(result.h4Text, 'Genre Fusion (Dim 13)');
+  assert.equal(result.h4Transform, 'none');
+  assert.equal(result.h4LetterSpacing, 'normal');
+  assert.ok(
+    result.h4FontFamily.includes('Sora'),
+    'Harmonia subheads should use the sans title font'
+  );
   assert.ok(result.bodyText.includes('math.pi'));
   assert.ok(!result.bodyText.includes('π'));
   assert.equal(result.hasRepeatedHdbscanStart, false);
@@ -2178,6 +2305,22 @@ async function assertHarmoniaArticle(page: Page) {
   assert.ok(
     result.tableWrapData.every((wrap) => wrap.right <= result.proseRight + 1),
     'article table wrappers should stay inside prose width'
+  );
+  assert.equal(result.tablePairDisplay, 'flex');
+  assert.equal(result.tablePairFlexDirection, 'column');
+  assert.equal(result.keyVisualizationsDisplay, 'flex');
+  assert.equal(result.keyVisualizationsFlexDirection, 'column');
+  assert.ok(result.iframeData.length >= 1, 'Harmonia should render iframes');
+  assert.ok(
+    result.iframeData.every(
+      (iframe) =>
+        iframe.allowTransparency === 'true' &&
+        iframe.isHarmonia === 'true' &&
+        !/background\s*:/i.test(iframe.styleAttr) &&
+        iframe.background === 'rgba(0, 0, 0, 0)' &&
+        iframe.opacity === '1'
+    ),
+    'all Harmonia iframes should be transparent and fully opaque'
   );
 }
 
@@ -2350,8 +2493,8 @@ async function assertLegacyMediaArticle(page: Page) {
   assert.equal(result.keycapDisplay, 'inline-block');
   assert.notEqual(result.keycapBorderTop, '0px');
   assert.notEqual(result.keycapBoxShadow, 'none');
-  assert.equal(result.keycapBackgroundImage, 'none');
-  assert.doesNotMatch(result.keycapBoxShadow, /inset/);
+  assert.match(result.keycapBackgroundImage, /linear-gradient/);
+  assert.match(result.keycapBoxShadow, /inset/);
   assert.ok(result.listData.length > 0, 'legacy article should include lists');
   assert.ok(
     result.listData.some(
@@ -2363,13 +2506,14 @@ async function assertLegacyMediaArticle(page: Page) {
   assert.ok(
     result.listData.some(
       (list) =>
-        list.tag === 'UL' && list.paddingLeft >= 32 && list.paddingLeft <= 34
+        list.tag === 'UL' && list.paddingLeft >= 39 && list.paddingLeft <= 41
     ),
-    'unordered article lists should compensate bullet spacing into the same text column'
+    'unordered article lists should keep the same APM/browser-default indent'
   );
   assert.ok(
-    Math.abs(result.orderedTextLeft - result.unorderedTextLeft) <= 1,
-    `ordered/unordered list text should share a vertical line: ${result.orderedTextLeft} / ${result.unorderedTextLeft}`
+    result.unorderedTextLeft - result.orderedTextLeft >= 5 &&
+      result.unorderedTextLeft - result.orderedTextLeft <= 8,
+    `ordered/unordered list text should keep the APM outside-marker offset: ${result.orderedTextLeft} / ${result.unorderedTextLeft}`
   );
   assert.ok(
     result.maxListOverflow <= 1,
@@ -2433,7 +2577,7 @@ async function main() {
     });
     await mobile.goto(baseUrl, { waitUntil: 'networkidle' });
     await assertRoybBandPlacement(mobile);
-    await assertMobileHeroPortraitHidden(mobile);
+    await assertMobileHeroPortraitContained(mobile);
     await screenshot(mobile, 'home-mobile');
 
     const blog = await browser.newPage({

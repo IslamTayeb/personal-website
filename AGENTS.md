@@ -98,6 +98,11 @@ before hand-tuning individual sections. Blog index rail semantics are hollow
 marker = opinion and filled marker = technical; only Decant and Harmonia are
 technical unless the content taxonomy explicitly changes.
 
+The unified-site favicon is the moon glyph on a transparent background. Keep the
+crescent cutout transparent, not background-colored. Its SVG should react to the
+browser color scheme: off-black (`#1C1C1C`) in light browser chrome and
+`#FAFAFA` in dark browser chrome.
+
 ## Main site commands
 
 All commands must run from `islamtayeb/`:
