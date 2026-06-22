@@ -208,6 +208,12 @@ async function assertHome(page: Page) {
     const heroContactColumn = heroTitleElement?.nextElementSibling
       ?.firstElementChild as HTMLElement | null | undefined;
     const heroContactColumnRect = heroContactColumn?.getBoundingClientRect();
+    const heroContactIndex = heroContactColumn?.firstElementChild as
+      | HTMLElement
+      | null
+      | undefined;
+    const heroContactDetails =
+      heroContactIndex?.querySelector<HTMLElement>('div');
     const heroContactLabels = [
       ...(heroContactColumn?.querySelectorAll('a') ?? []),
     ].map((link) => link.textContent?.trim() ?? '');
@@ -661,6 +667,12 @@ async function assertHome(page: Page) {
         (heroContentRect?.top ?? 0) - (heroTitleRect?.bottom ?? 0),
       heroContentWidth: heroContentRect?.width ?? 0,
       heroContactColumnWidth: heroContactColumnRect?.width ?? 0,
+      heroContactIndexGap: heroContactIndex
+        ? Number.parseFloat(getComputedStyle(heroContactIndex).rowGap)
+        : 0,
+      heroContactDetailsGap: heroContactDetails
+        ? Number.parseFloat(getComputedStyle(heroContactDetails).rowGap)
+        : 0,
       heroContactLabels,
       heroPortraitExists: Boolean(heroPortrait),
       heroPortraitWidth: heroPortraitRect?.width ?? 0,
@@ -794,6 +806,8 @@ async function assertHome(page: Page) {
   );
   assert.equal(result.heroPortraitBorderTop, '0px');
   assert.equal(result.heroPortraitObjectFit, 'cover');
+  assert.equal(result.heroContactIndexGap, 8);
+  assert.equal(result.heroContactDetailsGap, 2);
   assert.ok(
     result.heroHeaderTitleGap >= 11 && result.heroHeaderTitleGap <= 13,
     `About/title gap should match the blog index header gap: ${result.heroHeaderTitleGap}`
