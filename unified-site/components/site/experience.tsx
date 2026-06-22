@@ -236,6 +236,7 @@ function RailGroupBlock({
         <RoybLinkText
           data-testid="experience-group-label"
           data-group={group.kind}
+          className="w-fit justify-self-start"
           section="o"
         >
           {group.kind} ({group.roles.length})

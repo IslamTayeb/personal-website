@@ -229,11 +229,16 @@ async function assertHome(page: Page) {
       ) ?? []),
     ].map((label) => {
       const style = getComputedStyle(label);
+      const rect = label.getBoundingClientRect();
+      const toggleRect = label.parentElement?.getBoundingClientRect();
 
       return {
         text: label.textContent?.replace(/\s+/g, ' ').trim() ?? '',
         className: label.className,
+        justifySelf: style.justifySelf,
         textDecorationLine: style.textDecorationLine,
+        width: rect.width,
+        toggleWidth: toggleRect?.width ?? 0,
       };
     });
     const firstRailTitle = experienceSection?.querySelector(
@@ -971,9 +976,21 @@ async function assertHome(page: Page) {
         label.className.includes('royb-link') &&
         label.className.includes('royb-link-highlight') &&
         label.className.includes('royb-link-fragment') &&
-        label.className.includes('section-color-o')
+        label.className.includes('section-color-o') &&
+        label.className.includes('w-fit') &&
+        label.className.includes('justify-self-start')
     ),
     'experience group labels should use the shared ROYB link primitive'
+  );
+  assert.ok(
+    result.experienceGroupLabelStyles.every(
+      (label: { justifySelf: string; width: number; toggleWidth: number }) =>
+        label.justifySelf.endsWith('start') &&
+        label.width > 0 &&
+        label.toggleWidth > 0 &&
+        label.width < label.toggleWidth * 0.5
+    ),
+    'experience group label hover boxes should stay scoped to text, not the full row'
   );
 
   const research = result.groups.find((group) => group.kind === 'Research');
