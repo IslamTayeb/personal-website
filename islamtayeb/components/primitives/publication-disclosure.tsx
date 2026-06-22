@@ -55,13 +55,13 @@ function PublicationRow({
           <PublicationAuthors authors={publication.authors} />
           <span
             data-testid="publication-meta-line"
-            className="reading-copy mt-1 block text-sm font-normal leading-snug text-foreground"
+            className="reading-copy mt-1 block text-sm font-normal leading-snug text-muted-foreground"
           >
             {publication.type}
             {publication.venue ? (
               <>
-                <span className="px-1 text-foreground">/</span>
-                <span className="text-foreground">
+                <span className="px-1">/</span>
+                <span>
                   <RichText text={publication.venue} />
                 </span>
               </>

@@ -1269,21 +1269,28 @@ async function assertHome(page: Page) {
   assert.ok(
     result.publicationMetaLines.every(
       (className) =>
-        className.includes('text-foreground') &&
+        className.includes('text-muted-foreground') &&
         className.includes('font-normal') &&
         !className.includes('font-mono') &&
         !className.includes('uppercase') &&
         !className.includes('text-roy-y')
     ),
-    'publication type/venue metadata should match author styling'
+    'publication type/venue metadata should use muted date color'
   );
   assert.ok(
     result.publicationAuthorStyles.every(matchesMetadataStyle),
     'publication authors should stay at the compact foreground metadata scale'
   );
   assert.ok(
-    result.publicationMetaLineStyles.every(matchesMetadataStyle),
-    'publication type and journal should match publication author metadata styling'
+    result.publicationMetaLineStyles.every(
+      (style) =>
+        style.color === result.mutedToken &&
+        style.fontFamily === metadataStyle.fontFamily &&
+        style.fontSize === metadataStyle.fontSize &&
+        style.fontWeight === metadataStyle.fontWeight &&
+        style.textTransform === metadataStyle.textTransform
+    ),
+    'publication type and journal should match publication date color'
   );
   assert.ok(
     result.publicationDateStyles.every((style) => style.fontSize === 14),
