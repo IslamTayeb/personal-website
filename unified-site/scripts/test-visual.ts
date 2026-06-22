@@ -1705,17 +1705,17 @@ async function assertExperienceInteractions(page: Page) {
   assert.ok(teachingText?.includes('Organic Chemistry I'));
   assert.ok(
     teachingText?.includes(
-      'Introducing kernels; co-leading a discussion section + office hours'
+      'Introducing kernels, co-leading a discussion section + office hours'
     )
   );
   assert.ok(
     teachingText?.includes(
-      'Introduced CPUs; co-led a discussion section + office hours'
+      'Introduced CPUs, co-led a discussion section + office hours'
     )
   );
   assert.ok(
     teachingText?.includes(
-      'Led a study group; saw kids quit pre-med as the semester went'
+      'Led a study group, saw kids quit pre-med as the semester went'
     )
   );
   assert.ok(teachingIncomingDotClassName.includes('border-roy-o'));
