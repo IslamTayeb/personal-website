@@ -976,10 +976,9 @@ async function assertHome(page: Page) {
     'scholar',
   ]);
   for (const copy of [
-    "I'm researching systems in ML, particularly agent correctness and efficiency.",
-    'I currently study at Duke University in Durham, NC.',
+    "I'm researching systems in ML, particularly agent correctness and efficiency, and study at Duke.",
     'I was born and raised in Egypt, but later moved to Taif, Saudi Arabia during high school.',
-    'I also write technical and opinion pieces.',
+    'I also played osu! competitively and designed a few skins (500K+ downloads).',
     'I play Tetris and Monkeytype in my free time.',
   ]) {
     assert.ok(result.bodyText.includes(copy), `hero should include: ${copy}`);
@@ -989,7 +988,7 @@ async function assertHome(page: Page) {
     !result.bodyText.includes('Finding the Right Answer Was Never the Point'),
     'external writing should stay off the home writing preview'
   );
-  assert.ok(result.bodyText.includes('islam.moh.islamm@gmail.com'));
+  assert.ok(!result.bodyText.includes('islam.moh.islamm@gmail.com'));
   assert.ok(!result.bodyText.includes('islam.tayeb@duke.edu'));
   for (const label of ['experience', 'publications', 'courses', 'writing']) {
     assert.ok(

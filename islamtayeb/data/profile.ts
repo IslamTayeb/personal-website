@@ -17,13 +17,10 @@ export const profile = {
 export const heroParagraphs: TextSegment[][] = [
   [
     {
-      text: "I'm researching systems in ML, particularly agent correctness and efficiency. I currently study at ",
+      text: "I'm researching systems in ML, particularly agent correctness and efficiency, and study at ",
     },
-    { text: 'Duke University', href: profileLinks.dukeUniversity },
-    { text: ' in Durham, NC.' },
-    { text: ' I also ' },
-    { text: 'write', href: profileLinks.apmOverflow, external: false },
-    { text: ' technical and opinion pieces.' },
+    { text: 'Duke', href: profileLinks.dukeUniversity },
+    { text: '.' },
   ],
   [
     {
@@ -37,21 +34,12 @@ export const heroParagraphs: TextSegment[][] = [
   [
     { text: 'In high school, I worked as a graphic designer for an ' },
     { text: 'esports team', href: profileLinks.esports },
-    { text: '. Around the same time, I was playing ' },
+    { text: '. I also played ' },
     { text: 'osu!', href: profileLinks.osu },
     { text: ' competitively and designed a ' },
     { text: 'few', href: profileLinks.skinOne },
     { text: ' ' },
     { text: 'skins', href: profileLinks.skinTwo },
     { text: ' (500K+ downloads).' },
-  ],
-  [
-    { text: 'Feel free to reach out at ' },
-    {
-      text: profile.email,
-      href: `mailto:${profile.email}`,
-      external: false,
-    },
-    { text: '!' },
   ],
 ];

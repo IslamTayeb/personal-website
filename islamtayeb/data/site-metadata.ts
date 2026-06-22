@@ -1,8 +1,7 @@
 export const siteMetadata = {
   url: 'https://islamtayeb.dev',
   title: 'Islam Tayeb',
-  description:
-    'Islam Tayeb: systems, ML tooling, research, and APM Overflow writing.',
+  description: 'Islam Tayeb: systems, ML tooling, and research.',
   socialImage: {
     url: '/static/og-moon.png',
     width: 1200,
