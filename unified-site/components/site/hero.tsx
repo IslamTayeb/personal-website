@@ -72,11 +72,7 @@ function HeroStory() {
 
 export function Hero() {
   return (
-    <section
-      id="about"
-      data-testid="hero-section"
-      className="pb-3 pt-0 md:pb-3.5 md:pt-0"
-    >
+    <section id="about" data-testid="hero-section" className="pb-4 pt-0">
       <div className="flex w-full flex-col">
         <SectionHeader index="1" title="About" accent="text-roy-r" />
         <h1

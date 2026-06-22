@@ -21,9 +21,8 @@ export function Section({
   return (
     <section
       id={id}
-      // Section dividers are intentionally disabled for this visual pass.
-      // Keep the same vertical padding so the spacing stays comparable.
-      className={cn('py-3 md:py-3.5', className)}
+      // Adjacent section boxes touch; paired 16px paddings create a 32px gap.
+      className={cn('py-4', className)}
     >
       <SectionHeader
         index={index}
