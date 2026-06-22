@@ -13,7 +13,13 @@ export async function WritingPreview() {
   const posts = (await getListedPosts()).slice(0, 3);
 
   return (
-    <Section id="writing" index="4" title="Writing" accent="text-roy-b">
+    <Section
+      id="writing"
+      index="4"
+      title="Writing"
+      accent="text-roy-b"
+      className="pb-[20vh]"
+    >
       <BorderedPanel>
         <div className="flex w-full flex-col">
           <RailList>
@@ -25,16 +31,16 @@ export async function WritingPreview() {
                   key={post.manifest.slug}
                   dotClassName={isNew ? 'bg-roy-b' : 'bg-foreground/75'}
                   title={
-                    <span className="inline-flex min-w-0 items-baseline gap-2">
+                    <span>
                       <ExternalLink
                         href={postHref(post)}
                         section="b"
-                        className="min-w-0 text-foreground"
+                        className="text-foreground"
                       >
                         {post.manifest.title}
                       </ExternalLink>
                       {isNew ? (
-                        <span className="font-mono text-sm uppercase tracking-[0.12em] text-roy-b">
+                        <span className="ml-2 inline-block font-mono text-sm uppercase tracking-[0.12em] text-roy-b">
                           New
                         </span>
                       ) : null}

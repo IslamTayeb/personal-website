@@ -90,7 +90,7 @@ export function RailItem({
     <li
       data-testid={testId}
       className={cn(
-        'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pb-1.5 last:pb-0',
+        'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pb-2 last:pb-0',
         className
       )}
     >
@@ -141,7 +141,7 @@ export function RailItem({
           <p
             data-one-line="true"
             className={cn(
-              'reading-copy truncate text-base leading-snug text-foreground',
+              'reading-copy text-base leading-snug text-foreground md:truncate',
               descriptionClassName
             )}
           >
@@ -167,7 +167,7 @@ export function RailActionItem({
     <li
       data-testid={testId}
       className={cn(
-        'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pt-1.5',
+        'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pt-2',
         className
       )}
     >

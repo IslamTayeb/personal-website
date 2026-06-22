@@ -28,7 +28,7 @@ export default async function BlogIndexPage() {
         index="1"
         title={`Index (${itemCount})`}
         accent="text-roy-b"
-        className="pt-0 md:pt-0"
+        className="pb-[20vh] pt-0 md:pt-0"
       >
         <BorderedPanel>
           <RailList testId="blog-index-rail">
@@ -40,20 +40,20 @@ export default async function BlogIndexPage() {
                   key={post.manifest.slug}
                   dotClassName={isNew ? 'bg-roy-b' : postDotClassName}
                   title={
-                    <div className="flex min-w-0 items-baseline gap-2">
+                    <span>
                       <ExternalLink
                         href={postHref(post)}
                         section="b"
-                        className="min-w-0 text-base font-medium leading-tight text-foreground"
+                        className="text-base font-medium leading-tight text-foreground"
                       >
                         {post.manifest.title}
                       </ExternalLink>
                       {isNew ? (
-                        <span className="font-mono text-sm uppercase tracking-[0.12em] text-roy-b">
+                        <span className="ml-2 inline-block font-mono text-sm uppercase tracking-[0.12em] text-roy-b">
                           New
                         </span>
                       ) : null}
-                    </div>
+                    </span>
                   }
                   meta={formatMonthYear(post.manifest.publishedAt)}
                   footer={

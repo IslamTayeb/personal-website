@@ -37,6 +37,45 @@ export const viewport: Viewport = {
 
 const themeInitScript = `
 (function () {
+  function currentTheme() {
+    return document.documentElement.classList.contains('dark')
+      ? 'dark'
+      : 'light';
+  }
+
+  function themedHarmoniaSrc(src, theme) {
+    try {
+      var url = new URL(src, window.location.href);
+      url.searchParams.set('theme', theme);
+      return url.href;
+    } catch (_) {
+      return src;
+    }
+  }
+
+  function syncHarmoniaIframes() {
+    var theme = currentTheme();
+    document
+      .querySelectorAll('iframe[data-harmonia-iframe="true"]')
+      .forEach(function (iframe) {
+        var baseSrc = iframe.getAttribute('data-harmonia-src');
+
+        if (!baseSrc) {
+          return;
+        }
+
+        var nextSrc = themedHarmoniaSrc(baseSrc, theme);
+
+        if (iframe.getAttribute('src') !== nextSrc) {
+          iframe.setAttribute('src', nextSrc);
+        }
+
+        if (iframe.getAttribute('data-harmonia-theme') !== theme) {
+          iframe.setAttribute('data-harmonia-theme', theme);
+        }
+      });
+  }
+
   try {
     var saved = window.localStorage.getItem('theme');
     var theme =
@@ -52,6 +91,21 @@ const themeInitScript = `
   } catch (_) {
     document.documentElement.classList.add('light');
     document.documentElement.style.colorScheme = 'light';
+  }
+
+  window.__syncHarmoniaIframes = syncHarmoniaIframes;
+
+  if (window.MutationObserver && document.body) {
+    new MutationObserver(syncHarmoniaIframes).observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', syncHarmoniaIframes);
+  } else {
+    syncHarmoniaIframes();
   }
 })();
 `;

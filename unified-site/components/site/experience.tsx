@@ -34,7 +34,7 @@ function AdvisorLabel({
   }
 
   const className = cn(
-    'font-mono text-sm font-normal normal-case tracking-normal text-muted-foreground',
+    'inline-block font-mono text-sm font-normal normal-case tracking-normal text-muted-foreground',
     boxed && 'border border-border px-1'
   );
 
@@ -74,7 +74,7 @@ function RailGroup({
               ? 'bg-roy-o'
               : 'bg-foreground/75';
         const titleContent: ReactNode = role.piName ? (
-          <span className="inline-flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <span>
             {role.href ? (
               <ExternalLink
                 href={role.href}
@@ -86,6 +86,7 @@ function RailGroup({
             ) : (
               <span>{role.org}</span>
             )}
+            <span aria-hidden className="inline-block w-2" />
             <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
           </span>
         ) : (
@@ -194,6 +195,7 @@ function LinkedDescription({
 function RailGroupBlock({
   group,
   open,
+  isLast,
   onToggleOpen,
   expanded,
   onToggleExpanded,
@@ -201,6 +203,7 @@ function RailGroupBlock({
 }: {
   group: ExperienceGroup;
   open: boolean;
+  isLast: boolean;
   onToggleOpen: () => void;
   expanded: boolean;
   onToggleExpanded: () => void;
@@ -225,7 +228,10 @@ function RailGroupBlock({
         onClick={onToggleOpen}
         aria-expanded={open}
         data-testid="experience-group-toggle"
-        className="grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] items-center pb-2.5 text-left font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        className={cn(
+          'grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] items-center text-left font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring',
+          open || !isLast ? 'pb-2' : 'pb-0'
+        )}
       >
         <Chevron
           className="relative bottom-px left-px text-muted-foreground"
@@ -250,7 +256,7 @@ function RailGroupBlock({
         />
       ) : null}
       {open && hasHidden && allowShowMore ? (
-        <div className="flex justify-end pt-1.5">
+        <div className="flex justify-end pt-2">
           <SectionActionButton
             section="o"
             onClick={onToggleExpanded}
@@ -288,11 +294,12 @@ export function Experience({
     <Section id="experience" index="2" title="Experience" accent="text-roy-o">
       <BorderedPanel>
         <div className="flex w-full flex-col">
-          {experienceGroups.map((group) => (
+          {experienceGroups.map((group, index) => (
             <RailGroupBlock
               key={group.kind}
               group={group}
               open={openGroups[group.kind]}
+              isLast={index === experienceGroups.length - 1}
               onToggleOpen={() =>
                 setOpenGroups((current) => ({
                   ...current,

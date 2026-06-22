@@ -29,6 +29,7 @@ export const contactLinks: LinkItem[] = [
 ];
 
 export const profileLinks = {
+  dukeUniversity: 'https://www.duke.edu/',
   coolInfraStory:
     'https://www.wired.com/2015/09/whatsapp-serves-900-million-users-50-engineers/',
   notionInfra:

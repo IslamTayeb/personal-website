@@ -30,7 +30,7 @@ export const experienceGroups: ExperienceGroup[] = [
         href: 'https://machine.learning.bio/',
         incoming: true,
         state: 'incoming',
-        desc: 'GPU-native acceleration of CPU protein search',
+        desc: 'GPU acceleration of protein search',
       },
       {
         org: 'Duke University',

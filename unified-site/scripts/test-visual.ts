@@ -173,13 +173,21 @@ async function assertScrollbarStyles() {
   );
   assert.ok(
     css.includes('var(--section-color, var(--roy-b)) 20%') &&
+      css.includes(
+        'box-shadow: inset 0 -0.42em 0 var(--link-hover-highlight)'
+      ) &&
       !css.includes('--roy-r-highlight') &&
       !css.includes('--section-highlight'),
     'link hover highlight should use section color at 20% alpha'
   );
+  const railGutterMatches = css.match(/--rail-gutter:/g) ?? [];
+  const railMarkerMatches = css.match(/--rail-marker-size:/g) ?? [];
+
   assert.ok(
-    css.includes('--rail-gutter: 1.75rem') &&
-      css.includes('--rail-marker-size: 0.75rem'),
+    css.includes('--rail-gutter: 2rem') &&
+      railGutterMatches.length === 1 &&
+      css.includes('--rail-marker-size: 0.75rem') &&
+      railMarkerMatches.length === 1,
     'rail gutter and marker sizing should be centralized as root tokens'
   );
 }
@@ -225,6 +233,7 @@ async function assertHome(page: Page) {
       : null;
     const heroPortraitRect = heroPortrait?.getBoundingClientRect();
     const experienceSection = document.querySelector('#experience');
+    const writingSection = document.querySelector<HTMLElement>('#writing');
     const experienceTitle = experienceSection?.querySelector('header h2');
     const firstGroupLabel = experienceSection?.querySelector(
       '[data-testid="experience-group-label"]'
@@ -374,6 +383,9 @@ async function assertHome(page: Page) {
       return {
         rowExists: Boolean(row),
         connectorBackgroundImage: connectorStyle?.backgroundImage ?? '',
+        paddingTop: row
+          ? Number.parseFloat(getComputedStyle(row).paddingTop)
+          : 0,
         connectorCenter: connectorRect
           ? connectorRect.left + connectorRect.width / 2
           : 0,
@@ -384,6 +396,24 @@ async function assertHome(page: Page) {
         linkBottom: linkRect?.bottom ?? 0,
       };
     });
+    const railRowPaddingBottoms = [
+      ...document.querySelectorAll<HTMLElement>(
+        '#experience ul, #publications ul, #writing ul'
+      ),
+    ].flatMap((list) =>
+      [...list.children]
+        .slice(0, -1)
+        .filter(
+          (row): row is HTMLElement =>
+            row instanceof HTMLElement &&
+            Boolean(
+              row.querySelector(
+                '[data-testid="rail-dot"], [data-testid="publication-dot"]'
+              )
+            )
+        )
+        .map((row) => Number.parseFloat(getComputedStyle(row).paddingBottom))
+    );
     const groupChevronData = [
       ...document.querySelectorAll<SVGElement>(
         '[data-testid="experience-group-toggle"] svg'
@@ -399,6 +429,9 @@ async function assertHome(page: Page) {
     const groups = [
       ...document.querySelectorAll('[data-testid="experience-group"]'),
     ].map((group) => {
+      const toggle = group.querySelector<HTMLElement>(
+        '[data-testid="experience-group-toggle"]'
+      );
       const showMore = [...group.querySelectorAll('button')].find(
         (button) => button.textContent?.trim() === 'see more'
       );
@@ -406,13 +439,13 @@ async function assertHome(page: Page) {
 
       return {
         kind: group.getAttribute('data-group'),
-        expanded:
-          group
-            .querySelector('[data-testid="experience-group-toggle"]')
-            ?.getAttribute('aria-expanded') ?? '',
+        expanded: toggle?.getAttribute('aria-expanded') ?? '',
         rows: group.querySelectorAll('[data-testid="rail-title"]').length,
         text: group.textContent?.replace(/\s+/g, ' ').trim() ?? '',
         hasShowMore: Boolean(showMore),
+        togglePaddingBottom: toggle
+          ? Number.parseFloat(getComputedStyle(toggle).paddingBottom)
+          : 0,
         showMorePaddingTop: showMoreWrap
           ? Number.parseFloat(getComputedStyle(showMoreWrap).paddingTop)
           : 0,
@@ -660,6 +693,10 @@ async function assertHome(page: Page) {
         heroTitleElement?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       heroContactText:
         heroSection?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      dukeLinkHref:
+        heroSection?.querySelector<HTMLAnchorElement>(
+          'a[href="https://www.duke.edu/"]'
+        )?.href ?? '',
       heroHeaderTitleGap:
         (heroTitleRect?.top ?? 0) -
         (heroHeader?.getBoundingClientRect().bottom ?? 0),
@@ -696,6 +733,10 @@ async function assertHome(page: Page) {
       sectionBorders: topLevelSections.map((section) =>
         Number.parseFloat(getComputedStyle(section).borderTopWidth)
       ),
+      writingSectionPaddingBottom: writingSection
+        ? Number.parseFloat(getComputedStyle(writingSection).paddingBottom)
+        : 0,
+      viewportHeight: window.innerHeight,
       railGutter: rootStyle.getPropertyValue('--rail-gutter').trim(),
       railMarkerSize: rootStyle.getPropertyValue('--rail-marker-size').trim(),
       sectionLabelLefts,
@@ -714,6 +755,7 @@ async function assertHome(page: Page) {
       markerWidths: markerData.map((marker) => marker.width),
       markerCenters: markerData.map((marker) => marker.center),
       connectorCenters,
+      railRowPaddingBottoms,
       groupChevronWidths: groupChevronData.map((icon) => icon.width),
       groupChevronCenters: groupChevronData.map((icon) => icon.center),
       experienceTitleLeft: experienceTitle?.getBoundingClientRect().left ?? 0,
@@ -835,7 +877,13 @@ async function assertHome(page: Page) {
     result.sectionBorders.map(() => 0),
     'top-level section dividers should stay disabled'
   );
-  assert.equal(Number.parseFloat(result.railGutter), 1.75);
+  assert.ok(
+    Math.abs(
+      result.writingSectionPaddingBottom - result.viewportHeight * 0.2
+    ) <= 1,
+    `home page should keep 20vh of bottom reading slack: ${result.writingSectionPaddingBottom}`
+  );
+  assert.equal(Number.parseFloat(result.railGutter), 2);
   assert.equal(Number.parseFloat(result.railMarkerSize), 0.75);
   assert.ok(
     result.sectionLabelLefts.every(
@@ -928,13 +976,15 @@ async function assertHome(page: Page) {
     'scholar',
   ]);
   for (const copy of [
-    "Hey! I'm a Duke CS student based in Durham, NC, researching ML systems, particularly agent correctness and efficiency.",
+    "I'm researching systems in ML, particularly agent correctness and efficiency.",
+    'I currently study at Duke University in Durham, NC.',
     'I was born and raised in Egypt, but later moved to Taif, Saudi Arabia during high school.',
-    'I also enjoy writing technical and opinion pieces.',
+    'I also write technical and opinion pieces.',
     'I play Tetris and Monkeytype in my free time.',
   ]) {
     assert.ok(result.bodyText.includes(copy), `hero should include: ${copy}`);
   }
+  assert.equal(result.dukeLinkHref, 'https://www.duke.edu/');
   assert.ok(
     !result.bodyText.includes('Finding the Right Answer Was Never the Point'),
     'external writing should stay off the home writing preview'
@@ -1017,7 +1067,7 @@ async function assertHome(page: Page) {
   assert.equal(research?.rows, 4, 'Research should show 4 rows when collapsed');
   assert.ok(research?.text.includes('Research (5)'));
   assert.ok(research?.text.includes('see more'));
-  assert.equal(research?.showMorePaddingTop, 6);
+  assert.equal(research?.showMorePaddingTop, 8);
   assert.ok(research?.text.includes('Christian Dallago'));
   assert.ok(research?.text.includes('Matthew Lentz'));
   assert.ok(research?.text.includes('Philip Romero'));
@@ -1050,10 +1100,15 @@ async function assertHome(page: Page) {
   assert.equal(engineering?.expanded, 'true');
   assert.equal(engineering?.rows, 1);
   assert.ok(engineering?.text.includes('see more'));
-  assert.equal(engineering?.showMorePaddingTop, 6);
+  assert.equal(engineering?.showMorePaddingTop, 8);
   assert.equal(teaching?.expanded, 'false');
   assert.equal(teaching?.rows, 0, 'Teaching should default collapsed');
   assert.equal(teaching?.hasShowMore, false, 'Teaching should not see more');
+  assert.equal(
+    teaching?.togglePaddingBottom,
+    0,
+    'final closed Teaching toggle should not add bottom whitespace'
+  );
   assert.ok(teaching?.text.includes('Teaching (3)'));
   assert.ok(
     (teaching?.marginBottom ?? 0) < (research?.marginBottom ?? 0),
@@ -1153,6 +1208,16 @@ async function assertHome(page: Page) {
     '',
     'writing see-more action should not draw a rail connector'
   );
+  assert.equal(
+    result.writingActionRail.paddingTop,
+    8,
+    'writing see-more action should keep the shared 8px rail gap'
+  );
+  assert.ok(
+    result.railRowPaddingBottoms.length > 0 &&
+      result.railRowPaddingBottoms.every((padding) => padding === 8),
+    'experience, publication, and writing rail rows should use pb-2 between rows'
+  );
 
   for (const term of [
     'PyTorch',
@@ -1204,6 +1269,11 @@ async function assertHome(page: Page) {
     result.publicationActionRail.connectorBackgroundImage,
     '',
     'publication see-more action should not draw a rail connector'
+  );
+  assert.equal(
+    result.publicationActionRail.paddingTop,
+    8,
+    'publication see-more action should keep the shared 8px rail gap'
   );
   assert.ok(
     result.publicationMetaLines.every(
@@ -1339,30 +1409,193 @@ async function assertHome(page: Page) {
   );
 }
 
-async function assertMobileHeroPortraitContained(page: Page) {
+async function assertMobileHeroContactCompact(page: Page) {
   const result = await page.evaluate(() => {
     const heroPortrait = document.querySelector<HTMLElement>(
       '[data-testid="hero-portrait"]'
     );
-    const rect = heroPortrait?.getBoundingClientRect();
+    const heroContactIndex = heroPortrait?.parentElement as HTMLElement | null;
+    const heroContactDetails =
+      heroContactIndex?.querySelector<HTMLElement>('div');
+    const portraitRect = heroPortrait?.getBoundingClientRect();
+    const contactIndexRect = heroContactIndex?.getBoundingClientRect();
+    const contactDetailsRect = heroContactDetails?.getBoundingClientRect();
 
     return {
       exists: Boolean(heroPortrait),
-      width: rect?.width ?? 0,
-      height: rect?.height ?? 0,
+      display: heroPortrait ? getComputedStyle(heroPortrait).display : '',
+      width: portraitRect?.width ?? 0,
+      height: portraitRect?.height ?? 0,
+      contactTopGap:
+        (contactDetailsRect?.top ?? 0) - (contactIndexRect?.top ?? 0),
+      contactLabel:
+        heroContactDetails
+          ?.querySelector('span')
+          ?.textContent?.replace(/\s+/g, ' ')
+          .trim() ?? '',
+      contactLinks: [...(heroContactDetails?.querySelectorAll('a') ?? [])].map(
+        (link) => link.textContent?.trim() ?? ''
+      ),
     };
   });
 
   assert.equal(result.exists, true);
-  assert.ok(result.width > 0);
+  assert.equal(result.display, 'none');
+  assert.equal(result.width, 0);
+  assert.equal(result.height, 0);
   assert.ok(
-    Math.abs(result.width - result.height) <= 1,
-    `mobile hero portrait should stay square: ${result.width} x ${result.height}`
+    Math.abs(result.contactTopGap) <= 1,
+    `mobile contact should start without a hidden portrait gap: ${result.contactTopGap}`
+  );
+  assert.equal(result.contactLabel, 'contact');
+  assert.deepEqual(result.contactLinks, [
+    'email',
+    'linkedin',
+    'github',
+    'x',
+    'scholar',
+  ]);
+}
+
+async function assertMobileRailDescriptionsWrap(page: Page) {
+  const result = await page.evaluate(() =>
+    [
+      ...document.querySelectorAll<HTMLElement>(
+        '#experience p[data-one-line="true"]'
+      ),
+    ].map((description) => {
+      const style = getComputedStyle(description);
+      const rect = description.getBoundingClientRect();
+
+      return {
+        text: description.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+        whiteSpace: style.whiteSpace,
+        overflowX: style.overflowX,
+        textOverflow: style.textOverflow,
+        height: rect.height,
+        lineHeight: Number.parseFloat(style.lineHeight),
+      };
+    })
+  );
+
+  assert.ok(result.length > 0, 'mobile experience descriptions should render');
+  assert.ok(
+    result.every(
+      (description) =>
+        description.whiteSpace === 'normal' &&
+        description.overflowX === 'visible' &&
+        description.textOverflow === 'clip'
+    ),
+    'mobile experience descriptions should use normal wrapping instead of truncation'
   );
   assert.ok(
-    result.width <= 193,
-    `mobile hero portrait should stay compact: ${result.width}`
+    result.some(
+      (description) => description.height > description.lineHeight * 1.5
+    ),
+    'at least one mobile experience description should wrap across lines'
   );
+}
+
+async function assertWrappedInlineHighlight({
+  page,
+  selector,
+  label,
+  colorVariable,
+}: {
+  page: Page;
+  selector: string;
+  label: string;
+  colorVariable: string;
+}) {
+  const titleLink = page.locator(selector).first();
+
+  assert.ok((await titleLink.count()) > 0, `${label} should render`);
+  await titleLink.hover();
+
+  const result = await page.evaluate(
+    ({ selector, colorVariable }) => {
+      const link = document.querySelector<HTMLElement>(selector);
+      const style = link ? getComputedStyle(link) : null;
+      const probe = document.createElement('span');
+
+      probe.style.color = colorVariable;
+      document.body.append(probe);
+
+      const expectedColor = getComputedStyle(probe).color;
+
+      probe.remove();
+
+      const range = document.createRange();
+
+      if (link) {
+        range.selectNodeContents(link);
+      }
+
+      const contentRects = [...range.getClientRects()].filter(
+        (rect) => rect.width > 0 && rect.height > 0
+      );
+      const elementRects = link
+        ? [...link.getClientRects()].filter(
+            (rect) => rect.width > 0 && rect.height > 0
+          )
+        : [];
+
+      return {
+        text: link?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+        contentLineCount: contentRects.length,
+        elementLineCount: elementRects.length,
+        display: style?.display ?? '',
+        boxShadow: style?.boxShadow ?? '',
+        color: style?.color ?? '',
+        decoration: style?.textDecorationLine ?? '',
+        expectedColor,
+      };
+    },
+    { selector, colorVariable }
+  );
+
+  assert.ok(
+    result.contentLineCount > 1,
+    `${label} should wrap before testing multiline highlight: ${result.contentLineCount}`
+  );
+  assert.ok(
+    result.elementLineCount > 1,
+    `${label} anchor should expose per-line fragments, not one block box: ${result.elementLineCount}`
+  );
+  assert.equal(result.display, 'inline', `${label} should stay inline`);
+  assert.ok(result.boxShadow.includes('inset'));
+  assert.equal(result.color, result.expectedColor);
+  assert.equal(result.decoration, 'none');
+}
+
+async function assertMobileHomeWrappedHighlights(page: Page) {
+  await assertWrappedInlineHighlight({
+    page,
+    selector: 'a[href="https://machine.learning.bio/"]',
+    label: 'mobile experience advisor org link',
+    colorVariable: 'var(--roy-o)',
+  });
+  await assertWrappedInlineHighlight({
+    page,
+    selector: 'a[href="/blog/on-agent-memory-fidelity"]',
+    label: 'mobile home writing title',
+    colorVariable: 'var(--roy-b)',
+  });
+  await assertWrappedInlineHighlight({
+    page,
+    selector: '#publications [data-testid="publication-title"]',
+    label: 'mobile publication title',
+    colorVariable: 'var(--roy-y)',
+  });
+}
+
+async function assertMobileBlogWrappedHighlight(page: Page) {
+  await assertWrappedInlineHighlight({
+    page,
+    selector: 'a[href="/blog/on-agent-memory-fidelity"]',
+    label: 'mobile blog index title',
+    colorVariable: 'var(--roy-b)',
+  });
 }
 
 async function assertPublicationTitleUnderline(page: Page) {
@@ -1387,8 +1620,7 @@ async function assertPublicationTitleUnderline(page: Page) {
     probe.remove();
 
     return {
-      backgroundImage: style?.backgroundImage ?? '',
-      backgroundSize: style?.backgroundSize ?? '',
+      boxShadow: style?.boxShadow ?? '',
       color: style?.color ?? '',
       decoration: style?.textDecorationLine ?? '',
       skipInk: style?.textDecorationSkipInk ?? '',
@@ -1396,8 +1628,7 @@ async function assertPublicationTitleUnderline(page: Page) {
     };
   });
 
-  assert.notEqual(result.backgroundImage, 'none');
-  assert.equal(result.backgroundSize, '100% 100%');
+  assert.ok(result.boxShadow.includes('inset'));
   assert.equal(result.color, result.yellowToken);
   assert.equal(result.decoration, 'none');
   assert.equal(result.skipInk, 'auto');
@@ -1421,8 +1652,7 @@ async function assertExperienceGroupLabelHoverHighlight(page: Page) {
     probe.remove();
 
     return {
-      backgroundImage: style?.backgroundImage ?? '',
-      backgroundSize: style?.backgroundSize ?? '',
+      boxShadow: style?.boxShadow ?? '',
       color: style?.color ?? '',
       decoration: style?.textDecorationLine ?? '',
       skipInk: style?.textDecorationSkipInk ?? '',
@@ -1430,8 +1660,7 @@ async function assertExperienceGroupLabelHoverHighlight(page: Page) {
     };
   });
 
-  assert.notEqual(result.backgroundImage, 'none');
-  assert.equal(result.backgroundSize, '100% 100%');
+  assert.ok(result.boxShadow.includes('inset'));
   assert.equal(result.color, result.orangeToken);
   assert.equal(result.decoration, 'none');
   assert.equal(result.skipInk, 'auto');
@@ -1544,7 +1773,7 @@ async function assertHeroLinksHoverHighlight(page: Page) {
     return {
       linkColor,
       redToken,
-      backgroundSize: link ? getComputedStyle(link).backgroundSize : '',
+      boxShadow: link ? getComputedStyle(link).boxShadow : '',
       textDecorationLine: link ? getComputedStyle(link).textDecorationLine : '',
       textDecorationSkipInk: link
         ? getComputedStyle(link).textDecorationSkipInk
@@ -1553,7 +1782,7 @@ async function assertHeroLinksHoverHighlight(page: Page) {
   });
 
   assert.equal(colors.linkColor, colors.redToken);
-  assert.equal(colors.backgroundSize, '100% 100%');
+  assert.ok(colors.boxShadow.includes('inset'));
   assert.equal(colors.textDecorationLine, 'none');
   assert.equal(colors.textDecorationSkipInk, 'auto');
 }
@@ -1573,6 +1802,7 @@ async function assertBlogIndex(page: Page) {
         ?.textContent?.replace(/\s+/g, ' ')
         .trim() ?? '';
     const headingElement = document.querySelector<HTMLElement>('#posts h2');
+    const postsSection = document.querySelector<HTMLElement>('#posts');
     const bodyColor = getComputedStyle(document.body).color;
     const markerElement =
       document.querySelector<HTMLElement>('#posts header span');
@@ -1671,6 +1901,9 @@ async function assertBlogIndex(page: Page) {
         : '',
       readingFontFamily,
       sectionLeft,
+      postsPaddingBottom: postsSection
+        ? Number.parseFloat(getComputedStyle(postsSection).paddingBottom)
+        : 0,
       marker,
       markerColor: markerElement ? getComputedStyle(markerElement).color : '',
       headerFirstRowGap:
@@ -1679,6 +1912,9 @@ async function assertBlogIndex(page: Page) {
       legendExists: Boolean(legend),
       itemMarkers,
       itemCount: items.length,
+      rowPaddingBottoms: items
+        .slice(0, -1)
+        .map((item) => Number.parseFloat(getComputedStyle(item).paddingBottom)),
       dotCount: rail?.querySelectorAll('[data-testid="rail-dot"]').length ?? 0,
       connectorCount:
         rail?.querySelectorAll('[data-testid="rail-connector"]').length ?? 0,
@@ -1735,6 +1971,15 @@ async function assertBlogIndex(page: Page) {
   assert.ok(
     result.headerFirstRowGap >= 11 && result.headerFirstRowGap <= 13,
     `blog index header/list gap should match About/title spacing: ${result.headerFirstRowGap}`
+  );
+  assert.ok(
+    Math.abs(result.postsPaddingBottom - result.viewportHeight * 0.2) <= 1,
+    `blog index should keep 20vh of bottom reading slack: ${result.postsPaddingBottom}`
+  );
+  assert.ok(
+    result.rowPaddingBottoms.length > 0 &&
+      result.rowPaddingBottoms.every((padding) => padding === 8),
+    'blog index rail rows should use pb-2 between rows'
   );
   assert.equal(result.legendExists, false, 'blog index legend should be gone');
   const filledBlogRows = result.itemMarkers.filter(
@@ -2011,8 +2256,7 @@ async function assertArticle(page: Page) {
         tocFirstSectionStyle?.columnGap ?? '0'
       ),
       tocFirstNumDecoration: tocFirstNumStyle?.textDecorationLine ?? '',
-      hoveredArticleLinkBackground:
-        hoveredArticleLinkStyle?.backgroundSize ?? '',
+      hoveredArticleLinkShadow: hoveredArticleLinkStyle?.boxShadow ?? '',
       hoveredArticleLinkColor: hoveredArticleLinkStyle?.color ?? '',
       blueToken,
       hoveredArticleLinkDecoration:
@@ -2116,7 +2360,7 @@ async function assertArticle(page: Page) {
     result.tocFirstLinkWidth < result.tocWidth * 0.4,
     'TOC hover/click area should stay close to the text, not full width'
   );
-  assert.equal(result.hoveredArticleLinkBackground, '100% 100%');
+  assert.ok(result.hoveredArticleLinkShadow.includes('inset'));
   assert.equal(result.hoveredArticleLinkColor, result.blueToken);
   assert.equal(result.hoveredArticleLinkDecoration, 'none');
   assert.equal(result.hoveredArticleLinkSkipInk, 'auto');
@@ -2150,7 +2394,7 @@ async function assertArticle(page: Page) {
 
       return {
         color: style?.color ?? '',
-        backgroundSize: style?.backgroundSize ?? '',
+        boxShadow: style?.boxShadow ?? '',
         decoration: style?.textDecorationLine ?? '',
         skipInk: style?.textDecorationSkipInk ?? '',
         blueToken,
@@ -2158,7 +2402,7 @@ async function assertArticle(page: Page) {
     });
 
     assert.equal(tocGithubHover.color, tocGithubHover.blueToken);
-    assert.equal(tocGithubHover.backgroundSize, '100% 100%');
+    assert.ok(tocGithubHover.boxShadow.includes('inset'));
     assert.equal(tocGithubHover.decoration, 'none');
     assert.equal(tocGithubHover.skipInk, 'auto');
   }
@@ -2376,6 +2620,9 @@ async function assertHarmoniaArticle(page: Page) {
         allowTransparency: iframe.getAttribute('allowtransparency') ?? '',
         styleAttr: iframe.getAttribute('style') ?? '',
         isHarmonia: iframe.getAttribute('data-harmonia-iframe') ?? '',
+        baseSrc: iframe.getAttribute('data-harmonia-src') ?? '',
+        src: iframe.getAttribute('src') ?? '',
+        theme: iframe.getAttribute('data-harmonia-theme') ?? '',
         background: getComputedStyle(iframe).backgroundColor,
         opacity: getComputedStyle(iframe).opacity,
       })),
@@ -2454,11 +2701,53 @@ async function assertHarmoniaArticle(page: Page) {
       (iframe) =>
         iframe.allowTransparency === 'true' &&
         iframe.isHarmonia === 'true' &&
+        iframe.baseSrc.startsWith('https://islamtayeb.github.io/harmonia/') &&
+        iframe.src.includes('theme=light') &&
+        iframe.theme === 'light' &&
         !/background\s*:/i.test(iframe.styleAttr) &&
         iframe.background === 'rgba(0, 0, 0, 0)' &&
         iframe.opacity === '1'
     ),
     'all Harmonia iframes should be transparent and fully opaque'
+  );
+}
+
+async function assertHarmoniaIframeDarkTheme(page: Page) {
+  await page.getByTestId('theme-toggle').click();
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll('iframe[data-harmonia-iframe="true"]')].every(
+      (iframe) =>
+        iframe.getAttribute('data-harmonia-theme') === 'dark' &&
+        (iframe.getAttribute('src') ?? '').includes('theme=dark')
+    )
+  );
+
+  const result = await page.evaluate(() =>
+    [
+      ...document.querySelectorAll<HTMLIFrameElement>(
+        'iframe[data-harmonia-iframe="true"]'
+      ),
+    ].map((iframe) => ({
+      src: iframe.getAttribute('src') ?? '',
+      theme: iframe.getAttribute('data-harmonia-theme') ?? '',
+    }))
+  );
+
+  assert.ok(result.length >= 1, 'Harmonia should render theme-aware iframes');
+  assert.ok(
+    result.every(
+      (iframe) => iframe.theme === 'dark' && iframe.src.includes('theme=dark')
+    ),
+    'Harmonia iframes should receive the dark theme argument after toggling'
+  );
+
+  await page.getByTestId('theme-toggle').click();
+  await page.waitForFunction(() =>
+    [...document.querySelectorAll('iframe[data-harmonia-iframe="true"]')].every(
+      (iframe) =>
+        iframe.getAttribute('data-harmonia-theme') === 'light' &&
+        (iframe.getAttribute('src') ?? '').includes('theme=light')
+    )
   );
 }
 
@@ -2716,8 +3005,22 @@ async function main() {
     });
     await mobile.goto(baseUrl, { waitUntil: 'networkidle' });
     await assertRoybBandPlacement(mobile);
-    await assertMobileHeroPortraitContained(mobile);
+    await assertMobileHeroContactCompact(mobile);
+    await assertMobileRailDescriptionsWrap(mobile);
     await screenshot(mobile, 'home-mobile');
+
+    const narrowMobile = await browser.newPage({
+      viewport: { width: 320, height: 844 },
+    });
+    await narrowMobile.goto(baseUrl, { waitUntil: 'networkidle' });
+    await assertMobileHomeWrappedHighlights(narrowMobile);
+
+    const mobileBlog = await browser.newPage({
+      viewport: { width: 390, height: 844 },
+    });
+    await mobileBlog.goto(`${baseUrl}/blog`, { waitUntil: 'networkidle' });
+    await assertMobileBlogWrappedHighlight(mobileBlog);
+    await screenshot(mobileBlog, 'blog-index-mobile');
 
     const blog = await browser.newPage({
       viewport: { width: 1280, height: 900 },
@@ -2748,6 +3051,7 @@ async function main() {
     });
     await assertRoybBandPlacement(harmoniaArticle);
     await assertHarmoniaArticle(harmoniaArticle);
+    await assertHarmoniaIframeDarkTheme(harmoniaArticle);
     await screenshot(harmoniaArticle, 'blog-dimensions');
 
     const legacyArticle = await browser.newPage({

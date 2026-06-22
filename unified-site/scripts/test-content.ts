@@ -252,12 +252,12 @@ async function main() {
       );
       assert.match(
         post.html,
-        /<figure class="article-media iframe-figure"><iframe src="https:\/\/islamtayeb\.github\.io\/harmonia\/export\/visualizations\/genre\/genre_family_pie\/index\.html"[^>]*data-harmonia-iframe="true"[^>]*allowtransparency="true"[^>]*><\/iframe><\/figure>/,
+        /<figure class="article-media iframe-figure"><iframe (?=[^>]*data-harmonia-src="https:\/\/islamtayeb\.github\.io\/harmonia\/export\/visualizations\/genre\/genre_family_pie\/index\.html")(?=[^>]*data-harmonia-iframe="true")(?=[^>]*allowtransparency="true")[^>]*><\/iframe><\/figure>/,
         'bare Harmonia iframes should become figure-wrapped media'
       );
       assert.match(
         post.html,
-        /<figure class="article-media iframe-figure"><iframe width="100%" height="600px" src="https:\/\/islamtayeb\.github\.io\/harmonia\/export\/visualizations\/temporal\/genre_trends_proportion\/index\.html"[^>]*data-harmonia-iframe="true"[^>]*allowtransparency="true"[^>]*><\/iframe><figcaption><em>Genre trends by quarter<\/em><\/figcaption><\/figure>/,
+        /<figure class="article-media iframe-figure"><iframe (?=[^>]*width="100%")(?=[^>]*height="600px")(?=[^>]*data-harmonia-src="https:\/\/islamtayeb\.github\.io\/harmonia\/export\/visualizations\/temporal\/genre_trends_proportion\/index\.html")(?=[^>]*data-harmonia-iframe="true")(?=[^>]*allowtransparency="true")[^>]*><\/iframe><figcaption><em>Genre trends by quarter<\/em><\/figcaption><\/figure>/,
         'captioned Harmonia iframes should keep their own captioned figures'
       );
       assert.match(
@@ -268,6 +268,11 @@ async function main() {
     }
 
     if (post.manifest.slug === 'on-using-computers') {
+      assert.match(
+        post.html,
+        /<figure class="article-media article-media-unframed"><img src="\/static\/media\/pasted-image-20251003215923\.webp"/,
+        'Using Computers spaces screenshot should render without image frame padding'
+      );
       assert.equal(
         countMatches(post.html, /class="article-details"/g),
         13,
@@ -277,6 +282,14 @@ async function main() {
         post.html,
         /<hr class="footnotes-sep"><section class="footnotes">/,
         'Using Computers should use dashed footnote separator'
+      );
+    }
+
+    if (post.manifest.slug === 'on-fingerspitzengefuhl') {
+      assert.match(
+        post.html,
+        /<figure class="article-media article-media-unframed"><img src="https:\/\/raw\.githubusercontent\.com\/islamtayeb\/obsidian-files\/main\/On%20Fingerspitzengef%C3%BChl-22\.png"/,
+        'Fingerspitzengefuhl lead image should render without image frame padding'
       );
     }
   }

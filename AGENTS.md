@@ -217,7 +217,9 @@ Only commit when all three pass. Include meaningful commit messages that describ
   underline naturally at rest; hover may hide the underline when the ROYB
   highlight is active. Non-anchor controls that need the same ROYB link
   treatment should use `components/primitives/royb-link.tsx` instead of
-  duplicating class strings.
+  duplicating class strings. Multiline highlighted text links must stay in
+  normal inline flow, not as direct `flex`/`inline-flex` children, so
+  `box-decoration-break: clone` can fragment hover highlights per wrapped line.
 - **Unified-site section actions:** "see more" actions are lowercase normal
   text, not tracked uppercase or small-caps. When an action logically continues
   a rail list, render it through `RailActionItem` so the dashed rail extends to

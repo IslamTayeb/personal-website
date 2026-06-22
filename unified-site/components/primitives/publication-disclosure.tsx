@@ -41,7 +41,6 @@ function PublicationRow({
       dotTestId="publication-dot"
       titleTestId="publication-title-wrap"
       dotClassName="bg-foreground/75"
-      className="pb-2.5"
       connector={connector}
       title={
         <span className="block min-w-0">

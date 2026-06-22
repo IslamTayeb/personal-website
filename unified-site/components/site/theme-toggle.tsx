@@ -4,11 +4,16 @@ import { Moon, Sun } from 'lucide-react';
 
 type ThemeName = 'light' | 'dark';
 
+type HarmoniaThemeWindow = Window & {
+  __syncHarmoniaIframes?: () => void;
+};
+
 function applyTheme(theme: ThemeName) {
   document.documentElement.classList.remove('light', 'dark');
   document.documentElement.classList.add(theme);
   document.documentElement.style.colorScheme = theme;
   window.localStorage.setItem('theme', theme);
+  (window as HarmoniaThemeWindow).__syncHarmoniaIframes?.();
 }
 
 export function ThemeToggle() {

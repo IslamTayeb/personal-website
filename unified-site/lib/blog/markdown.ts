@@ -27,6 +27,18 @@ const articleLinkClasses = [
 const articleExternalLinkClasses = [...articleLinkClasses, 'external-link'];
 const articleLinkClassName = articleLinkClasses.join(' ');
 const articleExternalLinkClassName = articleExternalLinkClasses.join(' ');
+const unframedArticleImageSrcs = new Map<string, Set<string>>([
+  [
+    'on-fingerspitzengefuhl',
+    new Set([
+      'https://raw.githubusercontent.com/islamtayeb/obsidian-files/main/On%20Fingerspitzengef%C3%BChl-22.png',
+    ]),
+  ],
+  [
+    'on-using-computers',
+    new Set(['/static/media/pasted-image-20251003215923.webp']),
+  ],
+]);
 
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -40,6 +52,30 @@ function mergeClasses(className: string, requiredClasses: string[]) {
         .filter(Boolean)
     )
   ).join(' ');
+}
+
+function imageSrcFromHtml(imageHtml: string) {
+  return imageHtml.match(/\ssrc=(["'])(.*?)\1/i)?.[2] ?? '';
+}
+
+function articleMediaFigureHtml({
+  imageHtml,
+  manifest,
+  captionHtml,
+}: {
+  imageHtml: string;
+  manifest: PostManifest;
+  captionHtml?: string;
+}) {
+  const imageSrc = imageSrcFromHtml(imageHtml);
+  const className = unframedArticleImageSrcs.get(manifest.slug)?.has(imageSrc)
+    ? 'article-media article-media-unframed'
+    : 'article-media';
+  const caption = captionHtml
+    ? `<figcaption><em>${captionHtml}</em></figcaption>`
+    : '';
+
+  return `<figure class="${className}">${imageHtml}${caption}</figure>`;
 }
 
 function withoutFootnoteDefinitions(markdown: string) {
@@ -319,8 +355,18 @@ function withTransparentIframeAttrs(html: string) {
     const isHarmoniaIframe =
       /\bsrc="https:\/\/islamtayeb\.github\.io\/harmonia\//i.test(nextAttrs);
 
-    if (isHarmoniaIframe && !/\bdata-harmonia-iframe=/i.test(nextAttrs)) {
-      nextAttrs += ' data-harmonia-iframe="true"';
+    if (isHarmoniaIframe) {
+      const srcMatch = nextAttrs.match(/\bsrc=(["'])(.*?)\1/i);
+
+      if (srcMatch && !/\bdata-harmonia-src=/i.test(nextAttrs)) {
+        nextAttrs += ` data-harmonia-src="${escapeHtml(srcMatch[2])}"`;
+      }
+
+      nextAttrs = nextAttrs.replace(/\s+src=(["'])(.*?)\1/i, '');
+
+      if (!/\bdata-harmonia-iframe=/i.test(nextAttrs)) {
+        nextAttrs += ' data-harmonia-iframe="true"';
+      }
     }
 
     if (!/\ballowtransparency=/i.test(nextAttrs)) {
@@ -514,15 +560,16 @@ export function renderMarkdown(markdown: string, manifest: PostManifest) {
     .replace('<p>%%GENERATED_TOC%%</p>', toc)
     .replace(
       /<p>\s*(<img\b[^>]*>)\s+<em>([\s\S]*?)<\/em>\s*<\/p>/g,
-      '<figure class="article-media">$1<figcaption><em>$2</em></figcaption></figure>'
+      (_match, imageHtml: string, captionHtml: string) =>
+        articleMediaFigureHtml({ imageHtml, manifest, captionHtml })
     )
     .replace(
       /<p>\s*(<img\b[^>]*>)\s*<\/p>\s*<p>\s*<em>([\s\S]*?)<\/em>\s*<\/p>/g,
-      '<figure class="article-media">$1<figcaption><em>$2</em></figcaption></figure>'
+      (_match, imageHtml: string, captionHtml: string) =>
+        articleMediaFigureHtml({ imageHtml, manifest, captionHtml })
     )
-    .replace(
-      /<p>\s*(<img\b[^>]*>)\s*<\/p>/g,
-      '<figure class="article-media">$1</figure>'
+    .replace(/<p>\s*(<img\b[^>]*>)\s*<\/p>/g, (_match, imageHtml: string) =>
+      articleMediaFigureHtml({ imageHtml, manifest })
     )
     .replace(
       /<p>\s*(<video\b[\s\S]*?<\/video>)\s*<em>([\s\S]*?)<\/em>\s*<\/p>/g,
