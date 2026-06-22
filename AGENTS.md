@@ -114,6 +114,9 @@ Use meaningful commit messages that describe the why.
 - **One-line compact copy:** Descriptions, summaries, excerpts, compact rails,
   course details, and previews should be concise and constrained with explicit
   one-line CSS where needed.
+- **Phone breakpoint:** For the active site, "phone" means any viewport where
+  the hero portrait is hidden. Keep footer quote/credit visibility tied to that
+  same `md` portrait threshold, not to `sm`.
 - **Blog internals:** Active posts should use local `/blog/...` links for links
   to other posts. Do not link active content back to `apmoverflow.xyz`.
 - **Blog manifests:** Use `listed: false` for source-backed pages that should

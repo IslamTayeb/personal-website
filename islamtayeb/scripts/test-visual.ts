@@ -3072,6 +3072,13 @@ async function main() {
     await assertMobileFooterAlignment(narrowMobile);
     await assertMobileHomeWrappedHighlights(narrowMobile);
 
+    const portraitHidden = await browser.newPage({
+      viewport: { width: 700, height: 844 },
+    });
+    await portraitHidden.goto(baseUrl, { waitUntil: 'networkidle' });
+    await assertMobileHeroContactCompact(portraitHidden);
+    await assertMobileFooterAlignment(portraitHidden);
+
     const mobileBlog = await browser.newPage({
       viewport: { width: 390, height: 844 },
     });
