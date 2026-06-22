@@ -4,7 +4,7 @@ export const siteMetadata = {
   description:
     'Islam Tayeb: systems, ML tooling, research, and APM Overflow writing.',
   socialImage: {
-    url: '/static/og-image.png',
+    url: '/static/og-moon.png',
     width: 1200,
     height: 1200,
     alt: 'Crescent moon mark for Islam Tayeb',
