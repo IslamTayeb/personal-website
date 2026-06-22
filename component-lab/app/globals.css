@@ -89,9 +89,9 @@
   --roy-r: oklch(0.62 0.24 27);
   --roy-o: oklch(0.7 0.2 55);
   /* UI-facing yellow: bright, matches the band */
-  --roy-y: oklch(0.86 0.17 95);
+  --roy-y: #f3cf24;
   /* band-only yellow: stays vivid between darker stops */
-  --roy-y-band: oklch(0.86 0.17 95);
+  --roy-y-band: #f3cf24;
   --roy-b: oklch(0.55 0.18 250);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
@@ -106,7 +106,7 @@
 .dark {
   color-scheme: dark;
   /* on dark ink, the original bright yellow reads fine */
-  --roy-y: oklch(0.86 0.17 95);
+  --roy-y: #f3cf24;
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
@@ -143,7 +143,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     color-scheme: dark;
-    --roy-y: oklch(0.86 0.17 95);
+    --roy-y: #f3cf24;
     --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
     --card: oklch(0.205 0 0);

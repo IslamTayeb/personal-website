@@ -1,4 +1,5 @@
 .next/
+content/posts/*.md
 node_modules/
-test-results/
 next-env.d.ts
+test-results/

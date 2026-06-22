@@ -150,7 +150,7 @@ function DitherDemo({ kind }: { kind: DitherOption['kind'] }) {
     return (
       <OrderedDitherBar
         className="border-t border-border"
-        colors={['#ff2536', '#ff7900', '#f5d019', '#0875d1']}
+        colors={['#ff2536', '#ff7900', '#f3cf24', '#0875d1']}
       />
     );
   }
