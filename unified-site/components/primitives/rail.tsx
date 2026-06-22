@@ -121,7 +121,7 @@ export function RailItem({
           dotClassName
         )}
       />
-      <div className="flex w-full min-w-0 flex-col gap-1">
+      <div className="flex w-full min-w-0 flex-col gap-0.5">
         {onActivate ? (
           <button
             type="button"

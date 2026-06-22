@@ -21,7 +21,7 @@ export type ExperienceGroup = {
 export const experienceGroups: ExperienceGroup[] = [
   {
     kind: 'Research',
-    visibleCount: 3,
+    visibleCount: 4,
     roles: [
       {
         org: 'Duke University',

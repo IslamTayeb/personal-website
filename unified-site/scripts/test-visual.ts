@@ -223,6 +223,19 @@ async function assertHome(page: Page) {
     const firstGroupLabel = experienceSection?.querySelector(
       '[data-testid="experience-group-label"]'
     );
+    const experienceGroupLabelStyles = [
+      ...(experienceSection?.querySelectorAll<HTMLElement>(
+        '[data-testid="experience-group-label"]'
+      ) ?? []),
+    ].map((label) => {
+      const style = getComputedStyle(label);
+
+      return {
+        text: label.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+        className: label.className,
+        textDecorationLine: style.textDecorationLine,
+      };
+    });
     const firstRailTitle = experienceSection?.querySelector(
       '[data-testid="rail-title"]'
     );
@@ -267,6 +280,7 @@ async function assertHome(page: Page) {
     });
     const bodyStyle = getComputedStyle(document.body);
     const bodyColor = bodyStyle.color;
+    const bodyBackgroundColor = bodyStyle.backgroundColor;
     const bodyFontFamily = bodyStyle.fontFamily;
     const readingProbe = document.createElement('span');
 
@@ -415,6 +429,7 @@ async function assertHome(page: Page) {
         state: dot.getAttribute('data-state'),
         className: dot.className,
         border: Number.parseFloat(getComputedStyle(dot).borderTopWidth),
+        borderColor: getComputedStyle(dot).borderTopColor,
         backgroundColor: getComputedStyle(dot).backgroundColor,
       })
     );
@@ -601,6 +616,7 @@ async function assertHome(page: Page) {
     return {
       mainWidth: main?.getBoundingClientRect().width ?? 0,
       bodyColor,
+      bodyBackgroundColor,
       bodyFontFamily,
       readingFontFamily,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
@@ -676,6 +692,7 @@ async function assertHome(page: Page) {
       firstRailTitleLeft: firstRailTitle?.getBoundingClientRect().left ?? 0,
       experienceLinks,
       advisorLabels,
+      experienceGroupLabelStyles,
       experienceLegendExists: Boolean(
         experienceSection?.querySelector('[data-testid="experience-legend"]')
       ),
@@ -828,6 +845,10 @@ async function assertHome(page: Page) {
     result.sectionMarkerFontSizes.every((size) => Math.round(size) === 16),
     'section markers should follow the promoted 16px section label size'
   );
+  assert.ok(
+    result.sectionMarkerWidths.every((width) => Math.round(width) === 14),
+    'section marker text should have a fixed 14px width'
+  );
   assert.deepEqual(
     result.sectionLabelColors,
     result.sectionLabelColors.map(() => result.bodyColor),
@@ -918,6 +939,29 @@ async function assertHome(page: Page) {
     Math.abs(result.experienceTitleLeft - result.firstRailTitleLeft) <= 1,
     'Experience title should align with row titles'
   );
+  assert.deepEqual(
+    result.experienceGroupLabelStyles.map(
+      (label: { text: string }) => label.text
+    ),
+    ['Research (5)', 'Engineering (3)', 'Teaching (3)']
+  );
+  assert.ok(
+    result.experienceGroupLabelStyles.every(
+      (label: { textDecorationLine: string }) =>
+        label.textDecorationLine.includes('underline')
+    ),
+    'experience group labels should be underlined because they are clickable'
+  );
+  assert.ok(
+    result.experienceGroupLabelStyles.every(
+      (label: { className: string }) =>
+        label.className.includes('royb-link') &&
+        label.className.includes('royb-link-highlight') &&
+        label.className.includes('royb-link-fragment') &&
+        label.className.includes('section-color-o')
+    ),
+    'experience group labels should use the shared ROYB link primitive'
+  );
 
   const research = result.groups.find((group) => group.kind === 'Research');
   const engineering = result.groups.find(
@@ -926,7 +970,7 @@ async function assertHome(page: Page) {
   const teaching = result.groups.find((group) => group.kind === 'Teaching');
 
   assert.equal(research?.expanded, 'true', 'Research should default open');
-  assert.equal(research?.rows, 3, 'Research should show 3 rows when collapsed');
+  assert.equal(research?.rows, 4, 'Research should show 4 rows when collapsed');
   assert.ok(research?.text.includes('Research (5)'));
   assert.ok(research?.text.includes('see more'));
   assert.equal(research?.showMorePaddingTop, 6);
@@ -1012,10 +1056,12 @@ async function assertHome(page: Page) {
   assert.ok(
     incomingDots.every(
       (dot) =>
-        dot.className.includes('bg-roy-o') &&
-        dot.backgroundColor !== 'rgba(0, 0, 0, 0)'
+        dot.className.includes('border-roy-o') &&
+        dot.className.includes('bg-background') &&
+        dot.border > 0 &&
+        dot.backgroundColor === result.bodyBackgroundColor
     ),
-    'incoming rail markers should be filled orange'
+    'incoming rail markers should be hollow'
   );
   assert.ok(presentDots.every((dot) => dot.className.includes('bg-roy-o')));
   assert.ok(endedDots.every((dot) => dot.className.includes('bg-foreground')));
@@ -1306,6 +1352,40 @@ async function assertPublicationTitleUnderline(page: Page) {
   assert.equal(result.skipInk, 'auto');
 }
 
+async function assertExperienceGroupLabelHoverHighlight(page: Page) {
+  await page.locator('[data-testid="experience-group-label"]').first().hover();
+
+  const result = await page.evaluate(() => {
+    const label = document.querySelector<HTMLElement>(
+      '[data-testid="experience-group-label"]:hover'
+    );
+    const style = label ? getComputedStyle(label) : null;
+    const probe = document.createElement('span');
+
+    probe.style.color = 'var(--roy-o)';
+    document.body.append(probe);
+
+    const orangeToken = getComputedStyle(probe).color;
+
+    probe.remove();
+
+    return {
+      backgroundImage: style?.backgroundImage ?? '',
+      backgroundSize: style?.backgroundSize ?? '',
+      color: style?.color ?? '',
+      decoration: style?.textDecorationLine ?? '',
+      skipInk: style?.textDecorationSkipInk ?? '',
+      orangeToken,
+    };
+  });
+
+  assert.notEqual(result.backgroundImage, 'none');
+  assert.equal(result.backgroundSize, '100% 100%');
+  assert.equal(result.color, result.orangeToken);
+  assert.equal(result.decoration, 'none');
+  assert.equal(result.skipInk, 'auto');
+}
+
 async function assertExperienceInteractions(page: Page) {
   const groupRows = async (group: string) =>
     page
@@ -1313,7 +1393,7 @@ async function assertExperienceInteractions(page: Page) {
       .locator('[data-testid="rail-title"]')
       .count();
 
-  assert.equal(await groupRows('Research'), 3);
+  assert.equal(await groupRows('Research'), 4);
   assert.equal(await groupRows('Engineering'), 1);
   assert.equal(await groupRows('Teaching'), 0);
 
@@ -1327,7 +1407,7 @@ async function assertExperienceInteractions(page: Page) {
     .locator('[data-testid="experience-group"][data-group="Research"]')
     .getByRole('button', { name: /Research \(5\)/ })
     .click();
-  assert.equal(await groupRows('Research'), 3);
+  assert.equal(await groupRows('Research'), 4);
 
   await page
     .locator('[data-testid="experience-group"][data-group="Research"]')
@@ -1344,25 +1424,32 @@ async function assertExperienceInteractions(page: Page) {
   const teachingText = await page
     .locator('[data-testid="experience-group"][data-group="Teaching"]')
     .textContent();
+  const teachingIncomingDot = page
+    .locator('[data-testid="experience-group"][data-group="Teaching"]')
+    .locator('[data-testid="rail-dot"][data-state="incoming"]');
+  const teachingIncomingDotClassName =
+    (await teachingIncomingDot.getAttribute('class')) ?? '';
 
   assert.ok(teachingText?.includes('Operating Systems'));
   assert.ok(teachingText?.includes('Computer Systems'));
   assert.ok(teachingText?.includes('Organic Chemistry I'));
   assert.ok(
     teachingText?.includes(
-      'Introduced (more) freshmen to kernels and concurrency; co-led a discussion section.'
+      'Introducing kernels; co-leading a discussion section + office hours'
     )
   );
   assert.ok(
     teachingText?.includes(
-      'Introduced freshmen to CPUs and caches; co-led a discussion section.'
+      'Introduced CPUs; co-led a discussion section + office hours'
     )
   );
   assert.ok(
     teachingText?.includes(
-      'Led a study group; saw kids quit pre-med as the semester went.'
+      'Led a study group; saw kids quit pre-med as the semester went'
     )
   );
+  assert.ok(teachingIncomingDotClassName.includes('border-roy-o'));
+  assert.ok(teachingIncomingDotClassName.includes('bg-background'));
   assert.ok(!teachingText?.includes('Duke University.'));
   assert.ok(teachingText?.includes('Jan 2025 - May 2025'));
   assert.ok(!teachingText?.includes('Sophomore spring'));
@@ -2567,6 +2654,7 @@ async function main() {
     await assertVisibleOneLineDescriptions(home);
     await assertHeroLinksHoverHighlight(home);
     await assertPublicationTitleUnderline(home);
+    await assertExperienceGroupLabelHoverHighlight(home);
     await assertThemeToggleIsStable(home);
     await screenshot(home, 'home-desktop');
     await assertExperienceInteractions(home);

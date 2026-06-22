@@ -6,6 +6,7 @@ import { experienceGroups, type ExperienceGroup } from '@/data/experience';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { RichText } from '@/components/primitives/rich-text';
+import { RoybLinkText } from '@/components/primitives/royb-link';
 import { SectionActionButton } from '@/components/primitives/section-action';
 import { BorderedPanel, Section } from '@/components/primitives/section';
 import { cn } from '@/lib/utils';
@@ -68,7 +69,7 @@ function RailGroup({
         const state = role.state ?? (role.incoming ? 'incoming' : 'ended');
         const dotClassName =
           state === 'incoming'
-            ? 'bg-roy-o'
+            ? 'border border-roy-o bg-background'
             : state === 'present'
               ? 'bg-roy-o'
               : 'bg-foreground/75';
@@ -232,9 +233,13 @@ function RailGroupBlock({
           strokeWidth={1.8}
           aria-hidden
         />
-        <span data-testid="experience-group-label" data-group={group.kind}>
+        <RoybLinkText
+          data-testid="experience-group-label"
+          data-group={group.kind}
+          section="o"
+        >
           {group.kind} ({group.roles.length})
-        </span>
+        </RoybLinkText>
       </button>
       {open ? (
         <RailGroup

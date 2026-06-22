@@ -215,7 +215,9 @@ Only commit when all three pass. Include meaningful commit messages that describ
   classes in the renderer. Keep links on native `text-decoration` with
   `text-decoration-skip-ink: auto` so descenders and punctuation interrupt the
   underline naturally at rest; hover may hide the underline when the ROYB
-  highlight is active.
+  highlight is active. Non-anchor controls that need the same ROYB link
+  treatment should use `components/primitives/royb-link.tsx` instead of
+  duplicating class strings.
 - **Unified-site section actions:** "see more" actions are lowercase normal
   text, not tracked uppercase or small-caps. When an action logically continues
   a rail list, render it through `RailActionItem` so the dashed rail extends to

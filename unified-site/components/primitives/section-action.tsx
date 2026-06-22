@@ -1,5 +1,9 @@
 import type { ReactNode } from 'react';
 import { ExternalLink } from '@/components/primitives/external-link';
+import {
+  roybLinkClassName,
+  type RoybSection,
+} from '@/components/primitives/royb-link';
 import { cn } from '@/lib/utils';
 
 const actionClassName = 'font-mono text-sm text-muted-foreground';
@@ -11,7 +15,7 @@ export function SectionActionLink({
   className,
 }: {
   href: string;
-  section: 'r' | 'o' | 'y' | 'b';
+  section: RoybSection;
   children: ReactNode;
   className?: string;
 }) {
@@ -33,7 +37,7 @@ export function SectionActionButton({
   onClick,
   testId,
 }: {
-  section: 'r' | 'o' | 'y' | 'b';
+  section: RoybSection;
   children: ReactNode;
   className?: string;
   onClick: () => void;
@@ -45,8 +49,7 @@ export function SectionActionButton({
       onClick={onClick}
       data-testid={testId}
       className={cn(
-        'royb-link royb-link-highlight',
-        `section-color-${section}`,
+        roybLinkClassName({ section }),
         actionClassName,
         'outline-none focus-visible:ring-1 focus-visible:ring-ring',
         className

@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import type { AnchorHTMLAttributes, ReactNode } from 'react';
-import { cn } from '@/lib/utils';
+import {
+  roybLinkClassName,
+  type RoybLinkVariant,
+  type RoybSection,
+} from '@/components/primitives/royb-link';
 
 function isExternalHref(href: string) {
   return /^https?:\/\//.test(href);
@@ -17,18 +21,16 @@ export function ExternalLink({
   href: string;
   children: ReactNode;
   className?: string;
-  section?: 'r' | 'o' | 'y' | 'b';
-  variant?: 'highlight' | 'plain';
+  section?: RoybSection;
+  variant?: RoybLinkVariant;
 }) {
   const external = isExternalHref(href);
-  const classes = cn(
-    variant === 'highlight'
-      ? 'royb-link royb-link-highlight royb-link-fragment'
-      : 'royb-link-plain',
-    `section-color-${section}`,
-    external && 'external-link',
-    className
-  );
+  const classes = roybLinkClassName({
+    section,
+    variant,
+    external,
+    className,
+  });
 
   if (external) {
     return (
