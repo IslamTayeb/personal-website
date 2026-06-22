@@ -437,9 +437,7 @@
     border-bottom-color: var(--kbd-border-bottom);
     border-bottom-width: 2px;
     border-radius: 0;
-    box-shadow:
-      var(--kbd-inset-highlight),
-      var(--kbd-shadow);
+    box-shadow: var(--kbd-inset-highlight), var(--kbd-shadow);
     color: var(--kbd-foreground);
     cursor: default;
     transform: translateY(-0.05em);
