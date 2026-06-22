@@ -76,7 +76,7 @@ export function RailItem({
       {meta ? (
         <span
           className={cn(
-            'shrink-0 font-mono text-sm text-muted-foreground',
+            'min-w-0 max-w-[32vw] whitespace-normal text-right font-mono text-sm leading-tight text-muted-foreground md:max-w-none md:shrink-0 md:whitespace-nowrap',
             metaClassName
           )}
         >

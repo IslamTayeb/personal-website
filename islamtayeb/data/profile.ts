@@ -24,7 +24,7 @@ export const heroParagraphs: TextSegment[][] = [
   ],
   [
     {
-      text: 'I was born and raised in Egypt, but later moved to Taif, Saudi Arabia during high school. I play ',
+      text: 'I was born and raised in Egypt, but moved to Taif, Saudi Arabia during high school. I play ',
     },
     { text: 'Tetris', href: profileLinks.tetris },
     { text: ' and ' },

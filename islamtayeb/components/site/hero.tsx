@@ -4,6 +4,7 @@ import { contactLinks } from '@/data/links';
 import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { SectionHeader } from '@/components/primitives/section';
+import { cn } from '@/lib/utils';
 
 function ContactIndex() {
   return (
@@ -55,7 +56,10 @@ function HeroSegment({ segment }: { segment: TextSegment }) {
 
 function HeroStory() {
   return (
-    <div className="reading-copy flex flex-col gap-1.5 text-base leading-snug text-foreground">
+    <div
+      data-testid="hero-story"
+      className="reading-copy flex flex-col gap-1.5 text-base leading-snug text-foreground"
+    >
       {heroParagraphs.map((paragraph, paragraphIndex) => (
         <p key={paragraphIndex}>
           {paragraph.map((segment, segmentIndex) => (
@@ -70,22 +74,49 @@ function HeroStory() {
   );
 }
 
+function HeroTitle({
+  className,
+  testId,
+}: {
+  className?: string;
+  testId: string;
+}) {
+  return (
+    <h1
+      data-testid={testId}
+      className={cn(
+        'mb-2 w-fit font-sans text-4xl font-semibold tracking-tight text-foreground',
+        className
+      )}
+    >
+      Islam Tayeb
+    </h1>
+  );
+}
+
 export function Hero() {
   return (
     <section id="about" data-testid="hero-section" className="pb-4 pt-0">
       <div className="flex w-full flex-col">
         <SectionHeader index="1" title="About" accent="text-roy-r" />
-        <h1
-          data-testid="hero-title"
-          className="mb-2 w-fit font-sans text-4xl font-semibold tracking-tight text-foreground"
+        <HeroTitle testId="hero-title-mobile" className="md:hidden" />
+        <div
+          data-testid="hero-content"
+          className="flex flex-col gap-3 md:grid md:grid-cols-[25%_minmax(0,1fr)] md:gap-3"
         >
-          Islam Tayeb
-        </h1>
-        <div className="flex flex-col gap-3 md:grid md:grid-cols-[25%_minmax(0,1fr)] md:gap-3">
-          <div className="min-w-0 md:border-r md:border-border md:pr-3">
+          <div
+            data-testid="hero-contact-column"
+            className="min-w-0 md:border-r md:border-border md:pr-3"
+          >
             <ContactIndex />
           </div>
-          <HeroStory />
+          <div
+            data-testid="hero-story-column"
+            className="min-w-0 md:self-center"
+          >
+            <HeroTitle testId="hero-title" className="hidden md:block" />
+            <HeroStory />
+          </div>
         </div>
       </div>
     </section>

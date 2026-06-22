@@ -4,6 +4,7 @@ import path from 'node:path';
 import { spawn } from 'node:child_process';
 import { chromium, type Browser, type Page } from '@playwright/test';
 import { externalWriting } from '../data/external-writing';
+import { heroParagraphs, profile } from '../data/profile';
 import { getListedPosts } from '../lib/blog/posts';
 
 const root = process.cwd();
@@ -11,6 +12,13 @@ const port = 3011;
 let baseUrl = `http://localhost:${port}`;
 const existingBaseUrl = process.env.VISUAL_BASE_URL ?? 'http://localhost:3002';
 const screenshotDir = path.join(root, 'test-results', 'visual');
+const expectedHeroParagraphs = heroParagraphs.map((paragraph) =>
+  paragraph
+    .map((segment) => segment.text)
+    .join('')
+    .replace(/\s+/g, ' ')
+    .trim()
+);
 
 async function isServerReady(url: string) {
   try {
@@ -207,15 +215,29 @@ async function assertHome(page: Page) {
       : '';
     const heroSection = document.querySelector('[data-testid="hero-section"]');
     const heroHeader = heroSection?.querySelector<HTMLElement>('header');
-    const heroTitleElement = document.querySelector<HTMLElement>(
+    const heroContent = heroSection?.querySelector<HTMLElement>(
+      '[data-testid="hero-content"]'
+    );
+    const heroTitleElement = heroSection?.querySelector<HTMLElement>(
       '[data-testid="hero-title"]'
     );
     const heroTitleRect = heroTitleElement?.getBoundingClientRect();
-    const heroContentRect =
-      heroTitleElement?.nextElementSibling?.getBoundingClientRect();
-    const heroContactColumn = heroTitleElement?.nextElementSibling
-      ?.firstElementChild as HTMLElement | null | undefined;
+    const heroContentRect = heroContent?.getBoundingClientRect();
+    const heroContactColumn = heroContent?.querySelector<HTMLElement>(
+      '[data-testid="hero-contact-column"]'
+    );
     const heroContactColumnRect = heroContactColumn?.getBoundingClientRect();
+    const heroStoryColumn = heroContent?.querySelector<HTMLElement>(
+      '[data-testid="hero-story-column"]'
+    );
+    const heroStoryColumnRect = heroStoryColumn?.getBoundingClientRect();
+    const heroStoryColumnStyle = heroStoryColumn
+      ? getComputedStyle(heroStoryColumn)
+      : null;
+    const heroStory = heroContent?.querySelector<HTMLElement>(
+      '[data-testid="hero-story"]'
+    );
+    const heroStoryRect = heroStory?.getBoundingClientRect();
     const heroContactIndex = heroContactColumn?.firstElementChild as
       | HTMLElement
       | null
@@ -683,6 +705,7 @@ async function assertHome(page: Page) {
       bodyFontFamily,
       readingFontFamily,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      mainText: main?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       wordmarkLinkDisplays: wordmarkLinks.map(
         (link) => getComputedStyle(link).display
@@ -698,6 +721,8 @@ async function assertHome(page: Page) {
       themeToggleClassName,
       heroTitle:
         heroTitleElement?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      heroTitleLeft: heroTitleRect?.left ?? 0,
+      heroStoryLeft: heroStoryRect?.left ?? 0,
       heroContactText:
         heroSection?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       dukeLinkHref:
@@ -705,12 +730,27 @@ async function assertHome(page: Page) {
           'a[href="https://www.duke.edu/"]'
         )?.href ?? '',
       heroHeaderTitleGap:
-        (heroTitleRect?.top ?? 0) -
+        (heroContentRect?.top ?? 0) -
         (heroHeader?.getBoundingClientRect().bottom ?? 0),
       heroTitleContentGap:
-        (heroContentRect?.top ?? 0) - (heroTitleRect?.bottom ?? 0),
+        (heroStoryRect?.top ?? 0) - (heroTitleRect?.bottom ?? 0),
       heroContentWidth: heroContentRect?.width ?? 0,
       heroContactColumnWidth: heroContactColumnRect?.width ?? 0,
+      heroStoryAlignSelf: heroStoryColumnStyle?.alignSelf ?? '',
+      heroStoryDividerCenterDelta:
+        heroStoryColumnRect && heroContactColumnRect
+          ? heroStoryColumnRect.top +
+            heroStoryColumnRect.height / 2 -
+            (heroContactColumnRect.top + heroContactColumnRect.height / 2)
+          : Number.POSITIVE_INFINITY,
+      heroStoryDividerTopGap:
+        heroStoryColumnRect && heroContactColumnRect
+          ? heroStoryColumnRect.top - heroContactColumnRect.top
+          : Number.POSITIVE_INFINITY,
+      heroStoryDividerBottomGap:
+        heroStoryColumnRect && heroContactColumnRect
+          ? heroContactColumnRect.bottom - heroStoryColumnRect.bottom
+          : Number.POSITIVE_INFINITY,
       heroContactIndexGap: heroContactIndex
         ? Number.parseFloat(getComputedStyle(heroContactIndex).rowGap)
         : 0,
@@ -858,11 +898,15 @@ async function assertHome(page: Page) {
   assert.equal(result.heroContactDetailsGap, 2);
   assert.ok(
     result.heroHeaderTitleGap >= 11 && result.heroHeaderTitleGap <= 13,
-    `About/title gap should match the blog index header gap: ${result.heroHeaderTitleGap}`
+    `About/content gap should match the blog index header gap: ${result.heroHeaderTitleGap}`
   );
   assert.ok(
     result.heroTitleContentGap >= 7,
-    'hero title should keep a visible bottom gap before contact/body content'
+    'hero title should keep a visible bottom gap before story copy'
+  );
+  assert.ok(
+    Math.abs(result.heroTitleLeft - result.heroStoryLeft) <= 1,
+    `hero title should align with story copy: ${result.heroTitleLeft} / ${result.heroStoryLeft}`
   );
   assert.ok(
     result.heroContentWidth > 0 &&
@@ -870,6 +914,17 @@ async function assertHome(page: Page) {
         result.heroContactColumnWidth / result.heroContentWidth - 0.25
       ) <= 0.02,
     `hero contact column should take 25% of the content row: ${result.heroContactColumnWidth} / ${result.heroContentWidth}`
+  );
+  assert.equal(result.heroStoryAlignSelf, 'center');
+  assert.ok(
+    Math.abs(result.heroStoryDividerCenterDelta) <= 1,
+    `hero story should be vertically centered against the divider: ${result.heroStoryDividerCenterDelta}`
+  );
+  assert.ok(
+    Math.abs(
+      result.heroStoryDividerTopGap - result.heroStoryDividerBottomGap
+    ) <= 1,
+    `hero story divider gaps should balance: ${result.heroStoryDividerTopGap} / ${result.heroStoryDividerBottomGap}`
   );
   assert.deepEqual(result.sectionMarkers, ['§1', '§2', '§3', '§4']);
   assert.deepEqual(result.sectionLabels, [
@@ -975,12 +1030,7 @@ async function assertHome(page: Page) {
     'x',
     'scholar',
   ]);
-  for (const copy of [
-    "I'm researching systems in ML, particularly agent correctness and efficiency, and study at Duke.",
-    'I was born and raised in Egypt, but later moved to Taif, Saudi Arabia during high school.',
-    'I also played osu! competitively and designed a few skins (500K+ downloads).',
-    'I play Tetris and Monkeytype in my free time.',
-  ]) {
+  for (const copy of expectedHeroParagraphs) {
     assert.ok(result.bodyText.includes(copy), `hero should include: ${copy}`);
   }
   assert.equal(result.dukeLinkHref, 'https://www.duke.edu/');
@@ -988,8 +1038,11 @@ async function assertHome(page: Page) {
     !result.bodyText.includes('Finding the Right Answer Was Never the Point'),
     'external writing should stay off the home writing preview'
   );
-  assert.ok(!result.bodyText.includes('islam.moh.islamm@gmail.com'));
-  assert.ok(!result.bodyText.includes('islam.tayeb@duke.edu'));
+  assert.equal(
+    result.mainText.includes(profile.email),
+    expectedHeroParagraphs.some((copy) => copy.includes(profile.email))
+  );
+  assert.ok(!result.mainText.includes('islam.tayeb@duke.edu'));
   for (const label of ['experience', 'publications', 'courses', 'writing']) {
     assert.ok(
       !result.headerText.includes(label),
@@ -1422,17 +1475,34 @@ async function assertHome(page: Page) {
 
 async function assertMobileHeroContactCompact(page: Page) {
   const result = await page.evaluate(() => {
+    const mobileTitle = document.querySelector<HTMLElement>(
+      '[data-testid="hero-title-mobile"]'
+    );
+    const desktopTitle = document.querySelector<HTMLElement>(
+      '[data-testid="hero-title"]'
+    );
     const heroPortrait = document.querySelector<HTMLElement>(
       '[data-testid="hero-portrait"]'
     );
     const heroContactIndex = heroPortrait?.parentElement as HTMLElement | null;
     const heroContactDetails =
       heroContactIndex?.querySelector<HTMLElement>('div');
+    const mobileTitleRect = mobileTitle?.getBoundingClientRect();
     const portraitRect = heroPortrait?.getBoundingClientRect();
     const contactIndexRect = heroContactIndex?.getBoundingClientRect();
     const contactDetailsRect = heroContactDetails?.getBoundingClientRect();
 
     return {
+      mobileTitleText:
+        mobileTitle?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      mobileTitleDisplay: mobileTitle
+        ? getComputedStyle(mobileTitle).display
+        : '',
+      desktopTitleDisplay: desktopTitle
+        ? getComputedStyle(desktopTitle).display
+        : '',
+      titleContactGap:
+        (contactIndexRect?.top ?? 0) - (mobileTitleRect?.bottom ?? 0),
       exists: Boolean(heroPortrait),
       display: heroPortrait ? getComputedStyle(heroPortrait).display : '',
       width: portraitRect?.width ?? 0,
@@ -1450,6 +1520,13 @@ async function assertMobileHeroContactCompact(page: Page) {
     };
   });
 
+  assert.equal(result.mobileTitleText, 'Islam Tayeb');
+  assert.equal(result.mobileTitleDisplay, 'block');
+  assert.equal(result.desktopTitleDisplay, 'none');
+  assert.ok(
+    result.titleContactGap >= 7,
+    `mobile heading should stay above the contact stack: ${result.titleContactGap}`
+  );
   assert.equal(result.exists, true);
   assert.equal(result.display, 'none');
   assert.equal(result.width, 0);
@@ -1505,6 +1582,66 @@ async function assertMobileRailDescriptionsWrap(page: Page) {
     ),
     'at least one mobile experience description should wrap across lines'
   );
+}
+
+async function assertMobileRailDatesCanWrap({
+  page,
+  selector,
+  label,
+  requireActualWrap = false,
+}: {
+  page: Page;
+  selector: string;
+  label: string;
+  requireActualWrap?: boolean;
+}) {
+  const result = await page.evaluate((selector) => {
+    const dates = [...document.querySelectorAll<HTMLElement>(selector)].map(
+      (date) => {
+        const style = getComputedStyle(date);
+        const rect = date.getBoundingClientRect();
+
+        return {
+          text: date.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+          whiteSpace: style.whiteSpace,
+          flexShrink: Number.parseFloat(style.flexShrink),
+          maxWidth: style.maxWidth,
+          height: rect.height,
+          lineHeight: Number.parseFloat(style.lineHeight),
+        };
+      }
+    );
+
+    return {
+      dates,
+      documentClientWidth: document.documentElement.clientWidth,
+      documentScrollWidth: document.documentElement.scrollWidth,
+    };
+  }, selector);
+
+  assert.ok(result.dates.length > 0, `${label} should render`);
+  assert.ok(
+    result.dates.every(
+      (date) =>
+        date.whiteSpace === 'normal' &&
+        date.flexShrink > 0 &&
+        date.maxWidth !== 'none'
+    ),
+    `${label} should use mobile wrapping metadata styles`
+  );
+  assert.ok(
+    result.documentScrollWidth <= result.documentClientWidth + 1,
+    `${label} should not cause horizontal overflow: ${result.documentScrollWidth} / ${result.documentClientWidth}`
+  );
+
+  if (requireActualWrap) {
+    assert.ok(
+      result.dates.some(
+        (date) => date.lineHeight > 0 && date.height > date.lineHeight * 1.5
+      ),
+      `${label} should allow at least one long date to wrap`
+    );
+  }
 }
 
 async function assertMobileFooterAlignment(page: Page) {
@@ -3062,6 +3199,13 @@ async function main() {
     await assertRoybBandPlacement(mobile);
     await assertMobileHeroContactCompact(mobile);
     await assertMobileRailDescriptionsWrap(mobile);
+    await assertMobileRailDatesCanWrap({
+      page: mobile,
+      selector:
+        '#experience [data-testid="rail-title"] + span, #writing [data-testid="rail-title"] + span, #publications [data-testid="publication-title-wrap"] + span',
+      label: 'mobile home rail dates',
+      requireActualWrap: true,
+    });
     await assertMobileFooterAlignment(mobile);
     await screenshot(mobile, 'home-mobile');
 
@@ -3084,6 +3228,11 @@ async function main() {
     });
     await mobileBlog.goto(`${baseUrl}/blog`, { waitUntil: 'networkidle' });
     await assertMobileBlogWrappedHighlight(mobileBlog);
+    await assertMobileRailDatesCanWrap({
+      page: mobileBlog,
+      selector: '#posts [data-testid="rail-title"] + span',
+      label: 'mobile blog index dates',
+    });
     await screenshot(mobileBlog, 'blog-index-mobile');
 
     const blog = await browser.newPage({
