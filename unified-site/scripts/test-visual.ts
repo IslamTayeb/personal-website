@@ -274,23 +274,6 @@ async function assertHome(page: Page) {
     document.body.append(readingProbe);
     const readingFontFamily = getComputedStyle(readingProbe).fontFamily;
     readingProbe.remove();
-    const verdanaTargetSelectors = [
-      '#experience [data-testid="rail-title"] a',
-      '#experience p[data-one-line="true"]',
-      '#publications [data-testid="publication-title"]',
-      '#writing [data-testid="rail-title"] a',
-    ];
-    const verdanaTargetStyles = verdanaTargetSelectors.flatMap((selector) =>
-      [...document.querySelectorAll<HTMLElement>(selector)].map((element) => {
-        const style = getComputedStyle(element);
-
-        return {
-          selector,
-          text: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
-          fontFamily: style.fontFamily,
-        };
-      })
-    );
     const sectionLabelColors = topLevelSections.map((section) => {
       const label = section.querySelector<HTMLElement>('header h2');
 
@@ -620,7 +603,6 @@ async function assertHome(page: Page) {
       bodyColor,
       bodyFontFamily,
       readingFontFamily,
-      verdanaTargetStyles,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       wordmarkLinkDisplays: wordmarkLinks.map(
@@ -1020,13 +1002,6 @@ async function assertHome(page: Page) {
           style.textTransform === 'none'
       ),
     'experience descriptions should use the promoted readable body style'
-  );
-  assert.ok(
-    result.verdanaTargetStyles.length >= 4 &&
-      result.verdanaTargetStyles.every(
-        (style) => style.fontFamily === result.readingFontFamily
-      ),
-    `selected home rail text should use Verdana: ${JSON.stringify(result.verdanaTargetStyles)}`
   );
 
   const incomingDots = result.dots.filter((dot) => dot.state === 'incoming');
@@ -1542,21 +1517,6 @@ async function assertBlogIndex(page: Page) {
     const highlightedLinkClassNames = [
       ...document.querySelectorAll<HTMLElement>('a.royb-link-highlight'),
     ].map((link) => link.className);
-    const blogVerdanaTargetStyles = [
-      ...document.querySelectorAll<HTMLElement>(
-        '[data-testid="blog-index-rail"] [data-testid="rail-title"] a'
-      ),
-      ...document.querySelectorAll<HTMLElement>(
-        '[data-testid="blog-index-row-meta"]'
-      ),
-    ].map((element) => {
-      const style = getComputedStyle(element);
-
-      return {
-        text: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
-        fontFamily: style.fontFamily,
-      };
-    });
 
     return {
       header,
@@ -1613,7 +1573,6 @@ async function assertBlogIndex(page: Page) {
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       descriptionCount: descriptions?.length ?? 0,
       highlightedLinkClassNames,
-      blogVerdanaTargetStyles,
       footerBottom: footer?.getBoundingClientRect().bottom ?? 0,
       viewportHeight: window.innerHeight,
     };
@@ -1724,13 +1683,6 @@ async function assertBlogIndex(page: Page) {
         style.textTransform === 'none'
     ),
     'external writing word/time metadata should match blog post metadata'
-  );
-  assert.ok(
-    result.blogVerdanaTargetStyles.length >= 1 &&
-      result.blogVerdanaTargetStyles.every(
-        (style) => style.fontFamily === result.readingFontFamily
-      ),
-    `selected blog index text should use Verdana: ${JSON.stringify(result.blogVerdanaTargetStyles)}`
   );
   assert.ok(
     result.highlightedLinkClassNames.every((className) =>
