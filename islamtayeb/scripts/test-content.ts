@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
-import { access, readdir } from 'node:fs/promises';
+import { createHash } from 'node:crypto';
+import { access, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
+import { inflateSync } from 'node:zlib';
 import { externalWriting } from '../data/external-writing';
 import { buildAtomFeed } from '../lib/blog/feed';
 import {
@@ -75,6 +77,263 @@ function countMatches(value: string, pattern: RegExp) {
   return Array.from(value.matchAll(pattern)).length;
 }
 
+const legacyPlaceholderIconHashes = new Map([
+  [
+    'apple-icon.png',
+    'da678942d4656a903f61000551cc51c09464d7a223faaae304e8210e1ca19257',
+  ],
+  [
+    'icon-light-32x32.png',
+    '83145e5bb033ace23cd8e7fbb63e7c39733aaf58f8a7280d7800995cced6f7c2',
+  ],
+  [
+    'icon-dark-32x32.png',
+    '8a1570b2955c3748b6844356a7487d88c60f9f1e699e870a3452a3decd1ba03c',
+  ],
+]);
+
+type PngAlphaBounds = {
+  minX: number;
+  minY: number;
+  maxX: number;
+  maxY: number;
+};
+
+const faviconPngBounds = new Map<
+  string,
+  { width: number; height: number; bounds: PngAlphaBounds }
+>([
+  [
+    'apple-icon.png',
+    {
+      width: 180,
+      height: 180,
+      bounds: { minX: 30, minY: 24, maxX: 150, maxY: 156 },
+    },
+  ],
+  [
+    'icon-light-32x32.png',
+    {
+      width: 32,
+      height: 32,
+      bounds: { minX: 5, minY: 4, maxX: 26, maxY: 28 },
+    },
+  ],
+  [
+    'icon-dark-32x32.png',
+    {
+      width: 32,
+      height: 32,
+      bounds: { minX: 5, minY: 4, maxX: 26, maxY: 28 },
+    },
+  ],
+]);
+
+function paethPredictor(left: number, up: number, upLeft: number) {
+  const estimate = left + up - upLeft;
+  const leftDistance = Math.abs(estimate - left);
+  const upDistance = Math.abs(estimate - up);
+  const upLeftDistance = Math.abs(estimate - upLeft);
+
+  if (leftDistance <= upDistance && leftDistance <= upLeftDistance) {
+    return left;
+  }
+
+  if (upDistance <= upLeftDistance) {
+    return up;
+  }
+
+  return upLeft;
+}
+
+function getPngAlphaBounds(png: Buffer) {
+  assert.equal(
+    png.subarray(0, 8).toString('hex'),
+    '89504e470d0a1a0a',
+    'favicon PNG should have a valid PNG signature'
+  );
+
+  let offset = 8;
+  let width = 0;
+  let height = 0;
+  let bitDepth = 0;
+  let colorType = 0;
+  const idatChunks: Buffer[] = [];
+
+  while (offset < png.length) {
+    const chunkLength = png.readUInt32BE(offset);
+    const chunkType = png.toString('ascii', offset + 4, offset + 8);
+    const chunkDataStart = offset + 8;
+    const chunkDataEnd = chunkDataStart + chunkLength;
+    const chunkData = png.subarray(chunkDataStart, chunkDataEnd);
+
+    if (chunkType === 'IHDR') {
+      width = chunkData.readUInt32BE(0);
+      height = chunkData.readUInt32BE(4);
+      bitDepth = chunkData[8];
+      colorType = chunkData[9];
+    } else if (chunkType === 'IDAT') {
+      idatChunks.push(chunkData);
+    } else if (chunkType === 'IEND') {
+      break;
+    }
+
+    offset = chunkDataEnd + 4;
+  }
+
+  assert.equal(bitDepth, 8, 'favicon PNGs should use 8-bit channels');
+  assert.ok(
+    colorType === 4 || colorType === 6,
+    `favicon PNGs should include alpha channels, received color type ${colorType}`
+  );
+
+  const channels = colorType === 4 ? 2 : 4;
+  const alphaChannel = colorType === 4 ? 1 : 3;
+  const rowLength = width * channels;
+  const inflated = inflateSync(Buffer.concat(idatChunks));
+  let sourceOffset = 0;
+  let previousRow = new Uint8Array(rowLength);
+  const bounds: PngAlphaBounds = {
+    minX: width,
+    minY: height,
+    maxX: -1,
+    maxY: -1,
+  };
+
+  for (let y = 0; y < height; y += 1) {
+    const filterType = inflated[sourceOffset];
+    sourceOffset += 1;
+    const sourceRow = inflated.subarray(sourceOffset, sourceOffset + rowLength);
+    sourceOffset += rowLength;
+    const row = new Uint8Array(rowLength);
+
+    for (let index = 0; index < rowLength; index += 1) {
+      const raw = sourceRow[index];
+      const left = index >= channels ? row[index - channels] : 0;
+      const up = previousRow[index] ?? 0;
+      const upLeft = index >= channels ? previousRow[index - channels] : 0;
+
+      if (filterType === 0) {
+        row[index] = raw;
+      } else if (filterType === 1) {
+        row[index] = (raw + left) & 0xff;
+      } else if (filterType === 2) {
+        row[index] = (raw + up) & 0xff;
+      } else if (filterType === 3) {
+        row[index] = (raw + Math.floor((left + up) / 2)) & 0xff;
+      } else if (filterType === 4) {
+        row[index] = (raw + paethPredictor(left, up, upLeft)) & 0xff;
+      } else {
+        throw new Error(`Unsupported PNG filter type ${filterType}`);
+      }
+    }
+
+    for (let x = 0; x < width; x += 1) {
+      const alpha = row[x * channels + alphaChannel];
+
+      if (alpha > 0) {
+        bounds.minX = Math.min(bounds.minX, x);
+        bounds.minY = Math.min(bounds.minY, y);
+        bounds.maxX = Math.max(bounds.maxX, x);
+        bounds.maxY = Math.max(bounds.maxY, y);
+      }
+    }
+
+    previousRow = row;
+  }
+
+  assert.ok(bounds.maxX >= 0, 'favicon PNG should contain visible pixels');
+
+  return { width, height, bounds };
+}
+
+function assertCenteredPngGlyph(asset: string, assetBytes: Buffer) {
+  const expected = faviconPngBounds.get(asset);
+
+  if (!expected) {
+    return;
+  }
+
+  const actual = getPngAlphaBounds(assetBytes);
+  assert.equal(actual.width, expected.width, `${asset} width should be stable`);
+  assert.equal(
+    actual.height,
+    expected.height,
+    `${asset} height should be stable`
+  );
+  assert.deepEqual(
+    actual.bounds,
+    expected.bounds,
+    `${asset} alpha bounds should keep the moon glyph centered`
+  );
+
+  const centerX = (actual.bounds.minX + actual.bounds.maxX + 1) / 2;
+  const centerY = (actual.bounds.minY + actual.bounds.maxY + 1) / 2;
+  const canvasCenterX = actual.width / 2;
+  const canvasCenterY = actual.height / 2;
+
+  assert.ok(
+    Math.abs(centerX - canvasCenterX) <= 0.5,
+    `${asset} glyph should be horizontally centered`
+  );
+  assert.ok(
+    Math.abs(centerY - canvasCenterY) <= 0.5,
+    `${asset} glyph should be vertically centered`
+  );
+}
+
+async function assertFaviconAssets() {
+  const publicRoot = path.join(process.cwd(), 'public');
+  const faviconAssets = [
+    'apple-icon.png',
+    'icon-light-32x32.png',
+    'icon-dark-32x32.png',
+    'favicon.ico',
+  ];
+
+  for (const asset of faviconAssets) {
+    const assetBytes = await readFile(path.join(publicRoot, asset));
+    const legacyHash = legacyPlaceholderIconHashes.get(asset);
+
+    if (legacyHash) {
+      assert.notEqual(
+        createHash('sha256').update(assetBytes).digest('hex'),
+        legacyHash,
+        `${asset} should use the moon glyph, not the old placeholder mark`
+      );
+    }
+
+    assertCenteredPngGlyph(asset, assetBytes);
+  }
+
+  const iconSvg = await readFile(path.join(publicRoot, 'icon.svg'), 'utf8');
+  assert.match(iconSvg, /<circle cx="130\.57" cy="75\.97" r="54\.96"/);
+  assert.match(
+    iconSvg,
+    /<circle class="moon" cx="95\.5" cy="90" r="65\.5" mask="url\(#moon-cutout\)"/,
+    'favicon SVG should keep the centered moon geometry'
+  );
+
+  const layoutSource = await readFile(
+    path.join(process.cwd(), 'app', 'layout.tsx'),
+    'utf8'
+  );
+
+  for (const iconPath of [
+    '/icon.svg',
+    '/apple-icon.png',
+    '/icon-light-32x32.png',
+    '/icon-dark-32x32.png',
+    '/favicon.ico',
+  ]) {
+    assert.match(
+      layoutSource,
+      new RegExp(iconPath.replaceAll('.', '\\.')),
+      `site metadata should advertise ${iconPath}`
+    );
+  }
+}
+
 function assertArticlePrimitiveNormalization(postSlug: string, html: string) {
   assert.doesNotMatch(
     html,
@@ -138,6 +397,7 @@ async function main() {
   );
   assert.ok(listedPosts.length > 0, 'at least one listed post should load');
   assertDescendingDates(listedPosts);
+  await assertFaviconAssets();
   assert.deepEqual(externalWriting, [
     {
       title: 'Finding the Right Answer Was Never the Point',

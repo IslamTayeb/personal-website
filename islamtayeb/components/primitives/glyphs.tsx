@@ -15,8 +15,8 @@ export function MoonGlyph({ size = 16, className = '' }: GlyphProps) {
       aria-hidden="true"
       className={className}
     >
-      <circle cx="7.4" cy="8" r="5.6" fill="currentColor" />
-      <circle cx="10.4" cy="6.8" r="4.7" fill={cutout} />
+      <circle cx="8.49" cy="8" r="5.82" fill="currentColor" />
+      <circle cx="11.61" cy="6.75" r="4.89" fill={cutout} />
     </svg>
   );
 }

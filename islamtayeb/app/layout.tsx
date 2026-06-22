@@ -22,8 +22,23 @@ export const metadata: Metadata = {
   },
   description: siteMetadata.description,
   icons: {
-    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
-    apple: '/apple-icon.png',
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      {
+        url: '/icon-light-32x32.png',
+        media: '(prefers-color-scheme: light)',
+        sizes: '32x32',
+        type: 'image/png',
+      },
+      {
+        url: '/icon-dark-32x32.png',
+        media: '(prefers-color-scheme: dark)',
+        sizes: '32x32',
+        type: 'image/png',
+      },
+    ],
+    shortcut: [{ url: '/favicon.ico', sizes: '32x32' }],
+    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
   },
   openGraph: {
     title: siteMetadata.title,

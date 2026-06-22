@@ -128,7 +128,9 @@ Use meaningful commit messages that describe the why.
 - **Favicon:** The active favicon is the moon glyph on a transparent
   background. Keep the crescent cutout transparent. Its SVG should react to
   browser color scheme: off-black (`#1C1C1C`) in light chrome and `#FAFAFA` in
-  dark chrome.
+  dark chrome. Keep PNG and ICO fallbacks generated from the same crescent
+  geometry, including `apple-icon.png`, `icon-light-32x32.png`,
+  `icon-dark-32x32.png`, and `favicon.ico`.
 - **Repeated UI:** if something is used more than once, make it a component.
 
 ## Deployment

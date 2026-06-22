@@ -23,8 +23,8 @@
   <defs>
     <mask id="moon-cutout">
       <rect width="180" height="180" fill="white" />
-      <circle cx="117" cy="76.5" r="52.875" fill="black" />
+      <circle cx="130.57" cy="75.97" r="54.96" fill="black" />
     </mask>
   </defs>
-  <circle class="moon" cx="83.25" cy="90" r="63" mask="url(#moon-cutout)" />
+  <circle class="moon" cx="95.5" cy="90" r="65.5" mask="url(#moon-cutout)" />
 </svg>
