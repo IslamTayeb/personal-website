@@ -33,10 +33,7 @@ function AdvisorLabel({
     return null;
   }
 
-  const className = cn(
-    'inline-block font-mono text-sm font-normal normal-case tracking-normal text-muted-foreground',
-    boxed && 'border border-border px-1'
-  );
+  const className = cn(boxed && 'inline-block border border-border px-1');
 
   return (
     <span
@@ -74,21 +71,9 @@ function RailGroup({
               ? 'bg-roy-o'
               : 'bg-foreground/75';
         const titleContent: ReactNode = role.piName ? (
-          <span>
-            {role.href ? (
-              <ExternalLink
-                href={role.href}
-                section="o"
-                className="text-foreground"
-              >
-                {role.org}
-              </ExternalLink>
-            ) : (
-              <span>{role.org}</span>
-            )}
-            <span aria-hidden className="inline-block w-2" />
-            <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
-          </span>
+          <>
+            {role.org} / <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
+          </>
         ) : (
           role.org
         );
@@ -107,7 +92,7 @@ function RailGroup({
             incoming={role.incoming}
             state={state}
             title={
-              role.href && !role.piName ? (
+              role.href ? (
                 <ExternalLink
                   href={role.href}
                   section="o"
