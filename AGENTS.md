@@ -114,9 +114,9 @@ Use meaningful commit messages that describe the why.
 - **One-line compact copy:** Descriptions, summaries, excerpts, compact rails,
   course details, and previews should be concise and constrained with explicit
   one-line CSS where needed.
-- **Rail title/date balance:** On mobile rail rows, titles get width priority.
-  Dates may wrap under real row pressure, but should not wrap solely because of
-  a fixed viewport cap when the title is short.
+- **Rail title/date balance:** On mobile rail rows, dates get width priority.
+  Titles should give up space before dates wrap, while genuinely long dates can
+  still wrap on narrow phones without creating horizontal overflow.
 - **Phone breakpoint:** For the active site, "phone" means any viewport where
   the hero portrait is hidden. Keep footer quote/credit visibility tied to that
   same `md` portrait threshold, not to `sm`.
