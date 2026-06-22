@@ -931,8 +931,8 @@ async function assertHome(page: Page) {
   );
   assert.deepEqual(
     result.sectionLabelColors,
-    result.sectionLabelColors.map(() => result.bodyColor),
-    'section title labels should use neutral foreground text'
+    result.sectionMarkerColors,
+    'section title labels should use their section accent color'
   );
   assert.ok(
     result.markerWidths.every((width) => Math.round(width) === 12),
@@ -2016,8 +2016,8 @@ async function assertBlogIndex(page: Page) {
   assert.equal(result.heading, `Index (${result.itemCount})`);
   assert.equal(
     result.headingColor,
-    result.bodyColor,
-    'blog index title should use neutral foreground text'
+    result.markerColor,
+    'blog index title should use the blog section accent color'
   );
   assert.ok(
     Math.abs(result.sectionLeft - result.mainContentLeft) <= 1,
