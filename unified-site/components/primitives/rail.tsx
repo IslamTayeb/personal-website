@@ -67,7 +67,7 @@ export function RailItem({
       <span
         data-testid={titleTestId}
         className={cn(
-          'min-w-0 text-base font-medium leading-tight text-foreground',
+          'min-w-0 font-reading text-base font-medium leading-tight text-foreground',
           titleClassName
         )}
       >
