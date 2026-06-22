@@ -62,6 +62,10 @@ export function RailItem({
   onActivate?: () => void;
   ariaExpanded?: boolean;
 }) {
+  const topRowClassName = cn(
+    'grid min-w-0 items-start gap-3 text-left',
+    meta ? 'grid-cols-[minmax(0,1fr)_auto]' : 'grid-cols-[minmax(0,1fr)]'
+  );
   const topRow = (
     <>
       <span
@@ -76,7 +80,7 @@ export function RailItem({
       {meta ? (
         <span
           className={cn(
-            'min-w-0 max-w-[32vw] whitespace-normal text-right font-mono text-sm leading-tight text-muted-foreground md:max-w-none md:shrink-0 md:whitespace-nowrap',
+            'min-w-[5.5rem] max-w-[min(48vw,13rem)] whitespace-normal text-right font-mono text-sm leading-tight text-muted-foreground md:min-w-0 md:max-w-none md:shrink-0 md:whitespace-nowrap',
             metaClassName
           )}
         >
@@ -128,14 +132,15 @@ export function RailItem({
             onClick={onActivate}
             aria-expanded={ariaExpanded}
             data-testid={rowButtonTestId}
-            className="flex w-full min-w-0 cursor-pointer items-start justify-between gap-3 text-left outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className={cn(
+              topRowClassName,
+              'w-full cursor-pointer outline-none focus-visible:ring-1 focus-visible:ring-ring'
+            )}
           >
             {topRow}
           </button>
         ) : (
-          <div className="flex min-w-0 items-start justify-between gap-3">
-            {topRow}
-          </div>
+          <div className={topRowClassName}>{topRow}</div>
         )}
         {description ? (
           <p

@@ -1596,15 +1596,17 @@ async function assertMobileRailDescriptionsWrap(page: Page) {
   );
 }
 
-async function assertMobileRailDatesCanWrap({
+async function assertMobileRailDateLayout({
   page,
   selector,
   label,
+  singleLineDates = [],
   requireActualWrap = false,
 }: {
   page: Page;
   selector: string;
   label: string;
+  singleLineDates?: string[];
   requireActualWrap?: boolean;
 }) {
   const result = await page.evaluate((selector) => {
@@ -1616,7 +1618,7 @@ async function assertMobileRailDatesCanWrap({
         return {
           text: date.textContent?.replace(/\s+/g, ' ').trim() ?? '',
           whiteSpace: style.whiteSpace,
-          flexShrink: Number.parseFloat(style.flexShrink),
+          minWidth: style.minWidth,
           maxWidth: style.maxWidth,
           height: rect.height,
           lineHeight: Number.parseFloat(style.lineHeight),
@@ -1636,15 +1638,25 @@ async function assertMobileRailDatesCanWrap({
     result.dates.every(
       (date) =>
         date.whiteSpace === 'normal' &&
-        date.flexShrink > 0 &&
+        date.minWidth !== '0px' &&
         date.maxWidth !== 'none'
     ),
-    `${label} should use mobile wrapping metadata styles`
+    `${label} should use balanced mobile metadata sizing`
   );
   assert.ok(
     result.documentScrollWidth <= result.documentClientWidth + 1,
     `${label} should not cause horizontal overflow: ${result.documentScrollWidth} / ${result.documentClientWidth}`
   );
+
+  for (const text of singleLineDates) {
+    const date = result.dates.find((candidate) => candidate.text === text);
+
+    assert.ok(date, `${label} should include ${text}`);
+    assert.ok(
+      date.lineHeight > 0 && date.height <= date.lineHeight * 1.5,
+      `${label} should keep ${text} on one line when space is available`
+    );
+  }
 
   if (requireActualWrap) {
     assert.ok(
@@ -3276,12 +3288,12 @@ async function main() {
     await assertRoybBandPlacement(mobile);
     await assertMobileHeroContactCompact(mobile);
     await assertMobileRailDescriptionsWrap(mobile);
-    await assertMobileRailDatesCanWrap({
+    await assertMobileRailDateLayout({
       page: mobile,
       selector:
         '#experience [data-testid="rail-title"] + span, #writing [data-testid="rail-title"] + span, #publications [data-testid="publication-title-wrap"] + span',
       label: 'mobile home rail dates',
-      requireActualWrap: true,
+      singleLineDates: ['May 2025 - Oct 2025', 'Sep 2025'],
     });
     await assertMobileFooterAlignment(mobile);
     await screenshot(mobile, 'home-mobile');
@@ -3291,6 +3303,13 @@ async function main() {
     });
     await narrowMobile.goto(baseUrl, { waitUntil: 'networkidle' });
     await assertMobileFooterAlignment(narrowMobile);
+    await assertMobileRailDateLayout({
+      page: narrowMobile,
+      selector:
+        '#experience [data-testid="rail-title"] + span, #writing [data-testid="rail-title"] + span, #publications [data-testid="publication-title-wrap"] + span',
+      label: 'narrow mobile home rail dates',
+      requireActualWrap: true,
+    });
     await assertMobileHomeWrappedHighlights(narrowMobile);
 
     const portraitHidden = await browser.newPage({
@@ -3305,7 +3324,7 @@ async function main() {
     });
     await mobileBlog.goto(`${baseUrl}/blog`, { waitUntil: 'networkidle' });
     await assertMobileBlogWrappedHighlight(mobileBlog);
-    await assertMobileRailDatesCanWrap({
+    await assertMobileRailDateLayout({
       page: mobileBlog,
       selector: '#posts [data-testid="rail-title"] + span',
       label: 'mobile blog index dates',
