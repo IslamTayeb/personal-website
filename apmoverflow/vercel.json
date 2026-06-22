@@ -1,0 +1,173 @@
+{
+  "buildCommand": "node -e \"console.log('apmoverflow redirect shell: no build')\"",
+  "outputDirectory": ".",
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "https://islamtayeb.dev/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "https://islamtayeb.dev/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog/",
+      "destination": "https://islamtayeb.dev/blog",
+      "permanent": true
+    },
+    {
+      "source": "/blog/:path*",
+      "destination": "https://islamtayeb.dev/blog/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/feed",
+      "destination": "https://islamtayeb.dev/blog/feed.xml",
+      "permanent": true
+    },
+    {
+      "source": "/feed/",
+      "destination": "https://islamtayeb.dev/blog/feed.xml",
+      "permanent": true
+    },
+    {
+      "source": "/feed/index.xml",
+      "destination": "https://islamtayeb.dev/blog/feed.xml",
+      "permanent": true
+    },
+    {
+      "source": "/feed/rss.xml",
+      "destination": "https://islamtayeb.dev/blog/rss.xml",
+      "permanent": true
+    },
+    {
+      "source": "/static/:path*",
+      "destination": "https://islamtayeb.dev/static/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/agent-self-reflection",
+      "destination": "https://islamtayeb.dev/blog/agent-self-reflection",
+      "permanent": true
+    },
+    {
+      "source": "/agent-self-reflection/",
+      "destination": "https://islamtayeb.dev/blog/agent-self-reflection",
+      "permanent": true
+    },
+    {
+      "source": "/batch-agent-sdk-research-overview",
+      "destination": "https://islamtayeb.dev/blog/batch-agent-sdk-research-overview",
+      "permanent": true
+    },
+    {
+      "source": "/batch-agent-sdk-research-overview/",
+      "destination": "https://islamtayeb.dev/blog/batch-agent-sdk-research-overview",
+      "permanent": true
+    },
+    {
+      "source": "/effect-of-explanation-and-confidence-fields-on-llm-extraction",
+      "destination": "https://islamtayeb.dev/blog/effect-of-explanation-and-confidence-fields-on-llm-extraction",
+      "permanent": true
+    },
+    {
+      "source": "/effect-of-explanation-and-confidence-fields-on-llm-extraction/",
+      "destination": "https://islamtayeb.dev/blog/effect-of-explanation-and-confidence-fields-on-llm-extraction",
+      "permanent": true
+    },
+    {
+      "source": "/frontier-benchmarking",
+      "destination": "https://islamtayeb.dev/blog/frontier-benchmarking",
+      "permanent": true
+    },
+    {
+      "source": "/frontier-benchmarking/",
+      "destination": "https://islamtayeb.dev/blog/frontier-benchmarking",
+      "permanent": true
+    },
+    {
+      "source": "/hydra",
+      "destination": "https://islamtayeb.dev/blog/hydra",
+      "permanent": true
+    },
+    {
+      "source": "/hydra/",
+      "destination": "https://islamtayeb.dev/blog/hydra",
+      "permanent": true
+    },
+    {
+      "source": "/multi-agents",
+      "destination": "https://islamtayeb.dev/blog/multi-agents",
+      "permanent": true
+    },
+    {
+      "source": "/multi-agents/",
+      "destination": "https://islamtayeb.dev/blog/multi-agents",
+      "permanent": true
+    },
+    {
+      "source": "/on-agent-memory-fidelity",
+      "destination": "https://islamtayeb.dev/blog/on-agent-memory-fidelity",
+      "permanent": true
+    },
+    {
+      "source": "/on-agent-memory-fidelity/",
+      "destination": "https://islamtayeb.dev/blog/on-agent-memory-fidelity",
+      "permanent": true
+    },
+    {
+      "source": "/on-closing-doors",
+      "destination": "https://islamtayeb.dev/blog/on-closing-doors",
+      "permanent": true
+    },
+    {
+      "source": "/on-closing-doors/",
+      "destination": "https://islamtayeb.dev/blog/on-closing-doors",
+      "permanent": true
+    },
+    {
+      "source": "/on-dimensions-of-taste",
+      "destination": "https://islamtayeb.dev/blog/on-dimensions-of-taste",
+      "permanent": true
+    },
+    {
+      "source": "/on-dimensions-of-taste/",
+      "destination": "https://islamtayeb.dev/blog/on-dimensions-of-taste",
+      "permanent": true
+    },
+    {
+      "source": "/on-fingerspitzengefuhl",
+      "destination": "https://islamtayeb.dev/blog/on-fingerspitzengefuhl",
+      "permanent": true
+    },
+    {
+      "source": "/on-fingerspitzengefuhl/",
+      "destination": "https://islamtayeb.dev/blog/on-fingerspitzengefuhl",
+      "permanent": true
+    },
+    {
+      "source": "/on-using-computers",
+      "destination": "https://islamtayeb.dev/blog/on-using-computers",
+      "permanent": true
+    },
+    {
+      "source": "/on-using-computers/",
+      "destination": "https://islamtayeb.dev/blog/on-using-computers",
+      "permanent": true
+    },
+    {
+      "source": "/typhon-260515",
+      "destination": "https://islamtayeb.dev/blog/typhon-260515",
+      "permanent": true
+    },
+    {
+      "source": "/typhon-260515/",
+      "destination": "https://islamtayeb.dev/blog/typhon-260515",
+      "permanent": true
+    }
+  ]
+}

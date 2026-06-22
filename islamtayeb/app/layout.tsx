@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { DM_Mono, Sora } from 'next/font/google';
 import { SiteFooter } from '@/components/site/site-footer';
 import { SiteHeader } from '@/components/site/site-header';
+import { siteMetadata } from '@/data/site-metadata';
 import './globals.css';
 
 const sora = Sora({ variable: '--font-sora', subsets: ['latin'] });
@@ -14,16 +15,29 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://islamtayeb.dev'),
+  metadataBase: new URL(siteMetadata.url),
   title: {
-    default: 'Islam Tayeb',
-    template: '%s | Islam Tayeb',
+    default: siteMetadata.title,
+    template: `%s | ${siteMetadata.title}`,
   },
-  description:
-    'Islam Tayeb: systems, ML tooling, research, and APM Overflow writing.',
+  description: siteMetadata.description,
   icons: {
     icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
     apple: '/apple-icon.png',
+  },
+  openGraph: {
+    title: siteMetadata.title,
+    description: siteMetadata.description,
+    url: '/',
+    siteName: siteMetadata.title,
+    type: 'website',
+    images: [siteMetadata.socialImage],
+  },
+  twitter: {
+    card: 'summary',
+    title: siteMetadata.title,
+    description: siteMetadata.description,
+    images: [siteMetadata.socialImage],
   },
 };
 

@@ -51,6 +51,7 @@ function apmOverflowRedirects() {
     ['/feed/', `${siteUrl}/blog/feed.xml`],
     ['/feed/index.xml', `${siteUrl}/blog/feed.xml`],
     ['/feed/rss.xml', `${siteUrl}/blog/rss.xml`],
+    ['/static/:path*', `${siteUrl}/static/:path*`],
   ].flatMap(([source, destination]) => oldHostRedirects(source, destination));
   const postRedirects = listedPostSlugs().flatMap((slug) => [
     ...oldHostRedirects(`/${slug}`, `${siteUrl}/blog/${slug}`),

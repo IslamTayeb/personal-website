@@ -4,6 +4,7 @@ import { BorderedPanel, Section } from '@/components/primitives/section';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { externalWriting } from '@/data/external-writing';
+import { siteMetadata } from '@/data/site-metadata';
 import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
 import { formatMonthYear } from '@/lib/blog/date';
 
@@ -12,6 +13,19 @@ const postDotClassName = 'bg-foreground/75';
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'APM Overflow writing inside islamtayeb.dev.',
+  openGraph: {
+    title: 'Blog',
+    description: 'APM Overflow writing inside islamtayeb.dev.',
+    url: '/blog',
+    type: 'website',
+    images: [siteMetadata.socialImage],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Blog',
+    description: 'APM Overflow writing inside islamtayeb.dev.',
+    images: [siteMetadata.socialImage],
+  },
 };
 
 export default async function BlogIndexPage() {

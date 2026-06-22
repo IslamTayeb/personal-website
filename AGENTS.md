@@ -2,11 +2,14 @@
 
 ## Repo layout
 
-This repo now has one production app, one experimental sandbox, and archived
-legacy projects:
+This repo now has one production app, one production redirect shell, one
+experimental sandbox, and archived legacy projects:
 
 - **`islamtayeb/`** -- the active Next.js App Router site for
   `islamtayeb.dev`, including the unified personal site and blog.
+- **`apmoverflow/`** -- a tiny static Vercel redirect shell for
+  `apmoverflow.xyz`. It contains no authored content; it only sends old APM
+  paths to `https://islamtayeb.dev/blog/...`.
 - **`component-lab/`** -- an experimental Next.js lab for visual exploration.
   It is not production code and should stay isolated unless a design is
   intentionally ported.
@@ -36,8 +39,9 @@ APM Overflow writing now lives as Markdown plus JSON manifests under
 blog content. The archived APM Overflow copy is historical only.
 
 `apmoverflow.xyz` should remain a routing shell: old APM paths redirect to
-`https://islamtayeb.dev/blog/...`. Keep redirect coverage generated from
-`islamtayeb/next.config.mjs` and keep `npm run test:migration` passing.
+`https://islamtayeb.dev/blog/...`. Keep redirect coverage in both
+`islamtayeb/next.config.mjs` and `apmoverflow/vercel.json`, and keep
+`npm run test:migration` passing.
 
 ## Main site commands
 
@@ -126,9 +130,13 @@ Use meaningful commit messages that describe the why.
 
 ## Deployment
 
-The production Vercel project should build from `islamtayeb/`. Attach
-`islamtayeb.dev` as the canonical domain and attach `apmoverflow.xyz` plus
-`www.apmoverflow.xyz` to the same project so `islamtayeb/next.config.mjs` can
-handle old-path redirects.
+The main production Vercel project should build from `islamtayeb/`.
+`islamtayeb.dev` is the canonical domain.
+
+The existing `apm-overflow` Vercel project should build from `apmoverflow/`.
+Keep `apmoverflow.xyz` and `www.apmoverflow.xyz` attached there unless the
+domains are deliberately moved later. The shell `vercel.json` handles live
+old-path redirects, while `islamtayeb/next.config.mjs` keeps equivalent
+host-conditioned redirects ready if the domains are moved to the main project.
 
 The legacy archive folders should not be deployed directly.

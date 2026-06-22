@@ -21,6 +21,10 @@ type RedirectRule = {
   has?: HostCondition[];
 };
 
+type VercelConfig = {
+  redirects?: RedirectRule[];
+};
+
 function isOldHostRedirect(rule: RedirectRule) {
   return rule.has?.some(
     (condition) =>
@@ -47,6 +51,23 @@ function assertRedirect(
   );
 }
 
+function assertStaticRedirect(
+  redirects: RedirectRule[],
+  source: string,
+  destination: string
+) {
+  assert.ok(
+    redirects.some(
+      (rule) =>
+        rule.source === source &&
+        rule.destination === destination &&
+        rule.permanent === true &&
+        !rule.has
+    ),
+    `missing apmoverflow shell redirect: ${source} -> ${destination}`
+  );
+}
+
 async function readRedirects() {
   const redirects = nextConfig.redirects;
 
@@ -55,6 +76,18 @@ async function readRedirects() {
   }
 
   return (await redirects()) as RedirectRule[];
+}
+
+async function readApmShellRedirects() {
+  const configPath = path.resolve('..', 'apmoverflow', 'vercel.json');
+  const config = JSON.parse(await readFile(configPath, 'utf8')) as VercelConfig;
+
+  assert.ok(
+    Array.isArray(config.redirects),
+    'apmoverflow/vercel.json should define redirects'
+  );
+
+  return config.redirects;
 }
 
 async function listFiles(root: string): Promise<string[]> {
@@ -128,6 +161,7 @@ function assertPublicProfileFieldsAreIntentional() {
 
 async function main() {
   const redirects = await readRedirects();
+  const shellRedirects = await readApmShellRedirects();
   const posts = await getAllPosts();
 
   assert.ok(redirects.length > 0, 'next.config.mjs should define redirects');
@@ -139,6 +173,33 @@ async function main() {
   assertRedirect(redirects, '/feed/', `${siteUrl}/blog/feed.xml`);
   assertRedirect(redirects, '/feed/index.xml', `${siteUrl}/blog/feed.xml`);
   assertRedirect(redirects, '/feed/rss.xml', `${siteUrl}/blog/rss.xml`);
+  assertRedirect(redirects, '/static/:path*', `${siteUrl}/static/:path*`);
+
+  assertStaticRedirect(shellRedirects, '/', `${siteUrl}/blog`);
+  assertStaticRedirect(shellRedirects, '/blog', `${siteUrl}/blog`);
+  assertStaticRedirect(shellRedirects, '/blog/', `${siteUrl}/blog`);
+  assertStaticRedirect(
+    shellRedirects,
+    '/blog/:path*',
+    `${siteUrl}/blog/:path*`
+  );
+  assertStaticRedirect(shellRedirects, '/feed', `${siteUrl}/blog/feed.xml`);
+  assertStaticRedirect(shellRedirects, '/feed/', `${siteUrl}/blog/feed.xml`);
+  assertStaticRedirect(
+    shellRedirects,
+    '/feed/index.xml',
+    `${siteUrl}/blog/feed.xml`
+  );
+  assertStaticRedirect(
+    shellRedirects,
+    '/feed/rss.xml',
+    `${siteUrl}/blog/rss.xml`
+  );
+  assertStaticRedirect(
+    shellRedirects,
+    '/static/:path*',
+    `${siteUrl}/static/:path*`
+  );
 
   for (const post of posts) {
     assertRedirect(
@@ -148,6 +209,16 @@ async function main() {
     );
     assertRedirect(
       redirects,
+      `/${post.manifest.slug}/`,
+      `${siteUrl}/blog/${post.manifest.slug}`
+    );
+    assertStaticRedirect(
+      shellRedirects,
+      `/${post.manifest.slug}`,
+      `${siteUrl}/blog/${post.manifest.slug}`
+    );
+    assertStaticRedirect(
+      shellRedirects,
       `/${post.manifest.slug}/`,
       `${siteUrl}/blog/${post.manifest.slug}`
     );
@@ -163,7 +234,7 @@ async function main() {
   await assertFeedsAreCanonical();
 
   console.log(
-    `migration ok: ${posts.length} old APM slugs redirect, feeds canonical, old tracking payload absent`
+    `migration ok: ${posts.length} old APM slugs redirect in app and shell, feeds canonical, old tracking payload absent`
   );
 }
 

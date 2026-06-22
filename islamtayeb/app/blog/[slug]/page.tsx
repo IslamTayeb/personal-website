@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArticleProse } from '@/components/primitives/article-prose';
 import { RoybBand } from '@/components/primitives/royb-band';
+import { siteMetadata } from '@/data/site-metadata';
 import { formatDate, datetime } from '@/lib/blog/date';
 import { getAllPosts, getPostBySlug } from '@/lib/blog/posts';
 
@@ -29,6 +30,11 @@ export async function generateMetadata({
     return {};
   }
 
+  const socialImage = {
+    ...siteMetadata.socialImage,
+    url: post.manifest.socialImage ?? siteMetadata.socialImage.url,
+  };
+
   return {
     title: post.manifest.title,
     description: post.summary,
@@ -38,7 +44,13 @@ export async function generateMetadata({
       type: 'article',
       publishedTime: datetime(post.manifest.publishedAt),
       modifiedTime: datetime(post.manifest.updatedAt),
-      images: post.manifest.socialImage ? [post.manifest.socialImage] : [],
+      images: [socialImage],
+    },
+    twitter: {
+      card: 'summary',
+      title: post.manifest.title,
+      description: post.summary,
+      images: [socialImage],
     },
   };
 }

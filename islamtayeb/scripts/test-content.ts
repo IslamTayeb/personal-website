@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readdir } from 'node:fs/promises';
+import { access, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { externalWriting } from '../data/external-writing';
 import { buildAtomFeed } from '../lib/blog/feed';
@@ -106,6 +106,24 @@ function assertArticlePrimitiveNormalization(postSlug: string, html: string) {
   );
 }
 
+async function assertLocalSocialImageExists(
+  postSlug: string,
+  socialImage: string
+) {
+  assert.match(
+    socialImage,
+    /^\//,
+    `${postSlug} socialImage should use a root-relative public path`
+  );
+
+  const assetPath = path.join(process.cwd(), 'public', socialImage.slice(1));
+
+  await assert.doesNotReject(
+    access(assetPath),
+    `${postSlug} socialImage points to a missing public asset: ${socialImage}`
+  );
+}
+
 async function main() {
   const manifestFiles = (await readdir(contentRoot)).filter((file) =>
     file.endsWith('.json')
@@ -158,6 +176,12 @@ async function main() {
       `/blog/${post.manifest.slug}`,
       `${post.manifest.slug} should generate the expected route`
     );
+    if (post.manifest.socialImage) {
+      await assertLocalSocialImageExists(
+        post.manifest.slug,
+        post.manifest.socialImage
+      );
+    }
 
     const sourcePath = path.join(contentRoot, post.manifest.source);
     assert.ok(
