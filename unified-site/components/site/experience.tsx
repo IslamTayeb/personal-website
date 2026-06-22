@@ -33,7 +33,10 @@ function AdvisorLabel({
     return null;
   }
 
-  const className = cn(boxed && 'inline-block border border-border px-1');
+  const className = cn(
+    'text-[#6B6965] group-hover:text-[var(--section-color)]',
+    boxed && 'inline-block border border-border px-1'
+  );
 
   return (
     <span
@@ -72,7 +75,11 @@ function RailGroup({
               : 'bg-foreground/75';
         const titleContent: ReactNode = role.piName ? (
           <>
-            {role.org} / <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
+            {role.org}
+            <span className="text-[#DFDEDB] group-hover:text-[var(--section-color)]">
+              {' / '}
+            </span>
+            <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
           </>
         ) : (
           role.org
@@ -96,7 +103,7 @@ function RailGroup({
                 <ExternalLink
                   href={role.href}
                   section="o"
-                  className="text-foreground"
+                  className="group text-foreground"
                 >
                   {titleContent}
                 </ExternalLink>
