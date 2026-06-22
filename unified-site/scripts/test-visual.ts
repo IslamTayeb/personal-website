@@ -233,7 +233,6 @@ async function assertHome(page: Page) {
       : null;
     const heroPortraitRect = heroPortrait?.getBoundingClientRect();
     const experienceSection = document.querySelector('#experience');
-    const writingSection = document.querySelector<HTMLElement>('#writing');
     const experienceTitle = experienceSection?.querySelector('header h2');
     const firstGroupLabel = experienceSection?.querySelector(
       '[data-testid="experience-group-label"]'
@@ -733,9 +732,6 @@ async function assertHome(page: Page) {
       sectionBorders: topLevelSections.map((section) =>
         Number.parseFloat(getComputedStyle(section).borderTopWidth)
       ),
-      writingSectionPaddingBottom: writingSection
-        ? Number.parseFloat(getComputedStyle(writingSection).paddingBottom)
-        : 0,
       viewportHeight: window.innerHeight,
       railGutter: rootStyle.getPropertyValue('--rail-gutter').trim(),
       railMarkerSize: rootStyle.getPropertyValue('--rail-marker-size').trim(),
@@ -876,12 +872,6 @@ async function assertHome(page: Page) {
     result.sectionBorders,
     result.sectionBorders.map(() => 0),
     'top-level section dividers should stay disabled'
-  );
-  assert.ok(
-    Math.abs(
-      result.writingSectionPaddingBottom - result.viewportHeight * 0.2
-    ) <= 1,
-    `home page should keep 20vh of bottom reading slack: ${result.writingSectionPaddingBottom}`
   );
   assert.equal(Number.parseFloat(result.railGutter), 2);
   assert.equal(Number.parseFloat(result.railMarkerSize), 0.75);
@@ -1802,7 +1792,6 @@ async function assertBlogIndex(page: Page) {
         ?.textContent?.replace(/\s+/g, ' ')
         .trim() ?? '';
     const headingElement = document.querySelector<HTMLElement>('#posts h2');
-    const postsSection = document.querySelector<HTMLElement>('#posts');
     const bodyColor = getComputedStyle(document.body).color;
     const markerElement =
       document.querySelector<HTMLElement>('#posts header span');
@@ -1901,9 +1890,6 @@ async function assertBlogIndex(page: Page) {
         : '',
       readingFontFamily,
       sectionLeft,
-      postsPaddingBottom: postsSection
-        ? Number.parseFloat(getComputedStyle(postsSection).paddingBottom)
-        : 0,
       marker,
       markerColor: markerElement ? getComputedStyle(markerElement).color : '',
       headerFirstRowGap:
@@ -1971,10 +1957,6 @@ async function assertBlogIndex(page: Page) {
   assert.ok(
     result.headerFirstRowGap >= 11 && result.headerFirstRowGap <= 13,
     `blog index header/list gap should match About/title spacing: ${result.headerFirstRowGap}`
-  );
-  assert.ok(
-    Math.abs(result.postsPaddingBottom - result.viewportHeight * 0.2) <= 1,
-    `blog index should keep 20vh of bottom reading slack: ${result.postsPaddingBottom}`
   );
   assert.ok(
     result.rowPaddingBottoms.length > 0 &&

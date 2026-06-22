@@ -13,13 +13,7 @@ export async function WritingPreview() {
   const posts = (await getListedPosts()).slice(0, 3);
 
   return (
-    <Section
-      id="writing"
-      index="4"
-      title="Writing"
-      accent="text-roy-b"
-      className="pb-[20vh]"
-    >
+    <Section id="writing" index="4" title="Writing" accent="text-roy-b">
       <BorderedPanel>
         <div className="flex w-full flex-col">
           <RailList>

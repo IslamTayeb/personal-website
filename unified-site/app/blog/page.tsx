@@ -28,7 +28,7 @@ export default async function BlogIndexPage() {
         index="1"
         title={`Index (${itemCount})`}
         accent="text-roy-b"
-        className="pb-[20vh] pt-0 md:pt-0"
+        className="pt-0 md:pt-0"
       >
         <BorderedPanel>
           <RailList testId="blog-index-rail">
