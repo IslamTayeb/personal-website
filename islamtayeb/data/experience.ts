@@ -46,7 +46,7 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Aug 2025 - Present',
         href: 'https://www.romerolab.org/',
         state: 'present',
-        desc: 'Chemistry data-mining agents w/ Anthropic + Microsoft Research',
+        desc: 'Chemistry data-mining agents with Anthropic + Microsoft Research',
         descLinks: [
           {
             text: 'Anthropic',
@@ -72,7 +72,7 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Jul 2022 - Sep 2023',
         href: 'https://scholar.google.com/citations?user=BLMFawMAAAAJ&hl=en',
         state: 'ended',
-        desc: 'Polymer property prediction and synthesis for CO₂ capture w/ Saudi Aramco',
+        desc: 'Polymer property prediction and synthesis for CO₂ capture with Saudi Aramco',
         descLinks: [
           {
             text: 'Saudi Aramco',
