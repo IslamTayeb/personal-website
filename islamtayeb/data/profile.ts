@@ -17,10 +17,10 @@ export const profile = {
 export const heroParagraphs: TextSegment[][] = [
   [
     {
-      text: "I'm researching systems in ML, particularly agent correctness and efficiency, and study at ",
+      text: "I'm researching systems in ML, particularly agent correctness and efficiency. I study CS + Chemistry at ",
     },
     { text: 'Duke', href: profileLinks.dukeUniversity },
-    { text: '.' },
+    { text: ' in Durham, NC.' },
   ],
   [
     {
