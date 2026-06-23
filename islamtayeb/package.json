@@ -12,6 +12,7 @@
     "format:check": "prettier --check .",
     "test:content": "tsx scripts/test-content.ts",
     "test:migration": "tsx scripts/test-migration.ts",
+    "test:pageview": "tsx scripts/test-pageview.ts",
     "test:no-motion": "node scripts/test-no-motion.mjs",
     "test:visual": "tsx scripts/test-visual.ts"
   },

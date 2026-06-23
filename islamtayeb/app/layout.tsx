@@ -2,6 +2,7 @@ import { Analytics } from '@vercel/analytics/next';
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { DM_Mono, Sora } from 'next/font/google';
+import { PageviewScript } from '@/components/site/pageview-script';
 import { SiteFooter } from '@/components/site/site-footer';
 import { SiteHeader } from '@/components/site/site-header';
 import { siteMetadata } from '@/data/site-metadata';
@@ -158,6 +159,7 @@ export default function RootLayout({
           <SiteFooter />
         </main>
         {process.env.NODE_ENV === 'production' && <Analytics />}
+        <PageviewScript />
       </body>
     </html>
   );

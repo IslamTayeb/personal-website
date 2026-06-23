@@ -55,6 +55,7 @@ npm run format         # prettier --write .
 npm run format:check   # prettier --check .
 npm run test:content   # blog loading/rendering/feed validation
 npm run test:migration # old-domain redirects + public payload checks
+npm run test:pageview  # pageview webhook payload/routing validation
 npm run test:no-motion # fail on motion/resizing/dither/canvas leftovers
 npm run test:visual    # Playwright screenshots + DOM measurements
 ```
@@ -125,6 +126,13 @@ Use meaningful commit messages that describe the why.
 - **Blog manifests:** Use `listed: false` for source-backed pages that should
   exist at their slug but stay out of `/blog` and feeds. Use `allowHtml: true`
   only for posts that need raw HTML blocks.
+- **Pageview events:** The active site uses a tiny `sendBeacon` pageview script
+  and `/api/pageview` route for Discord webhook notifications. Keep it
+  post-response, avoid canvas/fingerprinting/external geolocation lookups, and
+  use Vercel request geolocation headers for location context. Configure it
+  with `SITE_VISIT_WEBHOOK_URL`; disable client emission with
+  `NEXT_PUBLIC_SITE_VISIT_EVENTS=false` or server delivery with
+  `SITE_VISIT_EVENTS_ENABLED=false`.
 - **Tables:** Blog tables use Obsidian-like intrinsic sizing: auto layout,
   small per-column minimums, normal wrapping, and no internal horizontal table
   scrollbars unless a post intentionally needs custom markup.
