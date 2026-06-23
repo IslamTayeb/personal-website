@@ -10,22 +10,18 @@ const oldHosts = ['apmoverflow.xyz', 'www.apmoverflow.xyz'];
 const appRoot = path.dirname(fileURLToPath(import.meta.url));
 const postContentRoot = path.join(appRoot, 'content', 'posts');
 
-function listedPostSlugs() {
+function postSlugs() {
   return readdirSync(postContentRoot)
     .filter((file) => file.endsWith('.json'))
-    .flatMap((file) => {
+    .map((file) => {
       const raw = readFileSync(path.join(postContentRoot, file), 'utf8');
       const manifest = JSON.parse(raw);
-
-      if (manifest.listed === false) {
-        return [];
-      }
 
       if (typeof manifest.slug !== 'string') {
         throw new Error(`${file} is missing a string slug`);
       }
 
-      return [manifest.slug];
+      return manifest.slug;
     })
     .sort();
 }
@@ -60,7 +56,7 @@ function apmOverflowRedirects() {
     ['/feed/rss.xml', `${siteUrl}/blog/rss.xml`],
     ['/static/:path*', `${siteUrl}/static/:path*`],
   ].flatMap(([source, destination]) => oldHostRedirects(source, destination));
-  const postRedirects = listedPostSlugs().flatMap((slug) => [
+  const postRedirects = postSlugs().flatMap((slug) => [
     ...oldHostRedirects(`/${slug}`, `${siteUrl}/blog/${slug}`),
     ...oldHostRedirects(`/${slug}/`, `${siteUrl}/blog/${slug}`),
   ]);

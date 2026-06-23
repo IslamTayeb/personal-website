@@ -124,8 +124,10 @@ Use meaningful commit messages that describe the why.
 - **Blog internals:** Active posts should use local `/blog/...` links for links
   to other posts. Do not link active content back to `apmoverflow.xyz`.
 - **Blog manifests:** Use `listed: false` for source-backed pages that should
-  exist at their slug but stay out of `/blog` and feeds. Use `allowHtml: true`
-  only for posts that need raw HTML blocks.
+  exist at their slug but stay out of `/blog`, feeds, and sitemaps. Hidden
+  source-backed pages still need old APM top-level redirect coverage when their
+  `/blog/...` page exists. Use `allowHtml: true` only for posts that need raw
+  HTML blocks.
 - **Pageview events:** The active site uses a tiny `sendBeacon` pageview script
   and `/api/pageview` route for Discord webhook notifications. Keep it
   post-response, avoid canvas/fingerprinting/external geolocation lookups, and

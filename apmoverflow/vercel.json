@@ -50,6 +50,66 @@
       "permanent": true
     },
     {
+      "source": "/agent-self-reflection",
+      "destination": "https://www.islamtayeb.dev/blog/agent-self-reflection",
+      "permanent": true
+    },
+    {
+      "source": "/agent-self-reflection/",
+      "destination": "https://www.islamtayeb.dev/blog/agent-self-reflection",
+      "permanent": true
+    },
+    {
+      "source": "/batch-agent-sdk-research-overview",
+      "destination": "https://www.islamtayeb.dev/blog/batch-agent-sdk-research-overview",
+      "permanent": true
+    },
+    {
+      "source": "/batch-agent-sdk-research-overview/",
+      "destination": "https://www.islamtayeb.dev/blog/batch-agent-sdk-research-overview",
+      "permanent": true
+    },
+    {
+      "source": "/effect-of-explanation-and-confidence-fields-on-llm-extraction",
+      "destination": "https://www.islamtayeb.dev/blog/effect-of-explanation-and-confidence-fields-on-llm-extraction",
+      "permanent": true
+    },
+    {
+      "source": "/effect-of-explanation-and-confidence-fields-on-llm-extraction/",
+      "destination": "https://www.islamtayeb.dev/blog/effect-of-explanation-and-confidence-fields-on-llm-extraction",
+      "permanent": true
+    },
+    {
+      "source": "/frontier-benchmarking",
+      "destination": "https://www.islamtayeb.dev/blog/frontier-benchmarking",
+      "permanent": true
+    },
+    {
+      "source": "/frontier-benchmarking/",
+      "destination": "https://www.islamtayeb.dev/blog/frontier-benchmarking",
+      "permanent": true
+    },
+    {
+      "source": "/hydra",
+      "destination": "https://www.islamtayeb.dev/blog/hydra",
+      "permanent": true
+    },
+    {
+      "source": "/hydra/",
+      "destination": "https://www.islamtayeb.dev/blog/hydra",
+      "permanent": true
+    },
+    {
+      "source": "/multi-agents",
+      "destination": "https://www.islamtayeb.dev/blog/multi-agents",
+      "permanent": true
+    },
+    {
+      "source": "/multi-agents/",
+      "destination": "https://www.islamtayeb.dev/blog/multi-agents",
+      "permanent": true
+    },
+    {
       "source": "/on-agent-memory-fidelity",
       "destination": "https://www.islamtayeb.dev/blog/on-agent-memory-fidelity",
       "permanent": true
@@ -97,6 +157,16 @@
     {
       "source": "/on-using-computers/",
       "destination": "https://www.islamtayeb.dev/blog/on-using-computers",
+      "permanent": true
+    },
+    {
+      "source": "/typhon-260515",
+      "destination": "https://www.islamtayeb.dev/blog/typhon-260515",
+      "permanent": true
+    },
+    {
+      "source": "/typhon-260515/",
+      "destination": "https://www.islamtayeb.dev/blog/typhon-260515",
       "permanent": true
     }
   ]

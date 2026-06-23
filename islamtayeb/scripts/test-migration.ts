@@ -4,7 +4,7 @@ import path from 'node:path';
 import { profile } from '../data/profile';
 import { siteMetadata } from '../data/site-metadata';
 import { buildAtomFeed, buildRssFeed } from '../lib/blog/feed';
-import { getAllPosts, getListedPosts } from '../lib/blog/posts';
+import { getAllPosts } from '../lib/blog/posts';
 import nextConfig from '../next.config.mjs';
 
 const siteUrl = siteMetadata.url;
@@ -66,17 +66,6 @@ function assertStaticRedirect(
         !rule.has
     ),
     `missing apmoverflow shell redirect: ${source} -> ${destination}`
-  );
-}
-
-function assertNoExplicitRedirect(
-  redirects: RedirectRule[],
-  source: string,
-  label: string
-) {
-  assert.ok(
-    !redirects.some((rule) => rule.source === source),
-    `${label} should not define an explicit redirect for ${source}`
   );
 }
 
@@ -176,8 +165,6 @@ async function main() {
   const redirects = await readRedirects();
   const shellRedirects = await readApmShellRedirects();
   const posts = await getAllPosts();
-  const listedPosts = await getListedPosts();
-  const unlistedPosts = posts.filter((post) => !post.manifest.listed);
 
   assert.ok(redirects.length > 0, 'next.config.mjs should define redirects');
   assertRedirect(redirects, '/', `${siteUrl}/blog`);
@@ -216,7 +203,7 @@ async function main() {
     `${siteUrl}/static/:path*`
   );
 
-  for (const post of listedPosts) {
+  for (const post of posts) {
     assertRedirect(
       redirects,
       `/${post.manifest.slug}`,
@@ -236,29 +223,6 @@ async function main() {
       shellRedirects,
       `/${post.manifest.slug}/`,
       `${siteUrl}/blog/${post.manifest.slug}`
-    );
-  }
-
-  for (const post of unlistedPosts) {
-    assertNoExplicitRedirect(
-      redirects.filter(isOldHostRedirect),
-      `/${post.manifest.slug}`,
-      'next.config.mjs'
-    );
-    assertNoExplicitRedirect(
-      redirects.filter(isOldHostRedirect),
-      `/${post.manifest.slug}/`,
-      'next.config.mjs'
-    );
-    assertNoExplicitRedirect(
-      shellRedirects,
-      `/${post.manifest.slug}`,
-      'apmoverflow/vercel.json'
-    );
-    assertNoExplicitRedirect(
-      shellRedirects,
-      `/${post.manifest.slug}/`,
-      'apmoverflow/vercel.json'
     );
   }
 
@@ -272,7 +236,7 @@ async function main() {
   await assertFeedsAreCanonical();
 
   console.log(
-    `migration ok: ${listedPosts.length} listed old APM slugs redirect in app and shell, feeds canonical, old tracking payload absent`
+    `migration ok: ${posts.length} old APM slugs redirect in app and shell, feeds canonical, old tracking payload absent`
   );
 }
 
