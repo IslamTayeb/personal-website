@@ -135,6 +135,11 @@ Use meaningful commit messages that describe the why.
   with `SITE_VISIT_WEBHOOK_URL`, or the existing `DISCORD_WEBHOOK_URL` fallback;
   disable client emission with `NEXT_PUBLIC_SITE_VISIT_EVENTS=false` or server
   delivery with `SITE_VISIT_EVENTS_ENABLED=false`.
+- **Pageview notification detail:** Discord pageview messages may use emojis for
+  section clarity, but location must be labeled as approximate network location.
+  Do not ask visitors for browser geolocation permission. Bot detection should
+  stay passive and heuristic unless a deliberate BotID-style integration is
+  planned.
 - **Tables:** Blog tables use Obsidian-like intrinsic sizing: auto layout,
   small per-column minimums, normal wrapping, and no internal horizontal table
   scrollbars unless a post intentionally needs custom markup.
