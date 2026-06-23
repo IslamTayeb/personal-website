@@ -26,6 +26,15 @@ type VercelConfig = {
   redirects?: RedirectRule[];
 };
 
+function redirectsOldHost(rule: RedirectRule, host: string) {
+  return rule.has?.some(
+    (condition) =>
+      condition.type === 'host' &&
+      typeof condition.value === 'string' &&
+      condition.value === host
+  );
+}
+
 function isOldHostRedirect(rule: RedirectRule) {
   return rule.has?.some(
     (condition) =>
@@ -40,16 +49,18 @@ function assertRedirect(
   source: string,
   destination: string
 ) {
-  assert.ok(
-    redirects.some(
-      (rule) =>
-        rule.source === source &&
-        rule.destination === destination &&
-        rule.permanent === true &&
-        isOldHostRedirect(rule)
-    ),
-    `missing apmoverflow redirect: ${source} -> ${destination}`
-  );
+  for (const host of oldHosts) {
+    assert.ok(
+      redirects.some(
+        (rule) =>
+          rule.source === source &&
+          rule.destination === destination &&
+          rule.permanent === true &&
+          redirectsOldHost(rule, host)
+      ),
+      `missing apmoverflow redirect for ${host}: ${source} -> ${destination}`
+    );
+  }
 }
 
 function assertStaticRedirect(
