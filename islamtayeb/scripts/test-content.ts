@@ -3,14 +3,23 @@ import { createHash } from 'node:crypto';
 import { access, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { inflateSync } from 'node:zlib';
+import robots from '../app/robots';
+import sitemap from '../app/sitemap';
 import { externalWriting } from '../data/external-writing';
-import { buildAtomFeed } from '../lib/blog/feed';
+import { siteMetadata } from '../data/site-metadata';
+import { buildAtomFeed, buildRssFeed } from '../lib/blog/feed';
 import {
   contentRoot,
   getAllPosts,
   getListedPosts,
   postHref,
 } from '../lib/blog/posts';
+import {
+  buildBlogPostingJsonLd,
+  buildPersonJsonLd,
+  buildPostMetadata,
+  canonicalUrlForPath,
+} from '../lib/seo';
 
 function assertDescendingDates(
   posts: Awaited<ReturnType<typeof getListedPosts>>
@@ -75,6 +84,18 @@ function assertImagesHaveAlt(postSlug: string, html: string) {
 
 function countMatches(value: string, pattern: RegExp) {
   return Array.from(value.matchAll(pattern)).length;
+}
+
+function escapeRegExp(value: string) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function assertNoBareSiteUrl(value: string, label: string) {
+  assert.doesNotMatch(
+    value,
+    /https:\/\/islamtayeb\.dev(?:\/|$)/,
+    `${label} should use the www canonical domain`
+  );
 }
 
 const legacyPlaceholderIconHashes = new Map([
@@ -383,6 +404,102 @@ async function assertLocalSocialImageExists(
   );
 }
 
+async function assertSeoInfrastructure(
+  posts: Awaited<ReturnType<typeof getAllPosts>>,
+  listedPosts: Awaited<ReturnType<typeof getListedPosts>>
+) {
+  const robotsConfig = robots();
+  const sitemapEntries = await sitemap();
+  const sitemapUrls = sitemapEntries.map((entry) => entry.url);
+  const listedPostUrls = listedPosts.map((post) =>
+    canonicalUrlForPath(postHref(post))
+  );
+  const unlistedPosts = posts.filter((post) => !post.manifest.listed);
+
+  assert.equal(siteMetadata.url, 'https://www.islamtayeb.dev');
+  assert.deepEqual(robotsConfig.rules, {
+    userAgent: '*',
+    allow: '/',
+  });
+  assert.equal(robotsConfig.sitemap, canonicalUrlForPath('/sitemap.xml'));
+  assert.deepEqual(sitemapUrls, [
+    canonicalUrlForPath('/'),
+    canonicalUrlForPath('/blog'),
+    ...listedPostUrls,
+  ]);
+
+  for (const post of posts) {
+    const metadata = buildPostMetadata(post);
+    const canonicalUrl = canonicalUrlForPath(postHref(post));
+    const openGraph = metadata.openGraph as { url?: string } | undefined;
+
+    assert.equal(
+      metadata.alternates?.canonical,
+      canonicalUrl,
+      `${post.manifest.slug} should expose a canonical URL`
+    );
+    assert.equal(
+      openGraph?.url,
+      canonicalUrl,
+      `${post.manifest.slug} should expose og:url`
+    );
+
+    if (post.manifest.listed) {
+      assert.equal(
+        metadata.robots,
+        undefined,
+        `${post.manifest.slug} should be indexable`
+      );
+      assert.ok(
+        sitemapUrls.includes(canonicalUrl),
+        `${post.manifest.slug} should appear in the sitemap`
+      );
+    } else {
+      assert.deepEqual(
+        metadata.robots,
+        { index: false, follow: false },
+        `${post.manifest.slug} should be marked noindex/nofollow`
+      );
+      assert.ok(
+        !sitemapUrls.includes(canonicalUrl),
+        `${post.manifest.slug} should be excluded from the sitemap`
+      );
+    }
+  }
+
+  const personJsonLd = buildPersonJsonLd();
+
+  assert.equal(personJsonLd['@type'], 'Person');
+  assert.equal(personJsonLd.url, siteMetadata.url);
+  assert.ok(
+    personJsonLd.sameAs.every((href) => href.startsWith('https://')),
+    'Person JSON-LD should only include HTTPS sameAs links'
+  );
+
+  for (const post of listedPosts) {
+    const blogPostingJsonLd = buildBlogPostingJsonLd(post);
+
+    assert.equal(blogPostingJsonLd['@type'], 'BlogPosting');
+    assert.equal(blogPostingJsonLd.url, canonicalUrlForPath(postHref(post)));
+    assert.equal(blogPostingJsonLd.headline, post.manifest.title);
+  }
+
+  const atomFeed = await buildAtomFeed();
+  const rssFeed = await buildRssFeed();
+
+  for (const feed of [atomFeed, rssFeed]) {
+    assertNoBareSiteUrl(feed, 'feed output');
+
+    for (const post of unlistedPosts) {
+      assert.doesNotMatch(
+        feed,
+        new RegExp(escapeRegExp(postHref(post))),
+        `${post.manifest.slug} should be excluded from feeds`
+      );
+    }
+  }
+}
+
 async function main() {
   const manifestFiles = (await readdir(contentRoot)).filter((file) =>
     file.endsWith('.json')
@@ -397,6 +514,7 @@ async function main() {
   );
   assert.ok(listedPosts.length > 0, 'at least one listed post should load');
   assertDescendingDates(listedPosts);
+  await assertSeoInfrastructure(posts, listedPosts);
   await assertFaviconAssets();
   assert.deepEqual(externalWriting, [
     {
@@ -583,9 +701,7 @@ async function main() {
   assert.match(feed, /<entry>/);
   assert.match(
     feed,
-    new RegExp(
-      `<title>${listedPosts[0].manifest.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}</title>`
-    )
+    new RegExp(`<title>${escapeRegExp(listedPosts[0].manifest.title)}</title>`)
   );
   assert.doesNotMatch(feed, /Finding the Right Answer Was Never the Point/);
   assert.doesNotMatch(feed, /dukechronicle\.com/);

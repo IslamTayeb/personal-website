@@ -9,7 +9,7 @@ experimental sandbox, and archived legacy projects:
   `islamtayeb.dev`, including the unified personal site and blog.
 - **`apmoverflow/`** -- a tiny static Vercel redirect shell for
   `apmoverflow.xyz`. It contains no authored content; it only sends old APM
-  paths to `https://islamtayeb.dev/blog/...`.
+  paths to `https://www.islamtayeb.dev/blog/...`.
 - **`component-lab/`** -- an experimental Next.js lab for visual exploration.
   It is not production code and should stay isolated unless a design is
   intentionally ported.
@@ -39,7 +39,7 @@ APM Overflow writing now lives as Markdown plus JSON manifests under
 blog content. The archived APM Overflow copy is historical only.
 
 `apmoverflow.xyz` should remain a routing shell: old APM paths redirect to
-`https://islamtayeb.dev/blog/...`. Keep redirect coverage in both
+`https://www.islamtayeb.dev/blog/...`. Keep redirect coverage in both
 `islamtayeb/next.config.mjs` and `apmoverflow/vercel.json`, and keep
 `npm run test:migration` passing.
 
@@ -147,7 +147,8 @@ Use meaningful commit messages that describe the why.
 ## Deployment
 
 The main production Vercel project should build from `islamtayeb/`.
-`islamtayeb.dev` is the canonical domain.
+`www.islamtayeb.dev` is the canonical domain. Keep crawler-facing metadata,
+feeds, sitemaps, and old-domain redirect destinations on that host.
 
 The existing `apm-overflow` Vercel project should build from `apmoverflow/`.
 Keep `apmoverflow.xyz` and `www.apmoverflow.xyz` attached there unless the

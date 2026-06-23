@@ -1,11 +1,14 @@
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
+type SectionHeadingLevel = 'h1' | 'h2';
+
 export function Section({
   id,
   index,
   title,
   accent = 'text-roy-o',
+  headingLevel = 'h2',
   headerExtra,
   children,
   className,
@@ -14,6 +17,7 @@ export function Section({
   index: string;
   title: string;
   accent?: string;
+  headingLevel?: SectionHeadingLevel;
   headerExtra?: ReactNode;
   children: ReactNode;
   className?: string;
@@ -28,6 +32,7 @@ export function Section({
         index={index}
         title={title}
         accent={accent}
+        headingLevel={headingLevel}
         extra={headerExtra}
       />
       {children}
@@ -39,13 +44,17 @@ export function SectionHeader({
   index,
   title,
   accent = 'text-roy-o',
+  headingLevel = 'h2',
   extra,
 }: {
   index: string;
   title: string;
   accent?: string;
+  headingLevel?: SectionHeadingLevel;
   extra?: ReactNode;
 }) {
+  const Heading = headingLevel;
+
   return (
     <header className="mb-3 flex flex-col gap-1">
       <div
@@ -61,14 +70,14 @@ export function SectionHeader({
         >
           §{index}
         </span>
-        <h2
+        <Heading
           className={cn(
             'font-mono text-base uppercase tracking-[0.2em]',
             accent
           )}
         >
           {title}
-        </h2>
+        </Heading>
         {extra ? <div className="min-w-0 self-center">{extra}</div> : null}
       </div>
     </header>

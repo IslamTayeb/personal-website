@@ -77,12 +77,14 @@ function HeroStory() {
 function HeroTitle({
   className,
   testId,
+  as: Component = 'h1',
 }: {
   className?: string;
   testId: string;
+  as?: 'h1' | 'div';
 }) {
   return (
-    <h1
+    <Component
       data-testid={testId}
       className={cn(
         'mb-2 w-fit font-sans text-4xl font-semibold tracking-tight text-foreground',
@@ -90,7 +92,7 @@ function HeroTitle({
       )}
     >
       Islam Tayeb
-    </h1>
+    </Component>
   );
 }
 
@@ -99,7 +101,7 @@ export function Hero() {
     <section id="about" data-testid="hero-section" className="pb-4 pt-0">
       <div className="flex w-full flex-col">
         <SectionHeader index="1" title="About" accent="text-roy-r" />
-        <HeroTitle testId="hero-title-mobile" className="md:hidden" />
+        <HeroTitle as="div" testId="hero-title-mobile" className="md:hidden" />
         <div
           data-testid="hero-content"
           className="flex flex-col gap-3 md:grid md:grid-cols-[25%_minmax(0,1fr)] md:gap-3"

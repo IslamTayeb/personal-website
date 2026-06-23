@@ -1,13 +1,25 @@
 import { escapeHtml } from './html';
 import { datetime, toFeedDate, toRssDate } from './date';
 import { getListedPosts, postHref } from './posts';
+import { siteMetadata } from '@/data/site-metadata';
 
-const siteUrl = 'https://islamtayeb.dev';
+const siteUrl = siteMetadata.url;
+
+function latestUpdatedDate(posts: Awaited<ReturnType<typeof getListedPosts>>) {
+  return posts.reduce<string>((latest, post) => {
+    const updatedAt = post.manifest.updatedAt ?? post.manifest.publishedAt;
+
+    if (!latest) {
+      return updatedAt;
+    }
+
+    return new Date(updatedAt) > new Date(latest) ? updatedAt : latest;
+  }, '');
+}
 
 export async function buildAtomFeed() {
   const posts = await getListedPosts();
-  const updated =
-    posts[0]?.manifest.updatedAt ?? posts[0]?.manifest.publishedAt ?? '';
+  const updated = latestUpdatedDate(posts);
 
   return `<?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
@@ -36,8 +48,7 @@ export async function buildAtomFeed() {
 
 export async function buildRssFeed() {
   const posts = await getListedPosts();
-  const updated =
-    posts[0]?.manifest.updatedAt ?? posts[0]?.manifest.publishedAt ?? '';
+  const updated = latestUpdatedDate(posts);
 
   return `<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

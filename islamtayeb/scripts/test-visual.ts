@@ -709,8 +709,30 @@ async function assertHome(page: Page) {
     const highlightedLinkClassNames = [
       ...document.querySelectorAll<HTMLElement>('a.royb-link-highlight'),
     ].map((link) => link.className);
+    const jsonLdTypes = [
+      ...document.querySelectorAll<HTMLScriptElement>(
+        'script[type="application/ld+json"]'
+      ),
+    ].map((script) => {
+      try {
+        return JSON.parse(script.textContent ?? '{}')['@type'] as string;
+      } catch {
+        return 'invalid';
+      }
+    });
 
     return {
+      canonicalHref:
+        document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+          ?.href ?? '',
+      ogUrl:
+        document
+          .querySelector<HTMLMetaElement>('meta[property="og:url"]')
+          ?.getAttribute('content') ?? '',
+      h1Texts: [...document.querySelectorAll('h1')].map(
+        (heading) => heading.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      ),
+      jsonLdTypes,
       mainWidth: main?.getBoundingClientRect().width ?? 0,
       bodyColor,
       bodyBackgroundColor,
@@ -893,6 +915,10 @@ async function assertHome(page: Page) {
   });
 
   assert.ok(result.mainWidth <= 800, 'main document should stay narrow');
+  assert.equal(result.canonicalHref, 'https://www.islamtayeb.dev/');
+  assert.equal(result.ogUrl, 'https://www.islamtayeb.dev');
+  assert.deepEqual(result.h1Texts, ['Islam Tayeb']);
+  assert.ok(result.jsonLdTypes.includes('Person'));
   assert.equal(result.heroTitle, 'Islam Tayeb');
   assert.equal(result.heroPortraitExists, true, 'hero portrait should render');
   assert.ok(result.heroPortraitWidth > 0, 'hero portrait should have width');
@@ -2022,10 +2048,12 @@ async function assertBlogIndex(page: Page) {
         .trim() ?? '';
     const heading =
       document
-        .querySelector('#posts h2')
+        .querySelector('#posts h1, #posts h2')
         ?.textContent?.replace(/\s+/g, ' ')
         .trim() ?? '';
-    const headingElement = document.querySelector<HTMLElement>('#posts h2');
+    const headingElement = document.querySelector<HTMLElement>(
+      '#posts h1, #posts h2'
+    );
     const bodyColor = getComputedStyle(document.body).color;
     const markerElement =
       document.querySelector<HTMLElement>('#posts header span');
@@ -2110,6 +2138,16 @@ async function assertBlogIndex(page: Page) {
     ].map((link) => link.className);
 
     return {
+      canonicalHref:
+        document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+          ?.href ?? '',
+      ogUrl:
+        document
+          .querySelector<HTMLMetaElement>('meta[property="og:url"]')
+          ?.getAttribute('content') ?? '',
+      h1Texts: [...document.querySelectorAll('h1')].map(
+        (heading) => heading.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      ),
       header,
       mainLeft: main?.getBoundingClientRect().left ?? 0,
       mainContentLeft:
@@ -2173,6 +2211,9 @@ async function assertBlogIndex(page: Page) {
   });
 
   assert.equal(result.header, '', 'blog header should only contain ROYB band');
+  assert.equal(result.canonicalHref, 'https://www.islamtayeb.dev/blog');
+  assert.equal(result.ogUrl, 'https://www.islamtayeb.dev/blog');
+  assert.deepEqual(result.h1Texts, [`Index (${result.itemCount})`]);
   assert.equal(result.marker, '§1');
   assert.equal(result.heading, `Index (${result.itemCount})`);
   assert.equal(
@@ -2431,6 +2472,17 @@ async function assertArticle(page: Page) {
         '.article-prose a.royb-link-highlight'
       ),
     ].map((link) => link.className);
+    const jsonLdTypes = [
+      ...document.querySelectorAll<HTMLScriptElement>(
+        'script[type="application/ld+json"]'
+      ),
+    ].map((script) => {
+      try {
+        return JSON.parse(script.textContent ?? '{}')['@type'] as string;
+      } catch {
+        return 'invalid';
+      }
+    });
     const blueProbe = document.createElement('span');
 
     blueProbe.style.color = 'var(--roy-b)';
@@ -2439,6 +2491,17 @@ async function assertArticle(page: Page) {
     blueProbe.remove();
 
     return {
+      canonicalHref:
+        document.querySelector<HTMLLinkElement>('link[rel="canonical"]')
+          ?.href ?? '',
+      ogUrl:
+        document
+          .querySelector<HTMLMetaElement>('meta[property="og:url"]')
+          ?.getAttribute('content') ?? '',
+      h1Texts: [...document.querySelectorAll('h1')].map(
+        (heading) => heading.textContent?.replace(/\s+/g, ' ').trim() ?? ''
+      ),
+      jsonLdTypes,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerDateText:
@@ -2530,6 +2593,16 @@ async function assertArticle(page: Page) {
   });
 
   assert.ok(result.titleText.length > 0, 'article title should render');
+  assert.equal(
+    result.canonicalHref,
+    'https://www.islamtayeb.dev/blog/on-agent-memory-fidelity'
+  );
+  assert.equal(
+    result.ogUrl,
+    'https://www.islamtayeb.dev/blog/on-agent-memory-fidelity'
+  );
+  assert.deepEqual(result.h1Texts, [result.titleText]);
+  assert.ok(result.jsonLdTypes.includes('BlogPosting'));
   assert.ok(result.titleWeight >= 600, 'article title should stay strong');
   assert.ok(
     Math.abs(result.titleLeft - result.mainContentLeft) <= 1,

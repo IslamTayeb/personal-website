@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArticleProse } from '@/components/primitives/article-prose';
 import { RoybBand } from '@/components/primitives/royb-band';
-import { siteMetadata } from '@/data/site-metadata';
-import { formatDate, datetime } from '@/lib/blog/date';
+import { JsonLd } from '@/components/site/json-ld';
+import { formatDate } from '@/lib/blog/date';
 import { getAllPosts, getPostBySlug } from '@/lib/blog/posts';
+import { buildBlogPostingJsonLd, buildPostMetadata } from '@/lib/seo';
 
 type PageProps = {
   params: Promise<{
@@ -30,29 +31,7 @@ export async function generateMetadata({
     return {};
   }
 
-  const socialImage = {
-    ...siteMetadata.socialImage,
-    url: post.manifest.socialImage ?? siteMetadata.socialImage.url,
-  };
-
-  return {
-    title: post.manifest.title,
-    description: post.summary,
-    openGraph: {
-      title: post.manifest.title,
-      description: post.summary,
-      type: 'article',
-      publishedTime: datetime(post.manifest.publishedAt),
-      modifiedTime: datetime(post.manifest.updatedAt),
-      images: [socialImage],
-    },
-    twitter: {
-      card: 'summary',
-      title: post.manifest.title,
-      description: post.summary,
-      images: [socialImage],
-    },
-  };
+  return buildPostMetadata(post);
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
@@ -65,6 +44,9 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <>
+      {post.manifest.listed ? (
+        <JsonLd data={buildBlogPostingJsonLd(post)} />
+      ) : null}
       <RoybBand />
       <article data-testid="blog-article" className="pb-44 pt-0">
         <header className="mb-7 flex flex-col gap-2.5">

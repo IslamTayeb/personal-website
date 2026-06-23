@@ -1,8 +1,11 @@
 import { readdirSync, readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const siteUrl = 'https://islamtayeb.dev';
+const require = createRequire(import.meta.url);
+const siteUrlConfig = require('./data/site-url.json');
+const siteUrl = siteUrlConfig.url;
 const oldHosts = ['apmoverflow.xyz', 'www.apmoverflow.xyz'];
 const appRoot = path.dirname(fileURLToPath(import.meta.url));
 const postContentRoot = path.join(appRoot, 'content', 'posts');
@@ -10,15 +13,19 @@ const postContentRoot = path.join(appRoot, 'content', 'posts');
 function listedPostSlugs() {
   return readdirSync(postContentRoot)
     .filter((file) => file.endsWith('.json'))
-    .map((file) => {
+    .flatMap((file) => {
       const raw = readFileSync(path.join(postContentRoot, file), 'utf8');
       const manifest = JSON.parse(raw);
+
+      if (manifest.listed === false) {
+        return [];
+      }
 
       if (typeof manifest.slug !== 'string') {
         throw new Error(`${file} is missing a string slug`);
       }
 
-      return manifest.slug;
+      return [manifest.slug];
     })
     .sort();
 }

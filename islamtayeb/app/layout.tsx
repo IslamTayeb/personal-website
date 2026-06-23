@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { DM_Mono, Sora } from 'next/font/google';
@@ -22,6 +23,9 @@ export const metadata: Metadata = {
     template: `%s | ${siteMetadata.title}`,
   },
   description: siteMetadata.description,
+  alternates: {
+    canonical: '/',
+  },
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },
@@ -44,7 +48,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: siteMetadata.title,
     description: siteMetadata.description,
-    url: '/',
+    url: siteMetadata.url,
     siteName: siteMetadata.title,
     type: 'website',
     images: [siteMetadata.socialImage],
@@ -158,7 +162,12 @@ export default function RootLayout({
           {children}
           <SiteFooter />
         </main>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <Analytics />
+            <SpeedInsights />
+          </>
+        )}
         <PageviewScript />
       </body>
     </html>

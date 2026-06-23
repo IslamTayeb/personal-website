@@ -7,16 +7,20 @@ import { externalWriting } from '@/data/external-writing';
 import { siteMetadata } from '@/data/site-metadata';
 import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
 import { formatMonthYear } from '@/lib/blog/date';
+import { canonicalUrlForPath } from '@/lib/seo';
 
 const postDotClassName = 'bg-foreground/75';
 
 export const metadata: Metadata = {
   title: 'Blog',
   description: 'APM Overflow writing inside islamtayeb.dev.',
+  alternates: {
+    canonical: canonicalUrlForPath('/blog'),
+  },
   openGraph: {
     title: 'Blog',
     description: 'APM Overflow writing inside islamtayeb.dev.',
-    url: '/blog',
+    url: canonicalUrlForPath('/blog'),
     type: 'website',
     images: [siteMetadata.socialImage],
   },
@@ -42,6 +46,7 @@ export default async function BlogIndexPage() {
         index="1"
         title={`Index (${itemCount})`}
         accent="text-roy-b"
+        headingLevel="h1"
         className="pt-0 md:pt-0"
       >
         <BorderedPanel>
