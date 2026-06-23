@@ -55,6 +55,8 @@ export type DiscordWebhookPayload = {
   };
 };
 
+const legacyWebhookEnvName = ['DISCORD', 'WEBHOOK', 'URL'].join('_');
+
 function asString(value: unknown, fallback = '') {
   return typeof value === 'string' ? value : fallback;
 }
@@ -107,6 +109,12 @@ function safeIsoDate(value: unknown) {
 
 function readHeader(request: Request, name: string) {
   return request.headers.get(name) ?? '';
+}
+
+function configuredValue(value: string | undefined) {
+  const trimmed = value?.trim();
+
+  return trimmed ? trimmed : undefined;
 }
 
 function decodeHeaderValue(value: string) {
@@ -339,12 +347,12 @@ export async function sendVisitWebhook(
   visit: ClientVisitPayload,
   context: VisitRequestContext
 ) {
-  const webhookUrl = process.env.SITE_VISIT_WEBHOOK_URL;
+  const webhookUrl =
+    configuredValue(process.env.SITE_VISIT_WEBHOOK_URL) ??
+    configuredValue(process.env[legacyWebhookEnvName]);
 
   if (!webhookUrl) {
-    console.warn(
-      'SITE_VISIT_WEBHOOK_URL is not configured; pageview not sent.'
-    );
+    console.warn('No pageview webhook URL is configured; pageview not sent.');
     return;
   }
 
@@ -358,5 +366,11 @@ export async function sendVisitWebhook(
 
   if (!response.ok) {
     throw new Error(`Visit webhook failed with HTTP ${response.status}`);
+  }
+
+  if (visit.reason.startsWith('codex-validation')) {
+    console.log(
+      `Pageview webhook validation succeeded for ${visit.path} with HTTP ${response.status}.`
+    );
   }
 }

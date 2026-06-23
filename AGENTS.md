@@ -130,9 +130,9 @@ Use meaningful commit messages that describe the why.
   and `/api/pageview` route for Discord webhook notifications. Keep it
   post-response, avoid canvas/fingerprinting/external geolocation lookups, and
   use Vercel request geolocation headers for location context. Configure it
-  with `SITE_VISIT_WEBHOOK_URL`; disable client emission with
-  `NEXT_PUBLIC_SITE_VISIT_EVENTS=false` or server delivery with
-  `SITE_VISIT_EVENTS_ENABLED=false`.
+  with `SITE_VISIT_WEBHOOK_URL`, or the existing `DISCORD_WEBHOOK_URL` fallback;
+  disable client emission with `NEXT_PUBLIC_SITE_VISIT_EVENTS=false` or server
+  delivery with `SITE_VISIT_EVENTS_ENABLED=false`.
 - **Tables:** Blog tables use Obsidian-like intrinsic sizing: auto layout,
   small per-column minimums, normal wrapping, and no internal horizontal table
   scrollbars unless a post intentionally needs custom markup.

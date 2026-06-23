@@ -4,6 +4,7 @@ import {
   buildDiscordVisitPayload,
   buildVisitRequestContext,
   normalizeVisitPayload,
+  sendVisitWebhook,
   shouldAcceptVisitRequest,
 } from '../lib/visit-events';
 
@@ -30,9 +31,11 @@ function request(headers: HeadersInit) {
   });
 }
 
-const normalized = normalizeVisitPayload(basePayload);
+const normalizedPayload = normalizeVisitPayload(basePayload);
 
-assert.ok(normalized, 'valid pageview payload should normalize');
+assert.ok(normalizedPayload, 'valid pageview payload should normalize');
+
+const normalized = normalizedPayload;
 assert.equal(normalized.path, '/blog/frontier-benchmarking?ref=test');
 assert.equal(normalized.firstVisit, true);
 
@@ -109,4 +112,57 @@ assert.ok(
   'Discord payload should include Vercel location headers'
 );
 
-console.log('pageview ok');
+async function assertWebhookFallback() {
+  const previousSiteWebhookUrl = process.env.SITE_VISIT_WEBHOOK_URL;
+  const previousDiscordWebhookUrl = process.env.DISCORD_WEBHOOK_URL;
+  const previousFetch = globalThis.fetch;
+  const webhookCalls: string[] = [];
+
+  globalThis.fetch = (async (url: string | URL | Request) => {
+    webhookCalls.push(String(url));
+
+    return new Response(null, { status: 204 });
+  }) as typeof fetch;
+
+  process.env.DISCORD_WEBHOOK_URL = 'https://discord.example/webhook';
+
+  delete process.env.SITE_VISIT_WEBHOOK_URL;
+  await sendVisitWebhook(
+    { ...normalized, reason: 'codex-validation-local' },
+    context
+  );
+
+  process.env.SITE_VISIT_WEBHOOK_URL = '';
+  await sendVisitWebhook(
+    { ...normalized, reason: 'codex-validation-empty-primary' },
+    context
+  );
+
+  assert.deepEqual(webhookCalls, [
+    'https://discord.example/webhook',
+    'https://discord.example/webhook',
+  ]);
+
+  if (previousSiteWebhookUrl === undefined) {
+    delete process.env.SITE_VISIT_WEBHOOK_URL;
+  } else {
+    process.env.SITE_VISIT_WEBHOOK_URL = previousSiteWebhookUrl;
+  }
+
+  if (previousDiscordWebhookUrl === undefined) {
+    delete process.env.DISCORD_WEBHOOK_URL;
+  } else {
+    process.env.DISCORD_WEBHOOK_URL = previousDiscordWebhookUrl;
+  }
+
+  globalThis.fetch = previousFetch;
+}
+
+assertWebhookFallback()
+  .then(() => {
+    console.log('pageview ok');
+  })
+  .catch((error: unknown) => {
+    console.error(error);
+    process.exit(1);
+  });
