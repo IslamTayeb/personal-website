@@ -288,8 +288,11 @@ async function assertHome(page: Page) {
       return {
         text: label.textContent?.replace(/\s+/g, ' ').trim() ?? '',
         className: label.className,
+        color: style.color,
         justifySelf: style.justifySelf,
+        letterSpacing: style.letterSpacing,
         textDecorationLine: style.textDecorationLine,
+        textTransform: style.textTransform,
         width: rect.width,
         left: rect.left,
         toggleWidth: toggleRect?.width ?? 0,
@@ -317,26 +320,17 @@ async function assertHome(page: Page) {
         color: style.color,
         fontFamily: style.fontFamily,
         fontSize: Number.parseFloat(style.fontSize),
+        fontWeight: Number.parseInt(style.fontWeight, 10),
         marginLeft: Number.parseFloat(style.marginLeft),
         paddingLeft: Number.parseFloat(style.paddingLeft),
         textTransform: style.textTransform,
         letterSpacing: style.letterSpacing,
       };
     });
-    const advisorGapStyles = [
-      ...(experienceSection?.querySelectorAll<HTMLElement>(
+    const advisorGapCount =
+      experienceSection?.querySelectorAll(
         '[data-testid="advisor-underline-gap"]'
-      ) ?? []),
-    ].map((gap) => {
-      const style = getComputedStyle(gap);
-      const rect = gap.getBoundingClientRect();
-
-      return {
-        width: rect.width,
-        borderBottomStyle: style.borderBottomStyle,
-        borderBottomWidth: Number.parseFloat(style.borderBottomWidth),
-      };
-    });
+      ).length ?? 0;
     const footer = document.querySelector('[data-testid="site-footer"]');
     const footerUpdate = footer?.querySelector<HTMLElement>(
       '[data-testid="site-footer-updated"]'
@@ -409,11 +403,27 @@ async function assertHome(page: Page) {
       ),
     ].map((dot) => {
       const rect = dot.getBoundingClientRect();
+      const row = dot.closest('li');
+      const title = row?.querySelector<HTMLElement>(
+        '[data-testid="rail-title"], [data-testid="publication-title"]'
+      );
+      const titleRect = title?.getBoundingClientRect();
+      const titleStyle = title ? getComputedStyle(title) : null;
+      const titleFontSize = Number.parseFloat(titleStyle?.fontSize ?? '0');
+      const parsedLineHeight = Number.parseFloat(titleStyle?.lineHeight ?? '0');
+      const titleLineHeight =
+        Number.isFinite(parsedLineHeight) && parsedLineHeight > 0
+          ? parsedLineHeight
+          : titleFontSize * 1.25;
 
       return {
         left: rect.left,
         width: rect.width,
         center: rect.left + rect.width / 2,
+        centerY: rect.top + rect.height / 2,
+        titleFirstLineCenterY: titleRect
+          ? titleRect.top + Math.min(titleRect.height, titleLineHeight) / 2
+          : 0,
       };
     });
     const connectorCenters = [
@@ -486,10 +496,12 @@ async function assertHome(page: Page) {
       ),
     ].map((icon) => {
       const rect = icon.getBoundingClientRect();
+      const style = getComputedStyle(icon);
 
       return {
         width: rect.width,
         center: rect.left + rect.width / 2,
+        color: style.color,
       };
     });
     const groups = [
@@ -867,16 +879,20 @@ async function assertHome(page: Page) {
       markerLefts: markerData.map((marker) => marker.left),
       markerWidths: markerData.map((marker) => marker.width),
       markerCenters: markerData.map((marker) => marker.center),
+      markerTitleCenterOffsets: markerData.map(
+        (marker) => marker.centerY - marker.titleFirstLineCenterY
+      ),
       connectorCenters,
       railRowPaddingBottoms,
       groupChevronWidths: groupChevronData.map((icon) => icon.width),
       groupChevronCenters: groupChevronData.map((icon) => icon.center),
+      groupChevronColors: groupChevronData.map((icon) => icon.color),
       experienceTitleLeft: experienceTitle?.getBoundingClientRect().left ?? 0,
       firstGroupLabelLeft: firstGroupLabel?.getBoundingClientRect().left ?? 0,
       firstRailTitleLeft: firstRailTitle?.getBoundingClientRect().left ?? 0,
       experienceLinks,
       advisorLabels,
-      advisorGapStyles,
+      advisorGapCount,
       experienceGroupLabelStyles,
       experienceLegendExists: Boolean(
         experienceSection?.querySelector('[data-testid="experience-legend"]')
@@ -1080,6 +1096,10 @@ async function assertHome(page: Page) {
     'rail marker centers should share the left-flush rail axis'
   );
   assert.ok(
+    result.markerTitleCenterOffsets.every((offset) => Math.abs(offset) <= 1.25),
+    'rail markers should be vertically centered against the first title line'
+  );
+  assert.ok(
     result.connectorCenters.every(
       (center) => Math.abs(center - expectedAxis) <= 1
     ),
@@ -1090,6 +1110,13 @@ async function assertHome(page: Page) {
       (center) => Math.abs(center - expectedAxis) <= 1
     ),
     'experience chevrons should share the left-flush rail axis'
+  );
+  assert.deepEqual(
+    result.groupChevronColors,
+    result.experienceGroupLabelStyles.map(
+      (label: { color: string }) => label.color
+    ),
+    'experience chevrons should inherit the label color by default'
   );
   assert.equal(result.hasCoursesSection, false, 'Courses should stay hidden');
   assert.ok(
@@ -1166,7 +1193,17 @@ async function assertHome(page: Page) {
     result.experienceGroupLabelStyles.map(
       (label: { text: string }) => label.text
     ),
-    ['Research (5)', 'Engineering (3)', 'Teaching (3)']
+    ['research (5)', 'engineering (3)', 'teaching (3)']
+  );
+  assert.ok(
+    result.experienceGroupLabelStyles.every(
+      (label: { text: string; textTransform: string; letterSpacing: string }) =>
+        label.text === label.text.toLowerCase() &&
+        label.textTransform === 'none' &&
+        (label.letterSpacing === 'normal' ||
+          Math.abs(Number.parseFloat(label.letterSpacing)) <= 0.5)
+    ),
+    'experience group labels should render lowercase without wide character spacing'
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
@@ -1207,15 +1244,15 @@ async function assertHome(page: Page) {
     'experience group toggle hover boxes should include only the arrow, gap, and label'
   );
 
-  const research = result.groups.find((group) => group.kind === 'Research');
+  const research = result.groups.find((group) => group.kind === 'research');
   const engineering = result.groups.find(
-    (group) => group.kind === 'Engineering'
+    (group) => group.kind === 'engineering'
   );
-  const teaching = result.groups.find((group) => group.kind === 'Teaching');
+  const teaching = result.groups.find((group) => group.kind === 'teaching');
 
-  assert.equal(research?.expanded, 'true', 'Research should default open');
-  assert.equal(research?.rows, 4, 'Research should show 4 rows when collapsed');
-  assert.ok(research?.text.includes('Research (5)'));
+  assert.equal(research?.expanded, 'true', 'research should default open');
+  assert.equal(research?.rows, 4, 'research should show 4 rows when collapsed');
+  assert.ok(research?.text.includes('research (5)'));
   assert.ok(research?.text.includes('see more'));
   assert.equal(research?.showMorePaddingTop, 8);
   assert.ok(research?.text.includes('Christian Dallago'));
@@ -1228,6 +1265,7 @@ async function assertHome(page: Page) {
         label.color === result.mutedToken &&
         label.fontFamily.includes('DM Mono') &&
         label.fontSize === 14 &&
+        label.fontWeight === 400 &&
         label.marginLeft === 0 &&
         label.paddingLeft === 0 &&
         label.textTransform === 'none' &&
@@ -1236,14 +1274,11 @@ async function assertHome(page: Page) {
     'advisor labels should match the muted mono rail date style without spacing hacks'
   );
   assert.ok(
-    result.advisorGapStyles.every(
-      (gap) =>
-        Math.abs(gap.width - 16) <= 0.5 &&
-        gap.borderBottomStyle === 'solid' &&
-        gap.borderBottomWidth >= 1 &&
-        gap.borderBottomWidth <= 2
-    ),
-    'advisor organization and PI labels should be bridged by a 16px underline gap'
+    result.advisorGapCount === 0 &&
+      result.experienceLinks.some(
+        (link) => link.text === 'Duke University Christian Dallago'
+      ),
+    'advisor organization and PI labels should be one inline underlined text run with one normal space'
   );
   assert.ok(
     !research?.text.includes('Duke University /') &&
@@ -1252,6 +1287,9 @@ async function assertHome(page: Page) {
   );
   assert.ok(research?.text.includes('incoming Aug 2026'));
   assert.ok(!research?.text.includes('Incoming Aug 2026'));
+  assert.ok(research?.text.includes('Apr 2026 - present'));
+  assert.ok(research?.text.includes('Aug 2025 - present'));
+  assert.ok(!research?.text.includes('Present'));
   assert.ok(research?.text.includes('Anthropic'));
   assert.ok(research?.text.includes('+ Microsoft Research'));
   assert.ok(
@@ -1272,14 +1310,14 @@ async function assertHome(page: Page) {
   assert.ok(engineering?.text.includes('see more'));
   assert.equal(engineering?.showMorePaddingTop, 8);
   assert.equal(teaching?.expanded, 'false');
-  assert.equal(teaching?.rows, 0, 'Teaching should default collapsed');
-  assert.equal(teaching?.hasShowMore, false, 'Teaching should not see more');
+  assert.equal(teaching?.rows, 0, 'teaching should default collapsed');
+  assert.equal(teaching?.hasShowMore, false, 'teaching should not see more');
   assert.equal(
     teaching?.togglePaddingBottom,
     0,
     'final closed Teaching toggle should not add bottom whitespace'
   );
-  assert.ok(teaching?.text.includes('Teaching (3)'));
+  assert.ok(teaching?.text.includes('teaching (3)'));
   assert.ok(
     (teaching?.marginBottom ?? 0) < (research?.marginBottom ?? 0),
     'closed groups should use tighter vertical spacing than open groups'
@@ -1969,9 +2007,13 @@ async function assertExperienceGroupLabelHoverHighlight(page: Page) {
 
   const result = await page.evaluate(() => {
     const label = document.querySelector<HTMLElement>(
-      '[data-testid="experience-group-label"]'
+      '[data-testid="experience-group-toggle"]:hover [data-testid="experience-group-label"]'
+    );
+    const arrow = document.querySelector<HTMLElement>(
+      '[data-testid="experience-group-toggle"]:hover [data-testid="experience-group-arrow"]'
     );
     const style = label ? getComputedStyle(label) : null;
+    const arrowStyle = arrow ? getComputedStyle(arrow) : null;
     const probe = document.createElement('span');
 
     probe.style.color = 'var(--roy-o)';
@@ -1984,6 +2026,7 @@ async function assertExperienceGroupLabelHoverHighlight(page: Page) {
     return {
       boxShadow: style?.boxShadow ?? '',
       color: style?.color ?? '',
+      arrowColor: arrowStyle?.color ?? '',
       decoration: style?.textDecorationLine ?? '',
       skipInk: style?.textDecorationSkipInk ?? '',
       orangeToken,
@@ -1992,8 +2035,63 @@ async function assertExperienceGroupLabelHoverHighlight(page: Page) {
 
   assert.ok(result.boxShadow.includes('inset'));
   assert.equal(result.color, result.orangeToken);
+  assert.equal(result.arrowColor, result.orangeToken);
   assert.equal(result.decoration, 'none');
   assert.equal(result.skipInk, 'auto');
+}
+
+async function assertExperienceTitleHoverColors(page: Page) {
+  const readHover = async () =>
+    page.evaluate(() => {
+      const hovered = document.querySelector<HTMLElement>(
+        '[data-testid="experience-title-run"]:hover'
+      );
+      const advisor = hovered?.querySelector<HTMLElement>(
+        '[data-testid="advisor-label"]'
+      );
+      const probe = document.createElement('span');
+
+      probe.style.color = 'var(--roy-o)';
+      document.body.append(probe);
+
+      const orangeToken = getComputedStyle(probe).color;
+
+      probe.remove();
+
+      return {
+        text: hovered?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+        titleColor: hovered ? getComputedStyle(hovered).color : '',
+        advisorColor: advisor ? getComputedStyle(advisor).color : '',
+        orangeToken,
+      };
+    });
+
+  const researchTitle = page
+    .locator('[data-testid="experience-title-run"]', {
+      hasText: 'Duke University Christian Dallago',
+    })
+    .first();
+
+  await researchTitle.locator('[data-testid="advisor-label"]').hover();
+  const researchHover = await readHover();
+
+  assert.equal(researchHover.text, 'Duke University Christian Dallago');
+  assert.equal(researchHover.titleColor, researchHover.orangeToken);
+  assert.equal(researchHover.advisorColor, researchHover.orangeToken);
+
+  const teachingTitle = page
+    .locator(
+      '[data-testid="experience-group"][data-group="teaching"] [data-testid="experience-title-run"]',
+      { hasText: 'Operating Systems Matthew Lentz' }
+    )
+    .first();
+
+  await teachingTitle.locator('[data-testid="advisor-label"]').hover();
+  const teachingHover = await readHover();
+
+  assert.equal(teachingHover.text, 'Operating Systems Matthew Lentz');
+  assert.equal(teachingHover.titleColor, teachingHover.orangeToken);
+  assert.equal(teachingHover.advisorColor, teachingHover.orangeToken);
 }
 
 async function assertWordmarkHoverHighlight(page: Page) {
@@ -2039,15 +2137,15 @@ async function assertExperienceInteractions(page: Page) {
       .locator('[data-testid="rail-title"]')
       .count();
 
-  assert.equal(await groupRows('Research'), 4);
-  assert.equal(await groupRows('Engineering'), 1);
-  assert.equal(await groupRows('Teaching'), 0);
+  assert.equal(await groupRows('research'), 4);
+  assert.equal(await groupRows('engineering'), 1);
+  assert.equal(await groupRows('teaching'), 0);
 
   const researchGroup = page.locator(
-    '[data-testid="experience-group"][data-group="Research"]'
+    '[data-testid="experience-group"][data-group="research"]'
   );
   const researchToggle = researchGroup.getByRole('button', {
-    name: /Research \(5\)/,
+    name: /research \(5\)/,
   });
   const groupBox = await researchGroup.boundingBox();
   const toggleBox = await researchToggle.boundingBox();
@@ -2064,40 +2162,40 @@ async function assertExperienceInteractions(page: Page) {
     toggleBox.y + toggleBox.height / 2
   );
   assert.equal(
-    await groupRows('Research'),
+    await groupRows('research'),
     4,
     'clicking the empty right side of the experience header should not toggle'
   );
 
   await page
-    .locator('[data-testid="experience-group"][data-group="Research"]')
-    .getByRole('button', { name: /Research \(5\)/ })
+    .locator('[data-testid="experience-group"][data-group="research"]')
+    .getByRole('button', { name: /research \(5\)/ })
     .click();
-  assert.equal(await groupRows('Research'), 0);
+  assert.equal(await groupRows('research'), 0);
 
   await page
-    .locator('[data-testid="experience-group"][data-group="Research"]')
-    .getByRole('button', { name: /Research \(5\)/ })
+    .locator('[data-testid="experience-group"][data-group="research"]')
+    .getByRole('button', { name: /research \(5\)/ })
     .click();
-  assert.equal(await groupRows('Research'), 4);
+  assert.equal(await groupRows('research'), 4);
 
   await page
-    .locator('[data-testid="experience-group"][data-group="Research"]')
+    .locator('[data-testid="experience-group"][data-group="research"]')
     .getByRole('button', { name: 'see more' })
     .click();
-  assert.equal(await groupRows('Research'), 5);
-  assert.equal(await groupRows('Engineering'), 1);
+  assert.equal(await groupRows('research'), 5);
+  assert.equal(await groupRows('engineering'), 1);
 
   await page
-    .locator('[data-testid="experience-group"][data-group="Teaching"]')
-    .getByRole('button', { name: /Teaching \(3\)/ })
+    .locator('[data-testid="experience-group"][data-group="teaching"]')
+    .getByRole('button', { name: /teaching \(3\)/ })
     .click();
-  assert.equal(await groupRows('Teaching'), 3);
+  assert.equal(await groupRows('teaching'), 3);
   const teachingText = await page
-    .locator('[data-testid="experience-group"][data-group="Teaching"]')
+    .locator('[data-testid="experience-group"][data-group="teaching"]')
     .textContent();
   const teachingIncomingDot = page
-    .locator('[data-testid="experience-group"][data-group="Teaching"]')
+    .locator('[data-testid="experience-group"][data-group="teaching"]')
     .locator('[data-testid="rail-dot"][data-state="incoming"]');
   const teachingIncomingDotClassName =
     (await teachingIncomingDot.getAttribute('class')) ?? '';
@@ -2136,11 +2234,11 @@ async function assertExperienceInteractions(page: Page) {
 
 async function expectNoTeachingShowMore(page: Page) {
   const count = await page
-    .locator('[data-testid="experience-group"][data-group="Teaching"]')
+    .locator('[data-testid="experience-group"][data-group="teaching"]')
     .getByRole('button', { name: 'see more' })
     .count();
 
-  assert.equal(count, 0, 'Teaching should not render see more');
+  assert.equal(count, 0, 'teaching should not render see more');
 }
 
 async function assertHeroLinksHoverHighlight(page: Page) {

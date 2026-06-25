@@ -13,14 +13,14 @@ export type ExperienceRole = {
 };
 
 export type ExperienceGroup = {
-  kind: 'Research' | 'Engineering' | 'Teaching';
+  kind: 'research' | 'engineering' | 'teaching';
   visibleCount: number;
   roles: ExperienceRole[];
 };
 
 export const experienceGroups: ExperienceGroup[] = [
   {
-    kind: 'Research',
+    kind: 'research',
     visibleCount: 4,
     roles: [
       {
@@ -35,7 +35,7 @@ export const experienceGroups: ExperienceGroup[] = [
       {
         org: 'Duke University',
         piName: 'Matthew Lentz',
-        date: 'Apr 2026 - Present',
+        date: 'Apr 2026 - present',
         href: 'https://users.cs.duke.edu/~mlentz/',
         state: 'present',
         desc: 'Tokenminning and efficiency for coding agents',
@@ -43,7 +43,7 @@ export const experienceGroups: ExperienceGroup[] = [
       {
         org: 'Duke University',
         piName: 'Philip Romero',
-        date: 'Aug 2025 - Present',
+        date: 'Aug 2025 - present',
         href: 'https://www.romerolab.org/',
         state: 'present',
         desc: 'Chemistry data-mining agents with Anthropic + Microsoft Research',
@@ -83,7 +83,7 @@ export const experienceGroups: ExperienceGroup[] = [
     ],
   },
   {
-    kind: 'Engineering',
+    kind: 'engineering',
     visibleCount: 1,
     roles: [
       {
@@ -110,7 +110,7 @@ export const experienceGroups: ExperienceGroup[] = [
     ],
   },
   {
-    kind: 'Teaching',
+    kind: 'teaching',
     visibleCount: 1,
     roles: [
       {

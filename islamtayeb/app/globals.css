@@ -237,13 +237,6 @@
   .publication-title-link {
     max-width: 100%;
   }
-  .advisor-underline-gap {
-    display: inline-block;
-    width: 1rem;
-    border-bottom: 1.5px solid
-      color-mix(in oklch, currentColor 42%, transparent);
-    transform: translateY(0.1em);
-  }
   .royb-link-plain {
     background-image: none;
     text-decoration-line: none;

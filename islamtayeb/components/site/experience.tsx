@@ -33,7 +33,7 @@ function AdvisorLabel({
   }
 
   const className = cn(
-    'font-mono text-sm leading-tight text-muted-foreground',
+    'font-mono text-sm font-normal leading-tight text-muted-foreground group-hover/experience-title:text-roy-o group-focus-visible/experience-title:text-roy-o',
     boxed && 'inline-block border border-border px-1'
   );
 
@@ -45,16 +45,6 @@ function AdvisorLabel({
     >
       {role.piName}
     </span>
-  );
-}
-
-function AdvisorUnderlineGap() {
-  return (
-    <span
-      data-testid="advisor-underline-gap"
-      className="advisor-underline-gap"
-      aria-hidden
-    />
   );
 }
 
@@ -84,9 +74,7 @@ function RailGroup({
               : 'bg-foreground/75';
         const titleContent: ReactNode = role.piName ? (
           <>
-            {role.org}
-            <AdvisorUnderlineGap />
-            <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
+            {role.org} <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
           </>
         ) : (
           role.org
@@ -110,12 +98,18 @@ function RailGroup({
                 <ExternalLink
                   href={role.href}
                   section="o"
-                  className="text-foreground"
+                  data-testid="experience-title-run"
+                  className="group/experience-title text-foreground"
                 >
                   {titleContent}
                 </ExternalLink>
               ) : (
-                titleContent
+                <span
+                  data-testid="experience-title-run"
+                  className="group/experience-title inline text-foreground hover:text-roy-o"
+                >
+                  {titleContent}
+                </span>
               )
             }
             meta={role.date}
@@ -195,7 +189,7 @@ function FilledDisclosureArrow({ open }: { open: boolean }) {
   return (
     <span
       data-testid="experience-group-arrow"
-      className="inline-flex h-[var(--rail-marker-size)] w-[var(--rail-marker-size)] items-center justify-center text-muted-foreground"
+      className="inline-flex h-[var(--rail-marker-size)] w-[var(--rail-marker-size)] items-center justify-center text-current group-hover/experience-toggle:text-roy-o group-focus-visible/experience-toggle:text-roy-o"
       aria-hidden
     >
       <span
@@ -228,8 +222,8 @@ function RailGroupBlock({
   boxedAdvisorLabels: boolean;
 }) {
   const hasHidden = group.roles.length > group.visibleCount;
-  const allowShowMore = group.kind !== 'Teaching';
-  const showAllRows = group.kind === 'Teaching' ? true : expanded;
+  const allowShowMore = group.kind !== 'teaching';
+  const showAllRows = group.kind === 'teaching' ? true : expanded;
 
   return (
     <div
@@ -246,7 +240,7 @@ function RailGroupBlock({
         aria-expanded={open}
         data-testid="experience-group-toggle"
         className={cn(
-          'royb-link-hover-scope inline-grid w-fit max-w-full grid-cols-[var(--rail-gutter)_max-content] items-center text-left font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring',
+          'royb-link-hover-scope group/experience-toggle inline-grid w-fit max-w-full grid-cols-[var(--rail-gutter)_max-content] items-center text-left font-mono text-sm tracking-normal text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring',
           open || !isLast ? 'pb-2' : 'pb-0'
         )}
       >
@@ -290,16 +284,16 @@ export function Experience({
   const [openGroups, setOpenGroups] = useState<
     Record<ExperienceGroup['kind'], boolean>
   >({
-    Research: true,
-    Engineering: true,
-    Teaching: false,
+    research: true,
+    engineering: true,
+    teaching: false,
   });
   const [expandedGroups, setExpandedGroups] = useState<
     Record<ExperienceGroup['kind'], boolean>
   >({
-    Research: false,
-    Engineering: false,
-    Teaching: false,
+    research: false,
+    engineering: false,
+    teaching: false,
   });
 
   return (
