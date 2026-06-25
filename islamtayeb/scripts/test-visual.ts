@@ -1193,17 +1193,16 @@ async function assertHome(page: Page) {
     result.experienceGroupLabelStyles.map(
       (label: { text: string }) => label.text
     ),
-    ['research (5)', 'engineering (3)', 'teaching (3)']
+    ['Research (5)', 'Engineering (3)', 'Teaching (3)']
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
       (label: { text: string; textTransform: string; letterSpacing: string }) =>
-        label.text === label.text.toLowerCase() &&
         label.textTransform === 'none' &&
         (label.letterSpacing === 'normal' ||
           Math.abs(Number.parseFloat(label.letterSpacing)) <= 0.5)
     ),
-    'experience group labels should render lowercase without wide character spacing'
+    'experience group labels should render title case without wide character spacing'
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
@@ -1252,7 +1251,7 @@ async function assertHome(page: Page) {
 
   assert.equal(research?.expanded, 'true', 'research should default open');
   assert.equal(research?.rows, 4, 'research should show 4 rows when collapsed');
-  assert.ok(research?.text.includes('research (5)'));
+  assert.ok(research?.text.includes('Research (5)'));
   assert.ok(research?.text.includes('see more'));
   assert.equal(research?.showMorePaddingTop, 8);
   assert.ok(research?.text.includes('Christian Dallago'));
@@ -1314,7 +1313,7 @@ async function assertHome(page: Page) {
     0,
     'final closed Teaching toggle should not add bottom whitespace'
   );
-  assert.ok(teaching?.text.includes('teaching (3)'));
+  assert.ok(teaching?.text.includes('Teaching (3)'));
   assert.ok(
     (teaching?.marginBottom ?? 0) < (research?.marginBottom ?? 0),
     'closed groups should use tighter vertical spacing than open groups'
@@ -2142,7 +2141,7 @@ async function assertExperienceInteractions(page: Page) {
     '[data-testid="experience-group"][data-group="research"]'
   );
   const researchToggle = researchGroup.getByRole('button', {
-    name: /research \(5\)/,
+    name: /Research \(5\)/,
   });
   const groupBox = await researchGroup.boundingBox();
   const toggleBox = await researchToggle.boundingBox();
@@ -2166,13 +2165,13 @@ async function assertExperienceInteractions(page: Page) {
 
   await page
     .locator('[data-testid="experience-group"][data-group="research"]')
-    .getByRole('button', { name: /research \(5\)/ })
+    .getByRole('button', { name: /Research \(5\)/ })
     .click();
   assert.equal(await groupRows('research'), 0);
 
   await page
     .locator('[data-testid="experience-group"][data-group="research"]')
-    .getByRole('button', { name: /research \(5\)/ })
+    .getByRole('button', { name: /Research \(5\)/ })
     .click();
   assert.equal(await groupRows('research'), 4);
 
@@ -2185,7 +2184,7 @@ async function assertExperienceInteractions(page: Page) {
 
   await page
     .locator('[data-testid="experience-group"][data-group="teaching"]')
-    .getByRole('button', { name: /teaching \(3\)/ })
+    .getByRole('button', { name: /Teaching \(3\)/ })
     .click();
   assert.equal(await groupRows('teaching'), 3);
   const teachingText = await page

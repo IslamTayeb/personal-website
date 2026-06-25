@@ -204,6 +204,10 @@ function FilledDisclosureArrow({ open }: { open: boolean }) {
   );
 }
 
+function experienceGroupLabel(kind: ExperienceGroup['kind']) {
+  return kind[0].toUpperCase() + kind.slice(1);
+}
+
 function RailGroupBlock({
   group,
   open,
@@ -224,6 +228,7 @@ function RailGroupBlock({
   const hasHidden = group.roles.length > group.visibleCount;
   const allowShowMore = group.kind !== 'teaching';
   const showAllRows = group.kind === 'teaching' ? true : expanded;
+  const label = experienceGroupLabel(group.kind);
 
   return (
     <div
@@ -251,7 +256,7 @@ function RailGroupBlock({
           className="w-fit justify-self-start"
           section="o"
         >
-          {group.kind} ({group.roles.length})
+          {label} ({group.roles.length})
         </RoybLinkText>
       </button>
       {open ? (
