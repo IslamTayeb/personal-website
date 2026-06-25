@@ -150,6 +150,11 @@ Use meaningful commit messages that describe the why.
   geometry, including `apple-icon.png`, `icon-light-32x32.png`,
   `icon-dark-32x32.png`, and `favicon.ico`.
 - **Repeated UI:** if something is used more than once, make it a component.
+- **Profile picture:** Generate hero profile assets from source photos with
+  `npm run render:profile-picture -- /absolute/path/to/source-image` inside
+  `islamtayeb/`. This writes both `public/me.webp` and
+  `public/hero-portrait.png` with the established 384px crop, sharpened
+  pixel/color treatment, and transparent square mask.
 
 ## Deployment
 

@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "render:profile-picture": "node scripts/render-profile-picture.mjs",
     "test:content": "tsx scripts/test-content.ts",
     "test:migration": "tsx scripts/test-migration.ts",
     "test:pageview": "tsx scripts/test-pageview.ts",
