@@ -1297,15 +1297,6 @@ async function assertHome(page: Page) {
     'advisor organization and PI labels should be one inline underlined text run with two breakable spaces'
   );
   assert.ok(
-    result.experienceTitleRuns.some(
-      (run) =>
-        run.text === 'Operating Systems Matthew Lentz' &&
-        run.rawText === 'Operating Systems  Matthew Lentz' &&
-        run.whiteSpace === 'break-spaces'
-    ),
-    'teaching advisor labels should also use the same breakable double-space separator'
-  );
-  assert.ok(
     !research?.text.includes('Duke University /') &&
       !teaching?.text.includes('Operating Systems /'),
     'advisor labels should sit after the organization without slash separators'
@@ -2107,6 +2098,13 @@ async function assertExperienceTitleHoverColors(page: Page) {
       { hasText: 'Operating Systems Matthew Lentz' }
     )
     .first();
+  const teachingSeparator = await teachingTitle.evaluate((element) => ({
+    rawText: element.textContent ?? '',
+    whiteSpace: getComputedStyle(element).whiteSpace,
+  }));
+
+  assert.equal(teachingSeparator.rawText, 'Operating Systems  Matthew Lentz');
+  assert.equal(teachingSeparator.whiteSpace, 'break-spaces');
 
   await teachingTitle.locator('[data-testid="advisor-label"]').hover();
   const teachingHover = await readHover();
