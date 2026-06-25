@@ -148,7 +148,7 @@ async function main() {
     },
   });
   const png = await image.png().toBuffer();
-  const webp = await image.webp({ quality: 100 }).toBuffer();
+  const webp = await image.webp({ lossless: true }).toBuffer();
   const pngPath = path.join(projectRoot, 'public', 'hero-portrait.png');
   const webpPath = path.join(projectRoot, 'public', 'me.webp');
 

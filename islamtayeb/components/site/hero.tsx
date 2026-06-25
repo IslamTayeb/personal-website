@@ -17,7 +17,7 @@ function ContactIndex() {
         height={384}
         priority
         unoptimized
-        className="hidden aspect-square w-full max-w-48 bg-background object-cover [image-rendering:pixelated] md:block md:max-w-none"
+        className="hidden aspect-square w-full max-w-48 bg-background object-cover md:block md:max-w-none"
       />
       <div className="flex flex-col gap-0.5">
         <span className="text-muted-foreground">contact</span>

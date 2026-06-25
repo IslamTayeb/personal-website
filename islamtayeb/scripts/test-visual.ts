@@ -844,6 +844,7 @@ async function assertHome(page: Page) {
       heroPortraitHeight: heroPortraitRect?.height ?? 0,
       heroPortraitBorderTop: heroPortraitStyle?.borderTopWidth ?? '',
       heroPortraitObjectFit: heroPortraitStyle?.objectFit ?? '',
+      heroPortraitImageRendering: heroPortraitStyle?.imageRendering ?? '',
       sectionMarkers: topLevelSections.map(
         (section) =>
           section
@@ -984,6 +985,7 @@ async function assertHome(page: Page) {
   );
   assert.equal(result.heroPortraitBorderTop, '0px');
   assert.equal(result.heroPortraitObjectFit, 'cover');
+  assert.notEqual(result.heroPortraitImageRendering, 'pixelated');
   assert.equal(result.heroContactIndexGap, 8);
   assert.equal(result.heroContactDetailsGap, 2);
   assert.ok(
