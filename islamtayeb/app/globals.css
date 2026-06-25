@@ -282,20 +282,38 @@
   }
   .article-prose > ol,
   .article-prose > ul {
-    @apply my-4 list-outside text-base;
+    @apply my-4 list-none text-base;
     line-height: 1.6;
     margin-left: 0;
     padding-left: 40px;
   }
   .article-prose > ol {
-    @apply list-decimal;
-  }
-  .article-prose > ul {
-    @apply list-disc;
+    counter-reset: article-list;
   }
   .article-prose > ol li,
   .article-prose > ul li {
     @apply pl-0;
+  }
+  .article-prose > ol > li,
+  .article-prose > ul > li {
+    position: relative;
+  }
+  .article-prose > ol > li {
+    counter-increment: article-list;
+  }
+  .article-prose > ol > li::before,
+  .article-prose > ul > li::before {
+    @apply font-mono font-normal text-muted-foreground;
+    position: absolute;
+    left: -28px;
+    width: 20px;
+    text-align: left;
+  }
+  .article-prose > ol > li::before {
+    content: counter(article-list) '.';
+  }
+  .article-prose > ul > li::before {
+    content: '•';
   }
   .article-prose > ol li::marker,
   .article-prose > ul li::marker {
@@ -310,9 +328,11 @@
     @apply my-0;
   }
   .article-prose li > ol {
+    list-style-type: decimal;
     padding-left: 40px;
   }
   .article-prose li > ul {
+    list-style-type: disc;
     padding-left: 40px;
   }
   .article-prose a {

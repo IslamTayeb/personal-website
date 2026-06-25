@@ -2721,6 +2721,15 @@ async function assertArticle(page: Page) {
       ? getComputedStyle(footnoteItem, '::marker')
       : null;
     const articleListStyle = articleList ? getComputedStyle(articleList) : null;
+    const articleListItem =
+      articleList?.querySelector<HTMLElement>(':scope > li');
+    const articleListItemRect = articleListItem?.getBoundingClientRect();
+    const articleListMarkerStyle = articleListItem
+      ? getComputedStyle(articleListItem, '::before')
+      : null;
+    const articleListMarkerLeft = Number.parseFloat(
+      articleListMarkerStyle?.left ?? '0'
+    );
     const firstBodyRowStyle = firstBodyRow
       ? getComputedStyle(firstBodyRow)
       : null;
@@ -2844,6 +2853,17 @@ async function assertArticle(page: Page) {
       articleListPadding: Number.parseFloat(
         articleListStyle?.paddingLeft ?? '0'
       ),
+      articleListItemInset:
+        articleListItemRect && articleList
+          ? articleListItemRect.left - articleList.getBoundingClientRect().left
+          : 0,
+      articleListMarkerContent: articleListMarkerStyle?.content ?? '',
+      articleListMarkerStart:
+        articleListItemRect && articleList
+          ? articleListItemRect.left +
+            articleListMarkerLeft -
+            articleList.getBoundingClientRect().left
+          : 0,
       tableCaptionCount:
         tableFigure?.querySelectorAll('figcaption').length ?? 0,
       firstBodyRowBackground: firstBodyRowStyle?.backgroundColor ?? '',
@@ -2989,8 +3009,15 @@ async function assertArticle(page: Page) {
     result.articlePaddingBottom >= 170 && result.articlePaddingBottom <= 178,
     `articles should keep a fixed bottom reading buffer: ${result.articlePaddingBottom}`
   );
-  assert.equal(result.articleListStyle, 'decimal');
+  assert.equal(result.articleListStyle, 'none');
   assert.ok(result.articleListPadding >= 39 && result.articleListPadding <= 41);
+  assert.ok(
+    result.articleListItemInset >= 39 && result.articleListItemInset <= 41
+  );
+  assert.ok(
+    result.articleListMarkerStart >= 11 && result.articleListMarkerStart <= 13
+  );
+  assert.ok(result.articleListMarkerContent.includes('counter'));
   assert.ok(result.footnotesSize >= 14 && result.footnotesSize < 15);
   assert.ok(result.footnoteListPadding >= 24);
   assert.ok(result.footnoteRefFamily.includes('DM Mono'));
@@ -3330,45 +3357,6 @@ async function assertLegacyMediaArticle(page: Page) {
         '.article-prose > ol, .article-prose > ul'
       ),
     ];
-    const orderedItem = document.querySelector('.article-prose > ol > li');
-    const unorderedItem = document.querySelector('.article-prose > ul > li');
-    const orderedWalker = orderedItem
-      ? document.createTreeWalker(orderedItem, NodeFilter.SHOW_TEXT)
-      : null;
-    const unorderedWalker = unorderedItem
-      ? document.createTreeWalker(unorderedItem, NodeFilter.SHOW_TEXT)
-      : null;
-    let orderedNode = orderedWalker?.nextNode() ?? null;
-    let unorderedNode = unorderedWalker?.nextNode() ?? null;
-
-    while (orderedNode && !orderedNode.textContent?.trim()) {
-      orderedNode = orderedWalker?.nextNode() ?? null;
-    }
-
-    while (unorderedNode && !unorderedNode.textContent?.trim()) {
-      unorderedNode = unorderedWalker?.nextNode() ?? null;
-    }
-
-    const orderedRange = document.createRange();
-    const unorderedRange = document.createRange();
-
-    if (orderedNode) {
-      orderedRange.selectNodeContents(orderedNode);
-    }
-
-    if (unorderedNode) {
-      unorderedRange.selectNodeContents(unorderedNode);
-    }
-
-    const orderedTextLeft = orderedNode
-      ? orderedRange.getBoundingClientRect().left
-      : 0;
-    const unorderedTextLeft = unorderedNode
-      ? unorderedRange.getBoundingClientRect().left
-      : 0;
-
-    orderedRange.detach();
-    unorderedRange.detach();
 
     const captionStyles = captions.map((caption) => {
       const style = getComputedStyle(caption);
@@ -3430,12 +3418,24 @@ async function assertLegacyMediaArticle(page: Page) {
     const listData = lists.map((list) => {
       const style = getComputedStyle(list);
       const rect = list.getBoundingClientRect();
+      const firstItem = list.querySelector<HTMLElement>(':scope > li');
+      const itemRect = firstItem?.getBoundingClientRect();
+      const beforeStyle = firstItem
+        ? getComputedStyle(firstItem, '::before')
+        : null;
+      const beforeLeft = Number.parseFloat(beforeStyle?.left ?? '0');
 
       return {
         tag: list.tagName,
         paddingLeft: Number.parseFloat(style.paddingLeft),
+        listStyleType: style.listStyleType,
         left: rect.left,
         right: rect.right,
+        itemInset: itemRect ? itemRect.left - rect.left : 0,
+        markerContent: beforeStyle?.content ?? '',
+        markerLeft: beforeLeft,
+        markerWidth: Number.parseFloat(beforeStyle?.width ?? '0'),
+        markerStart: itemRect ? itemRect.left + beforeLeft - rect.left : 0,
       };
     });
     const maxListOverflow = proseRect
@@ -3460,8 +3460,6 @@ async function assertLegacyMediaArticle(page: Page) {
       lightKeycap,
       darkKeycap,
       listData,
-      orderedTextLeft,
-      unorderedTextLeft,
       maxListOverflow,
       detailSummaryTexts: detailSummaries.map(
         (summary) => summary.textContent?.replace(/\s+/g, ' ').trim() ?? ''
@@ -3542,19 +3540,41 @@ async function assertLegacyMediaArticle(page: Page) {
       (list) =>
         list.tag === 'OL' && list.paddingLeft >= 39 && list.paddingLeft <= 41
     ),
-    'ordered article lists should keep an APM-like outside-marker indent'
+    'ordered article lists should keep a 40px text gutter'
   );
   assert.ok(
     result.listData.some(
       (list) =>
         list.tag === 'UL' && list.paddingLeft >= 39 && list.paddingLeft <= 41
     ),
-    'unordered article lists should keep the same APM/browser-default indent'
+    'unordered article lists should keep the same 40px text gutter'
   );
   assert.ok(
-    result.unorderedTextLeft - result.orderedTextLeft >= 5 &&
-      result.unorderedTextLeft - result.orderedTextLeft <= 8,
-    `ordered/unordered list text should keep the APM outside-marker offset: ${result.orderedTextLeft} / ${result.unorderedTextLeft}`
+    result.listData.every((list) => list.listStyleType === 'none'),
+    'top-level article lists should use custom aligned markers'
+  );
+  assert.ok(
+    result.listData.every(
+      (list) => list.itemInset >= 39 && list.itemInset <= 41
+    ),
+    'ordered/unordered list item text columns should align at 40px'
+  );
+  assert.ok(
+    result.listData.every(
+      (list) => list.markerStart >= 11 && list.markerStart <= 13
+    ),
+    'ordered/unordered custom markers should start on the same gutter axis'
+  );
+  assert.ok(
+    result.listData.every(
+      (list) => list.markerLeft === -28 && list.markerWidth === 20
+    ),
+    'ordered/unordered custom markers should share the same marker column'
+  );
+  assert.ok(
+    result.listData.some((list) => list.markerContent.includes('counter')) &&
+      result.listData.some((list) => list.markerContent === '"•"'),
+    'article lists should render ordered counters and unordered bullets'
   );
   assert.ok(
     result.maxListOverflow <= 1,
