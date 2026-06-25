@@ -158,8 +158,8 @@ Use meaningful commit messages that describe the why.
 - **Profile picture:** Generate hero profile assets from source photos with
   `npm run render:profile-picture -- /absolute/path/to/source-image` inside
   `islamtayeb/`. This writes both `public/me.webp` and
-  `public/hero-portrait.png` with the established 384px crop, sharpened
-  pixel/color treatment, and transparent square mask.
+  `public/hero-portrait.png` with the established 384px crop and transparent
+  square edge mask.
 
 ## Deployment
 
