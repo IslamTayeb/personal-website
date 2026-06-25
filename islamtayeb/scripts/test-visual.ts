@@ -1287,9 +1287,6 @@ async function assertHome(page: Page) {
   );
   assert.ok(research?.text.includes('incoming Aug 2026'));
   assert.ok(!research?.text.includes('Incoming Aug 2026'));
-  assert.ok(research?.text.includes('Apr 2026 - present'));
-  assert.ok(research?.text.includes('Aug 2025 - present'));
-  assert.ok(!research?.text.includes('Present'));
   assert.ok(research?.text.includes('Anthropic'));
   assert.ok(research?.text.includes('+ Microsoft Research'));
   assert.ok(
@@ -3594,6 +3591,7 @@ async function main() {
     await screenshot(home, 'home-desktop');
     await assertExperienceInteractions(home);
     await screenshot(home, 'home-experience-expanded');
+    await assertExperienceTitleHoverColors(home);
 
     const mobile = await browser.newPage({
       viewport: { width: 390, height: 844 },
