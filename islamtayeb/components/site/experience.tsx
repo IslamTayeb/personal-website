@@ -75,7 +75,7 @@ function RailGroup({
         const titleContent: ReactNode = role.piName ? (
           <>
             {role.org}
-            {'\u00a0\u00a0'}
+            {'  '}
             <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
           </>
         ) : (
@@ -101,14 +101,14 @@ function RailGroup({
                   href={role.href}
                   section="o"
                   data-testid="experience-title-run"
-                  className="group/experience-title text-foreground"
+                  className="group/experience-title whitespace-break-spaces text-foreground"
                 >
                   {titleContent}
                 </ExternalLink>
               ) : (
                 <span
                   data-testid="experience-title-run"
-                  className="group/experience-title inline text-foreground hover:text-roy-o"
+                  className="group/experience-title inline whitespace-break-spaces text-foreground hover:text-roy-o"
                 >
                   {titleContent}
                 </span>

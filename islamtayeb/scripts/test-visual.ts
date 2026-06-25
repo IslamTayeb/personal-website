@@ -307,7 +307,17 @@ async function assertHome(page: Page) {
     ].map((link) => ({
       text: link.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       rawText: link.textContent ?? '',
+      whiteSpace: getComputedStyle(link).whiteSpace,
       href: link.href,
+    }));
+    const experienceTitleRuns = [
+      ...(experienceSection?.querySelectorAll<HTMLElement>(
+        '[data-testid="experience-title-run"]'
+      ) ?? []),
+    ].map((run) => ({
+      text: run.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      rawText: run.textContent ?? '',
+      whiteSpace: getComputedStyle(run).whiteSpace,
     }));
     const advisorLabels = [
       ...(experienceSection?.querySelectorAll<HTMLElement>(
@@ -893,6 +903,7 @@ async function assertHome(page: Page) {
       firstGroupLabelLeft: firstGroupLabel?.getBoundingClientRect().left ?? 0,
       firstRailTitleLeft: firstRailTitle?.getBoundingClientRect().left ?? 0,
       experienceLinks,
+      experienceTitleRuns,
       advisorLabels,
       advisorGapCount,
       experienceGroupLabelStyles,
@@ -1280,9 +1291,19 @@ async function assertHome(page: Page) {
       result.experienceLinks.some(
         (link) =>
           link.text === 'Duke University Christian Dallago' &&
-          link.rawText === 'Duke University\u00a0\u00a0Christian Dallago'
+          link.rawText === 'Duke University  Christian Dallago' &&
+          link.whiteSpace === 'break-spaces'
       ),
-    'advisor organization and PI labels should be one inline underlined text run with two non-breaking spaces'
+    'advisor organization and PI labels should be one inline underlined text run with two breakable spaces'
+  );
+  assert.ok(
+    result.experienceTitleRuns.some(
+      (run) =>
+        run.text === 'Operating Systems Matthew Lentz' &&
+        run.rawText === 'Operating Systems  Matthew Lentz' &&
+        run.whiteSpace === 'break-spaces'
+    ),
+    'teaching advisor labels should also use the same breakable double-space separator'
   );
   assert.ok(
     !research?.text.includes('Duke University /') &&
