@@ -317,8 +317,24 @@ async function assertHome(page: Page) {
         color: style.color,
         fontFamily: style.fontFamily,
         fontSize: Number.parseFloat(style.fontSize),
+        marginLeft: Number.parseFloat(style.marginLeft),
+        paddingLeft: Number.parseFloat(style.paddingLeft),
         textTransform: style.textTransform,
         letterSpacing: style.letterSpacing,
+      };
+    });
+    const advisorGapStyles = [
+      ...(experienceSection?.querySelectorAll<HTMLElement>(
+        '[data-testid="advisor-underline-gap"]'
+      ) ?? []),
+    ].map((gap) => {
+      const style = getComputedStyle(gap);
+      const rect = gap.getBoundingClientRect();
+
+      return {
+        width: rect.width,
+        borderBottomStyle: style.borderBottomStyle,
+        borderBottomWidth: Number.parseFloat(style.borderBottomWidth),
       };
     });
     const footer = document.querySelector('[data-testid="site-footer"]');
@@ -860,6 +876,7 @@ async function assertHome(page: Page) {
       firstRailTitleLeft: firstRailTitle?.getBoundingClientRect().left ?? 0,
       experienceLinks,
       advisorLabels,
+      advisorGapStyles,
       experienceGroupLabelStyles,
       experienceLegendExists: Boolean(
         experienceSection?.querySelector('[data-testid="experience-legend"]')
@@ -1211,10 +1228,22 @@ async function assertHome(page: Page) {
         label.color === result.mutedToken &&
         label.fontFamily.includes('DM Mono') &&
         label.fontSize === 14 &&
+        label.marginLeft === 0 &&
+        label.paddingLeft === 0 &&
         label.textTransform === 'none' &&
         label.letterSpacing === 'normal'
     ),
-    'advisor labels should match the muted mono rail date style'
+    'advisor labels should match the muted mono rail date style without spacing hacks'
+  );
+  assert.ok(
+    result.advisorGapStyles.every(
+      (gap) =>
+        Math.abs(gap.width - 16) <= 0.5 &&
+        gap.borderBottomStyle === 'solid' &&
+        gap.borderBottomWidth >= 1 &&
+        gap.borderBottomWidth <= 2
+    ),
+    'advisor organization and PI labels should be bridged by a 16px underline gap'
   );
   assert.ok(
     !research?.text.includes('Duke University /') &&
@@ -1428,15 +1457,8 @@ async function assertHome(page: Page) {
     'publication type/venue metadata should use muted date color'
   );
   assert.ok(
-    result.publicationAuthorStyles.every(
-      (style) =>
-        style.color === result.bodyColor &&
-        style.fontFamily === result.readingFontFamily &&
-        style.fontSize === 16 &&
-        style.fontWeight === 400 &&
-        style.textTransform === 'none'
-    ),
-    'publication authors should use readable 16px foreground copy'
+    result.publicationAuthorStyles.every(matchesMetadataStyle),
+    'publication authors should stay at the compact foreground metadata scale'
   );
   assert.ok(
     result.publicationMetaLineStyles.every(

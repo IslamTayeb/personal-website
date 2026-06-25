@@ -33,7 +33,7 @@ function AdvisorLabel({
   }
 
   const className = cn(
-    'ml-1 font-mono text-sm leading-tight text-muted-foreground',
+    'font-mono text-sm leading-tight text-muted-foreground',
     boxed && 'inline-block border border-border px-1'
   );
 
@@ -45,6 +45,16 @@ function AdvisorLabel({
     >
       {role.piName}
     </span>
+  );
+}
+
+function AdvisorUnderlineGap() {
+  return (
+    <span
+      data-testid="advisor-underline-gap"
+      className="advisor-underline-gap"
+      aria-hidden
+    />
   );
 }
 
@@ -75,6 +85,7 @@ function RailGroup({
         const titleContent: ReactNode = role.piName ? (
           <>
             {role.org}
+            <AdvisorUnderlineGap />
             <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
           </>
         ) : (
