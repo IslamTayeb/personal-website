@@ -8,7 +8,7 @@ function PublicationAuthors({ authors }: { authors: string }) {
   return (
     <span
       data-testid="publication-authors"
-      className="reading-copy mt-1 block text-sm font-normal leading-snug text-foreground"
+      className="reading-copy mt-1 block text-base font-normal leading-snug text-foreground"
     >
       {authors.split(/(Islam Tayeb)/g).map((part, index) =>
         part === 'Islam Tayeb' ? (

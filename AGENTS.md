@@ -109,6 +109,11 @@ Use meaningful commit messages that describe the why.
 - **Links:** React-rendered hyperlinks should use
   `components/primitives/external-link.tsx`. Markdown-rendered article links
   should receive the same ROYB link classes in the renderer.
+- **Icon plus text links:** When a control has an icon plus a text label that
+  should use the ROYB underline/highlight, keep the icon outside the underline
+  span and wrap only the label in `RoybLinkText`. Use
+  `royb-link-hover-scope` when the icon or gap should trigger the label hover
+  state.
 - **Clickable states:** Every clickable control needs deliberate default,
   hover, active/pressed, disabled/unavailable, and keyboard-focus states. The
   theme toggle is the narrow exception: base and keyboard-focus states only.

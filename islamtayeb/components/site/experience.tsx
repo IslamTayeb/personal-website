@@ -1,7 +1,6 @@
 'use client';
 
 import { type ReactNode, useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
 import { experienceGroups, type ExperienceGroup } from '@/data/experience';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
@@ -33,7 +32,10 @@ function AdvisorLabel({
     return null;
   }
 
-  const className = cn(boxed && 'inline-block border border-border px-1');
+  const className = cn(
+    'ml-1 font-mono text-sm leading-tight text-muted-foreground',
+    boxed && 'inline-block border border-border px-1'
+  );
 
   return (
     <span
@@ -72,7 +74,8 @@ function RailGroup({
               : 'bg-foreground/75';
         const titleContent: ReactNode = role.piName ? (
           <>
-            {role.org} / <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
+            {role.org}
+            <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
           </>
         ) : (
           role.org
@@ -177,6 +180,25 @@ function LinkedDescription({
   );
 }
 
+function FilledDisclosureArrow({ open }: { open: boolean }) {
+  return (
+    <span
+      data-testid="experience-group-arrow"
+      className="inline-flex h-[var(--rail-marker-size)] w-[var(--rail-marker-size)] items-center justify-center text-muted-foreground"
+      aria-hidden
+    >
+      <span
+        className={cn(
+          'block h-0 w-0',
+          open
+            ? 'border-x-[5px] border-t-[7px] border-x-transparent border-t-current'
+            : 'border-y-[5px] border-l-[7px] border-y-transparent border-l-current'
+        )}
+      />
+    </span>
+  );
+}
+
 function RailGroupBlock({
   group,
   open,
@@ -197,7 +219,6 @@ function RailGroupBlock({
   const hasHidden = group.roles.length > group.visibleCount;
   const allowShowMore = group.kind !== 'Teaching';
   const showAllRows = group.kind === 'Teaching' ? true : expanded;
-  const Chevron = open ? ChevronDown : ChevronRight;
 
   return (
     <div
@@ -214,16 +235,11 @@ function RailGroupBlock({
         aria-expanded={open}
         data-testid="experience-group-toggle"
         className={cn(
-          'grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] items-center text-left font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring',
+          'royb-link-hover-scope inline-grid w-fit max-w-full grid-cols-[var(--rail-gutter)_max-content] items-center text-left font-mono text-sm uppercase tracking-[0.18em] text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring',
           open || !isLast ? 'pb-2' : 'pb-0'
         )}
       >
-        <Chevron
-          className="relative bottom-px left-px text-muted-foreground"
-          size={12}
-          strokeWidth={1.8}
-          aria-hidden
-        />
+        <FilledDisclosureArrow open={open} />
         <RoybLinkText
           data-testid="experience-group-label"
           data-group={group.kind}

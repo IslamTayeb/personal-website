@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { ExternalLink } from '@/components/primitives/external-link';
+import { RoybLinkText } from '@/components/primitives/royb-link';
 import { cn } from '@/lib/utils';
 import { MoonGlyph, SparkleGlyph } from './glyphs';
 
@@ -20,11 +21,12 @@ export function Wordmark() {
         section="r"
         variant="plain"
         className={cn(
-          'flex items-center gap-2',
+          'royb-link-hover-scope flex items-center gap-2',
           active === 'islam' ? 'text-roy-r' : 'text-muted-foreground'
         )}
       >
-        <MoonGlyph size={15} /> islam
+        <MoonGlyph size={15} />
+        <RoybLinkText section="r">islam</RoybLinkText>
       </ExternalLink>
       <span
         aria-hidden
@@ -37,11 +39,12 @@ export function Wordmark() {
         section="b"
         variant="plain"
         className={cn(
-          'flex items-center gap-2',
+          'royb-link-hover-scope flex items-center gap-2',
           active === 'blog' ? 'text-roy-b' : 'text-muted-foreground'
         )}
       >
-        <SparkleGlyph size={14} /> blog
+        <SparkleGlyph size={14} />
+        <RoybLinkText section="b">blog</RoybLinkText>
       </ExternalLink>
     </div>
   );

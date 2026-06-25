@@ -219,6 +219,11 @@ async function assertHome(page: Page) {
     const wordmarkLinks = [
       ...document.querySelectorAll<HTMLElement>('[data-testid="wordmark"] a'),
     ];
+    const wordmarkLinkTextSpans = [
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-testid="wordmark"] .royb-link-highlight'
+      ),
+    ];
     const themeToggle = document.querySelector('[data-testid="theme-toggle"]');
     const themeToggleClassName = themeToggle
       ? [themeToggle, ...themeToggle.querySelectorAll('*')]
@@ -286,7 +291,9 @@ async function assertHome(page: Page) {
         justifySelf: style.justifySelf,
         textDecorationLine: style.textDecorationLine,
         width: rect.width,
+        left: rect.left,
         toggleWidth: toggleRect?.width ?? 0,
+        toggleLeft: toggleRect?.left ?? 0,
       };
     });
     const firstRailTitle = experienceSection?.querySelector(
@@ -307,6 +314,9 @@ async function assertHome(page: Page) {
 
       return {
         text: label.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+        color: style.color,
+        fontFamily: style.fontFamily,
+        fontSize: Number.parseFloat(style.fontSize),
         textTransform: style.textTransform,
         letterSpacing: style.letterSpacing,
       };
@@ -455,8 +465,8 @@ async function assertHome(page: Page) {
         .map((row) => Number.parseFloat(getComputedStyle(row).paddingBottom))
     );
     const groupChevronData = [
-      ...document.querySelectorAll<SVGElement>(
-        '[data-testid="experience-group-toggle"] svg'
+      ...document.querySelectorAll<HTMLElement>(
+        '[data-testid="experience-group-arrow"]'
       ),
     ].map((icon) => {
       const rect = icon.getBoundingClientRect();
@@ -744,6 +754,15 @@ async function assertHome(page: Page) {
       wordmarkLinkDisplays: wordmarkLinks.map(
         (link) => getComputedStyle(link).display
       ),
+      wordmarkLinkTextStyles: wordmarkLinkTextSpans.map((text) => {
+        const style = getComputedStyle(text);
+
+        return {
+          text: text.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+          className: text.className,
+          textDecorationLine: style.textDecorationLine,
+        };
+      }),
       headerPaddingLeft: header
         ? Number.parseFloat(getComputedStyle(header).paddingLeft)
         : 0,
@@ -1098,6 +1117,21 @@ async function assertHome(page: Page) {
     ['flex', 'flex'],
     'wordmark links should preserve their icon/text flex layout'
   );
+  assert.deepEqual(
+    result.wordmarkLinkTextStyles.map((item: { text: string }) => item.text),
+    ['islam', 'blog'],
+    'wordmark should render only the label text through the ROYB underline primitive'
+  );
+  assert.ok(
+    result.wordmarkLinkTextStyles.every(
+      (item: { className: string; textDecorationLine: string }) =>
+        item.className.includes('royb-link') &&
+        item.className.includes('royb-link-highlight') &&
+        item.className.includes('royb-link-fragment') &&
+        item.textDecorationLine.includes('underline')
+    ),
+    'wordmark labels should share the ROYB underline treatment while icons stay outside it'
+  );
   assert.equal(
     result.headerPaddingLeft + result.headerPaddingRight,
     0,
@@ -1138,13 +1172,22 @@ async function assertHome(page: Page) {
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
-      (label: { justifySelf: string; width: number; toggleWidth: number }) =>
+      (label: {
+        justifySelf: string;
+        width: number;
+        toggleWidth: number;
+        left: number;
+        toggleLeft: number;
+      }) =>
         label.justifySelf.endsWith('start') &&
         label.width > 0 &&
         label.toggleWidth > 0 &&
-        label.width < label.toggleWidth * 0.5
+        label.toggleWidth > label.width &&
+        label.toggleWidth - label.width >= 28 &&
+        label.toggleWidth - label.width <= 40 &&
+        Math.abs(label.left - label.toggleLeft - 32) <= 1
     ),
-    'experience group label hover boxes should stay scoped to text, not the full row'
+    'experience group toggle hover boxes should include only the arrow, gap, and label'
   );
 
   const research = result.groups.find((group) => group.kind === 'Research');
@@ -1165,10 +1208,18 @@ async function assertHome(page: Page) {
     result.advisorLabels.some(
       (label) =>
         label.text === 'Christian Dallago' &&
+        label.color === result.mutedToken &&
+        label.fontFamily.includes('DM Mono') &&
+        label.fontSize === 14 &&
         label.textTransform === 'none' &&
         label.letterSpacing === 'normal'
     ),
-    'advisor labels should render proper names in normal case'
+    'advisor labels should match the muted mono rail date style'
+  );
+  assert.ok(
+    !research?.text.includes('Duke University /') &&
+      !teaching?.text.includes('Operating Systems /'),
+    'advisor labels should sit after the organization without slash separators'
   );
   assert.ok(research?.text.includes('incoming Aug 2026'));
   assert.ok(!research?.text.includes('Incoming Aug 2026'));
@@ -1377,8 +1428,15 @@ async function assertHome(page: Page) {
     'publication type/venue metadata should use muted date color'
   );
   assert.ok(
-    result.publicationAuthorStyles.every(matchesMetadataStyle),
-    'publication authors should stay at the compact foreground metadata scale'
+    result.publicationAuthorStyles.every(
+      (style) =>
+        style.color === result.bodyColor &&
+        style.fontFamily === result.readingFontFamily &&
+        style.fontSize === 16 &&
+        style.fontWeight === 400 &&
+        style.textTransform === 'none'
+    ),
+    'publication authors should use readable 16px foreground copy'
   );
   assert.ok(
     result.publicationMetaLineStyles.every(
@@ -1885,11 +1943,11 @@ async function assertPublicationTitleUnderline(page: Page) {
 }
 
 async function assertExperienceGroupLabelHoverHighlight(page: Page) {
-  await page.locator('[data-testid="experience-group-label"]').first().hover();
+  await page.locator('[data-testid="experience-group-arrow"]').first().hover();
 
   const result = await page.evaluate(() => {
     const label = document.querySelector<HTMLElement>(
-      '[data-testid="experience-group-label"]:hover'
+      '[data-testid="experience-group-label"]'
     );
     const style = label ? getComputedStyle(label) : null;
     const probe = document.createElement('span');
@@ -1916,6 +1974,42 @@ async function assertExperienceGroupLabelHoverHighlight(page: Page) {
   assert.equal(result.skipInk, 'auto');
 }
 
+async function assertWordmarkHoverHighlight(page: Page) {
+  await page.locator('[data-testid="wordmark"] a').first().hover();
+
+  const result = await page.evaluate(() => {
+    const label = document.querySelector<HTMLElement>(
+      '[data-testid="wordmark"] a:hover .royb-link-highlight'
+    );
+    const icon = document.querySelector<SVGElement>(
+      '[data-testid="wordmark"] a:hover svg'
+    );
+    const labelStyle = label ? getComputedStyle(label) : null;
+    const iconStyle = icon ? getComputedStyle(icon) : null;
+    const probe = document.createElement('span');
+
+    probe.style.color = 'var(--roy-r)';
+    document.body.append(probe);
+
+    const redToken = getComputedStyle(probe).color;
+
+    probe.remove();
+
+    return {
+      labelBoxShadow: labelStyle?.boxShadow ?? '',
+      labelColor: labelStyle?.color ?? '',
+      labelDecoration: labelStyle?.textDecorationLine ?? '',
+      iconDecoration: iconStyle?.textDecorationLine ?? '',
+      redToken,
+    };
+  });
+
+  assert.ok(result.labelBoxShadow.includes('inset'));
+  assert.equal(result.labelColor, result.redToken);
+  assert.equal(result.labelDecoration, 'none');
+  assert.equal(result.iconDecoration, 'none');
+}
+
 async function assertExperienceInteractions(page: Page) {
   const groupRows = async (group: string) =>
     page
@@ -1926,6 +2020,32 @@ async function assertExperienceInteractions(page: Page) {
   assert.equal(await groupRows('Research'), 4);
   assert.equal(await groupRows('Engineering'), 1);
   assert.equal(await groupRows('Teaching'), 0);
+
+  const researchGroup = page.locator(
+    '[data-testid="experience-group"][data-group="Research"]'
+  );
+  const researchToggle = researchGroup.getByRole('button', {
+    name: /Research \(5\)/,
+  });
+  const groupBox = await researchGroup.boundingBox();
+  const toggleBox = await researchToggle.boundingBox();
+
+  assert.ok(groupBox, 'Research group should have a layout box');
+  assert.ok(toggleBox, 'Research toggle should have a layout box');
+  assert.ok(
+    toggleBox.width < groupBox.width * 0.55,
+    'Research toggle should be shrink-wrapped instead of full width'
+  );
+
+  await page.mouse.click(
+    groupBox.x + groupBox.width - 4,
+    toggleBox.y + toggleBox.height / 2
+  );
+  assert.equal(
+    await groupRows('Research'),
+    4,
+    'clicking the empty right side of the experience header should not toggle'
+  );
 
   await page
     .locator('[data-testid="experience-group"][data-group="Research"]')
@@ -3347,6 +3467,7 @@ async function main() {
     await assertHome(home);
     await assertVisibleOneLineDescriptions(home);
     await assertHeroLinksHoverHighlight(home);
+    await assertWordmarkHoverHighlight(home);
     await assertPublicationTitleUnderline(home);
     await assertExperienceGroupLabelHoverHighlight(home);
     await assertThemeToggleIsStable(home);
