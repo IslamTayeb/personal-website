@@ -306,6 +306,7 @@ async function assertHome(page: Page) {
       ...(experienceSection?.querySelectorAll<HTMLAnchorElement>('a') ?? []),
     ].map((link) => ({
       text: link.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      rawText: link.textContent ?? '',
       href: link.href,
     }));
     const advisorLabels = [
@@ -1277,9 +1278,11 @@ async function assertHome(page: Page) {
   assert.ok(
     result.advisorGapCount === 0 &&
       result.experienceLinks.some(
-        (link) => link.text === 'Duke University Christian Dallago'
+        (link) =>
+          link.text === 'Duke University Christian Dallago' &&
+          link.rawText === 'Duke University\u00a0\u00a0Christian Dallago'
       ),
-    'advisor organization and PI labels should be one inline underlined text run with one normal space'
+    'advisor organization and PI labels should be one inline underlined text run with two non-breaking spaces'
   );
   assert.ok(
     !research?.text.includes('Duke University /') &&

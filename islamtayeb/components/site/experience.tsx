@@ -74,7 +74,9 @@ function RailGroup({
               : 'bg-foreground/75';
         const titleContent: ReactNode = role.piName ? (
           <>
-            {role.org} <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
+            {role.org}
+            {'\u00a0\u00a0'}
+            <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
           </>
         ) : (
           role.org
