@@ -341,7 +341,7 @@
     text-decoration-line: none;
   }
   .article-prose blockquote {
-    @apply border-l-2 border-roy-b pl-3 text-muted-foreground;
+    @apply border-l-2 border-roy-b pl-5 text-muted-foreground;
   }
   .article-prose figure {
     @apply my-5 max-w-full;
