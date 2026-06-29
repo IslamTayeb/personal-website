@@ -2063,19 +2063,37 @@ async function assertExperienceTitleHoverColors(page: Page) {
         '[data-testid="advisor-label"]'
       );
       const probe = document.createElement('span');
+      const foregroundProbe = document.createElement('span');
+      const mutedProbe = document.createElement('span');
 
       probe.style.color = 'var(--roy-o)';
+      foregroundProbe.style.color = 'var(--foreground)';
+      mutedProbe.style.color = 'var(--muted-foreground)';
       document.body.append(probe);
+      document.body.append(foregroundProbe);
+      document.body.append(mutedProbe);
 
       const orangeToken = getComputedStyle(probe).color;
+      const foregroundToken = getComputedStyle(foregroundProbe).color;
+      const mutedToken = getComputedStyle(mutedProbe).color;
 
       probe.remove();
+      foregroundProbe.remove();
+      mutedProbe.remove();
 
       return {
         text: hovered?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
         titleColor: hovered ? getComputedStyle(hovered).color : '',
         advisorColor: advisor ? getComputedStyle(advisor).color : '',
+        titleDecoration: hovered
+          ? getComputedStyle(hovered).textDecorationLine
+          : '',
+        advisorDecoration: advisor
+          ? getComputedStyle(advisor).textDecorationLine
+          : '',
         orangeToken,
+        foregroundToken,
+        mutedToken,
       };
     });
 
@@ -2099,19 +2117,27 @@ async function assertExperienceTitleHoverColors(page: Page) {
     )
     .first();
   const teachingSeparator = await teachingTitle.evaluate((element) => ({
+    tagName: element.tagName,
+    className: element.className,
     rawText: element.textContent ?? '',
     whiteSpace: getComputedStyle(element).whiteSpace,
+    decoration: getComputedStyle(element).textDecorationLine,
   }));
 
+  assert.equal(teachingSeparator.tagName, 'SPAN');
+  assert.ok(!teachingSeparator.className.includes('royb-link'));
   assert.equal(teachingSeparator.rawText, 'Operating Systems  Matthew Lentz');
   assert.equal(teachingSeparator.whiteSpace, 'break-spaces');
+  assert.equal(teachingSeparator.decoration, 'none');
 
-  await teachingTitle.locator('[data-testid="advisor-label"]').hover();
+  await teachingTitle.hover();
   const teachingHover = await readHover();
 
   assert.equal(teachingHover.text, 'Operating Systems Matthew Lentz');
-  assert.equal(teachingHover.titleColor, teachingHover.orangeToken);
-  assert.equal(teachingHover.advisorColor, teachingHover.orangeToken);
+  assert.equal(teachingHover.titleColor, teachingHover.foregroundToken);
+  assert.equal(teachingHover.advisorColor, teachingHover.mutedToken);
+  assert.equal(teachingHover.titleDecoration, 'none');
+  assert.equal(teachingHover.advisorDecoration, 'none');
 }
 
 async function assertWordmarkHoverHighlight(page: Page) {
@@ -2249,6 +2275,50 @@ async function assertExperienceInteractions(page: Page) {
     'Matthew Lentz should label both CS teaching rows'
   );
   assert.ok(teachingText?.includes('SAGE Tutoring'));
+  const computerSystemsLink = page
+    .locator(
+      '[data-testid="experience-group"][data-group="teaching"] a[data-testid="experience-title-run"]',
+      { hasText: 'Computer Systems Matthew Lentz' }
+    )
+    .first();
+  const computerSystemsLinkInfo = await computerSystemsLink.evaluate(
+    (element) => ({
+      href: element.getAttribute('href'),
+      className: element.className,
+      textDecoration: getComputedStyle(element).textDecorationLine,
+    })
+  );
+  const sageLink = page
+    .locator(
+      '[data-testid="experience-group"][data-group="teaching"] a[data-testid="advisor-label"]',
+      { hasText: 'SAGE Tutoring' }
+    )
+    .first();
+  const sageLinkInfo = await sageLink.evaluate((element) => ({
+    href: element.getAttribute('href'),
+    className: element.className,
+    textDecoration: getComputedStyle(element).textDecorationLine,
+  }));
+
+  assert.equal(
+    computerSystemsLinkInfo.href,
+    'https://courses.cs.duke.edu/spring26/compsci210d/'
+  );
+  assert.ok(
+    computerSystemsLinkInfo.className.includes('royb-link') &&
+      computerSystemsLinkInfo.className.includes('royb-link-highlight') &&
+      computerSystemsLinkInfo.className.includes('royb-link-fragment') &&
+      computerSystemsLinkInfo.textDecoration.includes('underline'),
+    'Computer Systems should use the ROYB underlined title link treatment'
+  );
+  assert.equal(sageLinkInfo.href, 'https://arc.duke.edu/peer-education/');
+  assert.ok(
+    sageLinkInfo.className.includes('royb-link') &&
+      sageLinkInfo.className.includes('royb-link-highlight') &&
+      sageLinkInfo.className.includes('royb-link-fragment') &&
+      sageLinkInfo.textDecoration.includes('underline'),
+    'SAGE Tutoring should use the ROYB underlined advisor link treatment'
+  );
   await expectNoTeachingShowMore(page);
 }
 

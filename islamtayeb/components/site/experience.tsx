@@ -24,18 +24,36 @@ type DescriptionSegment =
 function AdvisorLabel({
   role,
   boxed,
+  linkedTitle,
 }: {
   role: ExperienceGroup['roles'][number];
   boxed: boolean;
+  linkedTitle: boolean;
 }) {
   if (!role.piName) {
     return null;
   }
 
   const className = cn(
-    'font-mono text-sm font-normal leading-tight text-muted-foreground group-hover/experience-title:text-roy-o group-focus-visible/experience-title:text-roy-o',
+    'font-mono text-sm font-normal leading-tight text-muted-foreground',
+    linkedTitle &&
+      'group-hover/experience-title:text-roy-o group-focus-visible/experience-title:text-roy-o',
     boxed && 'inline-block border border-border px-1'
   );
+
+  if (role.piHref && !linkedTitle) {
+    return (
+      <ExternalLink
+        href={role.piHref}
+        section="o"
+        className={className}
+        data-testid="advisor-label"
+        data-boxed={boxed ? 'true' : undefined}
+      >
+        {role.piName}
+      </ExternalLink>
+    );
+  }
 
   return (
     <span
@@ -76,7 +94,11 @@ function RailGroup({
           <>
             {role.org}
             {'  '}
-            <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
+            <AdvisorLabel
+              role={role}
+              boxed={boxedAdvisorLabels}
+              linkedTitle={Boolean(role.href)}
+            />
           </>
         ) : (
           role.org
@@ -108,7 +130,7 @@ function RailGroup({
               ) : (
                 <span
                   data-testid="experience-title-run"
-                  className="group/experience-title inline whitespace-break-spaces text-foreground hover:text-roy-o"
+                  className="group/experience-title inline whitespace-break-spaces text-foreground"
                 >
                   {titleContent}
                 </span>

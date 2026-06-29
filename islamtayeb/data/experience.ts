@@ -1,6 +1,7 @@
 export type ExperienceRole = {
   org: string;
   piName?: string;
+  piHref?: string;
   date: string;
   desc: string;
   descLinks?: {
@@ -125,12 +126,14 @@ export const experienceGroups: ExperienceGroup[] = [
         org: 'Computer Systems',
         piName: 'Matthew Lentz',
         date: 'Jan 2026 - May 2026',
+        href: 'https://courses.cs.duke.edu/spring26/compsci210d/',
         state: 'ended',
         desc: 'Introduced CPUs, co-led a discussion section + office hours',
       },
       {
         org: 'Organic Chemistry I',
         piName: 'SAGE Tutoring',
+        piHref: 'https://arc.duke.edu/peer-education/',
         date: 'Jan 2025 - May 2025',
         state: 'ended',
         desc: 'Led a study group, saw kids quit pre-med as the semester went',

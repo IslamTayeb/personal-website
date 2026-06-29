@@ -109,6 +109,10 @@ Use meaningful commit messages that describe the why.
 - **Links:** React-rendered hyperlinks should use
   `components/primitives/external-link.tsx`. Markdown-rendered article links
   should receive the same ROYB link classes in the renderer.
+- **Experience advisor links:** In `islamtayeb/data/experience.ts`, use
+  `href` when the whole experience title should link. Use `piHref` only when
+  the advisor/mentor label should link while the organization/course title
+  remains plain text.
 - **Icon plus text links:** When a control has an icon plus a text label that
   should use the ROYB underline/highlight, keep the icon outside the underline
   span and wrap only the label in `RoybLinkText`. Use
