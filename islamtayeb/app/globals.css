@@ -46,8 +46,8 @@
   --orange: oklch(0.68 0.2 45);
   --roy-r: oklch(0.62 0.24 27);
   --roy-o: oklch(0.7 0.2 55);
-  --roy-y: #f3cf24;
-  --roy-y-band: #f3cf24;
+  --roy-y: #ffba06;
+  --roy-y-band: #ffba06;
   --roy-b: oklch(0.55 0.18 250);
   --code-keyword: #007020;
   --code-title: #06287e;
@@ -78,7 +78,7 @@
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
   --ink: oklch(0.985 0 0);
-  --roy-y: #f3cf24;
+  --roy-y: #ffba06;
   --code-keyword: #7ee787;
   --code-title: #79c0ff;
   --code-string: #a5d6ff;
@@ -107,7 +107,7 @@
     --input: oklch(1 0 0 / 15%);
     --ring: oklch(0.556 0 0);
     --ink: oklch(0.985 0 0);
-    --roy-y: #f3cf24;
+    --roy-y: #ffba06;
     --code-keyword: #7ee787;
     --code-title: #79c0ff;
     --code-string: #a5d6ff;
