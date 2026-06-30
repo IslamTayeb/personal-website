@@ -152,7 +152,7 @@ Use meaningful commit messages that describe the why.
 - **Blog internals:** Active posts should use local `/blog/...` links for links
   to other posts. Do not link active content back to `apmoverflow.xyz`.
 - **Article headers:** Blog article title/date headers use tight section-like
-  spacing: `mb-3 flex flex-col gap-1`.
+  spacing: `mb-4 flex flex-col gap-1`.
 - **Blog title weight:** Blog titles on the homepage writing preview, `/blog`
   index, and article pages should render at font-weight 600.
 - **Blog manifests:** Use `listed: false` for source-backed pages that should

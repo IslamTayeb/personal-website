@@ -3519,7 +3519,7 @@ async function assertArticle(page: Page) {
   );
   assert.ok(!result.headerText.includes('GitHub'));
   assert.ok(!result.headerText.includes('Why agent context should be'));
-  assert.equal(result.headerMarginBottom, 12);
+  assert.equal(result.headerMarginBottom, 16);
   assert.equal(result.headerRowGap, 4);
   assert.match(result.headerDateText, /^[A-Z][a-z]{2} \d{2}, \d{4}$/);
   assert.equal(result.headerDateTransform, 'none');
