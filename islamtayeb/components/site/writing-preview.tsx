@@ -13,7 +13,13 @@ export async function WritingPreview() {
   const posts = (await getListedPosts()).slice(0, 3);
 
   return (
-    <Section id="writing" index="4" title="Writing" accent="text-roy-b">
+    <Section
+      id="writing"
+      index="4"
+      title="Writing"
+      accent="text-roy-b"
+      className="mb-4"
+    >
       <BorderedPanel>
         <div className="flex w-full flex-col">
           <RailList>
@@ -24,12 +30,15 @@ export async function WritingPreview() {
                 <RailItem
                   key={post.manifest.slug}
                   dotClassName={isNew ? 'bg-roy-b' : 'bg-foreground/75'}
+                  hoverAccent={isNew ? undefined : 'b'}
+                  titleClassName="font-bold"
                   title={
                     <span>
                       <ExternalLink
                         href={postHref(post)}
                         section="b"
-                        className="text-foreground"
+                        data-rail-hover-source={isNew ? undefined : 'true'}
+                        className="font-bold text-foreground"
                       >
                         {post.manifest.title}
                       </ExternalLink>
@@ -44,7 +53,7 @@ export async function WritingPreview() {
                   footer={
                     <div
                       data-testid="writing-row-meta"
-                      className="reading-copy text-sm leading-snug text-foreground"
+                      className="reading-copy text-base leading-snug text-foreground"
                     >
                       {post.readingMeta}
                     </div>
@@ -55,7 +64,7 @@ export async function WritingPreview() {
             })}
             <RailActionItem testId="writing-action-row">
               <SectionActionLink href="/blog" section="b">
-                see more on blog
+                show more on blog...
               </SectionActionLink>
             </RailActionItem>
           </RailList>

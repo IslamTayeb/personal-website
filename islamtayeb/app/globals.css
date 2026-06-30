@@ -5,10 +5,11 @@
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: var(--font-sora), Arial, sans-serif;
-  --font-reading: Verdana, Geneva, sans-serif;
-  --font-mono: var(--font-dm-mono), ui-monospace, SFMono-Regular, monospace;
-  --font-serif: Georgia, serif;
+  --font-sans: var(--font-open-sans), Arial, sans-serif;
+  --font-reading: var(--font-open-sans), Arial, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    monospace;
   --color-ink: var(--ink);
   --color-orange: var(--orange);
   --color-roy-r: var(--roy-r);
@@ -236,6 +237,30 @@
   }
   .publication-title-link {
     max-width: 100%;
+  }
+  .rail-link-hover-accent-r:has([data-rail-hover-source]:hover)
+    > [data-rail-hover-target],
+  .rail-link-hover-accent-r:has([data-rail-hover-source]:focus-visible)
+    > [data-rail-hover-target] {
+    background-color: var(--roy-r);
+  }
+  .rail-link-hover-accent-o:has([data-rail-hover-source]:hover)
+    > [data-rail-hover-target],
+  .rail-link-hover-accent-o:has([data-rail-hover-source]:focus-visible)
+    > [data-rail-hover-target] {
+    background-color: var(--roy-o);
+  }
+  .rail-link-hover-accent-y:has([data-rail-hover-source]:hover)
+    > [data-rail-hover-target],
+  .rail-link-hover-accent-y:has([data-rail-hover-source]:focus-visible)
+    > [data-rail-hover-target] {
+    background-color: var(--roy-y);
+  }
+  .rail-link-hover-accent-b:has([data-rail-hover-source]:hover)
+    > [data-rail-hover-target],
+  .rail-link-hover-accent-b:has([data-rail-hover-source]:focus-visible)
+    > [data-rail-hover-target] {
+    background-color: var(--roy-b);
   }
   .royb-link-plain {
     background-image: none;

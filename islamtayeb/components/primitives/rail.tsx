@@ -2,6 +2,14 @@ import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 export type RailConnector = 'solid' | 'dashed' | 'none';
+type RailAccent = 'r' | 'o' | 'y' | 'b';
+
+const railAccentClasses: Record<RailAccent, string> = {
+  r: 'rail-link-hover-accent-r',
+  o: 'rail-link-hover-accent-o',
+  y: 'rail-link-hover-accent-y',
+  b: 'rail-link-hover-accent-b',
+};
 
 export function RailList({
   children,
@@ -26,6 +34,7 @@ export function RailItem({
   description,
   connector = 'solid',
   connectorClassName,
+  hoverAccent,
   footer,
   className,
   titleClassName,
@@ -47,6 +56,7 @@ export function RailItem({
   description?: ReactNode;
   connector?: RailConnector;
   connectorClassName?: string;
+  hoverAccent?: RailAccent;
   footer?: ReactNode;
   className?: string;
   titleClassName?: string;
@@ -66,12 +76,15 @@ export function RailItem({
     'grid min-w-0 items-start gap-3 text-left',
     meta ? 'grid-cols-[minmax(0,1fr)_auto]' : 'grid-cols-[minmax(0,1fr)]'
   );
+  const hoverAccentClasses = hoverAccent
+    ? railAccentClasses[hoverAccent]
+    : undefined;
   const topRow = (
     <>
       <span
         data-testid={titleTestId}
         className={cn(
-          'min-w-0 text-base font-medium leading-tight text-foreground',
+          'min-w-0 text-base font-semibold leading-tight text-foreground',
           titleClassName
         )}
       >
@@ -95,6 +108,7 @@ export function RailItem({
       data-testid={testId}
       className={cn(
         'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pb-2 last:pb-0',
+        hoverAccentClasses,
         className
       )}
     >
@@ -118,6 +132,7 @@ export function RailItem({
       ) : null}
       <span
         data-testid={dotTestId}
+        data-rail-hover-target={hoverAccent ? 'true' : undefined}
         data-incoming={incoming ? 'true' : undefined}
         data-state={state}
         className={cn(
@@ -172,12 +187,12 @@ export function RailActionItem({
     <li
       data-testid={testId}
       className={cn(
-        'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pt-2',
+        'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)]',
         className
       )}
     >
       <span aria-hidden />
-      <div className="flex min-w-0 justify-end">{children}</div>
+      <div className="flex min-w-0 justify-start">{children}</div>
     </li>
   );
 }

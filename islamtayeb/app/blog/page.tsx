@@ -58,12 +58,15 @@ export default async function BlogIndexPage() {
                 <RailItem
                   key={post.manifest.slug}
                   dotClassName={isNew ? 'bg-roy-b' : postDotClassName}
+                  hoverAccent={isNew ? undefined : 'b'}
+                  titleClassName="font-bold"
                   title={
                     <span>
                       <ExternalLink
                         href={postHref(post)}
                         section="b"
-                        className="text-base font-medium leading-tight text-foreground"
+                        data-rail-hover-source={isNew ? undefined : 'true'}
+                        className="text-base font-bold leading-tight text-foreground"
                       >
                         {post.manifest.title}
                       </ExternalLink>
@@ -78,7 +81,7 @@ export default async function BlogIndexPage() {
                   footer={
                     <div
                       data-testid="blog-index-row-meta"
-                      className="reading-copy flex flex-wrap gap-x-3 gap-y-1 text-sm leading-snug text-foreground"
+                      className="reading-copy flex flex-wrap gap-x-3 gap-y-1 text-base leading-snug text-foreground"
                     >
                       <span>{post.readingMeta}</span>
                     </div>
@@ -96,12 +99,15 @@ export default async function BlogIndexPage() {
                 key={item.href}
                 testId="external-writing-row"
                 dotClassName={postDotClassName}
+                hoverAccent="b"
+                titleClassName="font-bold"
                 title={
                   <ExternalLink
                     href={item.href}
                     section="b"
+                    data-rail-hover-source="true"
                     data-testid="external-writing-title"
-                    className="min-w-0 text-base font-medium leading-tight text-foreground"
+                    className="min-w-0 text-base font-bold leading-tight text-foreground"
                   >
                     {item.title}
                   </ExternalLink>
@@ -110,7 +116,7 @@ export default async function BlogIndexPage() {
                 footer={
                   <div
                     data-testid="external-writing-meta"
-                    className="reading-copy text-sm leading-snug text-foreground"
+                    className="reading-copy text-base leading-snug text-foreground"
                   >
                     {item.meta}
                   </div>

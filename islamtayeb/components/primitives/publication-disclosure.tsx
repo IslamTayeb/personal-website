@@ -8,14 +8,14 @@ function PublicationAuthors({ authors }: { authors: string }) {
   return (
     <span
       data-testid="publication-authors"
-      className="reading-copy mt-1 block text-sm font-normal leading-snug text-foreground"
+      className="reading-copy text-base font-normal leading-snug text-foreground"
     >
       {authors.split(/(Islam Tayeb)/g).map((part, index) =>
         part === 'Islam Tayeb' ? (
           <span
             key={`${part}-${index}`}
             data-testid="publication-author-self"
-            className="font-medium italic text-foreground"
+            className="font-semibold text-foreground"
           >
             {part}
           </span>
@@ -41,21 +41,25 @@ function PublicationRow({
       dotTestId="publication-dot"
       titleTestId="publication-title-wrap"
       dotClassName="bg-foreground/75"
+      hoverAccent="y"
       connector={connector}
       title={
-        <span className="block min-w-0">
-          <ExternalLink
-            href={publication.href}
-            section="y"
-            data-testid="publication-title"
-            className="publication-title-link text-base font-medium leading-tight text-foreground"
-          >
-            <RichText text={publication.title} />
-          </ExternalLink>
+        <span className="flex min-w-0 flex-col gap-0.5">
+          <span className="block min-w-0">
+            <ExternalLink
+              href={publication.href}
+              section="y"
+              data-rail-hover-source="true"
+              data-testid="publication-title"
+              className="publication-title-link text-base font-semibold leading-tight text-foreground"
+            >
+              <RichText text={publication.title} />
+            </ExternalLink>
+          </span>
           <PublicationAuthors authors={publication.authors} />
           <span
             data-testid="publication-meta-line"
-            className="reading-copy mt-1 block text-sm font-normal leading-snug text-muted-foreground"
+            className="reading-copy text-base font-normal leading-snug text-muted-foreground"
           >
             {publication.type}
             {publication.venue ? (
@@ -77,7 +81,7 @@ function PublicationRow({
 export function PublicationDisclosure({
   publications,
   moreHref,
-  moreLabel = 'see more',
+  moreLabel = 'show more...',
 }: {
   publications: Publication[];
   moreHref?: string;

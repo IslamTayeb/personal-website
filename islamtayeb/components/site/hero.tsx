@@ -4,7 +4,6 @@ import { contactLinks } from '@/data/links';
 import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { SectionHeader } from '@/components/primitives/section';
-import { cn } from '@/lib/utils';
 
 function ContactIndex() {
   return (
@@ -74,34 +73,12 @@ function HeroStory() {
   );
 }
 
-function HeroTitle({
-  className,
-  testId,
-  as: Component = 'h1',
-}: {
-  className?: string;
-  testId: string;
-  as?: 'h1' | 'div';
-}) {
-  return (
-    <Component
-      data-testid={testId}
-      className={cn(
-        'mb-2 w-fit font-sans text-4xl font-semibold tracking-tight text-foreground',
-        className
-      )}
-    >
-      Islam Tayeb
-    </Component>
-  );
-}
-
 export function Hero() {
   return (
     <section id="about" data-testid="hero-section" className="pb-4 pt-0">
       <div className="flex w-full flex-col">
         <SectionHeader index="1" title="About" accent="text-roy-r" />
-        <HeroTitle as="div" testId="hero-title-mobile" className="md:hidden" />
+        <h1 className="sr-only">Islam Tayeb</h1>
         <div
           data-testid="hero-content"
           className="flex flex-col gap-3 md:grid md:grid-cols-[25%_minmax(0,1fr)] md:gap-3"
@@ -116,7 +93,6 @@ export function Hero() {
             data-testid="hero-story-column"
             className="min-w-0 md:self-center"
           >
-            <HeroTitle testId="hero-title" className="hidden md:block" />
             <HeroStory />
           </div>
         </div>

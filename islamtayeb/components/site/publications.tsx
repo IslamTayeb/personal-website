@@ -14,7 +14,7 @@ export function Publications() {
         <PublicationDisclosure
           publications={publications}
           moreHref={scholarProfileUrl}
-          moreLabel="see more on scholar"
+          moreLabel="show more on Scholar..."
         />
       </BorderedPanel>
     </Section>

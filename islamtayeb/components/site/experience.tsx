@@ -24,24 +24,22 @@ type DescriptionSegment =
 function AdvisorLabel({
   role,
   boxed,
-  linkedTitle,
 }: {
   role: ExperienceGroup['roles'][number];
   boxed: boolean;
-  linkedTitle: boolean;
 }) {
   if (!role.piName) {
     return null;
   }
 
   const className = cn(
-    'font-mono text-sm font-normal leading-tight text-muted-foreground',
-    linkedTitle &&
+    'reading-copy text-base font-normal leading-tight text-muted-foreground',
+    role.href &&
       'group-hover/experience-title:text-roy-o group-focus-visible/experience-title:text-roy-o',
     boxed && 'inline-block border border-border px-1'
   );
 
-  if (role.piHref && !linkedTitle) {
+  if (role.piHref && !role.href) {
     return (
       <ExternalLink
         href={role.piHref}
@@ -92,13 +90,7 @@ function RailGroup({
               : 'bg-foreground/75';
         const titleContent: ReactNode = role.piName ? (
           <>
-            {role.org}
-            {'  '}
-            <AdvisorLabel
-              role={role}
-              boxed={boxedAdvisorLabels}
-              linkedTitle={Boolean(role.href)}
-            />
+            {role.org} <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
           </>
         ) : (
           role.org
@@ -115,6 +107,7 @@ function RailGroup({
           <RailItem
             key={`${group.kind}-${role.org}-${role.piName ?? role.org}-${role.date}`}
             dotClassName={dotClassName}
+            hoverAccent={state === 'ended' ? 'o' : undefined}
             incoming={role.incoming}
             state={state}
             title={
@@ -122,6 +115,9 @@ function RailGroup({
                 <ExternalLink
                   href={role.href}
                   section="o"
+                  data-rail-hover-source={
+                    state === 'ended' ? 'true' : undefined
+                  }
                   data-testid="experience-title-run"
                   className="group/experience-title whitespace-break-spaces text-foreground"
                 >
@@ -280,7 +276,15 @@ function RailGroupBlock({
           className="w-fit justify-self-start"
           section="o"
         >
-          {label} ({group.roles.length})
+          <span
+            data-testid="experience-group-label-name"
+            className="uppercase tracking-[0.2em]"
+          >
+            {label}
+          </span>{' '}
+          <span data-testid="experience-group-label-count">
+            ({group.roles.length})
+          </span>
         </RoybLinkText>
       </button>
       {open ? (
@@ -291,14 +295,20 @@ function RailGroupBlock({
         />
       ) : null}
       {open && hasHidden && allowShowMore ? (
-        <div className="flex justify-end pt-2">
-          <SectionActionButton
-            section="o"
-            onClick={onToggleExpanded}
-            testId="experience-more-control"
-          >
-            {expanded ? 'show less' : 'see more'}
-          </SectionActionButton>
+        <div
+          data-testid="experience-more-row"
+          className="grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pt-2"
+        >
+          <span aria-hidden />
+          <div className="flex min-w-0 justify-start">
+            <SectionActionButton
+              section="o"
+              onClick={onToggleExpanded}
+              testId="experience-more-control"
+            >
+              {expanded ? 'show less...' : 'show more...'}
+            </SectionActionButton>
+          </div>
         </div>
       ) : null}
     </div>

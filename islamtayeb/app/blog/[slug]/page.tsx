@@ -49,10 +49,10 @@ export default async function BlogPostPage({ params }: PageProps) {
       ) : null}
       <RoybBand />
       <article data-testid="blog-article" className="pb-44 pt-0">
-        <header className="mb-7 flex flex-col gap-2.5">
+        <header className="mb-3 flex flex-col gap-1">
           <h1
             data-testid="blog-article-title"
-            className="text-3xl font-semibold leading-tight tracking-tight text-foreground text-balance md:text-4xl"
+            className="text-3xl font-bold leading-tight tracking-tight text-foreground text-balance md:text-4xl"
           >
             {post.manifest.title}
           </h1>

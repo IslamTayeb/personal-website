@@ -2,7 +2,12 @@ import assert from 'node:assert/strict';
 import { mkdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
-import { chromium, type Browser, type Page } from '@playwright/test';
+import {
+  chromium,
+  type Browser,
+  type Locator,
+  type Page,
+} from '@playwright/test';
 import { externalWriting } from '../data/external-writing';
 import { heroParagraphs, profile } from '../data/profile';
 import { getListedPosts } from '../lib/blog/posts';
@@ -62,6 +67,183 @@ async function screenshot(page: Page, name: string) {
     path: path.join(screenshotDir, `${name}.png`),
     fullPage: true,
   });
+}
+
+async function cssColor(page: Page, value: string) {
+  return page.evaluate((cssValue) => {
+    const probe = document.createElement('span');
+
+    probe.style.color = cssValue;
+    document.body.append(probe);
+
+    const color = getComputedStyle(probe).color;
+
+    probe.remove();
+
+    return color;
+  }, value);
+}
+
+async function readRailRowColors({
+  row,
+  dotTestId = 'rail-dot',
+  connectorTestId = 'rail-connector',
+}: {
+  row: Locator;
+  dotTestId?: string;
+  connectorTestId?: string;
+}) {
+  return row.evaluate(
+    (element, testIds) => {
+      const dot = element.querySelector<HTMLElement>(
+        `[data-testid="${testIds.dotTestId}"]`
+      );
+      const connector = element.querySelector<HTMLElement>(
+        `[data-testid="${testIds.connectorTestId}"]`
+      );
+      const dotStyle = dot ? getComputedStyle(dot) : null;
+      const connectorStyle = connector ? getComputedStyle(connector) : null;
+
+      return {
+        dotBackgroundColor: dotStyle?.backgroundColor ?? '',
+        dotBorderColor: dotStyle?.borderTopColor ?? '',
+        connectorBackgroundColor: connectorStyle?.backgroundColor ?? '',
+        connectorColor: connectorStyle?.color ?? '',
+        connectorBackgroundImage: connectorStyle?.backgroundImage ?? '',
+      };
+    },
+    { dotTestId, connectorTestId }
+  );
+}
+
+async function assertNeutralRailRowHoverAccent({
+  page,
+  row,
+  hoverSource,
+  accent,
+  label,
+  dotTestId = 'rail-dot',
+  connectorTestId = 'rail-connector',
+}: {
+  page: Page;
+  row: Locator;
+  hoverSource: Locator;
+  accent: 'r' | 'o' | 'y' | 'b';
+  label: string;
+  dotTestId?: string;
+  connectorTestId?: string;
+}) {
+  const accentColor = await cssColor(page, `var(--roy-${accent})`);
+  const before = await readRailRowColors({ row, dotTestId, connectorTestId });
+
+  assert.notEqual(
+    before.dotBackgroundColor,
+    accentColor,
+    `${label} should start neutral before hover`
+  );
+
+  const rowBox = await row.boundingBox();
+
+  assert.ok(rowBox, `${label} should have a layout box`);
+
+  await page.mouse.move(
+    rowBox.x + rowBox.width - 2,
+    rowBox.y + rowBox.height / 2
+  );
+
+  const rowHover = await readRailRowColors({
+    row,
+    dotTestId,
+    connectorTestId,
+  });
+
+  assert.equal(
+    rowHover.dotBackgroundColor,
+    before.dotBackgroundColor,
+    `${label} dot should not change when hovering non-link row space`
+  );
+  assert.equal(
+    rowHover.connectorBackgroundColor,
+    before.connectorBackgroundColor,
+    `${label} connector background should not change on row hover`
+  );
+  assert.equal(
+    rowHover.connectorColor,
+    before.connectorColor,
+    `${label} connector color should not change on row hover`
+  );
+
+  await hoverSource.hover();
+
+  const linkHover = await readRailRowColors({
+    row,
+    dotTestId,
+    connectorTestId,
+  });
+
+  assert.equal(
+    linkHover.dotBackgroundColor,
+    accentColor,
+    `${label} dot should color only when the title link is hovered`
+  );
+  assert.equal(
+    linkHover.connectorBackgroundColor,
+    before.connectorBackgroundColor,
+    `${label} connector background should stay unchanged on link hover`
+  );
+  assert.equal(
+    linkHover.connectorColor,
+    before.connectorColor,
+    `${label} connector color should stay unchanged on link hover`
+  );
+  assert.equal(
+    linkHover.connectorBackgroundImage,
+    before.connectorBackgroundImage,
+    `${label} connector pattern should stay unchanged on link hover`
+  );
+
+  await page.mouse.move(0, 0);
+}
+
+async function assertRailRowKeepsMarkerOnHover({
+  page,
+  row,
+  hoverSource,
+  label,
+}: {
+  page: Page;
+  row: Locator;
+  hoverSource: Locator;
+  label: string;
+}) {
+  const before = await readRailRowColors({ row });
+
+  await hoverSource.hover();
+
+  const after = await readRailRowColors({ row });
+
+  assert.equal(
+    after.dotBackgroundColor,
+    before.dotBackgroundColor,
+    `${label} dot background should stay fixed on hover`
+  );
+  assert.equal(
+    after.dotBorderColor,
+    before.dotBorderColor,
+    `${label} dot border should stay fixed on hover`
+  );
+  assert.equal(
+    after.connectorBackgroundColor,
+    before.connectorBackgroundColor,
+    `${label} connector background should stay fixed on hover`
+  );
+  assert.equal(
+    after.connectorColor,
+    before.connectorColor,
+    `${label} connector color should stay fixed on hover`
+  );
+
+  await page.mouse.move(0, 0);
 }
 
 async function assertThemeBootstrapBeforeHeader() {
@@ -235,10 +417,10 @@ async function assertHome(page: Page) {
     const heroContent = heroSection?.querySelector<HTMLElement>(
       '[data-testid="hero-content"]'
     );
-    const heroTitleElement = heroSection?.querySelector<HTMLElement>(
-      '[data-testid="hero-title"]'
+    const heroVisibleTitleElement = heroSection?.querySelector<HTMLElement>(
+      '[data-testid="hero-title"], [data-testid="hero-title-mobile"]'
     );
-    const heroTitleRect = heroTitleElement?.getBoundingClientRect();
+    const heroSemanticTitle = heroSection?.querySelector<HTMLElement>('h1');
     const heroContentRect = heroContent?.getBoundingClientRect();
     const heroContactColumn = heroContent?.querySelector<HTMLElement>(
       '[data-testid="hero-contact-column"]'
@@ -273,6 +455,9 @@ async function assertHome(page: Page) {
     const heroPortraitRect = heroPortrait?.getBoundingClientRect();
     const experienceSection = document.querySelector('#experience');
     const experienceTitle = experienceSection?.querySelector('header h2');
+    const experienceTitleStyle = experienceTitle
+      ? getComputedStyle(experienceTitle)
+      : null;
     const firstGroupLabel = experienceSection?.querySelector(
       '[data-testid="experience-group-label"]'
     );
@@ -284,15 +469,35 @@ async function assertHome(page: Page) {
       const style = getComputedStyle(label);
       const rect = label.getBoundingClientRect();
       const toggleRect = label.parentElement?.getBoundingClientRect();
+      const name = label.querySelector<HTMLElement>(
+        '[data-testid="experience-group-label-name"]'
+      );
+      const count = label.querySelector<HTMLElement>(
+        '[data-testid="experience-group-label-count"]'
+      );
+      const nameStyle = name ? getComputedStyle(name) : null;
+      const countStyle = count ? getComputedStyle(count) : null;
 
       return {
         text: label.textContent?.replace(/\s+/g, ' ').trim() ?? '',
         className: label.className,
         color: style.color,
+        fontFamily: style.fontFamily,
+        fontSize: Number.parseFloat(style.fontSize),
         justifySelf: style.justifySelf,
         letterSpacing: style.letterSpacing,
         textDecorationLine: style.textDecorationLine,
         textTransform: style.textTransform,
+        nameStyle: {
+          fontFamily: nameStyle?.fontFamily ?? '',
+          fontSize: Number.parseFloat(nameStyle?.fontSize ?? '0'),
+          letterSpacing: nameStyle?.letterSpacing ?? '',
+          textTransform: nameStyle?.textTransform ?? '',
+        },
+        countStyle: {
+          letterSpacing: countStyle?.letterSpacing ?? '',
+          textTransform: countStyle?.textTransform ?? '',
+        },
         width: rect.width,
         left: rect.left,
         toggleWidth: toggleRect?.width ?? 0,
@@ -392,6 +597,25 @@ async function assertHome(page: Page) {
     const sectionLefts = topLevelSections.map(
       (section) => section.getBoundingClientRect().left
     );
+    const sectionContentGaps = topLevelSections
+      .slice(1)
+      .map((section, index) => {
+        const previousSection = topLevelSections[index];
+        const previousContent =
+          previousSection?.lastElementChild as HTMLElement | null;
+        const currentHeader = section.querySelector<HTMLElement>('header');
+
+        return (
+          (currentHeader?.getBoundingClientRect().top ?? 0) -
+          (previousContent?.getBoundingClientRect().bottom ?? 0)
+        );
+      });
+    const lastSection = topLevelSections[topLevelSections.length - 1];
+    const lastSectionContent =
+      lastSection?.lastElementChild as HTMLElement | null;
+    const writingFooterGap =
+      (footer?.getBoundingClientRect().top ?? 0) -
+      (lastSectionContent?.getBoundingClientRect().bottom ?? 0);
     const sharedRowTitleLefts = [
       experienceSection
         ?.querySelector<HTMLElement>('[data-testid="experience-group-label"]')
@@ -480,6 +704,7 @@ async function assertHome(page: Page) {
         connectorBottom: connectorRect?.bottom ?? 0,
         rowTop: rowRect?.top ?? 0,
         rowBottom: rowRect?.bottom ?? 0,
+        linkLeft: linkRect?.left ?? 0,
         linkBottom: linkRect?.bottom ?? 0,
       };
     });
@@ -522,9 +747,12 @@ async function assertHome(page: Page) {
         '[data-testid="experience-group-toggle"]'
       );
       const showMore = [...group.querySelectorAll('button')].find(
-        (button) => button.textContent?.trim() === 'see more'
+        (button) => button.textContent?.trim() === 'show more...'
       );
-      const showMoreWrap = showMore?.parentElement;
+      const showMoreWrap = group.querySelector<HTMLElement>(
+        '[data-testid="experience-more-row"]'
+      );
+      const showMoreRect = showMore?.getBoundingClientRect();
 
       return {
         kind: group.getAttribute('data-group'),
@@ -538,6 +766,7 @@ async function assertHome(page: Page) {
         showMorePaddingTop: showMoreWrap
           ? Number.parseFloat(getComputedStyle(showMoreWrap).paddingTop)
           : 0,
+        showMoreLeft: showMoreRect?.left ?? 0,
         marginBottom: Number.parseFloat(getComputedStyle(group).marginBottom),
       };
     });
@@ -577,6 +806,58 @@ async function assertHome(page: Page) {
         '#publications [data-testid="publication-title"]'
       ),
     ];
+    const publicationTitleLineChecks = publicationTitles.map((title) => {
+      const wordRects: Record<
+        string,
+        {
+          top: number;
+          bottom: number;
+        } | null
+      > = {
+        organic: null,
+        polymers: null,
+      };
+
+      for (const word of Object.keys(wordRects)) {
+        const walker = document.createTreeWalker(title, NodeFilter.SHOW_TEXT);
+        let node = walker.nextNode() as Text | null;
+
+        while (node) {
+          const index = node.data.indexOf(word);
+
+          if (index >= 0) {
+            const range = document.createRange();
+
+            range.setStart(node, index);
+            range.setEnd(node, index + word.length);
+
+            const rect = range.getBoundingClientRect();
+
+            range.detach();
+
+            wordRects[word] = {
+              top: rect.top,
+              bottom: rect.bottom,
+            };
+
+            break;
+          }
+
+          node = walker.nextNode() as Text | null;
+        }
+      }
+
+      const organic = wordRects.organic;
+      const polymers = wordRects.polymers;
+
+      return {
+        text: title.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+        organicPolymersSameLine:
+          Boolean(organic && polymers) &&
+          Math.abs((organic?.top ?? 0) - (polymers?.top ?? 0)) <= 1 &&
+          Math.abs((organic?.bottom ?? 0) - (polymers?.bottom ?? 0)) <= 1,
+      };
+    });
     const publicationAuthors = [
       ...document.querySelectorAll('[data-testid="publication-authors"]'),
     ].map((authors) => authors.textContent?.replace(/\s+/g, ' ').trim() ?? '');
@@ -621,6 +902,29 @@ async function assertHome(page: Page) {
         element.getAttribute('data-testid')
       )
     );
+    const publicationTextStacks = [
+      ...(document
+        .querySelector('#publications')
+        ?.querySelectorAll<HTMLElement>(
+          '[data-testid="publication-title-wrap"] > span'
+        ) ?? []),
+    ].map((stack) => {
+      const style = getComputedStyle(stack);
+
+      return {
+        className: stack.className,
+        display: style.display,
+        flexDirection: style.flexDirection,
+        rowGap: Number.parseFloat(style.rowGap),
+      };
+    });
+    const publicationChildMarginTops = [
+      ...(document
+        .querySelector('#publications')
+        ?.querySelectorAll<HTMLElement>(
+          '[data-testid="publication-authors"], [data-testid="publication-meta-line"]'
+        ) ?? []),
+    ].map((element) => Number.parseFloat(getComputedStyle(element).marginTop));
     const writingDots = [
       ...(document
         .querySelector('#writing')
@@ -661,6 +965,11 @@ async function assertHome(page: Page) {
       (title) =>
         title.nextElementSibling?.textContent?.replace(/\s+/g, ' ').trim() ?? ''
     );
+    const writingTitleWeights = [
+      ...(document
+        .querySelector('#writing')
+        ?.querySelectorAll<HTMLElement>('[data-testid="rail-title"]') ?? []),
+    ].map((title) => Number.parseInt(getComputedStyle(title).fontWeight, 10));
     const writingDescriptions = [
       ...(document
         .querySelector('#writing')
@@ -740,15 +1049,16 @@ async function assertHome(page: Page) {
     const mutedToken = getComputedStyle(mutedProbe).color;
     mutedProbe.remove();
 
-    const seeMoreActionStyles = [...document.querySelectorAll('a, button')]
+    const showMoreActionStyles = [...document.querySelectorAll('a, button')]
       .filter((element) =>
-        /see more/i.test(element.textContent?.replace(/\s+/g, ' ') ?? '')
+        /show more/i.test(element.textContent?.replace(/\s+/g, ' ') ?? '')
       )
       .map((element) => {
         const style = getComputedStyle(element);
 
         return {
           text: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+          left: element.getBoundingClientRect().left,
           color: style.color,
           fontSize: Number.parseFloat(style.fontSize),
           fontVariantCaps: style.fontVariantCaps,
@@ -811,9 +1121,8 @@ async function assertHome(page: Page) {
       themeToggleText:
         themeToggle?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       themeToggleClassName,
-      heroTitle:
-        heroTitleElement?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
-      heroTitleLeft: heroTitleRect?.left ?? 0,
+      heroVisibleTitleExists: Boolean(heroVisibleTitleElement),
+      heroSemanticTitleClassName: heroSemanticTitle?.className ?? '',
       heroStoryLeft: heroStoryRect?.left ?? 0,
       heroContactText:
         heroSection?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
@@ -821,11 +1130,9 @@ async function assertHome(page: Page) {
         heroSection?.querySelector<HTMLAnchorElement>(
           'a[href="https://www.duke.edu/"]'
         )?.href ?? '',
-      heroHeaderTitleGap:
+      heroHeaderContentGap:
         (heroContentRect?.top ?? 0) -
         (heroHeader?.getBoundingClientRect().bottom ?? 0),
-      heroTitleContentGap:
-        (heroStoryRect?.top ?? 0) - (heroTitleRect?.bottom ?? 0),
       heroContentWidth: heroContentRect?.width ?? 0,
       heroContactColumnWidth: heroContactColumnRect?.width ?? 0,
       heroStoryAlignSelf: heroStoryColumnStyle?.alignSelf ?? '',
@@ -887,6 +1194,8 @@ async function assertHome(page: Page) {
       ),
       sectionMarkerColors: sectionMarkerData.map((marker) => marker.color),
       sectionLabelColors,
+      sectionContentGaps,
+      writingFooterGap,
       sharedRowTitleLefts,
       markerLefts: markerData.map((marker) => marker.left),
       markerWidths: markerData.map((marker) => marker.width),
@@ -900,6 +1209,12 @@ async function assertHome(page: Page) {
       groupChevronCenters: groupChevronData.map((icon) => icon.center),
       groupChevronColors: groupChevronData.map((icon) => icon.color),
       experienceTitleLeft: experienceTitle?.getBoundingClientRect().left ?? 0,
+      experienceTitleStyle: {
+        fontFamily: experienceTitleStyle?.fontFamily ?? '',
+        fontSize: Number.parseFloat(experienceTitleStyle?.fontSize ?? '0'),
+        letterSpacing: experienceTitleStyle?.letterSpacing ?? '',
+        textTransform: experienceTitleStyle?.textTransform ?? '',
+      },
       firstGroupLabelLeft: firstGroupLabel?.getBoundingClientRect().left ?? 0,
       firstRailTitleLeft: firstRailTitle?.getBoundingClientRect().left ?? 0,
       experienceLinks,
@@ -918,6 +1233,7 @@ async function assertHome(page: Page) {
       writingMeta,
       writingMetaStyles,
       writingDates,
+      writingTitleWeights,
       writingDescriptionCount: writingDescriptions.length,
       writingConnectors,
       writingActionRail,
@@ -932,6 +1248,8 @@ async function assertHome(page: Page) {
       publicationSelfAuthors,
       publicationSelfAuthorStyles,
       publicationRows,
+      publicationTextStacks,
+      publicationChildMarginTops,
       hasCoursesSection: Boolean(document.querySelector('#courses')),
       publicationsTitle:
         document
@@ -947,6 +1265,7 @@ async function assertHome(page: Page) {
       publicationTitleTexts: publicationTitles.map(
         (title) => title.textContent?.replace(/\s+/g, ' ').trim() ?? ''
       ),
+      publicationTitleLineChecks,
       publicationTitleSubscripts: publicationTitles.map((title) =>
         [...title.querySelectorAll('sub')].map(
           (subscript) => subscript.textContent ?? ''
@@ -960,7 +1279,7 @@ async function assertHome(page: Page) {
       ),
       publicationTitleClassName: publicationTitles[0]?.className ?? '',
       mutedToken,
-      seeMoreActionStyles,
+      showMoreActionStyles,
       highlightedLinkClassNames,
       footerBorderTopWidth: footer
         ? Number.parseFloat(getComputedStyle(footer).borderTopWidth)
@@ -984,7 +1303,11 @@ async function assertHome(page: Page) {
   assert.equal(result.ogUrl, 'https://www.islamtayeb.dev');
   assert.deepEqual(result.h1Texts, ['Islam Tayeb']);
   assert.ok(result.jsonLdTypes.includes('Person'));
-  assert.equal(result.heroTitle, 'Islam Tayeb');
+  assert.equal(result.heroVisibleTitleExists, false);
+  assert.ok(
+    result.heroSemanticTitleClassName.includes('sr-only'),
+    'home h1 should stay semantic without rendering the large hero name'
+  );
   assert.equal(result.heroPortraitExists, true, 'hero portrait should render');
   assert.ok(result.heroPortraitWidth > 0, 'hero portrait should have width');
   assert.ok(
@@ -1001,16 +1324,8 @@ async function assertHome(page: Page) {
   assert.equal(result.heroContactIndexGap, 8);
   assert.equal(result.heroContactDetailsGap, 2);
   assert.ok(
-    result.heroHeaderTitleGap >= 11 && result.heroHeaderTitleGap <= 13,
-    `About/content gap should match the blog index header gap: ${result.heroHeaderTitleGap}`
-  );
-  assert.ok(
-    result.heroTitleContentGap >= 7,
-    'hero title should keep a visible bottom gap before story copy'
-  );
-  assert.ok(
-    Math.abs(result.heroTitleLeft - result.heroStoryLeft) <= 1,
-    `hero title should align with story copy: ${result.heroTitleLeft} / ${result.heroStoryLeft}`
+    result.heroHeaderContentGap >= 11 && result.heroHeaderContentGap <= 13,
+    `About/content gap should match the blog index header gap: ${result.heroHeaderContentGap}`
   );
   assert.ok(
     result.heroContentWidth > 0 &&
@@ -1041,6 +1356,18 @@ async function assertHome(page: Page) {
     result.sectionBorders,
     result.sectionBorders.map(() => 0),
     'top-level section dividers should stay disabled'
+  );
+  const normalSectionGap = result.sectionContentGaps[0];
+
+  assert.ok(
+    result.sectionContentGaps.every(
+      (gap) => Math.abs(gap - normalSectionGap) <= 1
+    ),
+    `top-level content gaps should match: ${result.sectionContentGaps.join(', ')}`
+  );
+  assert.ok(
+    Math.abs(result.writingFooterGap - normalSectionGap) <= 1,
+    `Writing/footer gap should match normal section rhythm: ${result.writingFooterGap} / ${normalSectionGap}`
   );
   assert.equal(Number.parseFloat(result.railGutter), 2);
   assert.equal(Number.parseFloat(result.railMarkerSize), 0.75);
@@ -1139,11 +1466,11 @@ async function assertHome(page: Page) {
     'hero metadata should only keep contact links'
   );
   assert.deepEqual(result.heroContactLabels, [
-    'email',
-    'linkedin',
-    'github',
-    'x',
-    'scholar',
+    'Email',
+    'LinkedIn',
+    'GitHub',
+    'X',
+    'Scholar',
   ]);
   for (const copy of expectedHeroParagraphs) {
     assert.ok(result.bodyText.includes(copy), `hero should include: ${copy}`);
@@ -1211,12 +1538,36 @@ async function assertHome(page: Page) {
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
-      (label: { text: string; textTransform: string; letterSpacing: string }) =>
-        label.textTransform === 'none' &&
-        (label.letterSpacing === 'normal' ||
-          Math.abs(Number.parseFloat(label.letterSpacing)) <= 0.5)
+      (label: {
+        nameStyle: {
+          fontFamily: string;
+          fontSize: number;
+          textTransform: string;
+          letterSpacing: string;
+        };
+      }) =>
+        label.nameStyle.fontFamily === result.experienceTitleStyle.fontFamily &&
+        label.nameStyle.fontSize === 14 &&
+        label.nameStyle.fontSize < result.experienceTitleStyle.fontSize &&
+        label.nameStyle.textTransform ===
+          result.experienceTitleStyle.textTransform &&
+        Math.abs(
+          Number.parseFloat(label.nameStyle.letterSpacing) -
+            label.nameStyle.fontSize * 0.2
+        ) <= 0.1
     ),
-    'experience group labels should render title case without wide character spacing'
+    'experience group label names should use uppercase letter-spaced subheading typography'
+  );
+  assert.ok(
+    result.experienceGroupLabelStyles.every(
+      (label: {
+        countStyle: { textTransform: string; letterSpacing: string };
+      }) =>
+        label.countStyle.textTransform === 'none' &&
+        (label.countStyle.letterSpacing === 'normal' ||
+          Math.abs(Number.parseFloat(label.countStyle.letterSpacing)) <= 0.5)
+    ),
+    'experience group counts should stay compact while the label names are letter-spaced'
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
@@ -1266,8 +1617,12 @@ async function assertHome(page: Page) {
   assert.equal(research?.expanded, 'true', 'research should default open');
   assert.equal(research?.rows, 4, 'research should show 4 rows when collapsed');
   assert.ok(research?.text.includes('Research (5)'));
-  assert.ok(research?.text.includes('see more'));
+  assert.ok(research?.text.includes('show more...'));
   assert.equal(research?.showMorePaddingTop, 8);
+  assert.ok(
+    Math.abs((research?.showMoreLeft ?? 0) - result.sectionLabelLefts[0]) <= 1,
+    'research show-more action should align with the rail text edge'
+  );
   assert.ok(research?.text.includes('Christian Dallago'));
   assert.ok(research?.text.includes('Matthew Lentz'));
   assert.ok(research?.text.includes('Philip Romero'));
@@ -1276,33 +1631,35 @@ async function assertHome(page: Page) {
       (label) =>
         label.text === 'Christian Dallago' &&
         label.color === result.mutedToken &&
-        label.fontFamily.includes('DM Mono') &&
-        label.fontSize === 14 &&
+        label.fontFamily === result.readingFontFamily &&
+        label.fontSize === 16 &&
         label.fontWeight === 400 &&
         label.marginLeft === 0 &&
         label.paddingLeft === 0 &&
         label.textTransform === 'none' &&
         label.letterSpacing === 'normal'
     ),
-    'advisor labels should match the muted mono rail date style without spacing hacks'
+    'advisor labels should use the muted normal-weight Open Sans reading style without spacing hacks'
   );
   assert.ok(
     result.advisorGapCount === 0 &&
       result.experienceLinks.some(
         (link) =>
           link.text === 'Duke University Christian Dallago' &&
-          link.rawText === 'Duke University  Christian Dallago' &&
+          link.rawText === 'Duke University Christian Dallago' &&
           link.whiteSpace === 'break-spaces'
       ),
-    'advisor organization and PI labels should be one inline underlined text run with two breakable spaces'
+    'advisor organization and PI labels should be one inline underlined text run with one breakable space'
   );
   assert.ok(
     !research?.text.includes('Duke University /') &&
       !teaching?.text.includes('Operating Systems /'),
     'advisor labels should sit after the organization without slash separators'
   );
-  assert.ok(research?.text.includes('incoming Aug 2026'));
-  assert.ok(!research?.text.includes('Incoming Aug 2026'));
+  assert.ok(research?.text.includes('Incoming Aug 2026'));
+  assert.ok(!research?.text.includes('incoming Aug 2026'));
+  assert.ok(research?.text.includes('Apr 2026 - Present'));
+  assert.ok(!research?.text.includes('Apr 2026 - present'));
   assert.ok(research?.text.includes('Anthropic'));
   assert.ok(research?.text.includes('+ Microsoft Research'));
   assert.ok(
@@ -1320,11 +1677,16 @@ async function assertHome(page: Page) {
 
   assert.equal(engineering?.expanded, 'true');
   assert.equal(engineering?.rows, 1);
-  assert.ok(engineering?.text.includes('see more'));
+  assert.ok(engineering?.text.includes('show more...'));
   assert.equal(engineering?.showMorePaddingTop, 8);
+  assert.ok(
+    Math.abs((engineering?.showMoreLeft ?? 0) - result.sectionLabelLefts[0]) <=
+      1,
+    'engineering show-more action should align with the rail text edge'
+  );
   assert.equal(teaching?.expanded, 'false');
   assert.equal(teaching?.rows, 0, 'teaching should default collapsed');
-  assert.equal(teaching?.hasShowMore, false, 'teaching should not see more');
+  assert.equal(teaching?.hasShowMore, false, 'teaching should not show more');
   assert.equal(
     teaching?.togglePaddingBottom,
     0,
@@ -1339,7 +1701,7 @@ async function assertHome(page: Page) {
   const metadataStyle = {
     color: result.bodyColor,
     fontFamily: result.readingFontFamily,
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: 400,
     textTransform: 'none',
   };
@@ -1393,12 +1755,19 @@ async function assertHome(page: Page) {
   assert.deepEqual(result.writingNewTags, ['New']);
   assert.ok(
     result.writingMeta.every(
-      (meta) => meta.includes('words') && meta.includes('min')
-    )
+      (meta) =>
+        /^\d+(?:\.\d+)?K? words \(\d+ mins\)$/.test(meta) &&
+        !/\b\d+(?:\.\d+)?k\b/.test(meta)
+    ),
+    'home writing metadata should use uppercase-K word counts and parenthesized mins'
   );
   assert.ok(
     result.writingMetaStyles.every(matchesMetadataStyle),
-    'writing word/time metadata should stay at the compact foreground metadata scale'
+    'writing word/time metadata should use readable body-scale metadata'
+  );
+  assert.ok(
+    result.writingTitleWeights.every((weight) => weight >= 700),
+    'home writing preview titles should render at font-weight 700'
   );
   assert.ok(
     result.writingDates.every((date) => /^[A-Z][a-z]{2} \d{4}$/.test(date)),
@@ -1431,8 +1800,13 @@ async function assertHome(page: Page) {
   );
   assert.equal(
     result.writingActionRail.paddingTop,
-    8,
-    'writing see-more action should keep the shared 8px rail gap'
+    0,
+    'writing see-more action should not add extra top padding'
+  );
+  assert.ok(
+    Math.abs(result.writingActionRail.linkLeft - result.sectionLabelLefts[0]) <=
+      1,
+    'writing see-more action should align with the rail text edge'
   );
   assert.ok(
     result.railRowPaddingBottoms.length > 0 &&
@@ -1493,8 +1867,14 @@ async function assertHome(page: Page) {
   );
   assert.equal(
     result.publicationActionRail.paddingTop,
-    8,
-    'publication see-more action should keep the shared 8px rail gap'
+    0,
+    'publication see-more action should not add extra top padding'
+  );
+  assert.ok(
+    Math.abs(
+      result.publicationActionRail.linkLeft - result.sectionLabelLefts[0]
+    ) <= 1,
+    'publication see-more action should align with the rail text edge'
   );
   assert.ok(
     result.publicationMetaLines.every(
@@ -1509,7 +1889,7 @@ async function assertHome(page: Page) {
   );
   assert.ok(
     result.publicationAuthorStyles.every(matchesMetadataStyle),
-    'publication authors should stay at the compact foreground metadata scale'
+    'publication authors should use readable body-scale metadata'
   );
   assert.ok(
     result.publicationMetaLineStyles.every(
@@ -1551,6 +1931,11 @@ async function assertHome(page: Page) {
     'Primal dual continual learning for robust antibody design',
     'Post-synthetic modification of UiO-66 analogue metal-organic framework as potential solid sorbent for direct air capture',
   ]);
+  assert.equal(
+    result.publicationTitleLineChecks[0]?.organicPolymersSameLine,
+    true,
+    'first publication title should keep organic polymers on one rendered line'
+  );
   assert.deepEqual(result.publicationTitleSubscripts, [['2'], [], []]);
   assert.equal(
     result.publicationSelfAuthors.length,
@@ -1564,12 +1949,12 @@ async function assertHome(page: Page) {
   assert.ok(
     result.publicationSelfAuthorStyles.every(
       (style: { className: string; fontStyle: string; fontWeight: number }) =>
-        style.className.includes('font-medium') &&
-        style.className.includes('italic') &&
-        style.fontStyle === 'italic' &&
-        style.fontWeight === 500
+        style.className.includes('font-semibold') &&
+        !style.className.includes('italic') &&
+        style.fontStyle === 'normal' &&
+        style.fontWeight === 600
     ),
-    'Islam Tayeb author spans should render italic at font-medium weight'
+    'Islam Tayeb author spans should render non-italic at semibold weight'
   );
   assert.ok(
     !result.publicationTitleClassName.includes('text-balance'),
@@ -1583,6 +1968,27 @@ async function assertHome(page: Page) {
       return authorIndex >= 0 && metaIndex > authorIndex;
     }),
     'publication type and journal should render under the authors'
+  );
+  assert.ok(
+    result.publicationTextStacks.every(
+      (stack: {
+        className: string;
+        display: string;
+        flexDirection: string;
+        rowGap: number;
+      }) =>
+        stack.className.includes('gap-0.5') &&
+        stack.display === 'flex' &&
+        stack.flexDirection === 'column' &&
+        stack.rowGap === 2
+    ),
+    'publication title, authors, and metadata should use a gap-0.5 vertical stack'
+  );
+  assert.ok(
+    result.publicationChildMarginTops.every(
+      (marginTop: number) => marginTop === 0
+    ),
+    'publication author and metadata rows should not add top margins'
   );
   assert.ok(
     result.publicationDateStyles.every(
@@ -1602,10 +2008,10 @@ async function assertHome(page: Page) {
     'publication dates should not use wide tracking'
   );
   assert.ok(
-    result.seeMoreActionStyles.every(
+    result.showMoreActionStyles.every(
       (style) => style.color === result.mutedToken
     ),
-    'see more actions should use the same muted grey as metadata labels'
+    'show more actions should use the same muted grey as metadata labels'
   );
   assert.ok(
     result.highlightedLinkClassNames.every((className) =>
@@ -1614,18 +2020,23 @@ async function assertHome(page: Page) {
     'home highlighted links should share the fragment-aware underline primitive'
   );
   assert.ok(
-    result.seeMoreActionStyles.every(
+    result.showMoreActionStyles.every(
       (style) =>
-        style.text === style.text.toLowerCase() &&
         style.fontVariantCaps === 'normal' &&
         style.fontSize === 14 &&
         style.textTransform === 'none'
     ),
-    'see more actions should stay lowercase date-sized normal text'
+    'show more actions should stay date-sized normal text without CSS text transforms'
+  );
+  assert.ok(
+    result.showMoreActionStyles.every(
+      (style) => Math.abs(style.left - result.sectionLabelLefts[0]) <= 1
+    ),
+    'show more actions should align with the rail text edge'
   );
   assert.equal(result.footerBorderTopWidth, 1);
-  assert.ok(result.bodyText.includes('see more on scholar'));
-  assert.ok(result.bodyText.includes('see more on blog'));
+  assert.ok(result.bodyText.includes('show more on Scholar...'));
+  assert.ok(result.bodyText.includes('show more on blog...'));
   assert.equal(result.footerUpdateText, 'Last updated Jun 22, 2026');
   assert.ok(result.footerQuoteText.includes('plz enjoy game'));
   assert.ok(result.footerQuoteText.includes('rrtyui'));
@@ -1644,34 +2055,26 @@ async function assertHome(page: Page) {
 
 async function assertMobileHeroContactCompact(page: Page) {
   const result = await page.evaluate(() => {
-    const mobileTitle = document.querySelector<HTMLElement>(
-      '[data-testid="hero-title-mobile"]'
+    const visibleTitle = document.querySelector<HTMLElement>(
+      '[data-testid="hero-title"], [data-testid="hero-title-mobile"]'
     );
-    const desktopTitle = document.querySelector<HTMLElement>(
-      '[data-testid="hero-title"]'
-    );
+    const heroSection = document.querySelector('[data-testid="hero-section"]');
+    const heroHeader = heroSection?.querySelector<HTMLElement>('header');
     const heroPortrait = document.querySelector<HTMLElement>(
       '[data-testid="hero-portrait"]'
     );
     const heroContactIndex = heroPortrait?.parentElement as HTMLElement | null;
     const heroContactDetails =
       heroContactIndex?.querySelector<HTMLElement>('div');
-    const mobileTitleRect = mobileTitle?.getBoundingClientRect();
+    const heroHeaderRect = heroHeader?.getBoundingClientRect();
     const portraitRect = heroPortrait?.getBoundingClientRect();
     const contactIndexRect = heroContactIndex?.getBoundingClientRect();
     const contactDetailsRect = heroContactDetails?.getBoundingClientRect();
 
     return {
-      mobileTitleText:
-        mobileTitle?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
-      mobileTitleDisplay: mobileTitle
-        ? getComputedStyle(mobileTitle).display
-        : '',
-      desktopTitleDisplay: desktopTitle
-        ? getComputedStyle(desktopTitle).display
-        : '',
-      titleContactGap:
-        (contactIndexRect?.top ?? 0) - (mobileTitleRect?.bottom ?? 0),
+      visibleTitleExists: Boolean(visibleTitle),
+      headerContactGap:
+        (contactIndexRect?.top ?? 0) - (heroHeaderRect?.bottom ?? 0),
       exists: Boolean(heroPortrait),
       display: heroPortrait ? getComputedStyle(heroPortrait).display : '',
       width: portraitRect?.width ?? 0,
@@ -1689,12 +2092,10 @@ async function assertMobileHeroContactCompact(page: Page) {
     };
   });
 
-  assert.equal(result.mobileTitleText, 'Islam Tayeb');
-  assert.equal(result.mobileTitleDisplay, 'block');
-  assert.equal(result.desktopTitleDisplay, 'none');
+  assert.equal(result.visibleTitleExists, false);
   assert.ok(
-    result.titleContactGap >= 7,
-    `mobile heading should stay above the contact stack: ${result.titleContactGap}`
+    result.headerContactGap >= 11 && result.headerContactGap <= 13,
+    `mobile contact should sit directly under the About header: ${result.headerContactGap}`
   );
   assert.equal(result.exists, true);
   assert.equal(result.display, 'none');
@@ -1706,11 +2107,11 @@ async function assertMobileHeroContactCompact(page: Page) {
   );
   assert.equal(result.contactLabel, 'contact');
   assert.deepEqual(result.contactLinks, [
-    'email',
-    'linkedin',
-    'github',
-    'x',
-    'scholar',
+    'Email',
+    'LinkedIn',
+    'GitHub',
+    'X',
+    'Scholar',
   ]);
 }
 
@@ -2126,11 +2527,11 @@ async function assertExperienceTitleHoverColors(page: Page) {
 
   assert.equal(teachingSeparator.tagName, 'SPAN');
   assert.ok(!teachingSeparator.className.includes('royb-link'));
-  assert.equal(teachingSeparator.rawText, 'Operating Systems  Matthew Lentz');
+  assert.equal(teachingSeparator.rawText, 'Operating Systems Matthew Lentz');
   assert.equal(teachingSeparator.whiteSpace, 'break-spaces');
   assert.equal(teachingSeparator.decoration, 'none');
 
-  await teachingTitle.hover();
+  await teachingTitle.locator('[data-testid="advisor-label"]').hover();
   const teachingHover = await readHover();
 
   assert.equal(teachingHover.text, 'Operating Systems Matthew Lentz');
@@ -2138,6 +2539,82 @@ async function assertExperienceTitleHoverColors(page: Page) {
   assert.equal(teachingHover.advisorColor, teachingHover.mutedToken);
   assert.equal(teachingHover.titleDecoration, 'none');
   assert.equal(teachingHover.advisorDecoration, 'none');
+}
+
+async function assertHomeRailHoverAccents(page: Page) {
+  const endedExperienceRow = page
+    .locator('#experience li', {
+      hasText: 'Duke University Navid NaderiAlizadeh',
+    })
+    .first();
+  const publicationRow = page
+    .locator('#publications [data-testid="publication-row"]')
+    .first();
+  const olderWritingRow = page
+    .locator('#writing li', { hasText: 'On Fingerspitzengefühl' })
+    .first();
+
+  await assertNeutralRailRowHoverAccent({
+    page,
+    row: endedExperienceRow,
+    hoverSource: endedExperienceRow.locator(
+      '[data-testid="experience-title-run"]'
+    ),
+    accent: 'o',
+    label: 'ended experience row',
+  });
+  await assertNeutralRailRowHoverAccent({
+    page,
+    row: publicationRow,
+    hoverSource: publicationRow.locator('[data-testid="publication-title"]'),
+    accent: 'y',
+    dotTestId: 'publication-dot',
+    connectorTestId: 'publication-connector',
+    label: 'publication row',
+  });
+  await assertNeutralRailRowHoverAccent({
+    page,
+    row: olderWritingRow,
+    hoverSource: olderWritingRow.locator(
+      'a[href="/blog/on-fingerspitzengefuhl"]'
+    ),
+    accent: 'b',
+    label: 'older writing row',
+  });
+  await assertRailRowKeepsMarkerOnHover({
+    page,
+    row: page
+      .locator('#experience li', { hasText: 'Christian Dallago' })
+      .first(),
+    hoverSource: page
+      .locator('[data-testid="experience-title-run"]', {
+        hasText: 'Duke University Christian Dallago',
+      })
+      .first(),
+    label: 'incoming experience row',
+  });
+  await assertRailRowKeepsMarkerOnHover({
+    page,
+    row: page
+      .locator('#experience li', { hasText: 'Duke University Matthew Lentz' })
+      .first(),
+    hoverSource: page
+      .locator('[data-testid="experience-title-run"]', {
+        hasText: 'Duke University Matthew Lentz',
+      })
+      .first(),
+    label: 'present experience row',
+  });
+  await assertRailRowKeepsMarkerOnHover({
+    page,
+    row: page
+      .locator('#writing li', { hasText: 'On Agent Memory Fidelity' })
+      .first(),
+    hoverSource: page
+      .locator('#writing a[href="/blog/on-agent-memory-fidelity"]')
+      .first(),
+    label: 'new writing row',
+  });
 }
 
 async function assertWordmarkHoverHighlight(page: Page) {
@@ -2227,10 +2704,27 @@ async function assertExperienceInteractions(page: Page) {
 
   await page
     .locator('[data-testid="experience-group"][data-group="research"]')
-    .getByRole('button', { name: 'see more' })
+    .getByRole('button', { name: 'show more...' })
     .click();
   assert.equal(await groupRows('research'), 5);
   assert.equal(await groupRows('engineering'), 1);
+  await page
+    .locator('[data-testid="experience-group"][data-group="research"]')
+    .getByRole('button', { name: 'show less...' })
+    .waitFor();
+  const railTextLeft = await page
+    .locator('#experience [data-testid="rail-title"]')
+    .first()
+    .evaluate((element) => element.getBoundingClientRect().left);
+  const showLessBox = await researchGroup
+    .getByRole('button', { name: 'show less...' })
+    .boundingBox();
+
+  assert.ok(showLessBox, 'Research show-less action should have a layout box');
+  assert.ok(
+    Math.abs(showLessBox.x - railTextLeft) <= 1,
+    'research show-less action should align with the rail text edge'
+  );
 
   await page
     .locator('[data-testid="experience-group"][data-group="teaching"]')
@@ -2341,10 +2835,10 @@ async function assertExperienceInteractions(page: Page) {
 async function expectNoTeachingShowMore(page: Page) {
   const count = await page
     .locator('[data-testid="experience-group"][data-group="teaching"]')
-    .getByRole('button', { name: 'see more' })
+    .getByRole('button', { name: 'show more...' })
     .count();
 
-  assert.equal(count, 0, 'teaching should not render see more');
+  assert.equal(count, 0, 'teaching should not render show more');
 }
 
 async function assertHeroLinksHoverHighlight(page: Page) {
@@ -2454,6 +2948,10 @@ async function assertBlogIndex(page: Page) {
         '[data-testid="external-writing-title"]'
       ),
     ];
+    const blogTitleWeights = [
+      ...(rail?.querySelectorAll<HTMLElement>('[data-testid="rail-title"]') ??
+        []),
+    ].map((title) => Number.parseInt(getComputedStyle(title).fontWeight, 10));
     const externalMetas = [
       ...document.querySelectorAll<HTMLElement>(
         '[data-testid="external-writing-meta"]'
@@ -2529,6 +3027,7 @@ async function assertBlogIndex(page: Page) {
       externalTitleTexts: externalTitleLinks.map(
         (link) => link.textContent?.replace(/\s+/g, ' ').trim() ?? ''
       ),
+      blogTitleWeights,
       externalHrefs: externalTitleLinks.map((link) => link.href),
       externalMetas: externalMetas.map(
         (meta) => meta.textContent?.replace(/\s+/g, ' ').trim() ?? ''
@@ -2613,6 +3112,10 @@ async function assertBlogIndex(page: Page) {
     result.externalTitleTexts,
     externalWriting.map((item) => item.title)
   );
+  assert.ok(
+    result.blogTitleWeights.every((weight) => weight >= 700),
+    'blog index titles should render at font-weight 700'
+  );
   assert.deepEqual(
     result.externalHrefs,
     externalWriting.map((item) => item.href)
@@ -2636,8 +3139,11 @@ async function assertBlogIndex(page: Page) {
     result.postDates.every((date) => /^[A-Z][a-z]{2} \d{4}$/.test(date)),
     'blog index dates should use month-year only'
   );
-  assert.ok(result.firstFooterText.includes('words'));
-  assert.ok(result.firstFooterText.includes('min'));
+  assert.match(
+    result.firstFooterText,
+    /^\d+(?:\.\d+)?K? words \(\d+ mins\)$/,
+    'blog index reading metadata should use uppercase-K word counts and parenthesized mins'
+  );
   assert.ok(
     !result.firstFooterText.includes('~'),
     'blog index reading metadata should not use approximation markers'
@@ -2653,7 +3159,7 @@ async function assertBlogIndex(page: Page) {
     {
       color: result.bodyColor,
       fontFamily: result.readingFontFamily,
-      fontSize: 14,
+      fontSize: 16,
       fontWeight: 400,
       textTransform: 'none',
     },
@@ -2664,7 +3170,7 @@ async function assertBlogIndex(page: Page) {
       (style) =>
         style.color === result.bodyColor &&
         style.fontFamily === result.readingFontFamily &&
-        style.fontSize === 14 &&
+        style.fontSize === 16 &&
         style.fontWeight === 400 &&
         style.textTransform === 'none'
     ),
@@ -2681,12 +3187,41 @@ async function assertBlogIndex(page: Page) {
   assert.ok(
     result.bodyText.includes('Finding the Right Answer Was Never the Point')
   );
-  assert.ok(result.bodyText.includes('894 words, 4 min'));
+  assert.ok(result.bodyText.includes('894 words (4 mins)'));
+  assert.doesNotMatch(
+    result.bodyText,
+    /\b\d+(?:\.\d+)?k\b/,
+    'blog index should not render lowercase-k thousands abbreviations'
+  );
   assert.ok(!result.bodyText.includes('Duke Chronicle'));
   assert.ok(
     Math.abs(result.viewportHeight - result.footerBottom) <= 1,
     'short blog index pages should pin the footer to the viewport bottom'
   );
+}
+
+async function assertBlogRailHoverAccents(page: Page) {
+  const olderBlogRow = page
+    .locator('#posts li', { hasText: 'On Fingerspitzengefühl' })
+    .first();
+
+  await assertNeutralRailRowHoverAccent({
+    page,
+    row: olderBlogRow,
+    hoverSource: olderBlogRow.locator('a[href="/blog/on-fingerspitzengefuhl"]'),
+    accent: 'b',
+    label: 'older blog row',
+  });
+  await assertRailRowKeepsMarkerOnHover({
+    page,
+    row: page
+      .locator('#posts li', { hasText: 'On Agent Memory Fidelity' })
+      .first(),
+    hoverSource: page
+      .locator('#posts a[href="/blog/on-agent-memory-fidelity"]')
+      .first(),
+    label: 'new blog row',
+  });
 }
 
 async function assertArticle(page: Page) {
@@ -2769,6 +3304,7 @@ async function assertArticle(page: Page) {
     const mainContentLeft =
       (mainRect?.left ?? 0) + Number.parseFloat(mainStyle?.paddingLeft ?? '0');
     const titleStyle = title ? getComputedStyle(title) : null;
+    const articleHeaderStyle = header ? getComputedStyle(header) : null;
     const tocMetaStyle = tocMeta ? getComputedStyle(tocMeta) : null;
     const tocMetaLabelStyle = tocMetaLabel
       ? getComputedStyle(tocMetaLabel)
@@ -2859,6 +3395,10 @@ async function assertArticle(page: Page) {
       jsonLdTypes,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerText: header?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+      headerMarginBottom: Number.parseFloat(
+        articleHeaderStyle?.marginBottom ?? '0'
+      ),
+      headerRowGap: Number.parseFloat(articleHeaderStyle?.rowGap ?? '0'),
       headerDateText:
         headerDate?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       headerDateTransform: headerDateStyle?.textTransform ?? '',
@@ -2969,23 +3509,43 @@ async function assertArticle(page: Page) {
   );
   assert.deepEqual(result.h1Texts, [result.titleText]);
   assert.ok(result.jsonLdTypes.includes('BlogPosting'));
-  assert.ok(result.titleWeight >= 600, 'article title should stay strong');
+  assert.ok(
+    result.titleWeight >= 700,
+    'article title should render at font-weight 700'
+  );
   assert.ok(
     Math.abs(result.titleLeft - result.mainContentLeft) <= 1,
     `article title should align to blog section marker edge: ${result.titleLeft} / ${result.mainContentLeft}`
   );
   assert.ok(!result.headerText.includes('GitHub'));
   assert.ok(!result.headerText.includes('Why agent context should be'));
+  assert.equal(result.headerMarginBottom, 12);
+  assert.equal(result.headerRowGap, 4);
   assert.match(result.headerDateText, /^[A-Z][a-z]{2} \d{2}, \d{4}$/);
   assert.equal(result.headerDateTransform, 'none');
-  for (const text of ['time', 'last updated', 'code', 'github']) {
+  for (const text of ['Time', 'Last updated', 'Code', 'GitHub']) {
     assert.ok(result.tocText.includes(text), `TOC should include ${text}`);
   }
-  for (const text of ['Time', 'Last updated', 'Code', 'GitHub']) {
-    assert.ok(!result.tocText.includes(text), `TOC should lowercase ${text}`);
+  for (const text of ['time', 'last updated', 'code', 'github']) {
+    assert.ok(!result.tocText.includes(text), `TOC should proper-case ${text}`);
   }
   assert.ok(!result.tocText.includes('Reading time'));
   assert.ok(!result.tocText.includes('~'));
+  assert.match(
+    result.tocText,
+    /\d+(?:\.\d+)?K? words \(\d+ mins\)/,
+    'TOC reading metadata should use uppercase-K word counts and parenthesized mins'
+  );
+  assert.doesNotMatch(
+    result.tocText,
+    /\b\d+(?:\.\d+)?k\b/,
+    'TOC reading metadata should not use lowercase-k thousands abbreviations'
+  );
+  assert.doesNotMatch(
+    result.tocText,
+    /\b\d+ min(?!s)\b/,
+    'TOC reading metadata should use mins'
+  );
   assert.equal(result.tocMetaFontVariantCaps, 'normal');
   assert.equal(result.tocMetaLabelTransform, 'none');
   assert.equal(result.tocMetaValueTransform, 'none');
@@ -3081,7 +3641,7 @@ async function assertArticle(page: Page) {
     assert.equal(result.h4Transform, 'none');
     assert.equal(result.h4LetterSpacing, 'normal');
     assert.ok(
-      result.h4Family.includes('Sora'),
+      result.h4Family.includes('Open Sans'),
       'article h4 labels should use the site title sans font'
     );
   }
@@ -3106,7 +3666,7 @@ async function assertArticle(page: Page) {
   assert.ok(result.articleListMarkerContent.includes('counter'));
   assert.ok(result.footnotesSize >= 14 && result.footnotesSize < 15);
   assert.ok(result.footnoteListPadding >= 24);
-  assert.ok(result.footnoteRefFamily.includes('DM Mono'));
+  assert.ok(result.footnoteRefFamily.includes('ui-monospace'));
   assert.ok(result.footnoteRefWeight >= 600);
   assert.equal(result.footnotesSepStyle, 'dashed');
   assert.ok(
@@ -3306,7 +3866,7 @@ async function assertHarmoniaArticle(page: Page) {
   assert.equal(result.h4Transform, 'none');
   assert.equal(result.h4LetterSpacing, 'normal');
   assert.ok(
-    result.h4FontFamily.includes('Sora'),
+    result.h4FontFamily.includes('Open Sans'),
     'Harmonia subheads should use the sans title font'
   );
   assert.ok(result.bodyText.includes('math.pi'));
@@ -3716,6 +4276,7 @@ async function main() {
     await assertWordmarkHoverHighlight(home);
     await assertPublicationTitleUnderline(home);
     await assertExperienceGroupLabelHoverHighlight(home);
+    await assertHomeRailHoverAccents(home);
     await assertThemeToggleIsStable(home);
     await screenshot(home, 'home-desktop');
     await assertExperienceInteractions(home);
@@ -3778,6 +4339,7 @@ async function main() {
     await blog.goto(`${baseUrl}/blog`, { waitUntil: 'networkidle' });
     const blogBand = await assertRoybBandPlacement(blog);
     await assertBlogIndex(blog);
+    await assertBlogRailHoverAccents(blog);
     await assertVisibleOneLineDescriptions(blog);
     await screenshot(blog, 'blog-index');
 

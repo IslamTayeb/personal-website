@@ -15,6 +15,14 @@ export function RichText({ text }: { text: string }) {
           );
         }
 
+        if (part === 'porous organic polymers') {
+          return (
+            <span key={`${part}-${index}`}>
+              porous organic{'\u00a0'}polymers
+            </span>
+          );
+        }
+
         return part;
       })}
     </>

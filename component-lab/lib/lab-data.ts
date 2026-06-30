@@ -1,22 +1,19 @@
+export type ExperienceKind = 'research' | 'engineering' | 'teaching';
+
 export type ExperienceRole = {
+  kind: ExperienceKind;
   org: string;
   piName?: string;
-  piHref?: string;
   date: string;
   desc: string;
-  descLinks?: {
-    text: string;
-    href: string;
-  }[];
   href?: string;
-  incoming?: boolean;
-  state?: 'present' | 'ended' | 'incoming';
+  state: 'incoming' | 'present' | 'ended';
 };
 
 export type ExperienceGroup = {
-  kind: 'research' | 'engineering' | 'teaching';
+  kind: ExperienceKind;
   visibleCount: number;
-  roles: ExperienceRole[];
+  roles: Omit<ExperienceRole, 'kind'>[];
 };
 
 export const experienceGroups: ExperienceGroup[] = [
@@ -29,7 +26,6 @@ export const experienceGroups: ExperienceGroup[] = [
         piName: 'Christian Dallago',
         date: 'Incoming Aug 2026',
         href: 'https://machine.learning.bio/',
-        incoming: true,
         state: 'incoming',
         desc: 'GPU acceleration of protein search',
       },
@@ -39,13 +35,7 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Apr 2026 - Present',
         href: 'https://users.cs.duke.edu/~mlentz/',
         state: 'present',
-        desc: 'Token minning runtime for coding agents with Tokenless (YC S26)',
-        descLinks: [
-          {
-            text: 'Tokenless (YC S26)',
-            href: 'https://usetokenless.com/',
-          },
-        ],
+        desc: 'Token mining runtime and benchmarks for coding agents with Tokenless',
       },
       {
         org: 'Duke University',
@@ -53,17 +43,7 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Aug 2025 - Present',
         href: 'https://www.romerolab.org/',
         state: 'present',
-        desc: 'Chemistry data-mining agents with Anthropic + Microsoft Research',
-        descLinks: [
-          {
-            text: 'Anthropic',
-            href: 'https://www.anthropic.com/news/ai-for-science-program',
-          },
-          {
-            text: 'Microsoft Research',
-            href: 'https://www.microsoft.com/en-us/research/people/kevyan/',
-          },
-        ],
+        desc: 'Chemistry data-mining agents with Anthropic and Microsoft Research',
       },
       {
         org: 'Duke University',
@@ -79,13 +59,7 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Jul 2022 - Sep 2023',
         href: 'https://scholar.google.com/citations?user=BLMFawMAAAAJ&hl=en',
         state: 'ended',
-        desc: 'Polymer property prediction and synthesis for CO₂ capture with Saudi Aramco',
-        descLinks: [
-          {
-            text: 'Saudi Aramco',
-            href: 'https://www.aramco.com/',
-          },
-        ],
+        desc: 'Polymer property prediction and synthesis for CO2 capture with Saudi Aramco',
       },
     ],
   },
@@ -112,7 +86,7 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Jun 2024 - Aug 2024',
         href: 'https://dihi.org/',
         state: 'ended',
-        desc: 'Automated literature review agents + VTE detection',
+        desc: 'Automated literature review agents and VTE detection',
       },
     ],
   },
@@ -125,8 +99,7 @@ export const experienceGroups: ExperienceGroup[] = [
         piName: 'Matthew Lentz',
         date: 'Incoming Aug 2026',
         state: 'incoming',
-        incoming: true,
-        desc: 'Introducing kernels, co-leading a discussion section + office hours',
+        desc: 'Introducing kernels, co-leading a discussion section and office hours',
       },
       {
         org: 'Computer Systems',
@@ -134,16 +107,24 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Jan 2026 - May 2026',
         href: 'https://courses.cs.duke.edu/spring26/compsci210d/',
         state: 'ended',
-        desc: 'Introduced CPUs, co-led a discussion section + office hours',
+        desc: 'Introduced CPUs, co-led a discussion section and office hours',
       },
       {
         org: 'Organic Chemistry I',
         piName: 'SAGE Tutoring',
-        href: 'https://arc.duke.edu/peer-education/',
         date: 'Jan 2025 - May 2025',
+        href: 'https://arc.duke.edu/peer-education/',
         state: 'ended',
-        desc: 'Led a study group, saw kids quit pre-med as the semester went',
+        desc: 'Led a study group through the semester',
       },
     ],
   },
 ];
+
+export const allExperienceRoles: ExperienceRole[] = experienceGroups.flatMap(
+  (group) => group.roles.map((role) => ({ ...role, kind: group.kind }))
+);
+
+export function experienceKindLabel(kind: ExperienceKind) {
+  return kind[0].toUpperCase() + kind.slice(1);
+}

@@ -520,7 +520,7 @@ async function main() {
     {
       title: 'Finding the Right Answer Was Never the Point',
       href: 'https://www.dukechronicle.com/article/daf941cd-e431-4e71-a282-5f7da9a56c28',
-      meta: '894 words, 4 min',
+      meta: '894 words (4 mins)',
       date: 'Nov 2024',
     },
   ]);
@@ -540,14 +540,20 @@ async function main() {
       post.html.includes('<p') || post.html.includes('<h'),
       `${post.manifest.slug} should render article content`
     );
-    assert.ok(
-      post.readingMeta.includes('min'),
-      `${post.manifest.slug} needs reading meta`
+    assert.match(
+      post.readingMeta,
+      /^\d+(?:\.\d+)?K? words \(\d+ mins\)$/,
+      `${post.manifest.slug} should use canonical reading metadata`
     );
     assert.doesNotMatch(
       post.readingMeta,
       /~/,
       `${post.manifest.slug} reading metadata should not use approximation markers`
+    );
+    assert.doesNotMatch(
+      post.readingMeta,
+      /\b\d+(?:\.\d+)?k\b/,
+      `${post.manifest.slug} reading metadata should use uppercase K`
     );
     assert.equal(
       postHref(post),
@@ -569,15 +575,20 @@ async function main() {
     assertImagesHaveAlt(post.manifest.slug, post.html);
     assertRenderedExternalLinks(post.manifest.slug, post.html);
     assertArticlePrimitiveNormalization(post.manifest.slug, post.html);
+    assert.doesNotMatch(
+      post.html,
+      /\b\d+(?:\.\d+)?k\b/,
+      `${post.manifest.slug} should render thousands abbreviations with uppercase K`
+    );
 
     if (post.manifest.slug === 'on-agent-memory-fidelity') {
       assert.match(post.html, /class="article-toc"/);
-      assert.match(post.html, /<span>time<\/span>/);
+      assert.match(post.html, /<span>Time<\/span>/);
       assert.doesNotMatch(post.html, /Reading time/);
-      assert.match(post.html, /last updated/);
-      assert.match(post.html, /github/);
-      assert.doesNotMatch(post.html, /<span>Time<\/span>/);
-      assert.doesNotMatch(post.html, /GitHub/);
+      assert.match(post.html, /Last updated/);
+      assert.match(post.html, /GitHub/);
+      assert.doesNotMatch(post.html, /<span>time<\/span>/);
+      assert.doesNotMatch(post.html, /<span>code<\/span>/);
       assert.match(post.html, /class="toc-subs"/);
       assert.match(
         post.html,

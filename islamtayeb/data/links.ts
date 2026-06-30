@@ -6,24 +6,24 @@ export type LinkItem = {
 
 export const contactLinks: LinkItem[] = [
   {
-    label: 'email',
+    label: 'Email',
     href: 'mailto:islam.moh.islamm@gmail.com',
     external: false,
   },
   {
-    label: 'linkedin',
+    label: 'LinkedIn',
     href: 'https://www.linkedin.com/in/islam-tayeb/',
   },
   {
-    label: 'github',
+    label: 'GitHub',
     href: 'https://github.com/IslamTayeb',
   },
   {
-    label: 'x',
+    label: 'X',
     href: 'https://x.com/IslamTyb',
   },
   {
-    label: 'scholar',
+    label: 'Scholar',
     href: 'https://scholar.google.com/citations?hl=en&user=2ZrlBUcAAAAJ',
   },
 ];

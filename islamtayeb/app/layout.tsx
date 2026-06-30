@@ -2,17 +2,15 @@ import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
-import { DM_Mono, Sora } from 'next/font/google';
+import { Open_Sans } from 'next/font/google';
 import { PageviewScript } from '@/components/site/pageview-script';
 import { SiteFooter } from '@/components/site/site-footer';
 import { SiteHeader } from '@/components/site/site-header';
 import { siteMetadata } from '@/data/site-metadata';
 import './globals.css';
 
-const sora = Sora({ variable: '--font-sora', subsets: ['latin'] });
-const dmMono = DM_Mono({
-  variable: '--font-dm-mono',
-  weight: ['400', '500'],
+const openSans = Open_Sans({
+  variable: '--font-open-sans',
   subsets: ['latin'],
 });
 
@@ -153,7 +151,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${sora.variable} ${dmMono.variable} bg-background`}
+      className={`${openSans.variable} bg-background`}
     >
       <body className="bg-background font-sans text-foreground antialiased">
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />

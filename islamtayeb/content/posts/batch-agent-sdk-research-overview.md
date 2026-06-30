@@ -6,7 +6,7 @@ You want to spawn 100+ coding agents concurrently (e.g. "research 100 papers, gi
 
 ### Orchestration Layer (spawning and managing agents)
 
-**Agent Orchestrator (Composio, 6.4k stars)** — Closest to what you're imagining but focused on coding tasks on a single codebase, not batch research. Spawns parallel Claude Code/Codex/Aider agents in isolated git worktrees, each gets its own branch and PR. Agent-agnostic, runtime-agnostic (tmux/Docker). Dashboard for supervision. Handles CI failures and review comments automatically.
+**Agent Orchestrator (Composio, 6.4K stars)** — Closest to what you're imagining but focused on coding tasks on a single codebase, not batch research. Spawns parallel Claude Code/Codex/Aider agents in isolated git worktrees, each gets its own branch and PR. Agent-agnostic, runtime-agnostic (tmux/Docker). Dashboard for supervision. Handles CI failures and review comments automatically.
 
 **Sculptor (Imbue, 146 stars)** — UI for running parallel Claude Code instances in Docker containers. Each agent gets an isolated container. Focused on parallel coding, not batch research/analysis.
 
@@ -18,9 +18,9 @@ You want to spawn 100+ coding agents concurrently (e.g. "research 100 papers, gi
 
 ### Inference Layer (making batched requests efficient)
 
-**vLLM (77k stars)** — High-throughput serving with continuous batching, PagedAttention, automatic prefix caching. The standard for self-hosted LLM inference. Prefix caching reuses KV blocks when requests share a prefix (e.g. same system prompt across 100 agents).
+**vLLM (77K stars)** — High-throughput serving with continuous batching, PagedAttention, automatic prefix caching. The standard for self-hosted LLM inference. Prefix caching reuses KV blocks when requests share a prefix (e.g. same system prompt across 100 agents).
 
-**SGLang (26k stars)** — RadixAttention: token-level radix tree for prefix caching, more fine-grained than vLLM's block-level hashing. Better for multi-turn/branching conversations where prefixes diverge mid-sequence.
+**SGLang (26K stars)** — RadixAttention: token-level radix tree for prefix caching, more fine-grained than vLLM's block-level hashing. Better for multi-turn/branching conversations where prefixes diverge mid-sequence.
 
 **LMCache** — KV cache extraction layer that sits between inference engines and storage. Enables cross-node KV sharing, hierarchical storage (GPU → CPU → disk → remote). Works with both vLLM and SGLang.
 

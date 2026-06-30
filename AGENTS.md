@@ -25,9 +25,9 @@ are changing.
 
 `islamtayeb/` is the official overhaul and replaces both the old
 `islamtayeb.dev` app and the old `apmoverflow.xyz` static blog. The active site
-uses the component-lab visual language: Sora + DM Mono, narrow document width,
-sharp borders, paper/ink base, the `islam / blog` selector, the top ROYB bar,
-and strong ROYB accents.
+uses the component-lab visual language: Open Sans + UI Mono, narrow document
+width, sharp borders, paper/ink base, the `islam / blog` selector, the top ROYB
+bar, and strong ROYB accents.
 
 The desired feel is elevated minimalism with real density: whitespace separates
 ideas, not inflates the page. Keep it motionless: no animations, transitions,
@@ -113,6 +113,9 @@ Use meaningful commit messages that describe the why.
   `href` when the whole experience title should link. Use `piHref` only when
   the advisor/mentor label should link while the organization/course title
   remains plain text.
+- **Experience date labels:** Capitalize display status words in experience
+  dates, e.g. `Incoming Aug 2026` and `Apr 2026 - Present`. Keep internal
+  `state` values lowercase.
 - **Icon plus text links:** When a control has an icon plus a text label that
   should use the ROYB underline/highlight, keep the icon outside the underline
   span and wrap only the label in `RoybLinkText`. Use
@@ -124,6 +127,22 @@ Use meaningful commit messages that describe the why.
 - **One-line compact copy:** Descriptions, summaries, excerpts, compact rails,
   course details, and previews should be concise and constrained with explicit
   one-line CSS where needed.
+- **Rail detail scale:** Publication author/type rows and writing word/time
+  metadata use `text-base` Open Sans reading copy. Rail dates remain compact
+  `text-sm` mono.
+- **Reading metadata format:** Abbreviate thousands with uppercase `K`, trim
+  whole-number decimals, and use parenthesized minutes, e.g.
+  `3K words (5 mins)`.
+- **Publication text stacks:** Publication title/author/type stacks should own
+  vertical rhythm with `flex flex-col gap-0.5`; avoid child `mt-*` margins.
+- **Show-more actions:** Bare disclosure labels use `show more...`; labeled index
+  actions put the ellipsis after the destination, e.g.
+  `show more on blog...` and `show more on Scholar...`. Collapse controls use
+  `show less...`.
+- **Rail hover accents:** Neutral rail dots should hover/focus to the owning
+  section color only when the primary title hyperlink is hovered/focused. Rail
+  connector lines stay grey. Already-colored state markers such as `New`,
+  `Present`, and `Incoming` stay fixed.
 - **Rail title/date balance:** On mobile rail rows, dates get width priority.
   Titles should give up space before dates wrap, while genuinely long dates can
   still wrap on narrow phones without creating horizontal overflow.
@@ -132,6 +151,10 @@ Use meaningful commit messages that describe the why.
   same `md` portrait threshold, not to `sm`.
 - **Blog internals:** Active posts should use local `/blog/...` links for links
   to other posts. Do not link active content back to `apmoverflow.xyz`.
+- **Article headers:** Blog article title/date headers use tight section-like
+  spacing: `mb-3 flex flex-col gap-1`.
+- **Blog title weight:** Blog titles on the homepage writing preview, `/blog`
+  index, and article pages should render at font-weight 700.
 - **Blog manifests:** Use `listed: false` for source-backed pages that should
   exist at their slug but stay out of `/blog`, feeds, and sitemaps. Hidden
   source-backed pages still need old APM top-level redirect coverage when their

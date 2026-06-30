@@ -6,6 +6,8 @@ import { RoybLinkText } from '@/components/primitives/royb-link';
 import { cn } from '@/lib/utils';
 import { MoonGlyph, SparkleGlyph } from './glyphs';
 
+const inactiveWordmarkClassName = 'text-[#6B6966]';
+
 export function Wordmark() {
   const pathname = usePathname();
   const active = pathname.startsWith('/blog') ? 'blog' : 'islam';
@@ -22,16 +24,13 @@ export function Wordmark() {
         variant="plain"
         className={cn(
           'royb-link-hover-scope flex items-center gap-2',
-          active === 'islam' ? 'text-roy-r' : 'text-muted-foreground'
+          active === 'islam' ? 'text-roy-r' : inactiveWordmarkClassName
         )}
       >
         <MoonGlyph size={15} />
         <RoybLinkText section="r">islam</RoybLinkText>
       </ExternalLink>
-      <span
-        aria-hidden
-        className="text-[#DFDEDB] dark:text-muted-foreground/45"
-      >
+      <span aria-hidden className={inactiveWordmarkClassName}>
         /
       </span>
       <ExternalLink
@@ -40,7 +39,7 @@ export function Wordmark() {
         variant="plain"
         className={cn(
           'royb-link-hover-scope flex items-center gap-2',
-          active === 'blog' ? 'text-roy-b' : 'text-muted-foreground'
+          active === 'blog' ? 'text-roy-b' : inactiveWordmarkClassName
         )}
       >
         <SparkleGlyph size={14} />

@@ -96,11 +96,18 @@ export function readingMeta(markdown: string) {
     .filter(Boolean).length;
   const rounded =
     words >= 1000
-      ? `${(Math.round(words / 100) / 10).toFixed(1)}k`
+      ? (() => {
+          const value = Math.round(words / 100) / 10;
+          const formatted = Number.isInteger(value)
+            ? value.toFixed(0)
+            : value.toFixed(1);
+
+          return `${formatted}K`;
+        })()
       : `${words}`;
   const minutes = Math.max(1, Math.round(words / 250));
 
-  return `${rounded} words, ${minutes} min`;
+  return `${rounded} words (${minutes} mins)`;
 }
 
 function normalizeFootnoteOrder(markdown: string) {
@@ -214,19 +221,19 @@ function buildToc(
     .join('');
 
   const metaItems = [
-    `<div class="toc-meta-row"><span>time</span><span>${escapeHtml(
+    `<div class="toc-meta-row"><span>Time</span><span>${escapeHtml(
       readingMeta(sourceMarkdown)
     )}</span></div>`,
-    `<div class="toc-meta-row"><span>last updated</span><span>${escapeHtml(
+    `<div class="toc-meta-row"><span>Last updated</span><span>${escapeHtml(
       formatDate(manifest.updatedAt)
     )}</span></div>`,
   ];
 
   if (manifest.codeLink) {
     metaItems.push(
-      `<div class="toc-meta-row"><span>code</span><span><a href="${escapeHtml(
+      `<div class="toc-meta-row"><span>Code</span><span><a href="${escapeHtml(
         manifest.codeLink.href
-      )}" class="toc-link ${articleExternalLinkClassName}">${escapeHtml(manifest.codeLink.label.toLowerCase())}</a></span></div>`
+      )}" class="toc-link ${articleExternalLinkClassName}">${escapeHtml(manifest.codeLink.label)}</a></span></div>`
     );
   }
 
