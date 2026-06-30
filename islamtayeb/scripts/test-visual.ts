@@ -2288,17 +2288,24 @@ async function assertExperienceInteractions(page: Page) {
       textDecoration: getComputedStyle(element).textDecorationLine,
     })
   );
-  const sageLink = page
+  const sageTitleLink = page
+    .locator(
+      '[data-testid="experience-group"][data-group="teaching"] a[data-testid="experience-title-run"]',
+      { hasText: /Organic Chemistry I\s+SAGE Tutoring/ }
+    )
+    .first();
+  const sageTitleLinkInfo = await sageTitleLink.evaluate((element) => ({
+    href: element.getAttribute('href'),
+    className: element.className,
+    textContent: element.textContent,
+    textDecoration: getComputedStyle(element).textDecorationLine,
+  }));
+  const sageAdvisorOnlyLinkCount = await page
     .locator(
       '[data-testid="experience-group"][data-group="teaching"] a[data-testid="advisor-label"]',
       { hasText: 'SAGE Tutoring' }
     )
-    .first();
-  const sageLinkInfo = await sageLink.evaluate((element) => ({
-    href: element.getAttribute('href'),
-    className: element.className,
-    textDecoration: getComputedStyle(element).textDecorationLine,
-  }));
+    .count();
 
   assert.equal(
     computerSystemsLinkInfo.href,
@@ -2311,13 +2318,22 @@ async function assertExperienceInteractions(page: Page) {
       computerSystemsLinkInfo.textDecoration.includes('underline'),
     'Computer Systems should use the ROYB underlined title link treatment'
   );
-  assert.equal(sageLinkInfo.href, 'https://arc.duke.edu/peer-education/');
+  assert.equal(sageTitleLinkInfo.href, 'https://arc.duke.edu/peer-education/');
+  assert.match(
+    sageTitleLinkInfo.textContent ?? '',
+    /Organic Chemistry I\s+SAGE Tutoring/
+  );
   assert.ok(
-    sageLinkInfo.className.includes('royb-link') &&
-      sageLinkInfo.className.includes('royb-link-highlight') &&
-      sageLinkInfo.className.includes('royb-link-fragment') &&
-      sageLinkInfo.textDecoration.includes('underline'),
-    'SAGE Tutoring should use the ROYB underlined advisor link treatment'
+    sageTitleLinkInfo.className.includes('royb-link') &&
+      sageTitleLinkInfo.className.includes('royb-link-highlight') &&
+      sageTitleLinkInfo.className.includes('royb-link-fragment') &&
+      sageTitleLinkInfo.textDecoration.includes('underline'),
+    'Organic Chemistry I SAGE Tutoring should use the ROYB underlined title link treatment'
+  );
+  assert.equal(
+    sageAdvisorOnlyLinkCount,
+    0,
+    'SAGE Tutoring should not render as an advisor-only anchor'
   );
   await expectNoTeachingShowMore(page);
 }

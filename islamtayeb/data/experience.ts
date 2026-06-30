@@ -133,7 +133,7 @@ export const experienceGroups: ExperienceGroup[] = [
       {
         org: 'Organic Chemistry I',
         piName: 'SAGE Tutoring',
-        piHref: 'https://arc.duke.edu/peer-education/',
+        href: 'https://arc.duke.edu/peer-education/',
         date: 'Jan 2025 - May 2025',
         state: 'ended',
         desc: 'Led a study group, saw kids quit pre-med as the semester went',
