@@ -59,14 +59,14 @@ export default async function BlogIndexPage() {
                   key={post.manifest.slug}
                   dotClassName={isNew ? 'bg-roy-b' : postDotClassName}
                   hoverAccent={isNew ? undefined : 'b'}
-                  titleClassName="font-bold"
+                  titleClassName="font-semibold"
                   title={
                     <span>
                       <ExternalLink
                         href={postHref(post)}
                         section="b"
                         data-rail-hover-source={isNew ? undefined : 'true'}
-                        className="text-base font-bold leading-tight text-foreground"
+                        className="text-base font-semibold leading-tight text-foreground"
                       >
                         {post.manifest.title}
                       </ExternalLink>
@@ -100,14 +100,14 @@ export default async function BlogIndexPage() {
                 testId="external-writing-row"
                 dotClassName={postDotClassName}
                 hoverAccent="b"
-                titleClassName="font-bold"
+                titleClassName="font-semibold"
                 title={
                   <ExternalLink
                     href={item.href}
                     section="b"
                     data-rail-hover-source="true"
                     data-testid="external-writing-title"
-                    className="min-w-0 text-base font-bold leading-tight text-foreground"
+                    className="min-w-0 text-base font-semibold leading-tight text-foreground"
                   >
                     {item.title}
                   </ExternalLink>

@@ -1766,8 +1766,8 @@ async function assertHome(page: Page) {
     'writing word/time metadata should use readable body-scale metadata'
   );
   assert.ok(
-    result.writingTitleWeights.every((weight) => weight >= 700),
-    'home writing preview titles should render at font-weight 700'
+    result.writingTitleWeights.every((weight) => weight === 600),
+    'home writing preview titles should render at font-weight 600'
   );
   assert.ok(
     result.writingDates.every((date) => /^[A-Z][a-z]{2} \d{4}$/.test(date)),
@@ -3113,8 +3113,8 @@ async function assertBlogIndex(page: Page) {
     externalWriting.map((item) => item.title)
   );
   assert.ok(
-    result.blogTitleWeights.every((weight) => weight >= 700),
-    'blog index titles should render at font-weight 700'
+    result.blogTitleWeights.every((weight) => weight === 600),
+    'blog index titles should render at font-weight 600'
   );
   assert.deepEqual(
     result.externalHrefs,
@@ -3510,8 +3510,8 @@ async function assertArticle(page: Page) {
   assert.deepEqual(result.h1Texts, [result.titleText]);
   assert.ok(result.jsonLdTypes.includes('BlogPosting'));
   assert.ok(
-    result.titleWeight >= 700,
-    'article title should render at font-weight 700'
+    result.titleWeight === 600,
+    'article title should render at font-weight 600'
   );
   assert.ok(
     Math.abs(result.titleLeft - result.mainContentLeft) <= 1,

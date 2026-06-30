@@ -31,14 +31,14 @@ export async function WritingPreview() {
                   key={post.manifest.slug}
                   dotClassName={isNew ? 'bg-roy-b' : 'bg-foreground/75'}
                   hoverAccent={isNew ? undefined : 'b'}
-                  titleClassName="font-bold"
+                  titleClassName="font-semibold"
                   title={
                     <span>
                       <ExternalLink
                         href={postHref(post)}
                         section="b"
                         data-rail-hover-source={isNew ? undefined : 'true'}
-                        className="font-bold text-foreground"
+                        className="font-semibold text-foreground"
                       >
                         {post.manifest.title}
                       </ExternalLink>
