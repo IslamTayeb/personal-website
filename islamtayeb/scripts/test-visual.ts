@@ -2053,34 +2053,55 @@ async function assertHome(page: Page) {
   );
 }
 
-async function assertMobileHeroContactCompact(page: Page) {
+async function assertMobileHeroContactUnderStory(page: Page) {
   const result = await page.evaluate(() => {
     const visibleTitle = document.querySelector<HTMLElement>(
       '[data-testid="hero-title"], [data-testid="hero-title-mobile"]'
     );
     const heroSection = document.querySelector('[data-testid="hero-section"]');
     const heroHeader = heroSection?.querySelector<HTMLElement>('header');
+    const heroStory = heroSection?.querySelector<HTMLElement>(
+      '[data-testid="hero-story"]'
+    );
+    const heroContactColumn = heroSection?.querySelector<HTMLElement>(
+      '[data-testid="hero-contact-column"]'
+    );
+    const heroContactMobile = heroSection?.querySelector<HTMLElement>(
+      '[data-testid="hero-contact-mobile"]'
+    );
     const heroPortrait = document.querySelector<HTMLElement>(
       '[data-testid="hero-portrait"]'
     );
-    const heroContactIndex = heroPortrait?.parentElement as HTMLElement | null;
-    const heroContactDetails =
-      heroContactIndex?.querySelector<HTMLElement>('div');
+    const heroContactDetails = heroContactMobile?.querySelector<HTMLElement>(
+      '[data-testid="hero-contact-details"]'
+    );
     const heroHeaderRect = heroHeader?.getBoundingClientRect();
+    const heroStoryRect = heroStory?.getBoundingClientRect();
+    const heroContactColumnRect = heroContactColumn?.getBoundingClientRect();
+    const heroContactMobileRect = heroContactMobile?.getBoundingClientRect();
     const portraitRect = heroPortrait?.getBoundingClientRect();
-    const contactIndexRect = heroContactIndex?.getBoundingClientRect();
     const contactDetailsRect = heroContactDetails?.getBoundingClientRect();
 
     return {
       visibleTitleExists: Boolean(visibleTitle),
-      headerContactGap:
-        (contactIndexRect?.top ?? 0) - (heroHeaderRect?.bottom ?? 0),
+      headerStoryGap: (heroStoryRect?.top ?? 0) - (heroHeaderRect?.bottom ?? 0),
+      storyContactGap:
+        (heroContactMobileRect?.top ?? 0) - (heroStoryRect?.bottom ?? 0),
+      storyContactLeftDelta:
+        (heroContactMobileRect?.left ?? 0) - (heroStoryRect?.left ?? 0),
+      desktopContactDisplay: heroContactColumn
+        ? getComputedStyle(heroContactColumn).display
+        : '',
+      desktopContactHeight: heroContactColumnRect?.height ?? 0,
+      mobileContactDisplay: heroContactMobile
+        ? getComputedStyle(heroContactMobile).display
+        : '',
       exists: Boolean(heroPortrait),
       display: heroPortrait ? getComputedStyle(heroPortrait).display : '',
       width: portraitRect?.width ?? 0,
       height: portraitRect?.height ?? 0,
       contactTopGap:
-        (contactDetailsRect?.top ?? 0) - (contactIndexRect?.top ?? 0),
+        (contactDetailsRect?.top ?? 0) - (heroContactMobileRect?.top ?? 0),
       contactLabel:
         heroContactDetails
           ?.querySelector('span')
@@ -2094,9 +2115,20 @@ async function assertMobileHeroContactCompact(page: Page) {
 
   assert.equal(result.visibleTitleExists, false);
   assert.ok(
-    result.headerContactGap >= 11 && result.headerContactGap <= 13,
-    `mobile contact should sit directly under the About header: ${result.headerContactGap}`
+    result.headerStoryGap >= 11 && result.headerStoryGap <= 13,
+    `mobile story should sit directly under the About header: ${result.headerStoryGap}`
   );
+  assert.ok(
+    result.storyContactGap >= 11 && result.storyContactGap <= 13,
+    `mobile contact should sit directly under the hero story: ${result.storyContactGap}`
+  );
+  assert.ok(
+    Math.abs(result.storyContactLeftDelta) <= 1,
+    `mobile contact should align with the hero story: ${result.storyContactLeftDelta}`
+  );
+  assert.equal(result.desktopContactDisplay, 'none');
+  assert.equal(result.desktopContactHeight, 0);
+  assert.equal(result.mobileContactDisplay, 'block');
   assert.equal(result.exists, true);
   assert.equal(result.display, 'none');
   assert.equal(result.width, 0);
@@ -4288,7 +4320,7 @@ async function main() {
     });
     await mobile.goto(baseUrl, { waitUntil: 'networkidle' });
     await assertRoybBandPlacement(mobile);
-    await assertMobileHeroContactCompact(mobile);
+    await assertMobileHeroContactUnderStory(mobile);
     await assertMobileRailDescriptionsWrap(mobile);
     await assertMobileRailDateLayout({
       page: mobile,
@@ -4318,7 +4350,7 @@ async function main() {
       viewport: { width: 700, height: 844 },
     });
     await portraitHidden.goto(baseUrl, { waitUntil: 'networkidle' });
-    await assertMobileHeroContactCompact(portraitHidden);
+    await assertMobileHeroContactUnderStory(portraitHidden);
     await assertMobileFooterAlignment(portraitHidden);
 
     const mobileBlog = await browser.newPage({

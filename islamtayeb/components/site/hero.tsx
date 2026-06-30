@@ -5,6 +5,30 @@ import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { SectionHeader } from '@/components/primitives/section';
 
+function ContactDetails() {
+  return (
+    <div data-testid="hero-contact-details" className="flex flex-col gap-0.5">
+      <span className="text-muted-foreground">contact</span>
+      <ul className="flex flex-wrap text-foreground">
+        {contactLinks.map((link, index) => (
+          <li key={link.label}>
+            <ExternalLink
+              href={link.href}
+              section="r"
+              className="text-foreground"
+            >
+              {link.label}
+            </ExternalLink>
+            {index < contactLinks.length - 1 ? (
+              <span className="mr-1">, </span>
+            ) : null}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 function ContactIndex() {
   return (
     <div className="flex flex-col gap-2 font-mono text-sm leading-snug">
@@ -18,25 +42,7 @@ function ContactIndex() {
         unoptimized
         className="hidden aspect-square w-full max-w-48 bg-background object-cover md:block md:max-w-none"
       />
-      <div className="flex flex-col gap-0.5">
-        <span className="text-muted-foreground">contact</span>
-        <ul className="flex flex-wrap text-foreground">
-          {contactLinks.map((link, index) => (
-            <li key={link.label}>
-              <ExternalLink
-                href={link.href}
-                section="r"
-                className="text-foreground"
-              >
-                {link.label}
-              </ExternalLink>
-              {index < contactLinks.length - 1 ? (
-                <span className="mr-1">, </span>
-              ) : null}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ContactDetails />
     </div>
   );
 }
@@ -85,7 +91,7 @@ export function Hero() {
         >
           <div
             data-testid="hero-contact-column"
-            className="min-w-0 md:border-r md:border-border md:pr-3"
+            className="hidden min-w-0 md:block md:border-r md:border-border md:pr-3"
           >
             <ContactIndex />
           </div>
@@ -94,6 +100,12 @@ export function Hero() {
             className="min-w-0 md:self-center"
           >
             <HeroStory />
+            <div
+              data-testid="hero-contact-mobile"
+              className="mt-3 font-mono text-sm leading-snug md:hidden"
+            >
+              <ContactDetails />
+            </div>
           </div>
         </div>
       </div>
