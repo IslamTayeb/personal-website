@@ -62,8 +62,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   colorScheme: 'light dark',
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
+    { media: '(prefers-color-scheme: light)', color: '#d5d1c7' },
+    { media: '(prefers-color-scheme: dark)', color: '#111111' },
   ],
 };
 
@@ -151,15 +151,15 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${openSans.variable} bg-background`}
+      className={`${openSans.variable} bg-[var(--ledger-background)]`}
     >
-      <body className="bg-background font-sans text-foreground antialiased">
+      <body className="bg-[var(--ledger-background)] font-sans text-foreground antialiased">
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <main className="mx-auto flex min-h-screen max-w-3xl flex-col px-4">
+        <div data-testid="site-page" className="site-page flex flex-col px-4">
           <SiteHeader />
-          {children}
+          <main className="flex flex-1 flex-col">{children}</main>
           <SiteFooter />
-        </main>
+        </div>
         {process.env.NODE_ENV === 'production' && (
           <>
             <Analytics />

@@ -26,15 +26,23 @@ const expectedHeroParagraphs = heroParagraphs.map((paragraph) =>
 );
 
 function colorBrightness(color: string) {
-  const match = color.match(/rgba?\((\d+), (\d+), (\d+)/);
+  const rgbMatch = color.match(/rgba?\((\d+), (\d+), (\d+)/);
 
-  assert.ok(match, `expected an rgb color, received: ${color}`);
+  if (rgbMatch) {
+    return (
+      Number.parseInt(rgbMatch[1], 10) +
+      Number.parseInt(rgbMatch[2], 10) +
+      Number.parseInt(rgbMatch[3], 10)
+    );
+  }
 
-  return (
-    Number.parseInt(match[1], 10) +
-    Number.parseInt(match[2], 10) +
-    Number.parseInt(match[3], 10)
-  );
+  const labMatch = color.match(/lab\((-?\d+(?:\.\d+)?)/);
+
+  if (labMatch) {
+    return Number.parseFloat(labMatch[1]) * 7.65;
+  }
+
+  assert.fail(`expected an rgb or lab color, received: ${color}`);
 }
 
 async function isServerReady(url: string) {
@@ -264,6 +272,7 @@ async function assertRoybBandPlacement(page: Page) {
     const header = document.querySelector('[data-testid="site-header"]');
     const wrap = document.querySelector('[data-testid="royb-band-wrap"]');
     const band = document.querySelector('[data-testid="royb-band"]');
+    const bandStyle = band ? getComputedStyle(band) : null;
     const nextContent = document.querySelector(
       'main > section header span, [data-testid="blog-article-title"]'
     );
@@ -275,6 +284,8 @@ async function assertRoybBandPlacement(page: Page) {
       bandTop: band?.getBoundingClientRect().top ?? 0,
       bandBottom: band?.getBoundingClientRect().bottom ?? 0,
       bandHeight: band?.getBoundingClientRect().height ?? 0,
+      bandBorderTopWidth: Number.parseFloat(bandStyle?.borderTopWidth ?? '0'),
+      bandBorderTopColor: bandStyle?.borderTopColor ?? '',
       nextContentTop: nextContent?.getBoundingClientRect().top ?? 0,
     };
   });
@@ -282,7 +293,12 @@ async function assertRoybBandPlacement(page: Page) {
   const topGap = placement.bandTop - placement.headerBottom;
   const bottomGap = placement.nextContentTop - placement.bandBottom;
 
-  assert.equal(placement.bandHeight, 4, 'ROYB bar should be 4px tall');
+  assert.equal(placement.bandHeight, 9, 'ROYB bar should be 9px tall');
+  assert.equal(
+    placement.bandBorderTopWidth,
+    1,
+    'ROYB bar should keep a thin hard border'
+  );
   assert.ok(topGap >= 16, `ROYB top gap should be doubled: ${topGap}px`);
   assert.ok(
     Math.abs(topGap - bottomGap) <= 2,
@@ -290,13 +306,312 @@ async function assertRoybBandPlacement(page: Page) {
   );
   assert.ok(
     Math.abs(placement.wrapTop - placement.headerBottom) <= 1,
-    'ROYB wrapper should stay directly after the sticky header'
+    'ROYB wrapper should stay directly after the in-page header'
   );
 
   return {
     topGap: Number(topGap.toFixed(2)),
     bottomGap: Number(bottomGap.toFixed(2)),
   };
+}
+
+async function assertDarkRoybBandBorder(page: Page) {
+  const result = await page.evaluate(() => {
+    const band = document.querySelector<HTMLElement>(
+      '[data-testid="royb-band"]'
+    );
+    const style = band ? getComputedStyle(band) : null;
+
+    return {
+      height: band?.getBoundingClientRect().height ?? 0,
+      borderTopWidth: Number.parseFloat(style?.borderTopWidth ?? '0'),
+      borderRightWidth: Number.parseFloat(style?.borderRightWidth ?? '0'),
+      borderBottomWidth: Number.parseFloat(style?.borderBottomWidth ?? '0'),
+      borderLeftWidth: Number.parseFloat(style?.borderLeftWidth ?? '0'),
+      borderTopColor: style?.borderTopColor ?? '',
+    };
+  });
+
+  assert.equal(result.height, 9, 'dark ROYB bar should keep the same height');
+  assert.deepEqual(
+    [
+      result.borderTopWidth,
+      result.borderRightWidth,
+      result.borderBottomWidth,
+      result.borderLeftWidth,
+    ],
+    [1, 1, 1, 1],
+    'dark ROYB bar should render a thin hard border'
+  );
+  assert.equal(
+    result.borderTopColor,
+    'rgb(85, 85, 85)',
+    'dark ROYB border should use #555'
+  );
+}
+
+async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
+  const result = await page.evaluate(() => {
+    const root = document.documentElement;
+    const originalClassName = root.className;
+    const sitePage = document.querySelector<HTMLElement>(
+      '[data-testid="site-page"]'
+    );
+    const header = document.querySelector<HTMLElement>(
+      '[data-testid="site-header"]'
+    );
+    const footer = document.querySelector<HTMLElement>(
+      '[data-testid="site-footer"]'
+    );
+    const sitePageStyle = sitePage ? getComputedStyle(sitePage) : null;
+    const headerStyle = header ? getComputedStyle(header) : null;
+    const footerStyle = footer ? getComputedStyle(footer) : null;
+    const htmlStyle = getComputedStyle(root);
+    const bodyStyle = getComputedStyle(document.body);
+    const pageRect = sitePage?.getBoundingClientRect();
+    const headerRect = header?.getBoundingClientRect();
+    const footerRect = footer?.getBoundingClientRect();
+
+    root.classList.remove('light');
+    root.classList.add('dark');
+
+    const darkSitePageStyle = sitePage ? getComputedStyle(sitePage) : null;
+    const darkHtmlStyle = getComputedStyle(root);
+    const darkBodyStyle = getComputedStyle(document.body);
+    const darkResult = {
+      htmlBackground: darkHtmlStyle.backgroundColor,
+      htmlBackgroundImage: darkHtmlStyle.backgroundImage,
+      htmlBackgroundPosition: darkHtmlStyle.backgroundPosition,
+      htmlBackgroundSize: darkHtmlStyle.backgroundSize,
+      bodyBackground: darkBodyStyle.backgroundColor,
+      bodyBackgroundImage: darkBodyStyle.backgroundImage,
+      bodyBackgroundPosition: darkBodyStyle.backgroundPosition,
+      bodyBackgroundSize: darkBodyStyle.backgroundSize,
+      pageBackground: darkSitePageStyle?.backgroundColor ?? '',
+      pageBackgroundImage: darkSitePageStyle?.backgroundImage ?? '',
+      pageBorderColor: darkSitePageStyle?.borderTopColor ?? '',
+      pageBoxShadow: darkSitePageStyle?.boxShadow ?? '',
+    };
+
+    root.className = originalClassName;
+
+    return {
+      viewportWidth: window.innerWidth,
+      viewportHeight: window.innerHeight,
+      htmlBackground: htmlStyle.backgroundColor,
+      htmlBackgroundImage: htmlStyle.backgroundImage,
+      htmlBackgroundPosition: htmlStyle.backgroundPosition,
+      htmlBackgroundSize: htmlStyle.backgroundSize,
+      bodyBackground: bodyStyle.backgroundColor,
+      bodyBackgroundImage: bodyStyle.backgroundImage,
+      bodyBackgroundPosition: bodyStyle.backgroundPosition,
+      bodyBackgroundSize: bodyStyle.backgroundSize,
+      pageBackground: sitePageStyle?.backgroundColor ?? '',
+      pageBackgroundImage: sitePageStyle?.backgroundImage ?? '',
+      pageBorderColor: sitePageStyle?.borderTopColor ?? '',
+      pageBorderTopWidth: Number.parseFloat(
+        sitePageStyle?.borderTopWidth ?? '0'
+      ),
+      pageBoxShadow: sitePageStyle?.boxShadow ?? '',
+      pagePaddingLeft: Number.parseFloat(sitePageStyle?.paddingLeft ?? '0'),
+      pagePaddingRight: Number.parseFloat(sitePageStyle?.paddingRight ?? '0'),
+      pageLeft: pageRect?.left ?? 0,
+      pageRight: pageRect?.right ?? 0,
+      pageTop: pageRect?.top ?? 0,
+      pageBottom: pageRect?.bottom ?? 0,
+      pageWidth: pageRect?.width ?? 0,
+      headerPosition: headerStyle?.position ?? '',
+      footerPosition: footerStyle?.position ?? '',
+      headerPaddingTop: Number.parseFloat(headerStyle?.paddingTop ?? '0'),
+      headerPaddingBottom: Number.parseFloat(headerStyle?.paddingBottom ?? '0'),
+      footerPaddingTop: Number.parseFloat(footerStyle?.paddingTop ?? '0'),
+      footerPaddingBottom: Number.parseFloat(footerStyle?.paddingBottom ?? '0'),
+      headerLeft: headerRect?.left ?? 0,
+      headerRight: headerRect?.right ?? 0,
+      footerLeft: footerRect?.left ?? 0,
+      footerRight: footerRect?.right ?? 0,
+      dark: darkResult,
+    };
+  });
+
+  assert.equal(
+    result.htmlBackground,
+    result.bodyBackground,
+    'html and body should share the ledger background'
+  );
+  assert.equal(
+    result.htmlBackgroundImage,
+    result.bodyBackgroundImage,
+    'html and body should share the ledger paper lines'
+  );
+  assert.equal(
+    result.htmlBackgroundPosition,
+    result.bodyBackgroundPosition,
+    'html and body should align the ledger paper lines'
+  );
+  assert.match(
+    result.bodyBackgroundImage,
+    /linear-gradient/,
+    'ledger should use paper-line background'
+  );
+  assert.equal(
+    result.bodyBackgroundPosition,
+    '0px 12px',
+    'ledger paper lines should not start flush at the screen edge'
+  );
+  assert.equal(
+    result.bodyBackgroundSize,
+    '100% 24px',
+    'ledger paper lines should follow the component-lab 24px rhythm'
+  );
+  assert.equal(
+    result.pageBackgroundImage,
+    'none',
+    'paper sheet should stay solid over the ledger lines'
+  );
+  assert.notEqual(
+    result.bodyBackground,
+    result.pageBackground,
+    'paper sheet should sit on a darker ledger background'
+  );
+  assert.ok(
+    colorBrightness(result.pageBackground) >
+      colorBrightness(result.bodyBackground),
+    'paper sheet should be lighter than the ledger background'
+  );
+  assert.equal(
+    result.headerPosition,
+    'static',
+    'site header should stay in the page flow'
+  );
+  assert.equal(
+    result.footerPosition,
+    'static',
+    'site footer should stay in the page flow'
+  );
+  assert.equal(
+    result.headerPaddingTop,
+    10,
+    'site header content should sit 10px from the paper top edge'
+  );
+  assert.equal(
+    result.headerPaddingBottom,
+    result.headerPaddingTop,
+    'site header padding should be vertically symmetric'
+  );
+  assert.equal(
+    result.footerPaddingTop,
+    result.footerPaddingBottom,
+    'site footer padding should be vertically symmetric'
+  );
+  assert.equal(
+    result.footerPaddingBottom,
+    10,
+    'site footer content should sit 10px from the paper bottom edge'
+  );
+  assert.ok(
+    Math.abs(result.headerLeft - (result.pageLeft + result.pagePaddingLeft)) <=
+      1 &&
+      Math.abs(
+        result.headerRight - (result.pageRight - result.pagePaddingRight)
+      ) <= 1 &&
+      Math.abs(
+        result.footerLeft - (result.pageLeft + result.pagePaddingLeft)
+      ) <= 1 &&
+      Math.abs(
+        result.footerRight - (result.pageRight - result.pagePaddingRight)
+      ) <= 1,
+    'header and footer should live inside the paper sheet padding'
+  );
+  assert.equal(
+    result.dark.htmlBackground,
+    result.dark.bodyBackground,
+    'dark mode html and body should share the ledger background'
+  );
+  assert.equal(
+    result.dark.htmlBackgroundImage,
+    result.dark.bodyBackgroundImage,
+    'dark mode html and body should share the ledger paper lines'
+  );
+  assert.equal(
+    result.dark.htmlBackgroundPosition,
+    result.dark.bodyBackgroundPosition,
+    'dark mode html and body should align the ledger paper lines'
+  );
+  assert.match(
+    result.dark.bodyBackgroundImage,
+    /linear-gradient/,
+    'dark mode ledger should keep paper-line background'
+  );
+  assert.equal(
+    result.dark.bodyBackgroundPosition,
+    '0px 12px',
+    'dark mode ledger paper lines should not start flush at the screen edge'
+  );
+  assert.equal(
+    result.dark.bodyBackgroundSize,
+    '100% 24px',
+    'dark mode ledger paper lines should keep the same rhythm'
+  );
+  assert.equal(
+    result.dark.pageBackgroundImage,
+    'none',
+    'dark mode paper sheet should stay solid over the ledger lines'
+  );
+  assert.notEqual(
+    result.dark.bodyBackground,
+    result.dark.pageBackground,
+    'dark mode should preserve page-on-ledger contrast'
+  );
+  assert.ok(
+    colorBrightness(result.dark.pageBackground) >
+      colorBrightness(result.dark.bodyBackground),
+    'dark mode paper sheet should be lighter than the ledger background'
+  );
+  assert.notEqual(
+    result.dark.pageBorderColor,
+    result.dark.pageBackground,
+    'dark mode page rule should remain high contrast'
+  );
+
+  if (expected === 'desktop') {
+    assert.equal(
+      result.pageBorderTopWidth,
+      1,
+      'desktop sheet should have a rule'
+    );
+    assert.notEqual(
+      result.pageBoxShadow,
+      'none',
+      'desktop sheet should use a hard offset shadow'
+    );
+    assert.match(
+      result.pageBoxShadow,
+      /rgba\(.+\) 6px 6px 0px/,
+      'paper shadow should be a lighter opacity-based 6px hard block'
+    );
+    assert.ok(
+      result.pageTop > 0 && result.pageWidth < result.viewportWidth,
+      'desktop sheet should reveal the ledger around the page'
+    );
+  } else {
+    assert.equal(
+      result.pageBorderTopWidth,
+      0,
+      'mobile sheet should drop the desktop page rule'
+    );
+    assert.equal(
+      result.pageBoxShadow,
+      'none',
+      'mobile sheet should drop the desktop page shadow'
+    );
+    assert.equal(result.pageLeft, 0, 'mobile sheet should fill the viewport');
+    assert.equal(
+      Math.round(result.pageWidth),
+      result.viewportWidth,
+      'mobile sheet should stay full-width'
+    );
+  }
 }
 
 async function assertVisibleOneLineDescriptions(page: Page) {
@@ -332,7 +647,7 @@ async function assertVisibleOneLineDescriptions(page: Page) {
 }
 
 async function assertThemeToggleIsStable(page: Page) {
-  const before = await page.locator('main').boundingBox();
+  const before = await page.getByTestId('site-page').boundingBox();
   const beforeClass = await page.locator('html').getAttribute('class');
 
   await page.getByTestId('theme-toggle').click();
@@ -342,7 +657,7 @@ async function assertThemeToggleIsStable(page: Page) {
   );
 
   const afterClass = await page.locator('html').getAttribute('class');
-  const after = await page.locator('main').boundingBox();
+  const after = await page.getByTestId('site-page').boundingBox();
 
   assert.ok(
     afterClass?.includes('dark') || afterClass?.includes('light'),
@@ -351,7 +666,7 @@ async function assertThemeToggleIsStable(page: Page) {
   assert.equal(
     Math.round(before?.width ?? 0),
     Math.round(after?.width ?? 0),
-    'theme toggle should not change document width'
+    'theme toggle should not change sheet width'
   );
 
   await page.getByTestId('theme-toggle').click();
@@ -426,6 +741,9 @@ async function assertHome(page: Page) {
       '[data-testid="hero-contact-column"]'
     );
     const heroContactColumnRect = heroContactColumn?.getBoundingClientRect();
+    const heroContactColumnStyle = heroContactColumn
+      ? getComputedStyle(heroContactColumn)
+      : null;
     const heroStoryColumn = heroContent?.querySelector<HTMLElement>(
       '[data-testid="hero-story-column"]'
     );
@@ -571,6 +889,7 @@ async function assertHome(page: Page) {
         width: rect?.width ?? 0,
         center: rect ? rect.left + rect.width / 2 : 0,
         fontSize: Number.parseFloat(style?.fontSize ?? '0'),
+        fontWeight: Number.parseInt(style?.fontWeight ?? '0', 10),
         color: style?.color ?? '',
       };
     });
@@ -578,6 +897,10 @@ async function assertHome(page: Page) {
     const bodyColor = bodyStyle.color;
     const bodyBackgroundColor = bodyStyle.backgroundColor;
     const bodyFontFamily = bodyStyle.fontFamily;
+    const pageBackgroundColor = getComputedStyle(
+      document.querySelector<HTMLElement>('[data-testid="site-page"]') ??
+        document.body
+    ).backgroundColor;
     const readingProbe = document.createElement('span');
 
     readingProbe.className = 'reading-copy';
@@ -588,6 +911,13 @@ async function assertHome(page: Page) {
       const label = section.querySelector<HTMLElement>('header h2');
 
       return label ? getComputedStyle(label).color : '';
+    });
+    const sectionLabelFontWeights = topLevelSections.map((section) => {
+      const label = section.querySelector<HTMLElement>('header h2');
+
+      return label
+        ? Number.parseInt(getComputedStyle(label).fontWeight, 10)
+        : 0;
     });
     const sectionLabelLefts = topLevelSections.map(
       (section) =>
@@ -1095,6 +1425,7 @@ async function assertHome(page: Page) {
       mainWidth: main?.getBoundingClientRect().width ?? 0,
       bodyColor,
       bodyBackgroundColor,
+      pageBackgroundColor,
       bodyFontFamily,
       readingFontFamily,
       bodyText: document.body.textContent?.replace(/\s+/g, ' ').trim() ?? '',
@@ -1150,6 +1481,8 @@ async function assertHome(page: Page) {
         heroStoryColumnRect && heroContactColumnRect
           ? heroContactColumnRect.bottom - heroStoryColumnRect.bottom
           : Number.POSITIVE_INFINITY,
+      heroStoryDividerStyle: heroContactColumnStyle?.borderRightStyle ?? '',
+      heroStoryDividerColor: heroContactColumnStyle?.borderRightColor ?? '',
       heroContactIndexGap: heroContactIndex
         ? Number.parseFloat(getComputedStyle(heroContactIndex).rowGap)
         : 0,
@@ -1180,6 +1513,21 @@ async function assertHome(page: Page) {
       sectionBorders: topLevelSections.map((section) =>
         Number.parseFloat(getComputedStyle(section).borderTopWidth)
       ),
+      sectionDividerStyles: topLevelSections.map(
+        (section) => getComputedStyle(section).borderTopStyle
+      ),
+      sectionDividerColors: topLevelSections.map(
+        (section) => getComputedStyle(section).borderTopColor
+      ),
+      sectionDividerImages: topLevelSections.map(
+        (section) => getComputedStyle(section).backgroundImage
+      ),
+      sectionDividerMargins: topLevelSections.map((section) =>
+        Number.parseFloat(getComputedStyle(section).marginTop)
+      ),
+      sectionDividerPaddings: topLevelSections.map((section) =>
+        Number.parseFloat(getComputedStyle(section).paddingTop)
+      ),
       viewportHeight: window.innerHeight,
       railGutter: rootStyle.getPropertyValue('--rail-gutter').trim(),
       railMarkerSize: rootStyle.getPropertyValue('--rail-marker-size').trim(),
@@ -1192,8 +1540,12 @@ async function assertHome(page: Page) {
       sectionMarkerFontSizes: sectionMarkerData.map(
         (marker) => marker.fontSize
       ),
+      sectionMarkerFontWeights: sectionMarkerData.map(
+        (marker) => marker.fontWeight
+      ),
       sectionMarkerColors: sectionMarkerData.map((marker) => marker.color),
       sectionLabelColors,
+      sectionLabelFontWeights,
       sectionContentGaps,
       writingFooterGap,
       sharedRowTitleLefts,
@@ -1345,6 +1697,11 @@ async function assertHome(page: Page) {
     ) <= 1,
     `hero story divider gaps should balance: ${result.heroStoryDividerTopGap} / ${result.heroStoryDividerBottomGap}`
   );
+  assert.equal(
+    result.heroStoryDividerStyle,
+    'dotted',
+    'hero portrait/text divider should be dotted'
+  );
   assert.deepEqual(result.sectionMarkers, ['§1', '§2', '§3', '§4']);
   assert.deepEqual(result.sectionLabels, [
     'About',
@@ -1354,8 +1711,38 @@ async function assertHome(page: Page) {
   ]);
   assert.deepEqual(
     result.sectionBorders,
-    result.sectionBorders.map(() => 0),
-    'top-level section dividers should stay disabled'
+    [0, 1, 1, 1],
+    'homepage separators should use one simple 1px border'
+  );
+  assert.deepEqual(
+    result.sectionDividerStyles.slice(1),
+    ['dotted', 'dotted', 'dotted'],
+    'homepage section separators should use dotted borders'
+  );
+  assert.ok(
+    result.sectionDividerColors
+      .slice(1)
+      .every((color) => color === result.heroStoryDividerColor),
+    'homepage section separators should match the hero divider color'
+  );
+  assert.equal(
+    result.sectionDividerImages[0],
+    'none',
+    'About should not render a section separator above itself'
+  );
+  assert.ok(
+    result.sectionDividerImages.every((image) => image === 'none'),
+    'homepage section separators should not use painted background rules'
+  );
+  assert.deepEqual(
+    result.sectionDividerMargins.map((margin) => Math.round(margin)),
+    [0, 8, 8, 8],
+    'homepage section separators should offset the existing section bottom padding'
+  );
+  assert.deepEqual(
+    result.sectionDividerPaddings.map((padding) => Math.round(padding)),
+    [0, 24, 24, 24],
+    'homepage section separators should keep balanced 1.5x section spacing'
   );
   const normalSectionGap = result.sectionContentGaps[0];
 
@@ -1365,10 +1752,7 @@ async function assertHome(page: Page) {
     ),
     `top-level content gaps should match: ${result.sectionContentGaps.join(', ')}`
   );
-  assert.ok(
-    Math.abs(result.writingFooterGap - normalSectionGap) <= 1,
-    `Writing/footer gap should match normal section rhythm: ${result.writingFooterGap} / ${normalSectionGap}`
-  );
+  assert.ok(result.writingFooterGap >= 32, 'Writing/footer gap should breathe');
   assert.equal(Number.parseFloat(result.railGutter), 2);
   assert.equal(Number.parseFloat(result.railMarkerSize), 0.75);
   assert.ok(
@@ -1410,6 +1794,11 @@ async function assertHome(page: Page) {
   assert.ok(
     result.sectionMarkerFontSizes.every((size) => Math.round(size) === 16),
     'section markers should follow the promoted 16px section label size'
+  );
+  assert.ok(
+    result.sectionMarkerFontWeights.every((weight) => weight >= 700) &&
+      result.sectionLabelFontWeights.every((weight) => weight >= 700),
+    'section headers should use bold mono labels'
   );
   assert.ok(
     result.sectionMarkerWidths.every((width) => Math.round(width) === 14),
@@ -1741,7 +2130,7 @@ async function assertHome(page: Page) {
         dot.className.includes('border-roy-o') &&
         dot.className.includes('bg-background') &&
         dot.border > 0 &&
-        dot.backgroundColor === result.bodyBackgroundColor
+        dot.backgroundColor === result.pageBackgroundColor
     ),
     'incoming rail markers should be hollow'
   );
@@ -3001,6 +3390,9 @@ async function assertBlogIndex(page: Page) {
       };
     });
     const footer = document.querySelector('footer');
+    const sitePage = document.querySelector<HTMLElement>(
+      '[data-testid="site-page"]'
+    );
     const bodyStyle = getComputedStyle(document.body);
     const readingProbe = document.createElement('span');
 
@@ -3083,6 +3475,7 @@ async function assertBlogIndex(page: Page) {
       descriptionCount: descriptions?.length ?? 0,
       highlightedLinkClassNames,
       footerBottom: footer?.getBoundingClientRect().bottom ?? 0,
+      sitePageBottom: sitePage?.getBoundingClientRect().bottom ?? 0,
       viewportHeight: window.innerHeight,
     };
   });
@@ -3227,8 +3620,12 @@ async function assertBlogIndex(page: Page) {
   );
   assert.ok(!result.bodyText.includes('Duke Chronicle'));
   assert.ok(
-    Math.abs(result.viewportHeight - result.footerBottom) <= 1,
-    'short blog index pages should pin the footer to the viewport bottom'
+    Math.abs(result.sitePageBottom - result.footerBottom) <= 1,
+    'short blog index pages should pin the footer to the paper sheet bottom'
+  );
+  assert.ok(
+    result.footerBottom < result.viewportHeight,
+    'desktop paper sheet should leave ledger visible below the footer'
   );
 }
 
@@ -3288,6 +3685,11 @@ async function assertArticle(page: Page) {
     const tocFirstSection = toc?.querySelector<HTMLElement>('.toc-section');
     const tocFirstNum = tocFirstSection?.querySelector<HTMLElement>('.toc-num');
     const tocFirstLink = toc?.querySelector<HTMLElement>('.toc-section > a');
+    const tocMonoElements = [
+      ...(toc?.querySelectorAll<HTMLElement>(
+        'h2, .toc-num, .toc-section > a, .toc-subs a'
+      ) ?? []),
+    ];
     const hoveredArticleLink = document.querySelector<HTMLElement>(
       '.article-prose p a:hover'
     );
@@ -3445,6 +3847,15 @@ async function assertArticle(page: Page) {
       tocMetaValueSize: Number.parseFloat(tocMetaValueStyle?.fontSize ?? '0'),
       tocMetaLabelTransform: tocMetaLabelStyle?.textTransform ?? '',
       tocMetaValueTransform: tocMetaValueStyle?.textTransform ?? '',
+      tocMonoElementStyles: tocMonoElements.map((element) => {
+        const style = getComputedStyle(element);
+
+        return {
+          text: element.textContent?.replace(/\s+/g, ' ').trim() ?? '',
+          fontFamily: style.fontFamily,
+          fontWeight: Number.parseInt(style.fontWeight, 10),
+        };
+      }),
       articlePaddingBottom: Number.parseFloat(
         articleStyle?.paddingBottom ?? '0'
       ),
@@ -3542,8 +3953,8 @@ async function assertArticle(page: Page) {
   assert.deepEqual(result.h1Texts, [result.titleText]);
   assert.ok(result.jsonLdTypes.includes('BlogPosting'));
   assert.ok(
-    result.titleWeight === 600,
-    'article title should render at font-weight 600'
+    result.titleWeight >= 700,
+    'article title should stay bold at the top of the article'
   );
   assert.ok(
     Math.abs(result.titleLeft - result.mainContentLeft) <= 1,
@@ -3582,6 +3993,14 @@ async function assertArticle(page: Page) {
   assert.equal(result.tocMetaLabelTransform, 'none');
   assert.equal(result.tocMetaValueTransform, 'none');
   assert.equal(result.tocMetaLetterSpacing, 'normal');
+  assert.ok(
+    result.tocMonoElementStyles.length >= 1 &&
+      result.tocMonoElementStyles.every(
+        (style) =>
+          style.fontFamily.includes('ui-monospace') && style.fontWeight <= 500
+      ),
+    'TOC index, numbers, section titles, and subsection titles should use normal-weight mono'
+  );
   assert.ok(
     result.tocMetaLabelSize >= 14 && result.tocMetaLabelSize < 15,
     'TOC metadata labels should match the hero contact scale'
@@ -3684,8 +4103,8 @@ async function assertArticle(page: Page) {
   );
   assert.equal(result.codeBackground, 'rgb(243, 243, 241)');
   assert.ok(
-    result.articlePaddingBottom >= 170 && result.articlePaddingBottom <= 178,
-    `articles should keep a fixed bottom reading buffer: ${result.articlePaddingBottom}`
+    result.articlePaddingBottom === 12,
+    `articles should use pb-3: ${result.articlePaddingBottom}`
   );
   assert.equal(result.articleListStyle, 'none');
   assert.ok(result.articleListPadding >= 39 && result.articleListPadding <= 41);
@@ -3767,6 +4186,76 @@ async function assertArticle(page: Page) {
     'dark keycap bottom edge should be darker than the key face'
   );
   assert.match(darkCode.kbdBoxShadow, /rgba\(0, 0, 0, 0\.7\)/);
+}
+
+async function assertFingerspitzenArticle(page: Page) {
+  const expectedSrcs = [
+    '/static/media/fingerspitzen-optimization-transparent.png',
+    '/static/media/fingerspitzen-language-transparent.png',
+  ];
+  const readImageStyles = () =>
+    page.evaluate((srcs) => {
+      const images = [
+        ...document.querySelectorAll<HTMLImageElement>('.article-media img'),
+      ];
+
+      return srcs.map((src) => {
+        const image = images.find((candidate) => {
+          return candidate.getAttribute('src') === src;
+        });
+        const figure = image?.closest('figure');
+        const style = image ? getComputedStyle(image) : null;
+
+        return {
+          src,
+          found: Boolean(image),
+          figureClassName: figure?.className ?? '',
+          background: style?.backgroundColor ?? '',
+          paddingTop: Number.parseFloat(style?.paddingTop ?? '0'),
+        };
+      });
+    }, expectedSrcs);
+
+  const lightImages = await readImageStyles();
+
+  assert.ok(
+    lightImages.every((image) => image.found),
+    'Fingerspitzengefuhl transparent PNGs should render in the article'
+  );
+  assert.ok(
+    lightImages.every((image) =>
+      image.figureClassName.includes('article-media-light-transparent')
+    ),
+    'Fingerspitzengefuhl transparent PNGs should use the light-transparent media class'
+  );
+  assert.deepEqual(
+    lightImages.map((image) => image.background),
+    ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 0)'],
+    'Fingerspitzengefuhl transparent PNGs should stay transparent in light mode'
+  );
+  assert.deepEqual(
+    lightImages.map((image) => Math.round(image.paddingTop)),
+    [10, 10],
+    'Fingerspitzengefuhl transparent PNGs should keep article image padding'
+  );
+
+  await page.getByTestId('theme-toggle').click();
+  await page.waitForFunction(() =>
+    document.documentElement.classList.contains('dark')
+  );
+
+  const darkImages = await readImageStyles();
+
+  assert.deepEqual(
+    darkImages.map((image) => image.background),
+    ['rgb(250, 250, 250)', 'rgb(250, 250, 250)'],
+    'Fingerspitzengefuhl transparent PNGs should use the article image fill in dark mode'
+  );
+  assert.deepEqual(
+    darkImages.map((image) => Math.round(image.paddingTop)),
+    [10, 10],
+    'Fingerspitzengefuhl transparent PNGs should keep padding in dark mode'
+  );
 }
 
 async function assertHarmoniaArticle(page: Page) {
@@ -4301,6 +4790,7 @@ async function main() {
       viewport: { width: 1280, height: 900 },
     });
     await home.goto(baseUrl, { waitUntil: 'networkidle' });
+    await assertSitePageShell(home, 'desktop');
     const homeBand = await assertRoybBandPlacement(home);
     await assertHome(home);
     await assertVisibleOneLineDescriptions(home);
@@ -4315,10 +4805,22 @@ async function main() {
     await screenshot(home, 'home-experience-expanded');
     await assertExperienceTitleHoverColors(home);
 
+    const darkHome = await browser.newPage({
+      viewport: { width: 1280, height: 900 },
+    });
+    await darkHome.addInitScript(() => {
+      window.localStorage.setItem('theme', 'dark');
+    });
+    await darkHome.goto(baseUrl, { waitUntil: 'networkidle' });
+    await assertSitePageShell(darkHome, 'desktop');
+    await assertDarkRoybBandBorder(darkHome);
+    await screenshot(darkHome, 'home-dark-desktop');
+
     const mobile = await browser.newPage({
       viewport: { width: 390, height: 844 },
     });
     await mobile.goto(baseUrl, { waitUntil: 'networkidle' });
+    await assertSitePageShell(mobile, 'mobile');
     await assertRoybBandPlacement(mobile);
     await assertMobileHeroContactUnderStory(mobile);
     await assertMobileRailDescriptionsWrap(mobile);
@@ -4407,6 +4909,20 @@ async function main() {
     await assertRoybBandPlacement(legacyArticle);
     await assertLegacyMediaArticle(legacyArticle);
     await screenshot(legacyArticle, 'blog-using-computers');
+
+    const fingerspitzenArticle = await browser.newPage({
+      viewport: { width: 1280, height: 900 },
+    });
+    await fingerspitzenArticle.addInitScript(() => {
+      window.localStorage.setItem('theme', 'light');
+    });
+    await fingerspitzenArticle.goto(`${baseUrl}/blog/on-fingerspitzengefuhl`, {
+      waitUntil: 'networkidle',
+    });
+    await assertRoybBandPlacement(fingerspitzenArticle);
+    await screenshot(fingerspitzenArticle, 'blog-fingerspitzen-light');
+    await assertFingerspitzenArticle(fingerspitzenArticle);
+    await screenshot(fingerspitzenArticle, 'blog-fingerspitzen-dark');
 
     assert.deepEqual(
       [homeBand.topGap, blogBand.topGap, articleBand.topGap],

@@ -19,6 +19,7 @@ export async function WritingPreview() {
       title="Writing"
       accent="text-roy-b"
       className="mb-4"
+      divided
     >
       <BorderedPanel>
         <div className="flex w-full flex-col">

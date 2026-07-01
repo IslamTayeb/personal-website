@@ -39,6 +39,15 @@ const unframedArticleImageSrcs = new Map<string, Set<string>>([
     new Set(['/static/media/pasted-image-20251003215923.webp']),
   ],
 ]);
+const lightTransparentArticleImageSrcs = new Map<string, Set<string>>([
+  [
+    'on-fingerspitzengefuhl',
+    new Set([
+      '/static/media/fingerspitzen-optimization-transparent.png',
+      '/static/media/fingerspitzen-language-transparent.png',
+    ]),
+  ],
+]);
 
 function escapeRegExp(value: string) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -68,9 +77,17 @@ function articleMediaFigureHtml({
   captionHtml?: string;
 }) {
   const imageSrc = imageSrcFromHtml(imageHtml);
-  const className = unframedArticleImageSrcs.get(manifest.slug)?.has(imageSrc)
-    ? 'article-media article-media-unframed'
-    : 'article-media';
+  const className = [
+    'article-media',
+    unframedArticleImageSrcs.get(manifest.slug)?.has(imageSrc)
+      ? 'article-media-unframed'
+      : '',
+    lightTransparentArticleImageSrcs.get(manifest.slug)?.has(imageSrc)
+      ? 'article-media-light-transparent'
+      : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
   const caption = captionHtml
     ? `<figcaption><em>${captionHtml}</em></figcaption>`
     : '';

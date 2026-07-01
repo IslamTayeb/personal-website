@@ -12,6 +12,8 @@ const settings = {
   radius: 0.77,
   feather: 0.26,
   maskPixel: 5,
+  innerDitherLevels: 12,
+  innerDitherStrength: 0.5,
   centerX: 0.5,
   centerY: 0.49,
   cropX: 0.81,
@@ -26,6 +28,17 @@ const bayer4 = [
   [3, 11, 1, 9],
   [15, 7, 13, 5],
 ].map((row) => row.map((value) => (value + 0.5) / 16));
+
+const bayer8 = [
+  [0, 48, 12, 60, 3, 51, 15, 63],
+  [32, 16, 44, 28, 35, 19, 47, 31],
+  [8, 56, 4, 52, 11, 59, 7, 55],
+  [40, 24, 36, 20, 43, 27, 39, 23],
+  [2, 50, 14, 62, 1, 49, 13, 61],
+  [34, 18, 46, 30, 33, 17, 45, 29],
+  [10, 58, 6, 54, 9, 57, 5, 53],
+  [42, 26, 38, 22, 41, 25, 37, 21],
+].map((row) => row.map((value) => (value + 0.5) / 64 - 0.5));
 
 function usage() {
   console.error(
@@ -44,6 +57,15 @@ function smoothstep(edge0, edge1, value) {
 
   const t = clamp((value - edge0) / (edge1 - edge0));
   return t * t * (3 - 2 * t);
+}
+
+function quantizeChannel(value, threshold) {
+  const levels = settings.innerDitherLevels - 1;
+  const normalized = value / 255;
+  const shifted =
+    normalized * levels + threshold * settings.innerDitherStrength;
+
+  return Math.round(clamp(Math.round(shifted) / levels) * 255);
 }
 
 function maskDistance(x, y) {
@@ -114,11 +136,19 @@ function renderOutput(sourceData) {
       const alphaTarget = 1 - edgeMask;
       const threshold = bayer4[maskY % 4][maskX % 4];
       const alpha = alphaTarget > threshold ? 255 : 0;
+      const innerThreshold = bayer8[y % 8][x % 8];
+      const shouldRenderInnerPattern = alphaTarget >= 0.999;
       const index = (y * canvasSize + x) * 4;
 
-      output[index] = sourceData[index];
-      output[index + 1] = sourceData[index + 1];
-      output[index + 2] = sourceData[index + 2];
+      output[index] = shouldRenderInnerPattern
+        ? quantizeChannel(sourceData[index], innerThreshold)
+        : sourceData[index];
+      output[index + 1] = shouldRenderInnerPattern
+        ? quantizeChannel(sourceData[index + 1], innerThreshold)
+        : sourceData[index + 1];
+      output[index + 2] = shouldRenderInnerPattern
+        ? quantizeChannel(sourceData[index + 2], innerThreshold)
+        : sourceData[index + 2];
       output[index + 3] = Math.round((sourceData[index + 3] * alpha) / 255);
     }
   }

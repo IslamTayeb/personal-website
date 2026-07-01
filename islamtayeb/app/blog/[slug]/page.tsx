@@ -48,11 +48,11 @@ export default async function BlogPostPage({ params }: PageProps) {
         <JsonLd data={buildBlogPostingJsonLd(post)} />
       ) : null}
       <RoybBand />
-      <article data-testid="blog-article" className="pb-44 pt-0">
+      <article data-testid="blog-article" className="pb-3 pt-0">
         <header className="mb-4 flex flex-col gap-1">
           <h1
             data-testid="blog-article-title"
-            className="text-3xl font-semibold leading-tight tracking-tight text-foreground text-balance md:text-4xl"
+            className="text-3xl font-bold leading-tight tracking-tight text-foreground text-balance md:text-4xl"
           >
             {post.manifest.title}
           </h1>

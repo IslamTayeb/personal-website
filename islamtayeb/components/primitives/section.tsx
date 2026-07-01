@@ -10,6 +10,7 @@ export function Section({
   accent = 'text-roy-o',
   headingLevel = 'h2',
   headerExtra,
+  divided = false,
   children,
   className,
 }: {
@@ -19,6 +20,7 @@ export function Section({
   accent?: string;
   headingLevel?: SectionHeadingLevel;
   headerExtra?: ReactNode;
+  divided?: boolean;
   children: ReactNode;
   className?: string;
 }) {
@@ -26,7 +28,11 @@ export function Section({
     <section
       id={id}
       // Adjacent section boxes touch; paired 16px paddings create a 32px gap.
-      className={cn('py-4', className)}
+      className={cn(
+        'py-4',
+        divided && 'mt-2 border-t border-dotted border-border pt-6',
+        className
+      )}
     >
       <SectionHeader
         index={index}
@@ -66,13 +72,16 @@ export function SectionHeader({
         )}
       >
         <span
-          className={cn('inline-block w-[14px] font-mono text-base', accent)}
+          className={cn(
+            'inline-block w-[14px] font-mono text-base font-bold',
+            accent
+          )}
         >
           §{index}
         </span>
         <Heading
           className={cn(
-            'font-mono text-base uppercase tracking-[0.2em]',
+            'font-mono text-base font-bold uppercase tracking-[0.2em]',
             accent
           )}
         >

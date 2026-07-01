@@ -91,7 +91,7 @@ export function Hero() {
         >
           <div
             data-testid="hero-contact-column"
-            className="hidden min-w-0 md:block md:border-r md:border-border md:pr-3"
+            className="hidden min-w-0 md:block md:border-r md:border-dotted md:border-border md:pr-3"
           >
             <ContactIndex />
           </div>

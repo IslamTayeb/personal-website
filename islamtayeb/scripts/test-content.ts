@@ -704,6 +704,16 @@ async function main() {
         /<figure class="article-media article-media-unframed"><img src="https:\/\/raw\.githubusercontent\.com\/islamtayeb\/obsidian-files\/main\/On%20Fingerspitzengef%C3%BChl-22\.png"/,
         'Fingerspitzengefuhl lead image should render without image frame padding'
       );
+      assert.match(
+        post.html,
+        /<figure class="article-media article-media-light-transparent"><img src="\/static\/media\/fingerspitzen-optimization-transparent\.png"/,
+        'Fingerspitzengefuhl optimization landscape should be transparent on light mode'
+      );
+      assert.match(
+        post.html,
+        /<figure class="article-media article-media-light-transparent"><img src="\/static\/media\/fingerspitzen-language-transparent\.png"/,
+        'Fingerspitzengefuhl high-dimensional understanding graphic should be transparent on light mode'
+      );
     }
   }
 

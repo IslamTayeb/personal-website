@@ -9,6 +9,7 @@ export function Publications() {
       index="3"
       title="Selected Publications"
       accent="text-roy-y"
+      divided
     >
       <BorderedPanel>
         <PublicationDisclosure
