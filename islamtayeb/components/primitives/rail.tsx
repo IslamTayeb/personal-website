@@ -93,7 +93,7 @@ export function RailItem({
       {meta ? (
         <span
           className={cn(
-            'min-w-[5.5rem] max-w-[min(48vw,13rem)] whitespace-normal text-right font-mono text-sm leading-tight text-muted-foreground md:min-w-0 md:max-w-none md:shrink-0 md:whitespace-nowrap',
+            'min-w-[5.5rem] max-w-[min(48vw,13rem)] whitespace-normal text-right font-mono text-sm leading-tight text-muted-foreground site-desktop:min-w-0 site-desktop:max-w-none site-desktop:shrink-0 site-desktop:whitespace-nowrap',
             metaClassName
           )}
         >
@@ -161,7 +161,7 @@ export function RailItem({
           <p
             data-one-line="true"
             className={cn(
-              'reading-copy text-base leading-snug text-foreground md:truncate',
+              'reading-copy text-base leading-snug text-foreground site-desktop:truncate',
               descriptionClassName
             )}
           >

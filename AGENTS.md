@@ -106,6 +106,10 @@ Use meaningful commit messages that describe the why.
 - **Path alias:** `@/*` maps to the active project root inside each app.
 - **Styling:** Tailwind CSS 4 in the active site. Use shared CSS variables and
   primitives before hand-tuning individual sections.
+- **Ledger background:** Desktop ruled-paper lines should use the shared 24px
+  rhythm with the visible rule at the bottom of the tile, not a 12px half-offset.
+  Keep `body` from margin-collapsing so the ledger origin stays at the viewport
+  top.
 - **Links:** React-rendered hyperlinks should use
   `components/primitives/external-link.tsx`. Markdown-rendered article links
   should receive the same ROYB link classes in the renderer.
@@ -146,9 +150,13 @@ Use meaningful commit messages that describe the why.
 - **Rail title/date balance:** On mobile rail rows, dates get width priority.
   Titles should give up space before dates wrap, while genuinely long dates can
   still wrap on narrow phones without creating horizontal overflow.
-- **Phone breakpoint:** For the active site, "phone" means any viewport where
-  the hero portrait is hidden. Keep footer quote/credit visibility tied to that
-  same `md` portrait threshold, not to `sm`.
+- **Mobile breakpoint:** For the active site, "mobile" means any viewport at or
+  below the named `--site-mobile-breakpoint` token. Desktop form starts at
+  `--site-desktop-breakpoint`. Keep those form breakpoints separate from
+  `--site-paper-max-width`, which preserves the old paper sheet width. At the
+  desktop breakpoint and above, the desktop paper sheet, ledger background, hero
+  portrait, and footer quote/credit may appear; at mobile widths, keep the shell
+  full-width and textureless with the page background behind overscroll.
 - **Blog internals:** Active posts should use local `/blog/...` links for links
   to other posts. Do not link active content back to `apmoverflow.xyz`.
 - **Article headers:** Blog article title/date headers use tight section-like

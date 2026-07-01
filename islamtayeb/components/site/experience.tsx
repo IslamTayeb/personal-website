@@ -209,7 +209,7 @@ function FilledDisclosureArrow({ open }: { open: boolean }) {
   return (
     <span
       data-testid="experience-group-arrow"
-      className="inline-flex h-[var(--rail-marker-size)] w-[var(--rail-marker-size)] items-center justify-center text-current group-hover/experience-toggle:text-roy-o group-focus-visible/experience-toggle:text-roy-o"
+      className="royb-link-hover-icon section-color-o inline-flex h-[var(--rail-marker-size)] w-[var(--rail-marker-size)] items-center justify-center text-current"
       aria-hidden
     >
       <span

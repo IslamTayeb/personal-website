@@ -354,6 +354,20 @@ async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
   const result = await page.evaluate(() => {
     const root = document.documentElement;
     const originalClassName = root.className;
+    const lengthProbe = document.createElement('div');
+    lengthProbe.style.position = 'absolute';
+    lengthProbe.style.visibility = 'hidden';
+    lengthProbe.style.pointerEvents = 'none';
+    lengthProbe.style.width = 'var(--site-mobile-breakpoint)';
+    document.body.append(lengthProbe);
+    const siteMobileBreakpointPx = lengthProbe.getBoundingClientRect().width;
+    lengthProbe.style.width = 'var(--site-desktop-breakpoint)';
+    const siteDesktopBreakpointPx = lengthProbe.getBoundingClientRect().width;
+    lengthProbe.style.width = 'var(--site-paper-max-width)';
+    const sitePaperMaxWidthPx = lengthProbe.getBoundingClientRect().width;
+    lengthProbe.style.width = 'var(--site-page-max-width)';
+    const sitePageMaxWidthPx = lengthProbe.getBoundingClientRect().width;
+    lengthProbe.remove();
     const sitePage = document.querySelector<HTMLElement>(
       '[data-testid="site-page"]'
     );
@@ -368,6 +382,7 @@ async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
     const footerStyle = footer ? getComputedStyle(footer) : null;
     const htmlStyle = getComputedStyle(root);
     const bodyStyle = getComputedStyle(document.body);
+    const bodyRect = document.body.getBoundingClientRect();
     const pageRect = sitePage?.getBoundingClientRect();
     const headerRect = header?.getBoundingClientRect();
     const footerRect = footer?.getBoundingClientRect();
@@ -398,6 +413,10 @@ async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
     return {
       viewportWidth: window.innerWidth,
       viewportHeight: window.innerHeight,
+      siteMobileBreakpointPx,
+      siteDesktopBreakpointPx,
+      sitePaperMaxWidthPx,
+      sitePageMaxWidthPx,
       htmlBackground: htmlStyle.backgroundColor,
       htmlBackgroundImage: htmlStyle.backgroundImage,
       htmlBackgroundPosition: htmlStyle.backgroundPosition,
@@ -406,6 +425,8 @@ async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
       bodyBackgroundImage: bodyStyle.backgroundImage,
       bodyBackgroundPosition: bodyStyle.backgroundPosition,
       bodyBackgroundSize: bodyStyle.backgroundSize,
+      bodyDisplay: bodyStyle.display,
+      bodyTop: bodyRect.top,
       pageBackground: sitePageStyle?.backgroundColor ?? '',
       pageBackgroundImage: sitePageStyle?.backgroundImage ?? '',
       pageBorderColor: sitePageStyle?.borderTopColor ?? '',
@@ -434,50 +455,48 @@ async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
     };
   });
 
+  assert.ok(
+    result.siteMobileBreakpointPx > 0,
+    'site mobile breakpoint token should resolve to a real length'
+  );
+  assert.ok(
+    Math.abs(result.siteDesktopBreakpointPx - result.siteMobileBreakpointPx) <=
+      1,
+    'site desktop breakpoint should start immediately after the mobile breakpoint'
+  );
+  assert.ok(
+    Math.abs(result.sitePageMaxWidthPx - result.sitePaperMaxWidthPx) <= 1,
+    'paper sheet max width should stay tied to the paper width token'
+  );
+  assert.ok(
+    result.sitePageMaxWidthPx < result.siteMobileBreakpointPx,
+    'paper sheet max width should remain smaller than the mobile form breakpoint'
+  );
+  if (expected === 'desktop') {
+    assert.ok(
+      result.viewportWidth >= result.siteDesktopBreakpointPx,
+      'desktop shell should only apply at or above the site desktop breakpoint'
+    );
+  } else {
+    assert.ok(
+      result.viewportWidth <= result.siteMobileBreakpointPx,
+      'mobile shell should apply through the site mobile breakpoint'
+    );
+  }
   assert.equal(
-    result.htmlBackground,
-    result.bodyBackground,
-    'html and body should share the ledger background'
+    result.bodyDisplay,
+    'flow-root',
+    'body should prevent the page margin from shifting the ledger line origin'
   );
   assert.equal(
-    result.htmlBackgroundImage,
-    result.bodyBackgroundImage,
-    'html and body should share the ledger paper lines'
-  );
-  assert.equal(
-    result.htmlBackgroundPosition,
-    result.bodyBackgroundPosition,
-    'html and body should align the ledger paper lines'
-  );
-  assert.match(
-    result.bodyBackgroundImage,
-    /linear-gradient/,
-    'ledger should use paper-line background'
-  );
-  assert.equal(
-    result.bodyBackgroundPosition,
-    '0px 12px',
-    'ledger paper lines should not start flush at the screen edge'
-  );
-  assert.equal(
-    result.bodyBackgroundSize,
-    '100% 24px',
-    'ledger paper lines should follow the component-lab 24px rhythm'
+    result.bodyTop,
+    0,
+    'body should stay anchored at the viewport top'
   );
   assert.equal(
     result.pageBackgroundImage,
     'none',
-    'paper sheet should stay solid over the ledger lines'
-  );
-  assert.notEqual(
-    result.bodyBackground,
-    result.pageBackground,
-    'paper sheet should sit on a darker ledger background'
-  );
-  assert.ok(
-    colorBrightness(result.pageBackground) >
-      colorBrightness(result.bodyBackground),
-    'paper sheet should be lighter than the ledger background'
+    'paper sheet should stay solid'
   );
   assert.equal(
     result.headerPosition,
@@ -491,8 +510,8 @@ async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
   );
   assert.equal(
     result.headerPaddingTop,
-    10,
-    'site header content should sit 10px from the paper top edge'
+    12,
+    'site header content should sit 12px from the paper top edge'
   );
   assert.equal(
     result.headerPaddingBottom,
@@ -524,57 +543,97 @@ async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
     'header and footer should live inside the paper sheet padding'
   );
   assert.equal(
-    result.dark.htmlBackground,
-    result.dark.bodyBackground,
-    'dark mode html and body should share the ledger background'
-  );
-  assert.equal(
-    result.dark.htmlBackgroundImage,
-    result.dark.bodyBackgroundImage,
-    'dark mode html and body should share the ledger paper lines'
-  );
-  assert.equal(
-    result.dark.htmlBackgroundPosition,
-    result.dark.bodyBackgroundPosition,
-    'dark mode html and body should align the ledger paper lines'
-  );
-  assert.match(
-    result.dark.bodyBackgroundImage,
-    /linear-gradient/,
-    'dark mode ledger should keep paper-line background'
-  );
-  assert.equal(
-    result.dark.bodyBackgroundPosition,
-    '0px 12px',
-    'dark mode ledger paper lines should not start flush at the screen edge'
-  );
-  assert.equal(
-    result.dark.bodyBackgroundSize,
-    '100% 24px',
-    'dark mode ledger paper lines should keep the same rhythm'
-  );
-  assert.equal(
     result.dark.pageBackgroundImage,
     'none',
-    'dark mode paper sheet should stay solid over the ledger lines'
-  );
-  assert.notEqual(
-    result.dark.bodyBackground,
-    result.dark.pageBackground,
-    'dark mode should preserve page-on-ledger contrast'
-  );
-  assert.ok(
-    colorBrightness(result.dark.pageBackground) >
-      colorBrightness(result.dark.bodyBackground),
-    'dark mode paper sheet should be lighter than the ledger background'
-  );
-  assert.notEqual(
-    result.dark.pageBorderColor,
-    result.dark.pageBackground,
-    'dark mode page rule should remain high contrast'
+    'dark mode paper sheet should stay solid'
   );
 
   if (expected === 'desktop') {
+    assert.equal(
+      result.htmlBackground,
+      result.bodyBackground,
+      'desktop html and body should share the ledger background'
+    );
+    assert.equal(
+      result.htmlBackgroundImage,
+      result.bodyBackgroundImage,
+      'desktop html and body should share the ledger paper lines'
+    );
+    assert.equal(
+      result.htmlBackgroundPosition,
+      result.bodyBackgroundPosition,
+      'desktop html and body should align the ledger paper lines'
+    );
+    assert.match(
+      result.bodyBackgroundImage,
+      /linear-gradient.*23px.*24px/,
+      'desktop ledger should use paper-line background'
+    );
+    assert.equal(
+      result.bodyBackgroundPosition,
+      '0px 0px',
+      'desktop ledger paper lines should place the first visible rule after a full gap'
+    );
+    assert.equal(
+      result.bodyBackgroundSize,
+      '100% 24px',
+      'desktop ledger paper lines should follow the component-lab 24px rhythm'
+    );
+    assert.notEqual(
+      result.bodyBackground,
+      result.pageBackground,
+      'desktop paper sheet should sit on a darker ledger background'
+    );
+    assert.ok(
+      colorBrightness(result.pageBackground) >
+        colorBrightness(result.bodyBackground),
+      'desktop paper sheet should be lighter than the ledger background'
+    );
+    assert.equal(
+      result.dark.htmlBackground,
+      result.dark.bodyBackground,
+      'dark desktop html and body should share the ledger background'
+    );
+    assert.equal(
+      result.dark.htmlBackgroundImage,
+      result.dark.bodyBackgroundImage,
+      'dark desktop html and body should share the ledger paper lines'
+    );
+    assert.equal(
+      result.dark.htmlBackgroundPosition,
+      result.dark.bodyBackgroundPosition,
+      'dark desktop html and body should align the ledger paper lines'
+    );
+    assert.match(
+      result.dark.bodyBackgroundImage,
+      /linear-gradient.*23px.*24px/,
+      'dark desktop ledger should keep paper-line background'
+    );
+    assert.equal(
+      result.dark.bodyBackgroundPosition,
+      '0px 0px',
+      'dark desktop ledger paper lines should place the first visible rule after a full gap'
+    );
+    assert.equal(
+      result.dark.bodyBackgroundSize,
+      '100% 24px',
+      'dark desktop ledger paper lines should keep the same rhythm'
+    );
+    assert.notEqual(
+      result.dark.bodyBackground,
+      result.dark.pageBackground,
+      'dark desktop should preserve page-on-ledger contrast'
+    );
+    assert.ok(
+      colorBrightness(result.dark.pageBackground) >
+        colorBrightness(result.dark.bodyBackground),
+      'dark desktop paper sheet should be lighter than the ledger background'
+    );
+    assert.notEqual(
+      result.dark.pageBorderColor,
+      result.dark.pageBackground,
+      'dark desktop page rule should remain high contrast'
+    );
     assert.equal(
       result.pageBorderTopWidth,
       1,
@@ -596,6 +655,46 @@ async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
     );
   } else {
     assert.equal(
+      result.htmlBackground,
+      result.bodyBackground,
+      'mobile html and body should share a solid background'
+    );
+    assert.equal(
+      result.bodyBackground,
+      result.pageBackground,
+      'mobile shell should not expose a separate ledger background'
+    );
+    assert.equal(
+      result.htmlBackgroundImage,
+      'none',
+      'mobile html should drop the ledger paper lines'
+    );
+    assert.equal(
+      result.bodyBackgroundImage,
+      'none',
+      'mobile body should drop the ledger paper lines'
+    );
+    assert.equal(
+      result.dark.htmlBackground,
+      result.dark.bodyBackground,
+      'dark mobile html and body should share a solid background'
+    );
+    assert.equal(
+      result.dark.bodyBackground,
+      result.dark.pageBackground,
+      'dark mobile shell should not expose a separate ledger background'
+    );
+    assert.equal(
+      result.dark.htmlBackgroundImage,
+      'none',
+      'dark mobile html should drop the ledger paper lines'
+    );
+    assert.equal(
+      result.dark.bodyBackgroundImage,
+      'none',
+      'dark mobile body should drop the ledger paper lines'
+    );
+    assert.equal(
       result.pageBorderTopWidth,
       0,
       'mobile sheet should drop the desktop page rule'
@@ -612,6 +711,11 @@ async function assertSitePageShell(page: Page, expected: 'desktop' | 'mobile') {
       'mobile sheet should stay full-width'
     );
   }
+
+  return {
+    siteMobileBreakpointPx: result.siteMobileBreakpointPx,
+    siteDesktopBreakpointPx: result.siteDesktopBreakpointPx,
+  };
 }
 
 async function assertVisibleOneLineDescriptions(page: Page) {
@@ -2837,15 +2941,25 @@ async function assertPublicationTitleUnderline(page: Page) {
   assert.equal(result.skipInk, 'auto');
 }
 
-async function assertExperienceGroupLabelHoverHighlight(page: Page) {
-  await page.locator('[data-testid="experience-group-arrow"]').first().hover();
+type ExperienceGroupToggleHighlightResult = {
+  boxShadow: string;
+  color: string;
+  arrowColor: string;
+  decoration: string;
+  skipInk: string;
+  orangeToken: string;
+};
 
-  const result = await page.evaluate(() => {
+async function readExperienceGroupToggleHighlight(
+  page: Page,
+  stateSelector: ':hover' | ':active'
+): Promise<ExperienceGroupToggleHighlightResult> {
+  return page.evaluate((selector) => {
     const label = document.querySelector<HTMLElement>(
-      '[data-testid="experience-group-toggle"]:hover [data-testid="experience-group-label"]'
+      `[data-testid="experience-group-toggle"]${selector} [data-testid="experience-group-label"]`
     );
     const arrow = document.querySelector<HTMLElement>(
-      '[data-testid="experience-group-toggle"]:hover [data-testid="experience-group-arrow"]'
+      `[data-testid="experience-group-toggle"]${selector} [data-testid="experience-group-arrow"]`
     );
     const style = label ? getComputedStyle(label) : null;
     const arrowStyle = arrow ? getComputedStyle(arrow) : null;
@@ -2866,13 +2980,55 @@ async function assertExperienceGroupLabelHoverHighlight(page: Page) {
       skipInk: style?.textDecorationSkipInk ?? '',
       orangeToken,
     };
-  });
+  }, stateSelector);
+}
 
-  assert.ok(result.boxShadow.includes('inset'));
+function assertExperienceGroupToggleHighlight(
+  result: ExperienceGroupToggleHighlightResult,
+  state: string
+) {
+  assert.ok(
+    result.boxShadow.includes('inset'),
+    `experience group label should highlight on ${state}`
+  );
   assert.equal(result.color, result.orangeToken);
   assert.equal(result.arrowColor, result.orangeToken);
   assert.equal(result.decoration, 'none');
   assert.equal(result.skipInk, 'auto');
+}
+
+async function assertExperienceGroupLabelHoverHighlight(page: Page) {
+  const teachingToggle = page
+    .locator('[data-testid="experience-group-toggle"]', {
+      hasText: /Teaching\s+\(3\)/,
+    })
+    .first();
+  const teachingLabel = teachingToggle
+    .locator('[data-testid="experience-group-label"]')
+    .first();
+
+  await teachingLabel.hover();
+  assertExperienceGroupToggleHighlight(
+    await readExperienceGroupToggleHighlight(page, ':hover'),
+    'category label hover'
+  );
+
+  const labelBox = await teachingLabel.boundingBox();
+  assert.ok(
+    labelBox,
+    'Teaching experience group label should have a layout box'
+  );
+  await page.mouse.move(
+    labelBox.x + labelBox.width / 2,
+    labelBox.y + labelBox.height / 2
+  );
+  await page.mouse.down();
+  assertExperienceGroupToggleHighlight(
+    await readExperienceGroupToggleHighlight(page, ':active'),
+    'category label press'
+  );
+  await page.mouse.move(0, 0);
+  await page.mouse.up();
 }
 
 async function assertExperienceTitleHoverColors(page: Page) {
@@ -4790,7 +4946,13 @@ async function main() {
       viewport: { width: 1280, height: 900 },
     });
     await home.goto(baseUrl, { waitUntil: 'networkidle' });
-    await assertSitePageShell(home, 'desktop');
+    const homeShell = await assertSitePageShell(home, 'desktop');
+    const siteMobileBreakpointWidth = Math.round(
+      homeShell.siteMobileBreakpointPx
+    );
+    const siteDesktopBreakpointWidth = Math.round(
+      homeShell.siteDesktopBreakpointPx
+    );
     const homeBand = await assertRoybBandPlacement(home);
     await assertHome(home);
     await assertVisibleOneLineDescriptions(home);
@@ -4816,12 +4978,25 @@ async function main() {
     await assertDarkRoybBandBorder(darkHome);
     await screenshot(darkHome, 'home-dark-desktop');
 
+    const mobileBreakpoint = await browser.newPage({
+      viewport: { width: siteMobileBreakpointWidth, height: 844 },
+    });
+    await mobileBreakpoint.goto(baseUrl, { waitUntil: 'networkidle' });
+    await assertSitePageShell(mobileBreakpoint, 'mobile');
+
+    const desktopBreakpoint = await browser.newPage({
+      viewport: { width: siteDesktopBreakpointWidth, height: 844 },
+    });
+    await desktopBreakpoint.goto(baseUrl, { waitUntil: 'networkidle' });
+    await assertSitePageShell(desktopBreakpoint, 'desktop');
+
     const mobile = await browser.newPage({
       viewport: { width: 390, height: 844 },
     });
     await mobile.goto(baseUrl, { waitUntil: 'networkidle' });
     await assertSitePageShell(mobile, 'mobile');
     await assertRoybBandPlacement(mobile);
+    await assertExperienceGroupLabelHoverHighlight(mobile);
     await assertMobileHeroContactUnderStory(mobile);
     await assertMobileRailDescriptionsWrap(mobile);
     await assertMobileRailDateLayout({

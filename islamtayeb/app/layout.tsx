@@ -148,14 +148,10 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={`${openSans.variable} bg-[var(--ledger-background)]`}
-    >
-      <body className="bg-[var(--ledger-background)] font-sans text-foreground antialiased">
+    <html lang="en" suppressHydrationWarning className={openSans.variable}>
+      <body className="font-sans text-foreground antialiased">
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <div data-testid="site-page" className="site-page flex flex-col px-4">
+        <div data-testid="site-page" className="site-page flex flex-col px-5">
           <SiteHeader />
           <main className="flex flex-1 flex-col">{children}</main>
           <SiteFooter />

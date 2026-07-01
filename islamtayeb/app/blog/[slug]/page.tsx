@@ -52,7 +52,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         <header className="mb-4 flex flex-col gap-1">
           <h1
             data-testid="blog-article-title"
-            className="text-3xl font-bold leading-tight tracking-tight text-foreground text-balance md:text-4xl"
+            className="text-3xl font-bold leading-tight tracking-tight text-foreground text-balance site-desktop:text-4xl"
           >
             {post.manifest.title}
           </h1>

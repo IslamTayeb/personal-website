@@ -5,7 +5,7 @@ export function SiteHeader() {
   return (
     <header
       data-testid="site-header"
-      className="border-b border-border bg-background py-2.5"
+      className="border-b border-border bg-background py-3"
     >
       <div className="mx-auto flex max-w-3xl items-center justify-between gap-4">
         <Wordmark />

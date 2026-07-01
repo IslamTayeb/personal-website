@@ -40,7 +40,7 @@ function ContactIndex() {
         height={384}
         priority
         unoptimized
-        className="hidden aspect-square w-full max-w-48 bg-background object-cover md:block md:max-w-none"
+        className="hidden aspect-square w-full max-w-48 bg-background object-cover site-desktop:block site-desktop:max-w-none"
       />
       <ContactDetails />
     </div>
@@ -87,22 +87,22 @@ export function Hero() {
         <h1 className="sr-only">Islam Tayeb</h1>
         <div
           data-testid="hero-content"
-          className="flex flex-col gap-3 md:grid md:grid-cols-[25%_minmax(0,1fr)] md:gap-3"
+          className="flex flex-col gap-3 site-desktop:grid site-desktop:grid-cols-[25%_minmax(0,1fr)] site-desktop:gap-3"
         >
           <div
             data-testid="hero-contact-column"
-            className="hidden min-w-0 md:block md:border-r md:border-dotted md:border-border md:pr-3"
+            className="hidden min-w-0 site-desktop:block site-desktop:border-r site-desktop:border-dotted site-desktop:border-border site-desktop:pr-3"
           >
             <ContactIndex />
           </div>
           <div
             data-testid="hero-story-column"
-            className="min-w-0 md:self-center"
+            className="min-w-0 site-desktop:self-center"
           >
             <HeroStory />
             <div
               data-testid="hero-contact-mobile"
-              className="mt-3 font-mono text-sm leading-snug md:hidden"
+              className="mt-3 font-mono text-sm leading-snug site-desktop:hidden"
             >
               <ContactDetails />
             </div>
