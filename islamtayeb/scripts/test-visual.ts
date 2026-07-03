@@ -3091,7 +3091,7 @@ async function assertExperienceTitleHoverColors(page: Page) {
   const teachingTitle = page
     .locator(
       '[data-testid="experience-group"][data-group="teaching"] [data-testid="experience-title-run"]',
-      { hasText: 'Operating Systems Matthew Lentz' }
+      { hasText: 'Operating Systems TA with Matthew Lentz' }
     )
     .first();
   const teachingSeparator = await teachingTitle.evaluate((element) => ({
@@ -3104,14 +3104,17 @@ async function assertExperienceTitleHoverColors(page: Page) {
 
   assert.equal(teachingSeparator.tagName, 'SPAN');
   assert.ok(!teachingSeparator.className.includes('royb-link'));
-  assert.equal(teachingSeparator.rawText, 'Operating Systems Matthew Lentz');
+  assert.equal(
+    teachingSeparator.rawText,
+    'Operating Systems TA with Matthew Lentz'
+  );
   assert.equal(teachingSeparator.whiteSpace, 'break-spaces');
   assert.equal(teachingSeparator.decoration, 'none');
 
   await teachingTitle.locator('[data-testid="advisor-label"]').hover();
   const teachingHover = await readHover();
 
-  assert.equal(teachingHover.text, 'Operating Systems Matthew Lentz');
+  assert.equal(teachingHover.text, 'Operating Systems TA with Matthew Lentz');
   assert.equal(teachingHover.titleColor, teachingHover.foregroundToken);
   assert.equal(teachingHover.advisorColor, teachingHover.mutedToken);
   assert.equal(teachingHover.titleDecoration, 'none');
@@ -3341,31 +3344,54 @@ async function assertExperienceInteractions(page: Page) {
   assert.ok(teachingText?.includes('Jan 2025 - May 2025'));
   assert.ok(!teachingText?.includes('Sophomore spring'));
   assert.equal(
-    (teachingText?.match(/Matthew Lentz/g) ?? []).length,
+    (teachingText?.match(/TA with Matthew Lentz/g) ?? []).length,
     2,
-    'Matthew Lentz should label both CS teaching rows'
+    'TA with Matthew Lentz should label both CS teaching rows'
   );
-  assert.ok(teachingText?.includes('SAGE Tutoring'));
-  const computerSystemsLink = page
-    .locator(
-      '[data-testid="experience-group"][data-group="teaching"] a[data-testid="experience-title-run"]',
-      { hasText: 'Computer Systems Matthew Lentz' }
-    )
+  assert.match(teachingText ?? '', /Organic Chemistry I\s+Tutor with SAGE/);
+  const teachingGroup = page.locator(
+    '[data-testid="experience-group"][data-group="teaching"]'
+  );
+  const computerSystemsRow = teachingGroup
+    .locator('li', { hasText: 'Computer Systems TA with Matthew Lentz' })
     .first();
-  const computerSystemsLinkInfo = await computerSystemsLink.evaluate(
+  const computerSystemsTitle = computerSystemsRow
+    .locator('[data-testid="experience-title-run"]')
+    .first();
+  const computerSystemsWithLink = computerSystemsRow
+    .locator('a[data-testid="with-label"]', { hasText: 'Matthew Lentz' })
+    .first();
+  const computerSystemsTitleInfo = await computerSystemsTitle.evaluate(
+    (element) => ({
+      tagName: element.tagName,
+      className: element.className,
+      textContent: element.textContent,
+      textDecoration: getComputedStyle(element).textDecorationLine,
+    })
+  );
+  const computerSystemsLinkInfo = await computerSystemsWithLink.evaluate(
     (element) => ({
       href: element.getAttribute('href'),
       className: element.className,
       textDecoration: getComputedStyle(element).textDecorationLine,
     })
   );
-  const sageTitleLink = page
-    .locator(
-      '[data-testid="experience-group"][data-group="teaching"] a[data-testid="experience-title-run"]',
-      { hasText: /Organic Chemistry I\s+SAGE Tutoring/ }
-    )
+  const orgoRow = teachingGroup
+    .locator('li', { hasText: /Organic Chemistry I\s+Tutor with SAGE/ })
     .first();
-  const sageTitleLinkInfo = await sageTitleLink.evaluate((element) => ({
+  const orgoTitle = orgoRow
+    .locator('[data-testid="experience-title-run"]')
+    .first();
+  const sageWithLink = orgoRow
+    .locator('a[data-testid="with-label"]', { hasText: 'SAGE' })
+    .first();
+  const orgoTitleInfo = await orgoTitle.evaluate((element) => ({
+    tagName: element.tagName,
+    className: element.className,
+    textContent: element.textContent,
+    textDecoration: getComputedStyle(element).textDecorationLine,
+  }));
+  const sageLinkInfo = await sageWithLink.evaluate((element) => ({
     href: element.getAttribute('href'),
     className: element.className,
     textContent: element.textContent,
@@ -3374,37 +3400,46 @@ async function assertExperienceInteractions(page: Page) {
   const sageAdvisorOnlyLinkCount = await page
     .locator(
       '[data-testid="experience-group"][data-group="teaching"] a[data-testid="advisor-label"]',
-      { hasText: 'SAGE Tutoring' }
+      { hasText: 'Tutor' }
     )
     .count();
 
+  assert.equal(computerSystemsTitleInfo.tagName, 'SPAN');
+  assert.equal(
+    computerSystemsTitleInfo.textContent,
+    'Computer Systems TA with Matthew Lentz'
+  );
+  assert.equal(computerSystemsTitleInfo.textDecoration, 'none');
   assert.equal(
     computerSystemsLinkInfo.href,
-    'https://courses.cs.duke.edu/spring26/compsci210d/'
+    'https://users.cs.duke.edu/~mlentz/'
   );
   assert.ok(
     computerSystemsLinkInfo.className.includes('royb-link') &&
       computerSystemsLinkInfo.className.includes('royb-link-highlight') &&
       computerSystemsLinkInfo.className.includes('royb-link-fragment') &&
       computerSystemsLinkInfo.textDecoration.includes('underline'),
-    'Computer Systems should use the ROYB underlined title link treatment'
+    'Matthew Lentz should use the ROYB underlined with-link treatment'
   );
-  assert.equal(sageTitleLinkInfo.href, 'https://arc.duke.edu/peer-education/');
+  assert.equal(orgoTitleInfo.tagName, 'SPAN');
   assert.match(
-    sageTitleLinkInfo.textContent ?? '',
-    /Organic Chemistry I\s+SAGE Tutoring/
+    orgoTitleInfo.textContent ?? '',
+    /Organic Chemistry I\s+Tutor with SAGE/
   );
+  assert.equal(orgoTitleInfo.textDecoration, 'none');
+  assert.equal(sageLinkInfo.href, 'https://arc.duke.edu/peer-education/');
+  assert.equal(sageLinkInfo.textContent, 'SAGE');
   assert.ok(
-    sageTitleLinkInfo.className.includes('royb-link') &&
-      sageTitleLinkInfo.className.includes('royb-link-highlight') &&
-      sageTitleLinkInfo.className.includes('royb-link-fragment') &&
-      sageTitleLinkInfo.textDecoration.includes('underline'),
-    'Organic Chemistry I SAGE Tutoring should use the ROYB underlined title link treatment'
+    sageLinkInfo.className.includes('royb-link') &&
+      sageLinkInfo.className.includes('royb-link-highlight') &&
+      sageLinkInfo.className.includes('royb-link-fragment') &&
+      sageLinkInfo.textDecoration.includes('underline'),
+    'SAGE should use the ROYB underlined with-link treatment'
   );
   assert.equal(
     sageAdvisorOnlyLinkCount,
     0,
-    'SAGE Tutoring should not render as an advisor-only anchor'
+    'Tutor should not render as an advisor-only anchor'
   );
   await expectNoTeachingShowMore(page);
 }

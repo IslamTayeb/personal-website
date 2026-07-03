@@ -1,7 +1,10 @@
 export type ExperienceRole = {
   org: string;
+  roleLabel?: string;
   piName?: string;
   piHref?: string;
+  withName?: string;
+  withHref?: string;
   date: string;
   desc: string;
   descLinks?: {
@@ -122,7 +125,9 @@ export const experienceGroups: ExperienceGroup[] = [
     roles: [
       {
         org: 'Operating Systems',
-        piName: 'Matthew Lentz',
+        roleLabel: 'TA',
+        withName: 'Matthew Lentz',
+        withHref: 'https://users.cs.duke.edu/~mlentz/',
         date: 'Incoming Aug 2026',
         state: 'incoming',
         incoming: true,
@@ -130,16 +135,18 @@ export const experienceGroups: ExperienceGroup[] = [
       },
       {
         org: 'Computer Systems',
-        piName: 'Matthew Lentz',
+        roleLabel: 'TA',
+        withName: 'Matthew Lentz',
+        withHref: 'https://users.cs.duke.edu/~mlentz/',
         date: 'Jan 2026 - May 2026',
-        href: 'https://courses.cs.duke.edu/spring26/compsci210d/',
         state: 'ended',
         desc: 'Introduced CPUs, co-led a discussion section + office hours',
       },
       {
         org: 'Organic Chemistry I',
-        piName: 'SAGE Tutoring',
-        href: 'https://arc.duke.edu/peer-education/',
+        roleLabel: 'Tutor',
+        withName: 'SAGE',
+        withHref: 'https://arc.duke.edu/peer-education/',
         date: 'Jan 2025 - May 2025',
         state: 'ended',
         desc: 'Led a study group, saw kids quit pre-med as the semester went',
