@@ -795,8 +795,8 @@ async function assertScrollbarStyles() {
   );
   assert.ok(
     css.includes('::-webkit-scrollbar-thumb') &&
-      css.includes('border-radius: 0px !important'),
-    'scrollbar thumb should be square'
+      css.includes('border-radius: 1px !important'),
+    'scrollbar thumb should use a 1px radius'
   );
   assert.ok(
     css.includes('::-webkit-scrollbar-track') &&
