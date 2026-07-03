@@ -788,9 +788,20 @@ async function assertScrollbarStyles() {
     'scrollbars should appear only when overflow needs them'
   );
   assert.ok(
+    css.includes('--scrollbar-thumb: #121110') &&
+      css.includes('--scrollbar-thumb: #555') &&
+      css.includes('scrollbar-color: var(--scrollbar-thumb) transparent'),
+    'scrollbar colors should use the light/dark thumb token on a transparent track'
+  );
+  assert.ok(
     css.includes('::-webkit-scrollbar-thumb') &&
-      css.includes('border-radius: 0 !important'),
+      css.includes('border-radius: 0px !important'),
     'scrollbar thumb should be square'
+  );
+  assert.ok(
+    css.includes('::-webkit-scrollbar-track') &&
+      css.includes('background: transparent'),
+    'scrollbar track should stay transparent'
   );
   assert.ok(
     css.includes('var(--section-color, var(--roy-b)) 20%') &&

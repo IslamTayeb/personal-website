@@ -110,6 +110,9 @@ Use meaningful commit messages that describe the why.
   rhythm with the visible rule at the bottom of the tile, not a 12px half-offset.
   Keep `body` from margin-collapsing so the ledger origin stays at the viewport
   top.
+- **Scrollbars:** Keep scrollbar tracks and corners transparent so they show the
+  current paper background. Use square scrollbar thumbs with
+  `border-radius: 0px`, `#121110` in light mode, and `#555` in dark mode.
 - **Links:** React-rendered hyperlinks should use
   `components/primitives/external-link.tsx`. Markdown-rendered article links
   should receive the same ROYB link classes in the renderer.
