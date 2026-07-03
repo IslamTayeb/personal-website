@@ -1,10 +1,7 @@
 export type ExperienceRole = {
   org: string;
-  roleLabel?: string;
   piName?: string;
   piHref?: string;
-  withName?: string;
-  withHref?: string;
   date: string;
   desc: string;
   descLinks?: {
@@ -125,31 +122,45 @@ export const experienceGroups: ExperienceGroup[] = [
     roles: [
       {
         org: 'Operating Systems',
-        roleLabel: 'TA',
-        withName: 'Matthew Lentz',
-        withHref: 'https://users.cs.duke.edu/~mlentz/',
+        piName: 'TA',
         date: 'Incoming Aug 2026',
         state: 'incoming',
         incoming: true,
-        desc: 'Introducing kernels, co-leading a discussion section + office hours',
+        desc: 'Introducing kernels with Matthew Lentz, co-leading a discussion section + office hours',
+        descLinks: [
+          {
+            text: 'Matthew Lentz',
+            href: 'https://users.cs.duke.edu/~mlentz/',
+          },
+        ],
       },
       {
         org: 'Computer Systems',
-        roleLabel: 'TA',
-        withName: 'Matthew Lentz',
-        withHref: 'https://users.cs.duke.edu/~mlentz/',
+        piName: 'TA',
         date: 'Jan 2026 - May 2026',
+        href: 'https://courses.cs.duke.edu/spring26/compsci210d/',
         state: 'ended',
-        desc: 'Introduced CPUs, co-led a discussion section + office hours',
+        desc: 'Introduced CPUs with Matthew Lentz, co-led a discussion section + office hours',
+        descLinks: [
+          {
+            text: 'Matthew Lentz',
+            href: 'https://users.cs.duke.edu/~mlentz/',
+          },
+        ],
       },
       {
         org: 'Organic Chemistry I',
-        roleLabel: 'Tutor',
-        withName: 'SAGE',
-        withHref: 'https://arc.duke.edu/peer-education/',
+        piName: 'Tutor',
+        href: 'https://arc.duke.edu/peer-education/',
         date: 'Jan 2025 - May 2025',
         state: 'ended',
-        desc: 'Led a study group, saw kids quit pre-med as the semester went',
+        desc: 'Led a study group with SAGE, saw kids quit pre-med as the semester went',
+        descLinks: [
+          {
+            text: 'SAGE',
+            href: 'https://arc.duke.edu/peer-education/',
+          },
+        ],
       },
     ],
   },

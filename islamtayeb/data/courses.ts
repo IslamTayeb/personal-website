@@ -5,14 +5,14 @@ export const teaching: Course[] = [
     name: 'Computer Systems, TA',
     code: 'CS 310',
     category: 'Systems',
-    desc: 'TA with Matthew Lentz. Assisted in discussions, office hours, and grading.',
+    desc: 'Assisted in discussions, office hours, and grading.',
     locked: true,
   },
   {
     name: 'Organic Chemistry II, Tutor',
     code: 'SAGE',
     category: 'Biochemistry',
-    desc: 'Tutor with SAGE. Led study groups. Was impressed at how good chem majors started getting at this point. Made me think like a teacher for the first time to predict what will come up. Began noticing the craft behind designing good exams.',
+    desc: 'Led study groups. Was impressed at how good chem majors started getting at this point. Made me think like a teacher for the first time to predict what will come up. Began noticing the craft behind designing good exams.',
     locked: false,
   },
 ];

@@ -28,9 +28,7 @@ function AdvisorLabel({
   role: ExperienceGroup['roles'][number];
   boxed: boolean;
 }) {
-  const label = role.roleLabel ?? role.piName;
-
-  if (!label) {
+  if (!role.piName) {
     return null;
   }
 
@@ -41,7 +39,7 @@ function AdvisorLabel({
     boxed && 'inline-block border border-border px-1'
   );
 
-  if (role.piHref && role.piName && !role.roleLabel && !role.href) {
+  if (role.piHref && !role.href) {
     return (
       <ExternalLink
         href={role.piHref}
@@ -50,7 +48,7 @@ function AdvisorLabel({
         data-testid="advisor-label"
         data-boxed={boxed ? 'true' : undefined}
       >
-        {label}
+        {role.piName}
       </ExternalLink>
     );
   }
@@ -61,45 +59,8 @@ function AdvisorLabel({
       data-testid="advisor-label"
       data-boxed={boxed ? 'true' : undefined}
     >
-      {label}
+      {role.piName}
     </span>
-  );
-}
-
-function WithLabel({
-  role,
-  boxed,
-  hoverSource,
-}: {
-  role: ExperienceGroup['roles'][number];
-  boxed: boolean;
-  hoverSource: boolean;
-}) {
-  if (!role.withName) {
-    return null;
-  }
-
-  if (!role.withHref) {
-    throw new Error(`Experience role "${role.org}" is missing withHref`);
-  }
-
-  return (
-    <>
-      {' with '}
-      <ExternalLink
-        href={role.withHref}
-        section="o"
-        className={cn(
-          'reading-copy text-base font-normal leading-tight text-muted-foreground',
-          boxed && 'inline-block border border-border px-1'
-        )}
-        data-rail-hover-source={hoverSource ? 'true' : undefined}
-        data-testid="with-label"
-        data-boxed={boxed ? 'true' : undefined}
-      >
-        {role.withName}
-      </ExternalLink>
-    </>
   );
 }
 
@@ -121,26 +82,19 @@ function RailGroup({
     <RailList>
       {roles.map((role, index) => {
         const state = role.state ?? (role.incoming ? 'incoming' : 'ended');
-        const hasLinkedWithLabel = Boolean(role.withName && role.withHref);
         const dotClassName =
           state === 'incoming'
             ? 'border border-roy-o bg-background'
             : state === 'present'
               ? 'bg-roy-o'
               : 'bg-foreground/75';
-        const titleContent: ReactNode =
-          role.roleLabel || role.piName ? (
-            <>
-              {role.org} <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
-              <WithLabel
-                role={role}
-                boxed={boxedAdvisorLabels}
-                hoverSource={state === 'ended'}
-              />
-            </>
-          ) : (
-            role.org
-          );
+        const titleContent: ReactNode = role.piName ? (
+          <>
+            {role.org} <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
+          </>
+        ) : (
+          role.org
+        );
         const isLastVisibleRole = index === roles.length - 1;
         const connector =
           index < roles.length - 1
@@ -157,7 +111,7 @@ function RailGroup({
             incoming={role.incoming}
             state={state}
             title={
-              role.href && !hasLinkedWithLabel ? (
+              role.href ? (
                 <ExternalLink
                   href={role.href}
                   section="o"

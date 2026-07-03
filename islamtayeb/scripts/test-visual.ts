@@ -3091,7 +3091,7 @@ async function assertExperienceTitleHoverColors(page: Page) {
   const teachingTitle = page
     .locator(
       '[data-testid="experience-group"][data-group="teaching"] [data-testid="experience-title-run"]',
-      { hasText: 'Operating Systems TA with Matthew Lentz' }
+      { hasText: 'Operating Systems TA' }
     )
     .first();
   const teachingSeparator = await teachingTitle.evaluate((element) => ({
@@ -3104,17 +3104,14 @@ async function assertExperienceTitleHoverColors(page: Page) {
 
   assert.equal(teachingSeparator.tagName, 'SPAN');
   assert.ok(!teachingSeparator.className.includes('royb-link'));
-  assert.equal(
-    teachingSeparator.rawText,
-    'Operating Systems TA with Matthew Lentz'
-  );
+  assert.equal(teachingSeparator.rawText, 'Operating Systems TA');
   assert.equal(teachingSeparator.whiteSpace, 'break-spaces');
   assert.equal(teachingSeparator.decoration, 'none');
 
   await teachingTitle.locator('[data-testid="advisor-label"]').hover();
   const teachingHover = await readHover();
 
-  assert.equal(teachingHover.text, 'Operating Systems TA with Matthew Lentz');
+  assert.equal(teachingHover.text, 'Operating Systems TA');
   assert.equal(teachingHover.titleColor, teachingHover.foregroundToken);
   assert.equal(teachingHover.advisorColor, teachingHover.mutedToken);
   assert.equal(teachingHover.titleDecoration, 'none');
@@ -3325,17 +3322,17 @@ async function assertExperienceInteractions(page: Page) {
   assert.ok(teachingText?.includes('Organic Chemistry I'));
   assert.ok(
     teachingText?.includes(
-      'Introducing kernels, co-leading a discussion section + office hours'
+      'Introducing kernels with Matthew Lentz, co-leading a discussion section + office hours'
     )
   );
   assert.ok(
     teachingText?.includes(
-      'Introduced CPUs, co-led a discussion section + office hours'
+      'Introduced CPUs with Matthew Lentz, co-led a discussion section + office hours'
     )
   );
   assert.ok(
     teachingText?.includes(
-      'Led a study group, saw kids quit pre-med as the semester went'
+      'Led a study group with SAGE, saw kids quit pre-med as the semester went'
     )
   );
   assert.ok(teachingIncomingDotClassName.includes('border-roy-o'));
@@ -3344,54 +3341,72 @@ async function assertExperienceInteractions(page: Page) {
   assert.ok(teachingText?.includes('Jan 2025 - May 2025'));
   assert.ok(!teachingText?.includes('Sophomore spring'));
   assert.equal(
-    (teachingText?.match(/TA with Matthew Lentz/g) ?? []).length,
+    (teachingText?.match(/Matthew Lentz/g) ?? []).length,
     2,
-    'TA with Matthew Lentz should label both CS teaching rows'
+    'Matthew Lentz should appear in both CS teaching descriptions'
   );
-  assert.match(teachingText ?? '', /Organic Chemistry I\s+Tutor with SAGE/);
+  assert.match(teachingText ?? '', /Organic Chemistry I\s+Tutor/);
   const teachingGroup = page.locator(
     '[data-testid="experience-group"][data-group="teaching"]'
   );
+  const operatingSystemsRow = teachingGroup
+    .locator('li', { hasText: 'Operating Systems TA' })
+    .first();
   const computerSystemsRow = teachingGroup
-    .locator('li', { hasText: 'Computer Systems TA with Matthew Lentz' })
+    .locator('li', { hasText: 'Computer Systems TA' })
+    .first();
+  const operatingSystemsLentzLink = operatingSystemsRow
+    .locator('p a', { hasText: 'Matthew Lentz' })
     .first();
   const computerSystemsTitle = computerSystemsRow
-    .locator('[data-testid="experience-title-run"]')
+    .locator('a[data-testid="experience-title-run"]', {
+      hasText: 'Computer Systems TA',
+    })
     .first();
-  const computerSystemsWithLink = computerSystemsRow
-    .locator('a[data-testid="with-label"]', { hasText: 'Matthew Lentz' })
+  const computerSystemsLentzLink = computerSystemsRow
+    .locator('p a', { hasText: 'Matthew Lentz' })
     .first();
   const computerSystemsTitleInfo = await computerSystemsTitle.evaluate(
     (element) => ({
       tagName: element.tagName,
+      href: element.getAttribute('href'),
       className: element.className,
       textContent: element.textContent,
       textDecoration: getComputedStyle(element).textDecorationLine,
     })
   );
-  const computerSystemsLinkInfo = await computerSystemsWithLink.evaluate(
+  const operatingSystemsLentzLinkInfo =
+    await operatingSystemsLentzLink.evaluate((element) => ({
+      href: element.getAttribute('href'),
+      className: element.className,
+      textContent: element.textContent,
+      textDecoration: getComputedStyle(element).textDecorationLine,
+    }));
+  const computerSystemsLentzLinkInfo = await computerSystemsLentzLink.evaluate(
     (element) => ({
       href: element.getAttribute('href'),
       className: element.className,
+      textContent: element.textContent,
       textDecoration: getComputedStyle(element).textDecorationLine,
     })
   );
   const orgoRow = teachingGroup
-    .locator('li', { hasText: /Organic Chemistry I\s+Tutor with SAGE/ })
+    .locator('li', { hasText: /Organic Chemistry I\s+Tutor/ })
     .first();
   const orgoTitle = orgoRow
-    .locator('[data-testid="experience-title-run"]')
+    .locator('a[data-testid="experience-title-run"]', {
+      hasText: /Organic Chemistry I\s+Tutor/,
+    })
     .first();
-  const sageWithLink = orgoRow
-    .locator('a[data-testid="with-label"]', { hasText: 'SAGE' })
-    .first();
+  const sageDescLink = orgoRow.locator('p a', { hasText: 'SAGE' }).first();
   const orgoTitleInfo = await orgoTitle.evaluate((element) => ({
     tagName: element.tagName,
+    href: element.getAttribute('href'),
     className: element.className,
     textContent: element.textContent,
     textDecoration: getComputedStyle(element).textDecorationLine,
   }));
-  const sageLinkInfo = await sageWithLink.evaluate((element) => ({
+  const sageLinkInfo = await sageDescLink.evaluate((element) => ({
     href: element.getAttribute('href'),
     className: element.className,
     textContent: element.textContent,
@@ -3404,29 +3419,46 @@ async function assertExperienceInteractions(page: Page) {
     )
     .count();
 
-  assert.equal(computerSystemsTitleInfo.tagName, 'SPAN');
+  assert.equal(computerSystemsTitleInfo.tagName, 'A');
   assert.equal(
-    computerSystemsTitleInfo.textContent,
-    'Computer Systems TA with Matthew Lentz'
+    computerSystemsTitleInfo.href,
+    'https://courses.cs.duke.edu/spring26/compsci210d/'
   );
-  assert.equal(computerSystemsTitleInfo.textDecoration, 'none');
+  assert.equal(computerSystemsTitleInfo.textContent, 'Computer Systems TA');
   assert.equal(
-    computerSystemsLinkInfo.href,
+    operatingSystemsLentzLinkInfo.href,
     'https://users.cs.duke.edu/~mlentz/'
   );
+  assert.equal(operatingSystemsLentzLinkInfo.textContent, 'Matthew Lentz');
+  assert.equal(
+    computerSystemsLentzLinkInfo.href,
+    'https://users.cs.duke.edu/~mlentz/'
+  );
+  assert.equal(computerSystemsLentzLinkInfo.textContent, 'Matthew Lentz');
   assert.ok(
-    computerSystemsLinkInfo.className.includes('royb-link') &&
-      computerSystemsLinkInfo.className.includes('royb-link-highlight') &&
-      computerSystemsLinkInfo.className.includes('royb-link-fragment') &&
-      computerSystemsLinkInfo.textDecoration.includes('underline'),
-    'Matthew Lentz should use the ROYB underlined with-link treatment'
+    computerSystemsTitleInfo.className.includes('royb-link') &&
+      computerSystemsTitleInfo.className.includes('royb-link-highlight') &&
+      computerSystemsTitleInfo.className.includes('royb-link-fragment') &&
+      computerSystemsTitleInfo.textDecoration.includes('underline'),
+    'Computer Systems TA should use the ROYB underlined title link treatment'
   );
-  assert.equal(orgoTitleInfo.tagName, 'SPAN');
-  assert.match(
-    orgoTitleInfo.textContent ?? '',
-    /Organic Chemistry I\s+Tutor with SAGE/
+  assert.ok(
+    operatingSystemsLentzLinkInfo.className.includes('royb-link') &&
+      operatingSystemsLentzLinkInfo.textDecoration.includes('underline') &&
+      computerSystemsLentzLinkInfo.className.includes('royb-link') &&
+      computerSystemsLentzLinkInfo.textDecoration.includes('underline'),
+    'Matthew Lentz description links should use the ROYB link treatment'
   );
-  assert.equal(orgoTitleInfo.textDecoration, 'none');
+  assert.equal(orgoTitleInfo.tagName, 'A');
+  assert.equal(orgoTitleInfo.href, 'https://arc.duke.edu/peer-education/');
+  assert.match(orgoTitleInfo.textContent ?? '', /Organic Chemistry I\s+Tutor/);
+  assert.ok(
+    orgoTitleInfo.className.includes('royb-link') &&
+      orgoTitleInfo.className.includes('royb-link-highlight') &&
+      orgoTitleInfo.className.includes('royb-link-fragment') &&
+      orgoTitleInfo.textDecoration.includes('underline'),
+    'Organic Chemistry I Tutor should use the ROYB underlined title link treatment'
+  );
   assert.equal(sageLinkInfo.href, 'https://arc.duke.edu/peer-education/');
   assert.equal(sageLinkInfo.textContent, 'SAGE');
   assert.ok(
@@ -3434,7 +3466,7 @@ async function assertExperienceInteractions(page: Page) {
       sageLinkInfo.className.includes('royb-link-highlight') &&
       sageLinkInfo.className.includes('royb-link-fragment') &&
       sageLinkInfo.textDecoration.includes('underline'),
-    'SAGE should use the ROYB underlined with-link treatment'
+    'SAGE should use the ROYB underlined description link treatment'
   );
   assert.equal(
     sageAdvisorOnlyLinkCount,

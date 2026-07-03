@@ -117,10 +117,9 @@ Use meaningful commit messages that describe the why.
   `href` when the whole experience title should link. Use `piHref` only when
   the advisor/mentor label should link while the organization/course title
   remains plain text.
-- **Experience teaching links:** Teaching rows use `roleLabel` for labels like
-  `TA` or `Tutor`, and `withName`/`withHref` for linked `with ...` context such
-  as a professor or tutoring program. Do not combine these with a whole-title
-  `href`, which would create competing title links.
+- **Experience teaching labels:** Teaching rows use `piName` for role labels
+  like `TA` or `Tutor`. Put collaborator/program context in the description as
+  linked `descLinks`, e.g. `with Matthew Lentz, ...` or `with SAGE, ...`.
 - **Experience date labels:** Capitalize display status words in experience
   dates, e.g. `Incoming Aug 2026` and `Apr 2026 - Present`. Keep internal
   `state` values lowercase.
