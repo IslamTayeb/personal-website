@@ -1444,6 +1444,24 @@ async function assertHome(page: Page) {
         .querySelector('#publications')
         ?.querySelectorAll('[data-testid="publication-meta-line"]') ?? []),
     ].map((meta) => meta.className);
+    const publicationMetaLineTexts = [
+      ...(document
+        .querySelector('#publications')
+        ?.querySelectorAll('[data-testid="publication-meta-line"]') ?? []),
+    ].map((meta) => meta.textContent?.replace(/\s+/g, ' ').trim() ?? '');
+    const publicationPaddedSlashCount = [
+      ...(document
+        .querySelector('#publications')
+        ?.querySelectorAll<HTMLElement>(
+          '[data-testid="publication-meta-line"] span'
+        ) ?? []),
+    ].filter(
+      (element) =>
+        element.textContent === '/' &&
+        (element.className.includes('px-') ||
+          getComputedStyle(element).paddingLeft !== '0px' ||
+          getComputedStyle(element).paddingRight !== '0px')
+    ).length;
     const publicationMetaLineStyles = [
       ...(document
         .querySelector('#publications')
@@ -1697,6 +1715,8 @@ async function assertHome(page: Page) {
       publicationConnectors,
       publicationActionRail,
       publicationMetaLines,
+      publicationMetaLineTexts,
+      publicationPaddedSlashCount,
       publicationMetaLineStyles,
       publicationDateStyles,
       publicationAuthors,
@@ -2394,6 +2414,16 @@ async function assertHome(page: Page) {
         style.textTransform === metadataStyle.textTransform
     ),
     'publication type and journal should match publication date color'
+  );
+  assert.deepEqual(result.publicationMetaLineTexts, [
+    'Research Article / Journal of Environmental Chemical Engineering',
+    'Pre-print',
+    'Research Article / Journal of CO2 Utilization',
+  ]);
+  assert.equal(
+    result.publicationPaddedSlashCount,
+    0,
+    'publication type/venue separator should be plain spaced text, not a padded slash element'
   );
   assert.ok(
     result.publicationDateStyles.every((style) => style.fontSize === 14),

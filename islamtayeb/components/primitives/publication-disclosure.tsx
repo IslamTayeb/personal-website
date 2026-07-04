@@ -34,6 +34,10 @@ function PublicationRow({
   publication: Publication;
   connector: 'solid' | 'dashed' | 'none';
 }) {
+  const metadata = publication.venue
+    ? `${publication.type} / ${publication.venue}`
+    : publication.type;
+
   return (
     <RailItem
       testId="publication-row"
@@ -61,15 +65,7 @@ function PublicationRow({
             data-testid="publication-meta-line"
             className="reading-copy text-base font-normal leading-snug text-muted-foreground"
           >
-            {publication.type}
-            {publication.venue ? (
-              <>
-                <span className="px-1">/</span>
-                <span>
-                  <RichText text={publication.venue} />
-                </span>
-              </>
-            ) : null}
+            <RichText text={metadata} />
           </span>
         </span>
       }
