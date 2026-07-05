@@ -21,6 +21,7 @@ export const experienceGroups: ExperienceGroup[] = [
     kind: 'research',
     visibleCount: 4,
     roles: [
+      /*
       {
         org: 'Duke University',
         piName: 'Christian Dallago',
@@ -29,6 +30,7 @@ export const experienceGroups: ExperienceGroup[] = [
         state: 'incoming',
         desc: 'GPU acceleration of protein search',
       },
+      */
       {
         org: 'Duke University',
         piName: 'Matthew Lentz',

@@ -2047,7 +2047,7 @@ async function assertHome(page: Page) {
     result.experienceGroupLabelStyles.map(
       (label: { text: string }) => label.text
     ),
-    ['Research (5)', 'Engineering (3)', 'Teaching (3)']
+    ['Research (4)', 'Engineering (3)', 'Teaching (3)']
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
@@ -2129,20 +2129,14 @@ async function assertHome(page: Page) {
 
   assert.equal(research?.expanded, 'true', 'research should default open');
   assert.equal(research?.rows, 4, 'research should show 4 rows when collapsed');
-  assert.ok(research?.text.includes('Research (5)'));
-  assert.ok(research?.text.includes('show more...'));
-  assert.equal(research?.showMorePaddingTop, 8);
-  assert.ok(
-    Math.abs((research?.showMoreLeft ?? 0) - result.sectionLabelLefts[0]) <= 1,
-    'research show-more action should align with the rail text edge'
-  );
-  assert.ok(research?.text.includes('Christian Dallago'));
+  assert.ok(research?.text.includes('Research (4)'));
+  assert.ok(!research?.text.includes('show more...'));
   assert.ok(research?.text.includes('Matthew Lentz'));
   assert.ok(research?.text.includes('Philip Romero'));
   assert.ok(
     result.advisorLabels.some(
       (label) =>
-        label.text === 'Christian Dallago' &&
+        label.text === 'Matthew Lentz' &&
         label.color === result.mutedToken &&
         label.fontFamily === result.readingFontFamily &&
         label.fontSize === 16 &&
@@ -2158,8 +2152,8 @@ async function assertHome(page: Page) {
     result.advisorGapCount === 0 &&
       result.experienceLinks.some(
         (link) =>
-          link.text === 'Duke University Christian Dallago' &&
-          link.rawText === 'Duke University Christian Dallago' &&
+          link.text === 'Duke University Matthew Lentz' &&
+          link.rawText === 'Duke University Matthew Lentz' &&
           link.whiteSpace === 'break-spaces'
       ),
     'advisor organization and PI labels should be one inline underlined text run with one breakable space'
@@ -2169,7 +2163,6 @@ async function assertHome(page: Page) {
       !teaching?.text.includes('Operating Systems /'),
     'advisor labels should sit after the organization without slash separators'
   );
-  assert.ok(research?.text.includes('Incoming Aug 2026'));
   assert.ok(!research?.text.includes('incoming Aug 2026'));
   assert.ok(research?.text.includes('Apr 2026 - Present'));
   assert.ok(!research?.text.includes('Apr 2026 - present'));
@@ -2184,8 +2177,8 @@ async function assertHome(page: Page) {
     'Anthropic should link to the AI for Science Program page'
   );
   assert.ok(!research?.text.includes('% Microsoft Research'));
-  assert.ok(!result.bodyText.includes('Dallago Lab'));
   assert.ok(!result.bodyText.includes('Lentz Lab'));
+  assert.ok(!result.bodyText.includes('Romero Lab'));
   assert.ok(!result.bodyText.includes('PI '));
 
   assert.equal(engineering?.expanded, 'true');
@@ -2247,7 +2240,6 @@ async function assertHome(page: Page) {
   const presentDots = result.dots.filter((dot) => dot.state === 'present');
   const endedDots = result.dots.filter((dot) => dot.state === 'ended');
 
-  assert.ok(incomingDots.length >= 1, 'incoming marker should render');
   assert.ok(
     incomingDots.every(
       (dot) =>
@@ -2908,7 +2900,7 @@ async function assertWrappedInlineHighlight({
 async function assertMobileHomeWrappedHighlights(page: Page) {
   await assertWrappedInlineHighlight({
     page,
-    selector: 'a[href="https://machine.learning.bio/"]',
+    selector: 'a[href="https://sites.duke.edu/navid/"]',
     label: 'mobile experience advisor org link',
     colorVariable: 'var(--roy-o)',
   });
@@ -3107,14 +3099,14 @@ async function assertExperienceTitleHoverColors(page: Page) {
 
   const researchTitle = page
     .locator('[data-testid="experience-title-run"]', {
-      hasText: 'Duke University Christian Dallago',
+      hasText: 'Duke University Matthew Lentz',
     })
     .first();
 
   await researchTitle.locator('[data-testid="advisor-label"]').hover();
   const researchHover = await readHover();
 
-  assert.equal(researchHover.text, 'Duke University Christian Dallago');
+  assert.equal(researchHover.text, 'Duke University Matthew Lentz');
   assert.equal(researchHover.titleColor, researchHover.orangeToken);
   assert.equal(researchHover.advisorColor, researchHover.orangeToken);
 
@@ -3191,18 +3183,6 @@ async function assertHomeRailHoverAccents(page: Page) {
   await assertRailRowKeepsMarkerOnHover({
     page,
     row: page
-      .locator('#experience li', { hasText: 'Christian Dallago' })
-      .first(),
-    hoverSource: page
-      .locator('[data-testid="experience-title-run"]', {
-        hasText: 'Duke University Christian Dallago',
-      })
-      .first(),
-    label: 'incoming experience row',
-  });
-  await assertRailRowKeepsMarkerOnHover({
-    page,
-    row: page
       .locator('#experience li', { hasText: 'Duke University Matthew Lentz' })
       .first(),
     hoverSource: page
@@ -3275,7 +3255,7 @@ async function assertExperienceInteractions(page: Page) {
     '[data-testid="experience-group"][data-group="research"]'
   );
   const researchToggle = researchGroup.getByRole('button', {
-    name: /Research \(5\)/,
+    name: /Research \(4\)/,
   });
   const groupBox = await researchGroup.boundingBox();
   const toggleBox = await researchToggle.boundingBox();
@@ -3299,38 +3279,48 @@ async function assertExperienceInteractions(page: Page) {
 
   await page
     .locator('[data-testid="experience-group"][data-group="research"]')
-    .getByRole('button', { name: /Research \(5\)/ })
+    .getByRole('button', { name: /Research \(4\)/ })
     .click();
   assert.equal(await groupRows('research'), 0);
 
   await page
     .locator('[data-testid="experience-group"][data-group="research"]')
-    .getByRole('button', { name: /Research \(5\)/ })
+    .getByRole('button', { name: /Research \(4\)/ })
     .click();
   assert.equal(await groupRows('research'), 4);
+  assert.equal(
+    await researchGroup.getByRole('button', { name: 'show more...' }).count(),
+    0
+  );
 
   await page
-    .locator('[data-testid="experience-group"][data-group="research"]')
+    .locator('[data-testid="experience-group"][data-group="engineering"]')
     .getByRole('button', { name: 'show more...' })
     .click();
-  assert.equal(await groupRows('research'), 5);
-  assert.equal(await groupRows('engineering'), 1);
+  assert.equal(await groupRows('research'), 4);
+  assert.equal(await groupRows('engineering'), 3);
   await page
-    .locator('[data-testid="experience-group"][data-group="research"]')
+    .locator('[data-testid="experience-group"][data-group="engineering"]')
     .getByRole('button', { name: 'show less...' })
     .waitFor();
   const railTextLeft = await page
     .locator('#experience [data-testid="rail-title"]')
     .first()
     .evaluate((element) => element.getBoundingClientRect().left);
-  const showLessBox = await researchGroup
+  const engineeringGroup = page.locator(
+    '[data-testid="experience-group"][data-group="engineering"]'
+  );
+  const showLessBox = await engineeringGroup
     .getByRole('button', { name: 'show less...' })
     .boundingBox();
 
-  assert.ok(showLessBox, 'Research show-less action should have a layout box');
+  assert.ok(
+    showLessBox,
+    'Engineering show-less action should have a layout box'
+  );
   assert.ok(
     Math.abs(showLessBox.x - railTextLeft) <= 1,
-    'research show-less action should align with the rail text edge'
+    'engineering show-less action should align with the rail text edge'
   );
 
   await page
@@ -3367,6 +3357,21 @@ async function assertExperienceInteractions(page: Page) {
   );
   assert.ok(teachingIncomingDotClassName.includes('border-roy-o'));
   assert.ok(teachingIncomingDotClassName.includes('bg-background'));
+  const teachingGroup = page.locator(
+    '[data-testid="experience-group"][data-group="teaching"]'
+  );
+  await assertRailRowKeepsMarkerOnHover({
+    page,
+    row: teachingGroup
+      .locator('li', { hasText: 'Operating Systems TA' })
+      .first(),
+    hoverSource: teachingGroup
+      .locator('[data-testid="experience-title-run"]', {
+        hasText: 'Operating Systems TA',
+      })
+      .first(),
+    label: 'incoming teaching row',
+  });
   assert.ok(!teachingText?.includes('Duke University.'));
   assert.ok(teachingText?.includes('Jan 2025 - May 2025'));
   assert.ok(!teachingText?.includes('Sophomore spring'));
@@ -3376,9 +3381,6 @@ async function assertExperienceInteractions(page: Page) {
     'Matthew Lentz should appear in both CS teaching descriptions'
   );
   assert.match(teachingText ?? '', /Organic Chemistry I\s+Tutor/);
-  const teachingGroup = page.locator(
-    '[data-testid="experience-group"][data-group="teaching"]'
-  );
   const operatingSystemsRow = teachingGroup
     .locator('li', { hasText: 'Operating Systems TA' })
     .first();

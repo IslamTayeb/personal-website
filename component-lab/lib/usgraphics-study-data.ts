@@ -223,6 +223,7 @@ export const beforeAfters: BeforeAfter[] = [
 ];
 
 export const ledgerRows = [
+  /*
   {
     id: 'RE-01',
     state: 'incoming',
@@ -232,6 +233,7 @@ export const ledgerRows = [
     evidence: 'GPU acceleration',
     action: 'lab',
   },
+  */
   {
     id: 'SYS-02',
     state: 'present',
