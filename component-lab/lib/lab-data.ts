@@ -19,7 +19,7 @@ export type ExperienceGroup = {
 export const experienceGroups: ExperienceGroup[] = [
   {
     kind: 'research',
-    visibleCount: 4,
+    visibleCount: 3,
     roles: [
       /*
       {

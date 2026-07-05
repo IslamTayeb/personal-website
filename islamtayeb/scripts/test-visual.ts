@@ -2128,11 +2128,18 @@ async function assertHome(page: Page) {
   const teaching = result.groups.find((group) => group.kind === 'teaching');
 
   assert.equal(research?.expanded, 'true', 'research should default open');
-  assert.equal(research?.rows, 4, 'research should show 4 rows when collapsed');
+  assert.equal(research?.rows, 3, 'research should show 3 rows when collapsed');
   assert.ok(research?.text.includes('Research (4)'));
-  assert.ok(!research?.text.includes('show more...'));
+  assert.ok(research?.text.includes('show more...'));
+  assert.equal(research?.showMorePaddingTop, 8);
+  assert.ok(
+    Math.abs((research?.showMoreLeft ?? 0) - result.sectionLabelLefts[0]) <= 1,
+    'research show-more action should align with the rail text edge'
+  );
   assert.ok(research?.text.includes('Matthew Lentz'));
   assert.ok(research?.text.includes('Philip Romero'));
+  assert.ok(research?.text.includes('Navid NaderiAlizadeh'));
+  assert.ok(!research?.text.includes('Mahmoud Abdelnaby'));
   assert.ok(
     result.advisorLabels.some(
       (label) =>
@@ -3247,7 +3254,7 @@ async function assertExperienceInteractions(page: Page) {
       .locator('[data-testid="rail-title"]')
       .count();
 
-  assert.equal(await groupRows('research'), 4);
+  assert.equal(await groupRows('research'), 3);
   assert.equal(await groupRows('engineering'), 1);
   assert.equal(await groupRows('teaching'), 0);
 
@@ -3273,7 +3280,7 @@ async function assertExperienceInteractions(page: Page) {
   );
   assert.equal(
     await groupRows('research'),
-    4,
+    3,
     'clicking the empty right side of the experience header should not toggle'
   );
 
@@ -3287,40 +3294,30 @@ async function assertExperienceInteractions(page: Page) {
     .locator('[data-testid="experience-group"][data-group="research"]')
     .getByRole('button', { name: /Research \(4\)/ })
     .click();
-  assert.equal(await groupRows('research'), 4);
-  assert.equal(
-    await researchGroup.getByRole('button', { name: 'show more...' }).count(),
-    0
-  );
+  assert.equal(await groupRows('research'), 3);
 
   await page
-    .locator('[data-testid="experience-group"][data-group="engineering"]')
+    .locator('[data-testid="experience-group"][data-group="research"]')
     .getByRole('button', { name: 'show more...' })
     .click();
   assert.equal(await groupRows('research'), 4);
-  assert.equal(await groupRows('engineering'), 3);
+  assert.equal(await groupRows('engineering'), 1);
   await page
-    .locator('[data-testid="experience-group"][data-group="engineering"]')
+    .locator('[data-testid="experience-group"][data-group="research"]')
     .getByRole('button', { name: 'show less...' })
     .waitFor();
   const railTextLeft = await page
     .locator('#experience [data-testid="rail-title"]')
     .first()
     .evaluate((element) => element.getBoundingClientRect().left);
-  const engineeringGroup = page.locator(
-    '[data-testid="experience-group"][data-group="engineering"]'
-  );
-  const showLessBox = await engineeringGroup
+  const showLessBox = await researchGroup
     .getByRole('button', { name: 'show less...' })
     .boundingBox();
 
-  assert.ok(
-    showLessBox,
-    'Engineering show-less action should have a layout box'
-  );
+  assert.ok(showLessBox, 'Research show-less action should have a layout box');
   assert.ok(
     Math.abs(showLessBox.x - railTextLeft) <= 1,
-    'engineering show-less action should align with the rail text edge'
+    'research show-less action should align with the rail text edge'
   );
 
   await page
