@@ -2596,7 +2596,7 @@ async function assertHome(page: Page) {
   assert.equal(result.footerBorderTopWidth, 1);
   assert.ok(result.bodyText.includes('show more on Scholar...'));
   assert.ok(result.bodyText.includes('show more on blog...'));
-  assert.equal(result.footerUpdateText, 'Last updated Jun 22, 2026');
+  assert.equal(result.footerUpdateText, 'Last updated Jul 13, 2026');
   assert.ok(result.footerQuoteText.includes('plz enjoy game'));
   assert.ok(result.footerQuoteText.includes('rrtyui'));
   assert.ok(!result.footerText.includes('Links:'));
@@ -2609,6 +2609,74 @@ async function assertHome(page: Page) {
   assert.ok(
     Math.abs(result.footerRight - result.footerQuoteRight) <= 1,
     'footer quote should sit at the right edge'
+  );
+}
+
+async function assertPostTagTypographyAndAlignment(page: Page, label: string) {
+  const result = await page.evaluate(() => {
+    const blueProbe = document.createElement('span');
+
+    blueProbe.style.color = 'var(--roy-b)';
+    document.body.append(blueProbe);
+    const blue = getComputedStyle(blueProbe).color;
+    blueProbe.remove();
+
+    const groups = [
+      ...document.querySelectorAll<HTMLElement>('[data-post-tags]'),
+    ].map((group) => {
+      const titleLink = group.parentElement?.querySelector('a');
+      const titleRects = titleLink
+        ? [...titleLink.getClientRects()].filter(
+            (rect) => rect.width > 0 && rect.height > 0
+          )
+        : [];
+      const titleLine = titleRects.at(-1);
+      const groupRect = group.getBoundingClientRect();
+
+      return {
+        verticalAlign: getComputedStyle(group).verticalAlign,
+        offset: titleLine
+          ? groupRect.top +
+            groupRect.height / 2 -
+            (titleLine.top + titleLine.height / 2)
+          : Number.POSITIVE_INFINITY,
+      };
+    });
+    const tags = [
+      ...document.querySelectorAll<HTMLElement>('[data-post-tag]'),
+    ].map((tag) => {
+      const style = getComputedStyle(tag);
+
+      return {
+        kind: tag.dataset.postTag ?? '',
+        color: style.color,
+        fontWeight: Number.parseInt(style.fontWeight, 10),
+      };
+    });
+
+    return { blue, groups, tags };
+  });
+
+  assert.ok(result.groups.length > 0, `${label} should render post tag groups`);
+  assert.ok(
+    result.groups.every(({ verticalAlign }) => verticalAlign === 'middle'),
+    `${label} post tag groups should use middle vertical alignment`
+  );
+  assert.ok(
+    result.groups.every(({ offset }) => Math.abs(offset) <= 2),
+    `${label} tag centers should align with their title line: ${result.groups
+      .map(({ offset }) => offset.toFixed(2))
+      .join(', ')}`
+  );
+  assert.ok(
+    result.tags.every(({ fontWeight }) => fontWeight === 400),
+    `${label} tag labels should use regular weight`
+  );
+  assert.ok(
+    result.tags
+      .filter(({ kind }) => kind === 'new')
+      .every(({ color }) => color === result.blue),
+    `${label} NEW tag text should use the blue token`
   );
 }
 
@@ -2853,9 +2921,9 @@ async function assertMobileFooterAlignment(page: Page) {
     `mobile footer should not overflow horizontally: ${result.footerScrollWidth} / ${result.footerClientWidth}`
   );
   assert.equal(result.updateWhiteSpace, 'nowrap');
-  assert.equal(result.updateText, 'Last updated Jun 22, 2026');
+  assert.equal(result.updateText, 'Last updated Jul 13, 2026');
   assert.equal(result.updateFontSize, 14);
-  assert.equal(result.footerVisibleText, 'Last updated Jun 22, 2026');
+  assert.equal(result.footerVisibleText, 'Last updated Jul 13, 2026');
   assert.equal(result.quoteDisplay, 'none');
   assert.ok(!result.footerVisibleText.includes('plz enjoy game'));
   assert.ok(!result.footerVisibleText.includes('rrtyui'));
@@ -5097,6 +5165,7 @@ async function main() {
     );
     const homeBand = await assertRoybBandPlacement(home);
     await assertHome(home);
+    await assertPostTagTypographyAndAlignment(home, 'desktop home');
     await assertVisibleOneLineDescriptions(home);
     await assertHeroLinksHoverHighlight(home);
     await assertWordmarkHoverHighlight(home);
@@ -5149,6 +5218,7 @@ async function main() {
       singleLineDates: ['May 2025 - Oct 2025', 'Sep 2025'],
     });
     await assertMobileFooterAlignment(mobile);
+    await assertPostTagTypographyAndAlignment(mobile, 'mobile home');
     await screenshot(mobile, 'home-mobile');
 
     const narrowMobile = await browser.newPage({
@@ -5182,6 +5252,7 @@ async function main() {
       selector: '#posts [data-testid="rail-title"] + span',
       label: 'mobile blog index dates',
     });
+    await assertPostTagTypographyAndAlignment(mobileBlog, 'mobile blog index');
     await screenshot(mobileBlog, 'blog-index-mobile');
 
     const blog = await browser.newPage({
@@ -5190,6 +5261,7 @@ async function main() {
     await blog.goto(`${baseUrl}/blog`, { waitUntil: 'networkidle' });
     const blogBand = await assertRoybBandPlacement(blog);
     await assertBlogIndex(blog);
+    await assertPostTagTypographyAndAlignment(blog, 'desktop blog index');
     await assertBlogRailHoverAccents(blog);
     await assertVisibleOneLineDescriptions(blog);
     await screenshot(blog, 'blog-index');

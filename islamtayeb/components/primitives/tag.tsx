@@ -9,7 +9,7 @@ const tagToneClasses: Record<TagTone, string> = {
   r: 'border-roy-r bg-roy-r/[0.14] text-foreground',
   o: 'border-roy-o bg-roy-o/[0.16] text-foreground',
   y: 'border-roy-y bg-roy-y/[0.22] text-foreground',
-  b: 'border-roy-b bg-roy-b/[0.14] text-foreground',
+  b: 'border-roy-b bg-roy-b/[0.14] text-roy-b',
 };
 
 export function Tag({
@@ -23,7 +23,7 @@ export function Tag({
   return (
     <span
       className={cn(
-        'inline-flex max-w-full items-center border border-dotted px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase leading-none tracking-[0.12em]',
+        'inline-flex max-w-full items-center border border-dotted px-1.5 py-0.5 font-mono text-[11px] font-normal uppercase leading-none tracking-[0.12em]',
         tagToneClasses[tone],
         className
       )}

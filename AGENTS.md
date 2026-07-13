@@ -169,7 +169,9 @@ Use meaningful commit messages that describe the why.
 - **Blog post tags:** Use the validated `kind` field in a post's JSON manifest
   for durable labels such as `technical`; currently only Decant and Harmonia
   are tagged. Render manifest and computed `New` labels through the shared
-  `PostTags`/`Tag` primitives; do not hand-style labels in individual rails.
+  `PostTags`/`Tag` primitives; keep tag text regular-weight, vertically aligned
+  with its title line, and colored to match non-neutral tones. Do not hand-style
+  labels in individual rails.
 - **Blog manifests:** Use `listed: false` for source-backed pages that should
   exist at their slug but stay out of `/blog`, feeds, and sitemaps. Hidden
   source-backed pages still need old APM top-level redirect coverage when their

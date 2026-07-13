@@ -35,5 +35,12 @@ export function PostTags({
     return null;
   }
 
-  return <span className="ml-2 inline-flex flex-wrap gap-1">{tags}</span>;
+  return (
+    <span
+      data-post-tags
+      className="ml-2 inline-flex flex-wrap gap-1 align-middle"
+    >
+      {tags}
+    </span>
+  );
 }
