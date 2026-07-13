@@ -5,6 +5,7 @@
   "description": "Context should not be one flat transcript. It should be a structured object of messages, where each message can be full, summarized, or hidden.",
   "publishedAt": "2026-06-07T12:48:00Z",
   "updatedAt": "2026-06-15T12:48:00Z",
+  "kind": "technical",
   "codeLink": {
     "label": "GitHub",
     "href": "https://github.com/IslamTayeb/decant"

@@ -1369,6 +1369,23 @@ async function assertHome(page: Page) {
     ]
       .map((element) => element.textContent?.trim() ?? '')
       .filter((text) => text === 'New');
+    const writingPostTags = [
+      ...(document
+        .querySelector('#writing')
+        ?.querySelectorAll<HTMLElement>('[data-post-tag]') ?? []),
+    ].map((tag) => {
+      const style = getComputedStyle(tag);
+
+      return {
+        label: tag.textContent?.trim() ?? '',
+        kind: tag.dataset.postTag ?? '',
+        backgroundColor: style.backgroundColor,
+        borderRadius: Number.parseFloat(style.borderRadius),
+        borderStyle: style.borderTopStyle,
+        fontFamily: style.fontFamily,
+        textTransform: style.textTransform,
+      };
+    });
     const writingMeta = [
       ...(document
         .querySelector('#writing')
@@ -1704,6 +1721,7 @@ async function assertHome(page: Page) {
       dots,
       writingDots,
       writingNewTags,
+      writingPostTags,
       writingMeta,
       writingMetaStyles,
       writingDates,
@@ -2265,6 +2283,25 @@ async function assertHome(page: Page) {
     result.writingDots.slice(1).every((dot) => dot.includes('bg-foreground/75'))
   );
   assert.deepEqual(result.writingNewTags, ['New']);
+  assert.deepEqual(
+    result.writingPostTags.map((tag) => [tag.kind, tag.label]),
+    [
+      ['new', 'New'],
+      ['technical', 'technical'],
+      ['technical', 'technical'],
+    ]
+  );
+  assert.ok(
+    result.writingPostTags.every(
+      (tag) =>
+        tag.borderStyle === 'dotted' &&
+        tag.borderRadius === 0 &&
+        tag.fontFamily.includes('monospace') &&
+        tag.textTransform === 'uppercase' &&
+        tag.backgroundColor !== 'rgba(0, 0, 0, 0)'
+    ),
+    'post tags should render as square, dotted, filled mono specimens'
+  );
   assert.ok(
     result.writingMeta.every(
       (meta) =>
@@ -3641,6 +3678,9 @@ async function assertBlogIndex(page: Page) {
         textTransform: style.textTransform,
       };
     });
+    const postTagLabels = [
+      ...(rail?.querySelectorAll<HTMLElement>('[data-post-tag]') ?? []),
+    ].map((tag) => [tag.dataset.postTag ?? '', tag.textContent?.trim() ?? '']);
     const footer = document.querySelector('footer');
     const sitePage = document.querySelector<HTMLElement>(
       '[data-testid="site-page"]'
@@ -3709,6 +3749,7 @@ async function assertBlogIndex(page: Page) {
         (meta) => meta.textContent?.replace(/\s+/g, ' ').trim() ?? ''
       ),
       externalMetaStyles,
+      postTagLabels,
       firstFooterText:
         firstFooter?.textContent?.replace(/\s+/g, ' ').trim() ?? '',
       firstFooterStyle: {
@@ -3801,6 +3842,11 @@ async function assertBlogIndex(page: Page) {
     result.externalMetas,
     externalWriting.map((item) => item.meta)
   );
+  assert.deepEqual(result.postTagLabels, [
+    ['new', 'New'],
+    ['technical', 'technical'],
+    ['technical', 'technical'],
+  ]);
   assert.deepEqual(
     result.externalRows.map((row) => row?.includes('Nov 2024')),
     externalWriting.map(() => true)

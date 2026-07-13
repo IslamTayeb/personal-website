@@ -166,6 +166,10 @@ Use meaningful commit messages that describe the why.
   spacing: `mb-4 flex flex-col gap-1`.
 - **Blog title weight:** Blog titles on the homepage writing preview, `/blog`
   index, and article pages should render at font-weight 600.
+- **Blog post tags:** Use the validated `kind` field in a post's JSON manifest
+  for durable labels such as `technical`; currently only Decant and Harmonia
+  are tagged. Render manifest and computed `New` labels through the shared
+  `PostTags`/`Tag` primitives; do not hand-style labels in individual rails.
 - **Blog manifests:** Use `listed: false` for source-backed pages that should
   exist at their slug but stay out of `/blog`, feeds, and sitemaps. Hidden
   source-backed pages still need old APM top-level redirect coverage when their

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { RoybBand } from '@/components/primitives/royb-band';
 import { BorderedPanel, Section } from '@/components/primitives/section';
 import { ExternalLink } from '@/components/primitives/external-link';
+import { PostTags } from '@/components/primitives/post-tags';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { externalWriting } from '@/data/external-writing';
 import { siteMetadata } from '@/data/site-metadata';
@@ -70,11 +71,7 @@ export default async function BlogIndexPage() {
                       >
                         {post.manifest.title}
                       </ExternalLink>
-                      {isNew ? (
-                        <span className="ml-2 inline-block font-mono text-sm uppercase tracking-[0.12em] text-roy-b">
-                          New
-                        </span>
-                      ) : null}
+                      <PostTags isNew={isNew} kind={post.manifest.kind} />
                     </span>
                   }
                   meta={formatMonthYear(post.manifest.publishedAt)}

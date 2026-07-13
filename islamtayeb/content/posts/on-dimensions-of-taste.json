@@ -6,6 +6,7 @@
   "publishedAt": "2026-01-02T00:02Z",
   "updatedAt": "2026-01-02T00:02:00Z",
   "listed": true,
+  "kind": "technical",
   "allowHtml": true,
   "wrapTables": false,
   "codeLink": {

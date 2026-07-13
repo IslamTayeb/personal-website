@@ -513,6 +513,13 @@ async function main() {
     'every APM Overflow manifest should load'
   );
   assert.ok(listedPosts.length > 0, 'at least one listed post should load');
+  assert.deepEqual(
+    listedPosts
+      .filter((post) => post.manifest.kind === 'technical')
+      .map((post) => post.manifest.slug),
+    ['on-agent-memory-fidelity', 'on-dimensions-of-taste'],
+    'only Decant and Harmonia should carry the technical tag'
+  );
   assertDescendingDates(listedPosts);
   await assertSeoInfrastructure(posts, listedPosts);
   await assertFaviconAssets();

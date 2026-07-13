@@ -1,6 +1,7 @@
 import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
 import { formatMonthYear } from '@/lib/blog/date';
 import { ExternalLink } from '@/components/primitives/external-link';
+import { PostTags } from '@/components/primitives/post-tags';
 import {
   RailActionItem,
   RailItem,
@@ -43,11 +44,7 @@ export async function WritingPreview() {
                       >
                         {post.manifest.title}
                       </ExternalLink>
-                      {isNew ? (
-                        <span className="ml-2 inline-block font-mono text-sm uppercase tracking-[0.12em] text-roy-b">
-                          New
-                        </span>
-                      ) : null}
+                      <PostTags isNew={isNew} kind={post.manifest.kind} />
                     </span>
                   }
                   meta={formatMonthYear(post.manifest.publishedAt)}

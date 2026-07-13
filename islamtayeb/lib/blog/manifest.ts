@@ -17,6 +17,9 @@ export type VideoInsert = {
   ariaLabel: string;
 };
 
+export const postKinds = ['technical'] as const;
+export type PostKind = (typeof postKinds)[number];
+
 export type PostManifest = {
   slug: string;
   source: string;
@@ -25,6 +28,7 @@ export type PostManifest = {
   publishedAt: string;
   updatedAt: string;
   listed: boolean;
+  kind: PostKind | null;
   allowHtml: boolean;
   wrapTables: boolean;
   codeLink: CodeLink | null;
@@ -41,6 +45,7 @@ const allowedTopLevelFields = new Set([
   'publishedAt',
   'updatedAt',
   'listed',
+  'kind',
   'allowHtml',
   'wrapTables',
   'codeLink',
@@ -75,6 +80,19 @@ function validateDateField(issues: string[], value: unknown, field: string) {
   if (!isValidDateString(value)) {
     issues.push(`${field} must be a valid date string`);
   }
+}
+
+function validatePostKind(issues: string[], value: unknown) {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  if (typeof value !== 'string' || !postKinds.includes(value as PostKind)) {
+    issues.push(`kind must be one of: ${postKinds.join(', ')}`);
+    return null;
+  }
+
+  return value as PostKind;
 }
 
 function validateCodeLink(issues: string[], value: unknown) {
@@ -234,6 +252,7 @@ export function validatePostManifest(raw: unknown, manifestPath: string) {
   }
 
   const codeLink = validateCodeLink(issues, raw.codeLink);
+  const kind = validatePostKind(issues, raw.kind);
   const images = validateImages(issues, raw.images);
   const videoInserts = validateVideoInserts(issues, raw.videoInserts);
 
@@ -251,6 +270,7 @@ export function validatePostManifest(raw: unknown, manifestPath: string) {
     publishedAt: String(raw.publishedAt),
     updatedAt: String(raw.updatedAt),
     listed: typeof raw.listed === 'boolean' ? raw.listed : true,
+    kind,
     allowHtml: typeof raw.allowHtml === 'boolean' ? raw.allowHtml : false,
     wrapTables: typeof raw.wrapTables === 'boolean' ? raw.wrapTables : true,
     codeLink,
