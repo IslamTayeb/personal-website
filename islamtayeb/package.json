@@ -13,11 +13,12 @@
     "render:profile-picture": "node scripts/render-profile-picture.mjs",
     "test:content": "tsx scripts/test-content.ts",
     "test:migration": "tsx scripts/test-migration.ts",
-    "test:pageview": "tsx scripts/test-pageview.ts",
+    "test:pageview": "tsx scripts/test-pageview.ts && tsx scripts/test-network-enrichment.ts && tsx scripts/test-visit-storage.ts && tsx scripts/test-visit-processing.ts",
     "test:no-motion": "node scripts/test-no-motion.mjs",
     "test:visual": "tsx scripts/test-visual.ts"
   },
   "dependencies": {
+    "@neondatabase/serverless": "1.1.0",
     "@tailwindcss/postcss": "^4.2.0",
     "@vercel/analytics": "1.6.1",
     "@vercel/speed-insights": "2.0.0",

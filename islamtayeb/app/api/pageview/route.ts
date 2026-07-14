@@ -2,10 +2,10 @@ import { after } from 'next/server';
 import {
   buildVisitRequestContext,
   normalizeVisitPayload,
-  sendVisitWebhook,
   shouldAcceptVisitRequest,
   shouldSkipVisitRequest,
 } from '@/lib/visit-events';
+import { processVisitEvent } from '@/lib/visit-processing';
 
 export const runtime = 'nodejs';
 
@@ -42,12 +42,10 @@ export async function POST(request: Request) {
     return new Response(null, { status: 204, headers: noStoreHeaders });
   }
 
-  after(async () => {
-    try {
-      await sendVisitWebhook(visit, context);
-    } catch (error) {
-      console.error('Failed to send pageview event.', error);
-    }
+  const serverAt = new Date();
+
+  after(() => {
+    return processVisitEvent(visit, context, { serverAt });
   });
 
   return new Response(null, { status: 204, headers: noStoreHeaders });

@@ -189,6 +189,14 @@ Use meaningful commit messages that describe the why.
   Do not ask visitors for browser geolocation permission. Bot detection should
   stay passive and heuristic unless a deliberate BotID-style integration is
   planned.
+- **Pageview history:** Persist accepted pageviews post-response to private Neon
+  Postgres through the server-only `DATABASE_URL`; keep the schema migration in
+  `islamtayeb/db/migrations/`. Store the raw request IP and every normalized
+  client/request field, but expose no public read API or visitor dashboard.
+  Enrich only ASN/network ownership through IPinfo Lite using the server-only
+  `SITE_VISIT_IPINFO_TOKEN`; ignore provider geolocation and continue using
+  Vercel headers for location. Database and Discord failures must stay
+  independent so either destination can succeed on its own.
 - **Tables:** Blog tables use Obsidian-like intrinsic sizing: auto layout,
   small per-column minimums, normal wrapping, and no internal horizontal table
   scrollbars unless a post intentionally needs custom markup.
