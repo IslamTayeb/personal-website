@@ -49,6 +49,7 @@ const pageviewScript = `
 
     return {
       kind: 'pageview',
+      eventId: randomId(),
       path: window.location.pathname + window.location.search,
       title: document.title || 'Untitled',
       referrer: document.referrer || 'direct',

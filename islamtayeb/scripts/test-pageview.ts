@@ -12,6 +12,7 @@ import {
 
 const basePayload = {
   kind: 'pageview',
+  eventId: 'event-1234567890',
   path: '/blog/frontier-benchmarking?ref=test',
   title: 'Frontier Benchmarking',
   referrer: 'https://example.com/source',
@@ -39,7 +40,19 @@ assert.ok(normalizedPayload, 'valid pageview payload should normalize');
 
 const normalized = normalizedPayload;
 assert.equal(normalized.path, '/blog/frontier-benchmarking?ref=test');
+assert.equal(normalized.eventId, 'event-1234567890');
 assert.equal(normalized.firstVisit, true);
+
+assert.equal(
+  normalizeVisitPayload({ ...basePayload, eventId: '' }),
+  null,
+  'missing event IDs should be rejected so pageviews remain idempotent'
+);
+assert.equal(
+  normalizeVisitPayload({ ...basePayload, eventId: 'not valid!' }),
+  null,
+  'malformed event IDs should be rejected'
+);
 
 assert.equal(
   normalizeVisitPayload({ ...basePayload, kind: 'click' }),
@@ -130,7 +143,23 @@ assert.match(
   'Discord payload should include a coordinates map link when present'
 );
 assert.match(fieldValue(discordPayload, '🌐 Network'), /IP: 203\.0\.113\.41/);
+assert.match(
+  fieldValue(discordPayload, '🌐 Network'),
+  /IP: 203\.0\.113\.41\nISP \/ Org: unknown\nHost:/,
+  'Discord payload should show the ISP/org line immediately below the IP'
+);
 assert.match(fieldValue(discordPayload, '🌐 Network'), /UA: Test Browser/);
+
+const enrichedDiscordPayload = buildDiscordVisitPayload(normalized, context, {
+  asn: 'AS13371',
+  asName: 'Duke University',
+  asDomain: 'duke.edu',
+});
+
+assert.match(
+  fieldValue(enrichedDiscordPayload, '🌐 Network'),
+  /ISP \/ Org: Duke University \(AS13371, duke\.edu\)/
+);
 assert.match(fieldValue(discordPayload, '🤖 Bot signal'), /❓ Unknown/);
 assert.match(fieldValue(discordPayload, '🤖 Bot signal'), /UA not recognized/);
 assert.match(

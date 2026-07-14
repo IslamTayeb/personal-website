@@ -1,3 +1,9 @@
+import {
+  formatNetworkOrganization,
+  UNKNOWN_NETWORK_ENRICHMENT,
+  type NetworkEnrichment,
+} from './network-enrichment';
+
 const MAX_FIELD_LENGTH = 900;
 const MAX_TITLE_LENGTH = 180;
 const MAX_PATH_LENGTH = 240;
@@ -106,6 +112,7 @@ const browserReasons = new Set([
 
 export type ClientVisitPayload = {
   kind: 'pageview';
+  eventId: string;
   path: string;
   title: string;
   referrer: string;
@@ -227,6 +234,16 @@ function safeIsoDate(value: unknown) {
   }
 
   return date.toISOString();
+}
+
+function safeEventId(value: unknown) {
+  const eventId = asString(value).trim();
+
+  if (!/^[A-Za-z0-9_-]{8,80}$/.test(eventId)) {
+    return null;
+  }
+
+  return eventId;
 }
 
 function readHeader(request: Request, name: string) {
@@ -378,8 +395,15 @@ export function normalizeVisitPayload(input: unknown) {
     return null;
   }
 
+  const eventId = safeEventId(candidate.eventId);
+
+  if (!eventId) {
+    return null;
+  }
+
   return {
     kind: 'pageview',
+    eventId,
     path: safePath(candidate.path),
     title: safeDiscordText(
       asString(candidate.title, 'Untitled'),
@@ -535,11 +559,13 @@ function buildLocationValue(context: VisitRequestContext) {
 
 function buildNetworkValue(
   context: VisitRequestContext,
-  displayedClientIp: string | null
+  displayedClientIp: string | null,
+  network: NetworkEnrichment
 ) {
   return safeDiscordText(
     [
       `IP: ${displayedClientIp ?? 'hidden'}`,
+      `ISP / Org: ${formatNetworkOrganization(network)}`,
       `Host: ${context.host}`,
       `UA: ${context.userAgent}`,
     ].join('\n')
@@ -570,7 +596,8 @@ function buildVisitValue(visit: ClientVisitPayload) {
 
 export function buildDiscordVisitPayload(
   visit: ClientVisitPayload,
-  context: VisitRequestContext
+  context: VisitRequestContext,
+  network: NetworkEnrichment = UNKNOWN_NETWORK_ENRICHMENT
 ): DiscordWebhookPayload {
   const shouldIncludeClientIp =
     process.env.SITE_VISIT_INCLUDE_CLIENT_IP !== 'false';
@@ -596,7 +623,7 @@ export function buildDiscordVisitPayload(
     },
     {
       name: '🌐 Network',
-      value: buildNetworkValue(context, displayedClientIp),
+      value: buildNetworkValue(context, displayedClientIp, network),
       inline: false,
     },
     {
@@ -647,7 +674,8 @@ export function buildDiscordVisitPayload(
 
 export async function sendVisitWebhook(
   visit: ClientVisitPayload,
-  context: VisitRequestContext
+  context: VisitRequestContext,
+  network: NetworkEnrichment = UNKNOWN_NETWORK_ENRICHMENT
 ) {
   const webhookUrl =
     configuredValue(process.env.SITE_VISIT_WEBHOOK_URL) ??
@@ -663,7 +691,7 @@ export async function sendVisitWebhook(
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(buildDiscordVisitPayload(visit, context)),
+    body: JSON.stringify(buildDiscordVisitPayload(visit, context, network)),
   });
 
   if (!response.ok) {
