@@ -193,10 +193,12 @@ Use meaningful commit messages that describe the why.
   Postgres through the server-only `DATABASE_URL`; keep the schema migration in
   `islamtayeb/db/migrations/`. Store the raw request IP and every normalized
   client/request field, but expose no public read API or visitor dashboard.
-  Enrich only ASN/network ownership through IPinfo Lite using the server-only
-  `SITE_VISIT_IPINFO_TOKEN`; ignore provider geolocation and continue using
-  Vercel headers for location. Database and Discord failures must stay
-  independent so either destination can succeed on its own.
+  Enrich only ASN/network ownership through IPinfo. Prefer IPinfo Lite with the
+  server-only `SITE_VISIT_IPINFO_TOKEN`; when no token is configured, use the
+  supported tokenless `/org` endpoint as a best-effort fallback. Ignore provider
+  geolocation and continue using Vercel headers for location. Database and
+  Discord failures must stay independent so either destination can succeed on
+  its own.
 - **Tables:** Blog tables use Obsidian-like intrinsic sizing: auto layout,
   small per-column minimums, normal wrapping, and no internal horizontal table
   scrollbars unless a post intentionally needs custom markup.

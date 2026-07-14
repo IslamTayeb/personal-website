@@ -67,12 +67,39 @@ async function run() {
   );
   assert.equal(fetchCalls, 1, 'invalid IP addresses should not call IPinfo');
 
+  const publicFallback = await resolveNetworkEnrichment('152.3.72.6', {
+    token: '',
+    fetchImpl: (async (url: string | URL | Request, init?: RequestInit) => {
+      assert.equal(String(url), 'https://ipinfo.io/152.3.72.6/org');
+      assert.equal(new Headers(init?.headers).get('accept'), 'text/plain');
+
+      return new Response('AS13371 Duke University\n');
+    }) as typeof fetch,
+  });
+
+  assert.deepEqual(publicFallback, {
+    asn: 'AS13371',
+    asName: 'Duke University',
+    asDomain: 'unknown',
+  });
+  assert.equal(
+    formatNetworkOrganization(publicFallback),
+    'Duke University (AS13371)'
+  );
+
   assert.deepEqual(
     await resolveNetworkEnrichment('203.0.113.8', {
       token: '',
-      fetchImpl: (async () => {
-        throw new Error('missing token should not be fetched');
-      }) as typeof fetch,
+      fetchImpl: (async () => new Response('malformed')) as typeof fetch,
+    }),
+    UNKNOWN_NETWORK_ENRICHMENT
+  );
+
+  assert.deepEqual(
+    await resolveNetworkEnrichment('203.0.113.8', {
+      token: '',
+      fetchImpl: (async () =>
+        new Response(null, { status: 429 })) as typeof fetch,
     }),
     UNKNOWN_NETWORK_ENRICHMENT
   );

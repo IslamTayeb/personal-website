@@ -1,6 +1,7 @@
 import { isIP } from 'node:net';
 
 const IPINFO_LITE_BASE_URL = 'https://api.ipinfo.io/lite';
+const IPINFO_PUBLIC_BASE_URL = 'https://ipinfo.io';
 const DEFAULT_TIMEOUT_MS = 2_000;
 const MAX_AS_NAME_LENGTH = 180;
 
@@ -66,11 +67,6 @@ export async function resolveNetworkEnrichment(
   }
 
   const token = (options.token ?? process.env.SITE_VISIT_IPINFO_TOKEN)?.trim();
-
-  if (!token) {
-    return UNKNOWN_NETWORK_ENRICHMENT;
-  }
-
   const controller = new AbortController();
   const timeout = setTimeout(
     () => controller.abort(),
@@ -78,11 +74,38 @@ export async function resolveNetworkEnrichment(
   );
 
   try {
-    const response = await (options.fetchImpl ?? fetch)(
-      `${IPINFO_LITE_BASE_URL}/${encodeURIComponent(clientIp)}`,
+    const fetchImpl = options.fetchImpl ?? fetch;
+
+    if (token) {
+      const response = await fetchImpl(
+        `${IPINFO_LITE_BASE_URL}/${encodeURIComponent(clientIp)}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          cache: 'no-store',
+          signal: controller.signal,
+        }
+      );
+
+      if (!response.ok) {
+        return UNKNOWN_NETWORK_ENRICHMENT;
+      }
+
+      const payload = (await response.json()) as Record<string, unknown>;
+
+      return {
+        asn: normalizeAsn(payload.asn),
+        asName: compactValue(payload.as_name, MAX_AS_NAME_LENGTH),
+        asDomain: normalizeDomain(payload.as_domain),
+      };
+    }
+
+    const response = await fetchImpl(
+      `${IPINFO_PUBLIC_BASE_URL}/${encodeURIComponent(clientIp)}/org`,
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Accept: 'text/plain',
         },
         cache: 'no-store',
         signal: controller.signal,
@@ -93,12 +116,20 @@ export async function resolveNetworkEnrichment(
       return UNKNOWN_NETWORK_ENRICHMENT;
     }
 
-    const payload = (await response.json()) as Record<string, unknown>;
+    const publicOrganization = compactValue(
+      await response.text(),
+      MAX_AS_NAME_LENGTH + 20
+    );
+    const match = /^(AS\d{1,12})\s+(.{1,180})$/i.exec(publicOrganization);
+
+    if (!match) {
+      return UNKNOWN_NETWORK_ENRICHMENT;
+    }
 
     return {
-      asn: normalizeAsn(payload.asn),
-      asName: compactValue(payload.as_name, MAX_AS_NAME_LENGTH),
-      asDomain: normalizeDomain(payload.as_domain),
+      asn: normalizeAsn(match[1]),
+      asName: compactValue(match[2], MAX_AS_NAME_LENGTH),
+      asDomain: 'unknown',
     };
   } catch {
     return UNKNOWN_NETWORK_ENRICHMENT;
