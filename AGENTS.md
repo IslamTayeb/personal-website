@@ -2,32 +2,23 @@
 
 ## Repo layout
 
-This repo now has one production app, one production redirect shell, one
-experimental sandbox, and archived legacy projects:
+This repo has one production app and one production redirect shell:
 
-- **`islamtayeb/`** -- the active Next.js App Router site for
-  `islamtayeb.dev`, including the unified personal site and blog.
+- **`imt/`** -- the active Next.js App Router site for
+  `imt.sh`, including the unified personal site and blog.
 - **`apmoverflow/`** -- a tiny static Vercel redirect shell for
   `apmoverflow.xyz`. It contains no authored content; it only sends old APM
-  paths to `https://www.islamtayeb.dev/blog/...`.
-- **`component-lab/`** -- an experimental Next.js lab for visual exploration.
-  It is not production code and should stay isolated unless a design is
-  intentionally ported.
-- **`archive/islamtayeb-legacy/`** -- the old personal site, kept for rollback
-  and reference only.
-- **`archive/apmoverflow-legacy/`** -- the old static APM Overflow blog, kept
-  for rollback and reference only.
+  paths to `https://imt.sh/blog/...`.
 
 There is no root `package.json`. Run commands from the project directory you
 are changing.
 
 ## Active site intent
 
-`islamtayeb/` is the official overhaul and replaces both the old
-`islamtayeb.dev` app and the old `apmoverflow.xyz` static blog. The active site
-uses the component-lab visual language: Open Sans + UI Mono, narrow document
-width, sharp borders, paper/ink base, the `islam / blog` selector, the top ROYB
-bar, and strong ROYB accents.
+`imt/` is the official overhaul and replaces both the old
+`imt.sh` app and the old `apmoverflow.xyz` static blog. The active site
+uses: Open Sans + UI Mono, narrow document width, sharp borders, paper/ink
+base, the `islam / blog` selector, the top ROYB bar, and strong ROYB accents.
 
 The desired feel is elevated minimalism with real density: whitespace separates
 ideas, not inflates the page. Keep it motionless: no animations, transitions,
@@ -35,17 +26,20 @@ render-time measurements, resize observers, canvas/dither experiments, autoplay
 media, or animation libraries.
 
 APM Overflow writing now lives as Markdown plus JSON manifests under
-`islamtayeb/content/posts/`. Treat that directory as the source of truth for
-blog content. The archived APM Overflow copy is historical only.
+`imt/content/posts/`. Treat that directory as the source of truth for
+blog content.
 
 `apmoverflow.xyz` should remain a routing shell: old APM paths redirect to
-`https://www.islamtayeb.dev/blog/...`. Keep redirect coverage in both
-`islamtayeb/next.config.mjs` and `apmoverflow/vercel.json`, and keep
-`npm run test:migration` passing.
+`https://imt.sh/blog/...`. Both redirect tables derive from the post manifests
+through `imt/lib/apm-redirects.mjs`: `imt/next.config.mjs` builds
+host-conditioned redirects from it at build time, and `apmoverflow/vercel.json`
+is written by `npm run generate:redirects` in `imt/`. Re-run the generator
+after adding or renaming a post; `npm run test:migration` fails when the shell
+config is stale.
 
 ## Main site commands
 
-All active-site commands run from `islamtayeb/`:
+All active-site commands run from `imt/`:
 
 ```sh
 npm run dev            # local dev server
@@ -53,31 +47,18 @@ npm run build          # Next production build
 npm run lint           # eslint
 npm run format         # prettier --write .
 npm run format:check   # prettier --check .
+npm run generate:redirects   # rewrite apmoverflow/vercel.json from post manifests
+npm test               # content + migration + pageview + no-motion
 npm run test:content   # blog loading/rendering/feed validation
 npm run test:migration # old-domain redirects + public payload checks
 npm run test:pageview  # pageview webhook payload/routing validation
 npm run test:no-motion # fail on motion/resizing/dither/canvas leftovers
-npm run test:visual    # Playwright screenshots + DOM measurements
+npm run test:visual    # Playwright screenshots + DOM measurements (needs npx playwright install chromium once)
 ```
 
 Before considering active-site work done, run build, lint, format check,
-content test, migration test, no-motion test, and visual test. Inspect the
-generated screenshots for visual rhythm, not just pass/fail output.
-
-## Component lab commands
-
-For design exploration, run commands from `component-lab/`:
-
-```sh
-npm run dev
-npm run build
-npm run lint
-npm run format
-npm run format:check
-```
-
-Use npm only in the lab. Do not wire `component-lab/` into Vercel deploys
-unless the experiment graduates into a deliberate implementation plan.
+`npm test`, and the visual test. Inspect the generated screenshots for visual
+rhythm, not just pass/fail output.
 
 ## Verification discipline
 
@@ -93,9 +74,8 @@ intended behavior or visual meaning is ambiguous, ask.
 
 Commit and push when the project is in a good rollback state. Before committing:
 
-1. Run the active-site gates from `islamtayeb/`.
-2. If `component-lab/` changed, run its build, lint, and format check.
-3. If formatting is off, run `npm run format` in the affected project, then
+1. Run the active-site gates from `imt/`.
+2. If formatting is off, run `npm run format` in the affected project, then
    re-run the relevant gates.
 
 Use meaningful commit messages that describe the why.
@@ -113,7 +93,7 @@ Use meaningful commit messages that describe the why.
 - **Links:** React-rendered hyperlinks should use
   `components/primitives/external-link.tsx`. Markdown-rendered article links
   should receive the same ROYB link classes in the renderer.
-- **Experience advisor links:** In `islamtayeb/data/experience.ts`, use
+- **Experience advisor links:** In `imt/data/experience.ts`, use
   `href` when the whole experience title should link. Use `piHref` only when
   the advisor/mentor label should link while the organization/course title
   remains plain text.
@@ -176,7 +156,9 @@ Use meaningful commit messages that describe the why.
   exist at their slug but stay out of `/blog`, feeds, and sitemaps. Hidden
   source-backed pages still need old APM top-level redirect coverage when their
   `/blog/...` page exists. Use `allowHtml: true` only for posts that need raw
-  HTML blocks.
+  HTML blocks. Every manifest carries a one-line `summary` (96 characters or
+  fewer) used for the meta description, feeds, and JSON-LD; there is no
+  `description` field.
 - **Pageview events:** The active site uses a tiny `sendBeacon` pageview script
   and `/api/pageview` route for Discord webhook notifications. Keep it
   post-response, avoid canvas/fingerprinting/external geolocation lookups, and
@@ -191,7 +173,7 @@ Use meaningful commit messages that describe the why.
   planned.
 - **Pageview history:** Persist accepted pageviews post-response to private Neon
   Postgres through the server-only `DATABASE_URL`; keep the schema migration in
-  `islamtayeb/db/migrations/`. Store the raw request IP and every normalized
+  `imt/db/migrations/`. Store the raw request IP and every normalized
   client/request field, but expose no public read API or visitor dashboard.
   Enrich only ASN/network ownership through IPinfo. Prefer IPinfo Lite with the
   server-only `SITE_VISIT_IPINFO_TOKEN`; when no token is configured, use the
@@ -211,20 +193,18 @@ Use meaningful commit messages that describe the why.
 - **Repeated UI:** if something is used more than once, make it a component.
 - **Profile picture:** Generate hero profile assets from source photos with
   `npm run render:profile-picture -- /absolute/path/to/source-image` inside
-  `islamtayeb/`. This writes both `public/me.webp` and
+  `imt/`. This writes both `public/me.webp` and
   `public/hero-portrait.png` with the established 384px crop and transparent
   square edge mask.
 
 ## Deployment
 
-The main production Vercel project should build from `islamtayeb/`.
-`www.islamtayeb.dev` is the canonical domain. Keep crawler-facing metadata,
+The main production Vercel project should build from `imt/`.
+`imt.sh` is the canonical domain. Keep crawler-facing metadata,
 feeds, sitemaps, and old-domain redirect destinations on that host.
 
 The existing `apm-overflow` Vercel project should build from `apmoverflow/`.
 Keep `apmoverflow.xyz` and `www.apmoverflow.xyz` attached there unless the
 domains are deliberately moved later. The shell `vercel.json` handles live
-old-path redirects, while `islamtayeb/next.config.mjs` keeps equivalent
+old-path redirects, while `imt/next.config.mjs` keeps equivalent
 host-conditioned redirects ready if the domains are moved to the main project.
-
-The legacy archive folders should not be deployed directly.

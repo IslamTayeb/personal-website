@@ -1,38 +1,22 @@
-# personal-website
+# websites
 
-Two small sites live here:
+- `imt/` - Next.js site at [imt.sh](https://imt.sh). Vercel project `personal-website`.
+- `apmoverflow/` - redirect shell. Sends old `apmoverflow.xyz` paths to `imt.sh/blog`.
 
-- `islamtayeb/` - Next.js personal website at `islamtayeb.dev`
-- `apmoverflow/` - static blog at `apmoverflow.xyz`
+`islamtayeb.dev` is abandoned. Do not reference it anywhere.
 
-## Main Site
+## Run
 
 ```sh
-cd islamtayeb
+cd imt
 npm install
 npm run dev
 ```
 
-Before committing changes to the main site:
+## Check before committing
 
 ```sh
-npm run lint
-npm run format:check
-npm run build
+npm test && npm run lint && npm run format:check && npm run build
 ```
 
-## Blog Posts
-
-The personal site reads `https://apmoverflow.xyz/blog/` in
-`islamtayeb/app/_components/Blog.tsx` for the latest post order, then fetches
-the linked posts for excerpts. The Atom/RSS feeds should mirror that same list.
-
-Markdown-backed posts are generated first, then the feed is generated from
-`apmoverflow/blog/index.html` and the linked post HTML files:
-
-```sh
-cd apmoverflow
-npm run build
-```
-
-Vercel also runs that build when deploying `apmoverflow/`.
+Blog posts live in `imt/content/posts/`. Rules for design and content are in `AGENTS.md`.
