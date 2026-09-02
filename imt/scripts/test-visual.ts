@@ -2065,7 +2065,7 @@ async function assertHome(page: Page) {
     result.experienceGroupLabelStyles.map(
       (label: { text: string }) => label.text
     ),
-    ['Research (4)', 'Engineering (3)', 'Teaching (3)']
+    ['Research (3)', 'Engineering (3)', 'Teaching (3)']
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
@@ -2146,22 +2146,17 @@ async function assertHome(page: Page) {
   const teaching = result.groups.find((group) => group.kind === 'teaching');
 
   assert.equal(research?.expanded, 'true', 'research should default open');
-  assert.equal(research?.rows, 3, 'research should show 3 rows when collapsed');
-  assert.ok(research?.text.includes('Research (4)'));
-  assert.ok(research?.text.includes('show more...'));
-  assert.equal(research?.showMorePaddingTop, 8);
-  assert.ok(
-    Math.abs((research?.showMoreLeft ?? 0) - result.sectionLabelLefts[0]) <= 1,
-    'research show-more action should align with the rail text edge'
-  );
-  assert.ok(research?.text.includes('Matthew Lentz'));
+  assert.equal(research?.rows, 3, 'research should show all 3 rows');
+  assert.ok(research?.text.includes('Research (3)'));
+  assert.equal(research?.hasShowMore, false, 'research should not show more');
+  assert.ok(!research?.text.includes('Matthew Lentz'));
   assert.ok(research?.text.includes('Philip Romero'));
   assert.ok(research?.text.includes('Navid NaderiAlizadeh'));
-  assert.ok(!research?.text.includes('Mahmoud Abdelnaby'));
+  assert.ok(research?.text.includes('Mahmoud Abdelnaby'));
   assert.ok(
     result.advisorLabels.some(
       (label) =>
-        label.text === 'Matthew Lentz' &&
+        label.text === 'Philip Romero' &&
         label.color === result.mutedToken &&
         label.fontFamily === result.readingFontFamily &&
         label.fontSize === 16 &&
@@ -2177,8 +2172,8 @@ async function assertHome(page: Page) {
     result.advisorGapCount === 0 &&
       result.experienceLinks.some(
         (link) =>
-          link.text === 'Duke University Matthew Lentz' &&
-          link.rawText === 'Duke University Matthew Lentz' &&
+          link.text === 'Duke University Philip Romero' &&
+          link.rawText === 'Duke University Philip Romero' &&
           link.whiteSpace === 'break-spaces'
       ),
     'advisor organization and PI labels should be one inline underlined text run with one breakable space'
@@ -2189,8 +2184,8 @@ async function assertHome(page: Page) {
     'advisor labels should sit after the organization without slash separators'
   );
   assert.ok(!research?.text.includes('incoming Aug 2026'));
-  assert.ok(research?.text.includes('Apr 2026 - Present'));
-  assert.ok(!research?.text.includes('Apr 2026 - present'));
+  assert.ok(research?.text.includes('Aug 2025 - Present'));
+  assert.ok(!research?.text.includes('Aug 2025 - present'));
   assert.ok(research?.text.includes('Anthropic'));
   assert.ok(research?.text.includes('+ Microsoft Research'));
   assert.ok(
@@ -3211,14 +3206,14 @@ async function assertExperienceTitleHoverColors(page: Page) {
 
   const researchTitle = page
     .locator('[data-testid="experience-title-run"]', {
-      hasText: 'Duke University Matthew Lentz',
+      hasText: 'Duke University Philip Romero',
     })
     .first();
 
   await researchTitle.locator('[data-testid="advisor-label"]').hover();
   const researchHover = await readHover();
 
-  assert.equal(researchHover.text, 'Duke University Matthew Lentz');
+  assert.equal(researchHover.text, 'Duke University Philip Romero');
   assert.equal(researchHover.titleColor, researchHover.orangeToken);
   assert.equal(researchHover.advisorColor, researchHover.orangeToken);
 
@@ -3295,11 +3290,11 @@ async function assertHomeRailHoverAccents(page: Page) {
   await assertRailRowKeepsMarkerOnHover({
     page,
     row: page
-      .locator('#experience li', { hasText: 'Duke University Matthew Lentz' })
+      .locator('#experience li', { hasText: 'Duke University Philip Romero' })
       .first(),
     hoverSource: page
       .locator('[data-testid="experience-title-run"]', {
-        hasText: 'Duke University Matthew Lentz',
+        hasText: 'Duke University Philip Romero',
       })
       .first(),
     label: 'present experience row',
@@ -3367,7 +3362,7 @@ async function assertExperienceInteractions(page: Page) {
     '[data-testid="experience-group"][data-group="research"]'
   );
   const researchToggle = researchGroup.getByRole('button', {
-    name: /Research \(4\)/,
+    name: /Research \(3\)/,
   });
   const groupBox = await researchGroup.boundingBox();
   const toggleBox = await researchToggle.boundingBox();
@@ -3391,38 +3386,40 @@ async function assertExperienceInteractions(page: Page) {
 
   await page
     .locator('[data-testid="experience-group"][data-group="research"]')
-    .getByRole('button', { name: /Research \(4\)/ })
+    .getByRole('button', { name: /Research \(3\)/ })
     .click();
   assert.equal(await groupRows('research'), 0);
 
   await page
     .locator('[data-testid="experience-group"][data-group="research"]')
-    .getByRole('button', { name: /Research \(4\)/ })
+    .getByRole('button', { name: /Research \(3\)/ })
     .click();
   assert.equal(await groupRows('research'), 3);
 
-  await page
-    .locator('[data-testid="experience-group"][data-group="research"]')
-    .getByRole('button', { name: 'show more...' })
-    .click();
-  assert.equal(await groupRows('research'), 4);
-  assert.equal(await groupRows('engineering'), 1);
-  await page
-    .locator('[data-testid="experience-group"][data-group="research"]')
+  const engineeringGroup = page.locator(
+    '[data-testid="experience-group"][data-group="engineering"]'
+  );
+  await engineeringGroup.getByRole('button', { name: 'show more...' }).click();
+  assert.equal(await groupRows('engineering'), 3);
+  assert.equal(await groupRows('research'), 3);
+  await engineeringGroup
     .getByRole('button', { name: 'show less...' })
     .waitFor();
   const railTextLeft = await page
     .locator('#experience [data-testid="rail-title"]')
     .first()
     .evaluate((element) => element.getBoundingClientRect().left);
-  const showLessBox = await researchGroup
+  const showLessBox = await engineeringGroup
     .getByRole('button', { name: 'show less...' })
     .boundingBox();
 
-  assert.ok(showLessBox, 'Research show-less action should have a layout box');
+  assert.ok(
+    showLessBox,
+    'Engineering show-less action should have a layout box'
+  );
   assert.ok(
     Math.abs(showLessBox.x - railTextLeft) <= 1,
-    'research show-less action should align with the rail text edge'
+    'engineering show-less action should align with the rail text edge'
   );
 
   await page

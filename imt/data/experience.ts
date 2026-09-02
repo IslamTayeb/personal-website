@@ -37,20 +37,6 @@ export const experienceGroups: ExperienceGroup[] = [
       */
       {
         org: 'Duke University',
-        piName: 'Matthew Lentz',
-        date: 'Apr 2026 - Present',
-        href: 'https://users.cs.duke.edu/~mlentz/',
-        state: 'present',
-        desc: 'Token minning runtime for coding agents with Tokenless (YC S26)',
-        descLinks: [
-          {
-            text: 'Tokenless (YC S26)',
-            href: 'https://usetokenless.com/',
-          },
-        ],
-      },
-      {
-        org: 'Duke University',
         piName: 'Philip Romero',
         date: 'Aug 2025 - Present',
         href: 'https://www.romerolab.org/',

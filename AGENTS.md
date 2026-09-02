@@ -101,7 +101,7 @@ Use meaningful commit messages that describe the why.
   like `TA` or `Tutor`. Put collaborator/program context in the description as
   linked `descLinks`, e.g. `with Matthew Lentz, ...` or `with SAGE, ...`.
 - **Experience date labels:** Capitalize display status words in experience
-  dates, e.g. `Incoming Aug 2026` and `Apr 2026 - Present`. Keep internal
+  dates, e.g. `Incoming Aug 2026` and `Aug 2025 - Present`. Keep internal
   `state` values lowercase.
 - **Icon plus text links:** When a control has an icon plus a text label that
   should use the ROYB underline/highlight, keep the icon outside the underline
