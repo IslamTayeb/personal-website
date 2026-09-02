@@ -287,6 +287,17 @@
       box-shadow: 6px 6px 0 var(--page-shadow);
     }
   }
+  /* The 404 dialog stands alone on the ledger paper: no page frame,
+     no header, no footer. */
+  .site-page:has([data-not-found='true']) {
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+  .site-page:has([data-not-found='true']) > header,
+  .site-page:has([data-not-found='true']) > footer {
+    display: none;
+  }
   .royb-band {
     background: linear-gradient(
       90deg,
