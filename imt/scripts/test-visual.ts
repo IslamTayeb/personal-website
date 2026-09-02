@@ -3430,11 +3430,12 @@ async function assertExperienceInteractions(page: Page) {
   const teachingText = await page
     .locator('[data-testid="experience-group"][data-group="teaching"]')
     .textContent();
-  const teachingIncomingDot = page
+  const teachingPresentDot = page
     .locator('[data-testid="experience-group"][data-group="teaching"]')
-    .locator('[data-testid="rail-dot"][data-state="incoming"]');
-  const teachingIncomingDotClassName =
-    (await teachingIncomingDot.getAttribute('class')) ?? '';
+    .locator('li', { hasText: 'Operating Systems TA' })
+    .locator('[data-testid="rail-dot"][data-state="present"]');
+  const teachingPresentDotClassName =
+    (await teachingPresentDot.getAttribute('class')) ?? '';
 
   assert.ok(teachingText?.includes('Operating Systems'));
   assert.ok(teachingText?.includes('Computer Systems'));
@@ -3454,8 +3455,9 @@ async function assertExperienceInteractions(page: Page) {
       'Led a study group with SAGE, saw kids quit pre-med as the semester went'
     )
   );
-  assert.ok(teachingIncomingDotClassName.includes('border-roy-o'));
-  assert.ok(teachingIncomingDotClassName.includes('bg-background'));
+  assert.ok(teachingPresentDotClassName.includes('bg-roy-o'));
+  assert.ok(teachingText?.includes('Aug 2026 - Dec 2026'));
+  assert.ok(!teachingText?.includes('Incoming Aug 2026'));
   const teachingGroup = page.locator(
     '[data-testid="experience-group"][data-group="teaching"]'
   );
@@ -3469,7 +3471,7 @@ async function assertExperienceInteractions(page: Page) {
         hasText: 'Operating Systems TA',
       })
       .first(),
-    label: 'incoming teaching row',
+    label: 'present teaching row',
   });
   assert.ok(!teachingText?.includes('Duke University.'));
   assert.ok(teachingText?.includes('Jan 2025 - May 2025'));

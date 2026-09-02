@@ -111,9 +111,8 @@ export const experienceGroups: ExperienceGroup[] = [
       {
         org: 'Operating Systems',
         piName: 'TA',
-        date: 'Incoming Aug 2026',
-        state: 'incoming',
-        incoming: true,
+        date: 'Aug 2026 - Dec 2026',
+        state: 'present',
         desc: 'Introducing kernels with Matthew Lentz, co-leading a discussion section + office hours',
         descLinks: [
           {
