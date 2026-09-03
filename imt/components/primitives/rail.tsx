@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 type RailConnector = 'solid' | 'dashed' | 'none';
@@ -30,6 +30,7 @@ export function RailList({
 export function RailItem({
   dotClassName,
   marker,
+  markerHeight,
   title,
   meta,
   description,
@@ -55,6 +56,9 @@ export function RailItem({
   // Optional mark rendered centered on the dot's position instead of the
   // plain square. It may be wider or taller than the dot and overhangs evenly.
   marker?: ReactNode;
+  // Rendered height of `marker` in px. The connector uses it to keep the same
+  // air around the mark that the plain 12px dot gets (5px below, 9px above).
+  markerHeight?: number;
   title: ReactNode;
   meta?: ReactNode;
   description?: ReactNode;
@@ -110,6 +114,11 @@ export function RailItem({
   return (
     <li
       data-testid={testId}
+      style={
+        marker && markerHeight
+          ? ({ '--rail-mark-height': `${markerHeight}px` } as CSSProperties)
+          : undefined
+      }
       className={cn(
         'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pb-2 last:pb-0',
         hoverAccentClasses,
@@ -120,7 +129,15 @@ export function RailItem({
         <span
           data-testid={connectorTestId}
           className={cn(
-            'absolute left-[calc(var(--rail-marker-size)/2-0.5px)] top-[21px] bottom-[5px] w-px',
+            'absolute w-px',
+            // The plain dot spans 4px to 16px of the row; the line starts 5px
+            // under it and stops 9px above the next dot. A mark is centered on
+            // the same 10px midline, so the same gaps follow from its height.
+            // A 1px line centered on the 12px box also lands on a half pixel
+            // and snaps left, so under a mark it starts on the center pixel.
+            marker && markerHeight
+              ? 'left-[calc(var(--rail-marker-size)/2)] top-[calc(15px+var(--rail-mark-height)/2)] bottom-[calc(var(--rail-mark-height)/2-1px)]'
+              : 'left-[calc(var(--rail-marker-size)/2-0.5px)] top-[21px] bottom-[5px]',
             connector === 'solid' ? 'bg-border' : 'text-border',
             connectorClassName
           )}

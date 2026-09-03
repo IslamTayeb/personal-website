@@ -97,10 +97,13 @@ function RailGroup({
             : state === 'present'
               ? 'bg-roy-o'
               : 'bg-foreground/75';
+        const markerHeight = role.orgKey
+          ? orgMarkBalancedHeight(role.orgKey, 12)
+          : undefined;
         const marker = role.orgKey ? (
           <OrgMark
             org={role.orgKey}
-            size={orgMarkBalancedHeight(role.orgKey, 12)}
+            size={markerHeight}
             fit="height"
             className="block max-w-none shrink-0"
           />
@@ -125,6 +128,7 @@ function RailGroup({
             key={`${group.kind}-${role.org}-${role.piName ?? role.org}-${role.date}`}
             dotClassName={dotClassName}
             marker={marker}
+            markerHeight={markerHeight}
             hoverAccent={state === 'ended' ? 'o' : undefined}
             incoming={role.incoming}
             state={state}
@@ -293,15 +297,13 @@ function RailGroupBlock({
           data-group={group.kind}
           className="w-fit justify-self-start"
           section="o"
+          variant="plain"
         >
           <span
             data-testid="experience-group-label-name"
             className="uppercase tracking-[0.2em]"
           >
             {label}
-          </span>{' '}
-          <span data-testid="experience-group-label-count">
-            ({group.roles.length})
           </span>
         </RoybLinkText>
       </button>

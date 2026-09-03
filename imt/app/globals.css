@@ -90,7 +90,7 @@
 
 .dark {
   color-scheme: dark;
-  --background: #1e1e1e;
+  --background: #1a1a1a;
   --ledger-background: #141414;
   --ledger-line: color-mix(
     in oklch,
@@ -112,7 +112,7 @@
   --code-string: #a5d6ff;
   --code-comment: #8b949e;
   --code-foreground: #e6edf3;
-  --code-block-background: #1c1c1c;
+  --code-block-background: #171717;
   --kbd-background: #262626;
   --kbd-border: #3f3f3f;
   --kbd-border-bottom: #121212;
@@ -133,7 +133,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not(.light) {
     color-scheme: dark;
-    --background: #1e1e1e;
+    --background: #1a1a1a;
     --ledger-background: #141414;
     --ledger-line: color-mix(
       in oklch,
@@ -155,7 +155,7 @@
     --code-string: #a5d6ff;
     --code-comment: #8b949e;
     --code-foreground: #e6edf3;
-    --code-block-background: #1c1c1c;
+    --code-block-background: #171717;
     --kbd-background: #262626;
     --kbd-border: #3f3f3f;
     --kbd-border-bottom: #121212;
@@ -429,6 +429,9 @@
   }
   .section-color-b {
     --section-color: var(--roy-b);
+  }
+  .section-color-n {
+    --section-color: var(--foreground);
   }
   .article-prose {
     @apply text-base leading-relaxed text-foreground;

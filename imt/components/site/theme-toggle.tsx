@@ -1,6 +1,6 @@
 'use client';
 
-import { Moon, Sun } from 'lucide-react';
+import { RoybLinkText } from '@/components/primitives/royb-link';
 
 type ThemeName = 'light' | 'dark';
 
@@ -31,19 +31,13 @@ export function ThemeToggle() {
       data-testid="theme-toggle"
       aria-label="Toggle color scheme"
       onClick={toggleTheme}
-      className="inline-flex items-stretch border border-border text-muted-foreground outline-none focus-visible:ring-1 focus-visible:ring-ring"
+      className="royb-link-plain section-color-n royb-link-hover-scope font-mono text-base text-[#6B6966] outline-none focus-visible:ring-1 focus-visible:ring-ring"
     >
-      <span
-        data-testid="theme-toggle-light"
-        className="grid h-6 w-7 place-items-center bg-foreground text-background dark:bg-transparent dark:text-muted-foreground"
-      >
-        <Sun size={12} strokeWidth={1.8} aria-hidden />
+      <span className="dark:hidden">
+        <RoybLinkText section="n">light</RoybLinkText>
       </span>
-      <span
-        data-testid="theme-toggle-dark"
-        className="grid h-6 w-7 place-items-center border-l border-border bg-transparent text-muted-foreground dark:bg-foreground dark:text-background"
-      >
-        <Moon size={12} strokeWidth={1.8} aria-hidden />
+      <span className="hidden dark:inline">
+        <RoybLinkText section="n">dark</RoybLinkText>
       </span>
     </button>
   );

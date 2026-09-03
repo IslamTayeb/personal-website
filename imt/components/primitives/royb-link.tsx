@@ -1,7 +1,7 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
-export type RoybSection = 'r' | 'o' | 'y' | 'b';
+export type RoybSection = 'r' | 'o' | 'y' | 'b' | 'n';
 export type RoybLinkVariant = 'highlight' | 'plain';
 
 export function roybLinkClassName({

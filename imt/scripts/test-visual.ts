@@ -908,11 +908,7 @@ async function assertHome(page: Page) {
       const name = label.querySelector<HTMLElement>(
         '[data-testid="experience-group-label-name"]'
       );
-      const count = label.querySelector<HTMLElement>(
-        '[data-testid="experience-group-label-count"]'
-      );
       const nameStyle = name ? getComputedStyle(name) : null;
-      const countStyle = count ? getComputedStyle(count) : null;
 
       return {
         text: label.textContent?.replace(/\s+/g, ' ').trim() ?? '',
@@ -929,10 +925,6 @@ async function assertHome(page: Page) {
           fontSize: Number.parseFloat(nameStyle?.fontSize ?? '0'),
           letterSpacing: nameStyle?.letterSpacing ?? '',
           textTransform: nameStyle?.textTransform ?? '',
-        },
-        countStyle: {
-          letterSpacing: countStyle?.letterSpacing ?? '',
-          textTransform: countStyle?.textTransform ?? '',
         },
         width: rect.width,
         left: rect.left,
@@ -2098,7 +2090,7 @@ async function assertHome(page: Page) {
     result.experienceGroupLabelStyles.map(
       (label: { text: string }) => label.text
     ),
-    ['Research (3)', 'Engineering (3)', 'Teaching (3)']
+    ['Research', 'Engineering', 'Teaching']
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
@@ -2124,28 +2116,22 @@ async function assertHome(page: Page) {
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
-      (label: {
-        countStyle: { textTransform: string; letterSpacing: string };
-      }) =>
-        label.countStyle.textTransform === 'none' &&
-        (label.countStyle.letterSpacing === 'normal' ||
-          Math.abs(Number.parseFloat(label.countStyle.letterSpacing)) <= 0.5)
+      (label: { text: string }) => !/\(\d+\)/.test(label.text)
     ),
-    'experience group counts should stay compact while the label names are letter-spaced'
+    'experience group labels should not show a role count'
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
       (label: { textDecorationLine: string }) =>
-        label.textDecorationLine.includes('underline')
+        !label.textDecorationLine.includes('underline')
     ),
-    'experience group labels should be underlined because they are clickable'
+    'experience group labels should not be underlined'
   );
   assert.ok(
     result.experienceGroupLabelStyles.every(
       (label: { className: string }) =>
-        label.className.includes('royb-link') &&
-        label.className.includes('royb-link-highlight') &&
-        label.className.includes('royb-link-fragment') &&
+        label.className.includes('royb-link-plain') &&
+        !label.className.includes('royb-link-highlight') &&
         label.className.includes('section-color-o') &&
         label.className.includes('w-fit') &&
         label.className.includes('justify-self-start')
@@ -2180,7 +2166,7 @@ async function assertHome(page: Page) {
 
   assert.equal(research?.expanded, 'true', 'research should default open');
   assert.equal(research?.rows, 3, 'research should show all 3 rows');
-  assert.ok(research?.text.includes('Research (3)'));
+  assert.ok(research?.text.includes('Research'));
   assert.equal(research?.hasShowMore, false, 'research should not show more');
   assert.ok(!research?.text.includes('Matthew Lentz'));
   assert.ok(research?.text.includes('Philip Romero'));
@@ -2251,7 +2237,7 @@ async function assertHome(page: Page) {
     0,
     'final closed Teaching toggle should not add bottom whitespace'
   );
-  assert.ok(teaching?.text.includes('Teaching (3)'));
+  assert.ok(teaching?.text.includes('Teaching'));
   assert.ok(
     (teaching?.marginBottom ?? 0) < (research?.marginBottom ?? 0),
     'closed groups should use tighter vertical spacing than open groups'
