@@ -112,7 +112,14 @@ async function readRailRowColors({
       const dotStyle = dot ? getComputedStyle(dot) : null;
       const connectorStyle = connector ? getComputedStyle(connector) : null;
 
+      // Org marks are inline SVGs colored through `color`; plain dots through
+      // `background-color`. Report whichever the row uses as its accent.
+      const dotIsMark = dot?.hasAttribute('data-rail-marker') ?? false;
+
       return {
+        dotIsMark,
+        dotAccentColor:
+          (dotIsMark ? dotStyle?.color : dotStyle?.backgroundColor) ?? '',
         dotBackgroundColor: dotStyle?.backgroundColor ?? '',
         dotBorderColor: dotStyle?.borderTopColor ?? '',
         connectorBackgroundColor: connectorStyle?.backgroundColor ?? '',
@@ -145,7 +152,7 @@ async function assertNeutralRailRowHoverAccent({
   const before = await readRailRowColors({ row, dotTestId, connectorTestId });
 
   assert.notEqual(
-    before.dotBackgroundColor,
+    before.dotAccentColor,
     accentColor,
     `${label} should start neutral before hover`
   );
@@ -166,8 +173,8 @@ async function assertNeutralRailRowHoverAccent({
   });
 
   assert.equal(
-    rowHover.dotBackgroundColor,
-    before.dotBackgroundColor,
+    rowHover.dotAccentColor,
+    before.dotAccentColor,
     `${label} dot should not change when hovering non-link row space`
   );
   assert.equal(
@@ -190,10 +197,17 @@ async function assertNeutralRailRowHoverAccent({
   });
 
   assert.equal(
-    linkHover.dotBackgroundColor,
+    linkHover.dotAccentColor,
     accentColor,
     `${label} dot should color only when the title link is hovered`
   );
+  if (before.dotIsMark) {
+    assert.equal(
+      linkHover.dotBackgroundColor,
+      before.dotBackgroundColor,
+      `${label} dot background should not paint behind an org mark on hover`
+    );
+  }
   assert.equal(
     linkHover.connectorBackgroundColor,
     before.connectorBackgroundColor,
@@ -1221,13 +1235,32 @@ async function assertHome(page: Page) {
       };
     });
     const dots = [...document.querySelectorAll('[data-testid="rail-dot"]')].map(
-      (dot) => ({
-        state: dot.getAttribute('data-state'),
-        className: dot.className,
-        border: Number.parseFloat(getComputedStyle(dot).borderTopWidth),
-        borderColor: getComputedStyle(dot).borderTopColor,
-        backgroundColor: getComputedStyle(dot).backgroundColor,
-      })
+      (dot) => {
+        const mark = dot.querySelector<SVGElement>('svg[data-org-mark]');
+        const markRect = mark?.getBoundingClientRect();
+        const dotRect = dot.getBoundingClientRect();
+
+        return {
+          state: dot.getAttribute('data-state'),
+          className: dot.className,
+          border: Number.parseFloat(getComputedStyle(dot).borderTopWidth),
+          borderColor: getComputedStyle(dot).borderTopColor,
+          backgroundColor: getComputedStyle(dot).backgroundColor,
+          color: getComputedStyle(dot).color,
+          hasMark: Boolean(mark),
+          markCenterOffsetX: markRect
+            ? markRect.left +
+              markRect.width / 2 -
+              (dotRect.left + dotRect.width / 2)
+            : 0,
+          markCenterOffsetY: markRect
+            ? markRect.top +
+              markRect.height / 2 -
+              (dotRect.top + dotRect.height / 2)
+            : 0,
+          markHeight: markRect?.height ?? 0,
+        };
+      }
     );
     const publicationButtons = document.querySelectorAll(
       '[data-testid="publication-row-button"]'
@@ -2260,18 +2293,32 @@ async function assertHome(page: Page) {
   const presentDots = result.dots.filter((dot) => dot.state === 'present');
   const endedDots = result.dots.filter((dot) => dot.state === 'ended');
 
+  const experienceDots = [...incomingDots, ...presentDots, ...endedDots];
+
   assert.ok(
-    incomingDots.every(
-      (dot) =>
-        dot.className.includes('border-roy-o') &&
-        dot.className.includes('bg-background') &&
-        dot.border > 0 &&
-        dot.backgroundColor === result.pageBackgroundColor
-    ),
-    'incoming rail markers should be hollow'
+    experienceDots.length > 0 && experienceDots.every((dot) => dot.hasMark),
+    'every experience row should carry an org mark'
   );
-  assert.ok(presentDots.every((dot) => dot.className.includes('bg-roy-o')));
-  assert.ok(endedDots.every((dot) => dot.className.includes('bg-foreground')));
+  assert.ok(
+    experienceDots.every(
+      (dot) =>
+        dot.border === 0 &&
+        dot.backgroundColor === 'rgba(0, 0, 0, 0)' &&
+        Math.abs(dot.markCenterOffsetX) <= 0.75 &&
+        Math.abs(dot.markCenterOffsetY) <= 0.75 &&
+        dot.markHeight >= 10 &&
+        dot.markHeight <= 20
+    ),
+    'org marks should sit centered on the dot position, weighted around the 12px dot, with no box behind them'
+  );
+  assert.ok(
+    incomingDots.every((dot) => dot.className.includes('text-roy-o')),
+    'incoming org marks should be solid orange, not hollow'
+  );
+  assert.ok(presentDots.every((dot) => dot.className.includes('text-roy-o')));
+  assert.ok(
+    endedDots.every((dot) => dot.className.includes('text-foreground/75'))
+  );
   assert.equal(result.experienceLegendExists, false);
   assert.ok(result.writingDots[0]?.includes('bg-roy-b'));
   assert.ok(
@@ -2504,11 +2551,11 @@ async function assertHome(page: Page) {
     result.publicationSelfAuthorStyles.every(
       (style: { className: string; fontStyle: string; fontWeight: number }) =>
         style.className.includes('font-semibold') &&
-        !style.className.includes('italic') &&
-        style.fontStyle === 'normal' &&
+        style.className.includes('italic') &&
+        style.fontStyle === 'italic' &&
         style.fontWeight === 600
     ),
-    'Islam Tayeb author spans should render non-italic at semibold weight'
+    'Islam Tayeb author spans should render semibold italic'
   );
   assert.ok(
     !result.publicationTitleClassName.includes('text-balance'),
@@ -3231,20 +3278,20 @@ async function assertExperienceTitleHoverColors(page: Page) {
     decoration: getComputedStyle(element).textDecorationLine,
   }));
 
-  assert.equal(teachingSeparator.tagName, 'SPAN');
-  assert.ok(!teachingSeparator.className.includes('royb-link'));
+  // The course link wraps the whole title run, including the TA label, as one
+  // inline underlined run with a single breakable space.
+  assert.equal(teachingSeparator.tagName, 'A');
+  assert.ok(teachingSeparator.className.includes('royb-link'));
   assert.equal(teachingSeparator.rawText, 'Operating Systems TA');
   assert.equal(teachingSeparator.whiteSpace, 'break-spaces');
-  assert.equal(teachingSeparator.decoration, 'none');
+  assert.equal(teachingSeparator.decoration, 'underline');
 
   await teachingTitle.locator('[data-testid="advisor-label"]').hover();
   const teachingHover = await readHover();
 
   assert.equal(teachingHover.text, 'Operating Systems TA');
-  assert.equal(teachingHover.titleColor, teachingHover.foregroundToken);
-  assert.equal(teachingHover.advisorColor, teachingHover.mutedToken);
-  assert.equal(teachingHover.titleDecoration, 'none');
-  assert.equal(teachingHover.advisorDecoration, 'none');
+  assert.equal(teachingHover.titleColor, teachingHover.orangeToken);
+  assert.equal(teachingHover.advisorColor, teachingHover.orangeToken);
 }
 
 async function assertHomeRailHoverAccents(page: Page) {
@@ -3455,7 +3502,7 @@ async function assertExperienceInteractions(page: Page) {
       'Led a study group with SAGE, saw kids quit pre-med as the semester went'
     )
   );
-  assert.ok(teachingPresentDotClassName.includes('bg-roy-o'));
+  assert.ok(teachingPresentDotClassName.includes('text-roy-o'));
   assert.ok(teachingText?.includes('Aug 2026 - Dec 2026'));
   assert.ok(!teachingText?.includes('Incoming Aug 2026'));
   const teachingGroup = page.locator(

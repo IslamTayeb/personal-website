@@ -1,5 +1,8 @@
+import type { OrgKey } from '@/components/primitives/org-marks';
+
 type ExperienceRole = {
   org: string;
+  orgKey?: OrgKey;
   piName?: string;
   piHref?: string;
   date: string;
@@ -27,6 +30,7 @@ export const experienceGroups: ExperienceGroup[] = [
       /*
       {
         org: 'Duke University',
+        orgKey: 'duke',
         piName: 'Christian Dallago',
         date: 'Incoming Aug 2026',
         href: 'https://machine.learning.bio/',
@@ -37,6 +41,7 @@ export const experienceGroups: ExperienceGroup[] = [
       */
       {
         org: 'Duke University',
+        orgKey: 'duke',
         piName: 'Philip Romero',
         date: 'Aug 2025 - Present',
         href: 'https://www.romerolab.org/',
@@ -55,6 +60,7 @@ export const experienceGroups: ExperienceGroup[] = [
       },
       {
         org: 'Duke University',
+        orgKey: 'duke',
         piName: 'Navid NaderiAlizadeh',
         date: 'Oct 2024 - Apr 2025',
         href: 'https://sites.duke.edu/navid/',
@@ -63,6 +69,7 @@ export const experienceGroups: ExperienceGroup[] = [
       },
       {
         org: 'KFUPM',
+        orgKey: 'kfupm',
         piName: 'Mahmoud Abdelnaby',
         date: 'Jul 2022 - Sep 2023',
         href: 'https://scholar.google.com/citations?user=BLMFawMAAAAJ&hl=en',
@@ -83,13 +90,15 @@ export const experienceGroups: ExperienceGroup[] = [
     roles: [
       {
         org: 'Soff (YC S24)',
+        orgKey: 'soff',
         date: 'May 2025 - Oct 2025',
-        href: 'https://soff.ai/',
+        href: 'https://www.ycombinator.com/companies/soff',
         state: 'ended',
         desc: 'Agentic sales intelligence for manufacturers, employee #2',
       },
       {
         org: 'Life Edit Therapeutics',
+        orgKey: 'life-edit',
         date: 'Sep 2024 - May 2025',
         href: 'https://lifeeditinc.com/',
         state: 'ended',
@@ -97,6 +106,7 @@ export const experienceGroups: ExperienceGroup[] = [
       },
       {
         org: 'Duke Institute for Health Innovation',
+        orgKey: 'dihi',
         date: 'Jun 2024 - Aug 2024',
         href: 'https://dihi.org/',
         state: 'ended',
@@ -110,8 +120,10 @@ export const experienceGroups: ExperienceGroup[] = [
     roles: [
       {
         org: 'Operating Systems',
+        orgKey: 'duke',
         piName: 'TA',
         date: 'Aug 2026 - Dec 2026',
+        href: 'https://courses.cs.duke.edu/fall26/compsci310/',
         state: 'present',
         desc: 'Introducing kernels with Matthew Lentz, co-leading a discussion section + office hours',
         descLinks: [
@@ -123,6 +135,7 @@ export const experienceGroups: ExperienceGroup[] = [
       },
       {
         org: 'Computer Systems',
+        orgKey: 'duke',
         piName: 'TA',
         date: 'Jan 2026 - May 2026',
         href: 'https://courses.cs.duke.edu/spring26/compsci210d/',
@@ -137,6 +150,7 @@ export const experienceGroups: ExperienceGroup[] = [
       },
       {
         org: 'Organic Chemistry I',
+        orgKey: 'duke',
         piName: 'Tutor',
         href: 'https://arc.duke.edu/peer-education/',
         date: 'Jan 2025 - May 2025',

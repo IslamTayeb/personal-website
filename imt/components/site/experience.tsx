@@ -3,6 +3,10 @@
 import { type ReactNode, useState } from 'react';
 import { experienceGroups, type ExperienceGroup } from '@/data/experience';
 import { ExternalLink } from '@/components/primitives/external-link';
+import {
+  OrgMark,
+  orgMarkBalancedHeight,
+} from '@/components/primitives/org-marks';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { RichText } from '@/components/primitives/rich-text';
 import { RoybLinkText } from '@/components/primitives/royb-link';
@@ -82,12 +86,25 @@ function RailGroup({
     <RailList>
       {roles.map((role, index) => {
         const state = role.state ?? (role.incoming ? 'incoming' : 'ended');
-        const dotClassName =
-          state === 'incoming'
+        // Org marks take the dot's colors as text color; present and incoming
+        // are both solid orange, ended is the neutral dot color.
+        const dotClassName = role.orgKey
+          ? state === 'ended'
+            ? 'text-foreground/75'
+            : 'text-roy-o'
+          : state === 'incoming'
             ? 'border border-roy-o bg-background'
             : state === 'present'
               ? 'bg-roy-o'
               : 'bg-foreground/75';
+        const marker = role.orgKey ? (
+          <OrgMark
+            org={role.orgKey}
+            size={orgMarkBalancedHeight(role.orgKey, 12)}
+            fit="height"
+            className="block max-w-none shrink-0"
+          />
+        ) : undefined;
         const titleContent: ReactNode = role.piName ? (
           <>
             {role.org} <AdvisorLabel role={role} boxed={boxedAdvisorLabels} />
@@ -107,6 +124,7 @@ function RailGroup({
           <RailItem
             key={`${group.kind}-${role.org}-${role.piName ?? role.org}-${role.date}`}
             dotClassName={dotClassName}
+            marker={marker}
             hoverAccent={state === 'ended' ? 'o' : undefined}
             incoming={role.incoming}
             state={state}

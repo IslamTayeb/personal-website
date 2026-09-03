@@ -15,7 +15,7 @@ function PublicationAuthors({ authors }: { authors: string }) {
           <span
             key={`${part}-${index}`}
             data-testid="publication-author-self"
-            className="font-semibold text-foreground"
+            className="font-semibold italic text-foreground"
           >
             {part}
           </span>

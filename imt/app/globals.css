@@ -366,24 +366,48 @@
     > [data-rail-hover-target],
   .rail-link-hover-accent-r:has([data-rail-hover-source]:focus-visible)
     > [data-rail-hover-target] {
+    color: var(--roy-r);
+  }
+  .rail-link-hover-accent-r:has([data-rail-hover-source]:hover)
+    > [data-rail-hover-target]:not([data-rail-marker]),
+  .rail-link-hover-accent-r:has([data-rail-hover-source]:focus-visible)
+    > [data-rail-hover-target]:not([data-rail-marker]) {
     background-color: var(--roy-r);
   }
   .rail-link-hover-accent-o:has([data-rail-hover-source]:hover)
     > [data-rail-hover-target],
   .rail-link-hover-accent-o:has([data-rail-hover-source]:focus-visible)
     > [data-rail-hover-target] {
+    color: var(--roy-o);
+  }
+  .rail-link-hover-accent-o:has([data-rail-hover-source]:hover)
+    > [data-rail-hover-target]:not([data-rail-marker]),
+  .rail-link-hover-accent-o:has([data-rail-hover-source]:focus-visible)
+    > [data-rail-hover-target]:not([data-rail-marker]) {
     background-color: var(--roy-o);
   }
   .rail-link-hover-accent-y:has([data-rail-hover-source]:hover)
     > [data-rail-hover-target],
   .rail-link-hover-accent-y:has([data-rail-hover-source]:focus-visible)
     > [data-rail-hover-target] {
+    color: var(--roy-y);
+  }
+  .rail-link-hover-accent-y:has([data-rail-hover-source]:hover)
+    > [data-rail-hover-target]:not([data-rail-marker]),
+  .rail-link-hover-accent-y:has([data-rail-hover-source]:focus-visible)
+    > [data-rail-hover-target]:not([data-rail-marker]) {
     background-color: var(--roy-y);
   }
   .rail-link-hover-accent-b:has([data-rail-hover-source]:hover)
     > [data-rail-hover-target],
   .rail-link-hover-accent-b:has([data-rail-hover-source]:focus-visible)
     > [data-rail-hover-target] {
+    color: var(--roy-b);
+  }
+  .rail-link-hover-accent-b:has([data-rail-hover-source]:hover)
+    > [data-rail-hover-target]:not([data-rail-marker]),
+  .rail-link-hover-accent-b:has([data-rail-hover-source]:focus-visible)
+    > [data-rail-hover-target]:not([data-rail-marker]) {
     background-color: var(--roy-b);
   }
   .royb-link-plain {

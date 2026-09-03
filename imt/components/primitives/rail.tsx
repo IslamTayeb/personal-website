@@ -29,6 +29,7 @@ export function RailList({
 
 export function RailItem({
   dotClassName,
+  marker,
   title,
   meta,
   description,
@@ -51,6 +52,9 @@ export function RailItem({
   ariaExpanded,
 }: {
   dotClassName: string;
+  // Optional mark rendered centered on the dot's position instead of the
+  // plain square. It may be wider or taller than the dot and overhangs evenly.
+  marker?: ReactNode;
   title: ReactNode;
   meta?: ReactNode;
   description?: ReactNode;
@@ -133,13 +137,17 @@ export function RailItem({
       <span
         data-testid={dotTestId}
         data-rail-hover-target={hoverAccent ? 'true' : undefined}
+        data-rail-marker={marker ? 'true' : undefined}
         data-incoming={incoming ? 'true' : undefined}
         data-state={state}
         className={cn(
           'relative mt-1 h-[var(--rail-marker-size)] w-[var(--rail-marker-size)] shrink-0',
+          marker && 'flex items-center justify-center',
           dotClassName
         )}
-      />
+      >
+        {marker}
+      </span>
       <div className="flex w-full min-w-0 flex-col gap-0.5">
         {onActivate ? (
           <button
