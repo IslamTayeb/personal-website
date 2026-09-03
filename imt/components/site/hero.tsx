@@ -1,8 +1,10 @@
 import Image from 'next/image';
 
 import { contactLinks } from '@/data/links';
+import { newsItems } from '@/data/news';
 import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
+import { RailItem, RailList } from '@/components/primitives/rail';
 import { SectionHeader } from '@/components/primitives/section';
 
 function ContactDetails() {
@@ -79,6 +81,42 @@ function HeroStory() {
   );
 }
 
+function News() {
+  return (
+    <RailList testId="hero-news" className="mt-3">
+      {newsItems.map((item, index) => {
+        const isLatest = index === 0;
+
+        return (
+          <RailItem
+            key={`${item.date}-${item.text}`}
+            testId="hero-news-row"
+            dotClassName={isLatest ? 'bg-roy-r' : 'bg-foreground/75'}
+            hoverAccent={isLatest ? undefined : 'r'}
+            titleClassName="reading-copy font-normal leading-snug site-desktop:truncate"
+            title={
+              item.href ? (
+                <ExternalLink
+                  href={item.href}
+                  section="r"
+                  data-rail-hover-source={isLatest ? undefined : 'true'}
+                  className="text-foreground"
+                >
+                  {item.text}
+                </ExternalLink>
+              ) : (
+                item.text
+              )
+            }
+            meta={item.date}
+            connector={index < newsItems.length - 1 ? 'solid' : 'none'}
+          />
+        );
+      })}
+    </RailList>
+  );
+}
+
 export function Hero() {
   return (
     <section id="about" data-testid="hero-section" className="pb-4 pt-0">
@@ -108,6 +146,7 @@ export function Hero() {
             </div>
           </div>
         </div>
+        <News />
       </div>
     </section>
   );
