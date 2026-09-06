@@ -1,4 +1,4 @@
-import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
+import { getListedPosts, postHref } from '@/lib/blog/posts';
 import { formatMonthYear } from '@/lib/blog/date';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { PostTags } from '@/components/primitives/post-tags';
@@ -26,25 +26,23 @@ export async function WritingPreview() {
         <div className="flex w-full flex-col">
           <RailList>
             {posts.map((post, index) => {
-              const isNew = isNewPost(index);
-
               return (
                 <RailItem
                   key={post.manifest.slug}
-                  dotClassName={isNew ? 'bg-roy-b' : 'bg-foreground/75'}
-                  hoverAccent={isNew ? undefined : 'b'}
+                  dotClassName="bg-foreground/75"
+                  hoverAccent="b"
                   titleClassName="font-semibold"
                   title={
                     <span>
                       <ExternalLink
                         href={postHref(post)}
                         section="b"
-                        data-rail-hover-source={isNew ? undefined : 'true'}
+                        data-rail-hover-source="true"
                         className="font-semibold text-foreground"
                       >
                         {post.manifest.title}
                       </ExternalLink>
-                      <PostTags isNew={isNew} kind={post.manifest.kind} />
+                      <PostTags kind={post.manifest.kind} />
                     </span>
                   }
                   meta={formatMonthYear(post.manifest.publishedAt)}

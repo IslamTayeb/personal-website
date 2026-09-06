@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { SquareArrowOutUpRight } from 'lucide-react';
 import { Tag } from '@/components/primitives/tag';
 import type { PostKind } from '@/lib/blog/manifest';
 
@@ -7,18 +8,29 @@ const postKindTone = {
 } as const;
 
 export function PostTags({
-  isNew = false,
   kind,
+  external = false,
 }: {
-  isNew?: boolean;
   kind?: PostKind | null;
+  // Marks writing published somewhere other than this site.
+  external?: boolean;
 }) {
   const tags: ReactNode[] = [];
 
-  if (isNew) {
+  if (external) {
     tags.push(
-      <Tag key="new" tone="b" data-post-tag="new">
-        New
+      <Tag
+        key="external"
+        tone="neutral"
+        data-post-tag="external"
+        className="gap-1"
+      >
+        <SquareArrowOutUpRight
+          aria-hidden
+          className="size-[10px] shrink-0"
+          strokeWidth={2}
+        />
+        external
       </Tag>
     );
   }

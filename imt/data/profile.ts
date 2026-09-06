@@ -17,12 +17,27 @@ export const profile = {
 export const heroParagraphs: TextSegment[][] = [
   [
     {
-      text: "I'm a rising senior studying CS + Chemistry at ",
+      text: "I'm a senior studying Computer Science at ",
     },
     { text: 'Duke University', href: profileLinks.dukeUniversity },
     {
-      text: " in Durham, NC. I'm researching systems in ML, particularly agent correctness and efficiency. I usually use science, data, and coding as motivating domains.",
+      text: " in Durham, NC. I'm interested in ML systems, especially for science and coding. I currently work with ",
     },
+    { text: 'Philip Romero', href: profileLinks.romeroLab },
+    {
+      text: ' on agents for chemical reaction data extraction and analysis.',
+    },
+  ],
+  [
+    {
+      text: 'Before that, I used to do organic chemistry research on porous polymers and ',
+    },
+    { text: 'published a few papers', href: profileLinks.scholar },
+    {
+      text: '. Then, I transitioned to software engineering to experience startups and worked at ',
+    },
+    { text: 'Soff (YC S24)', href: profileLinks.soff },
+    { text: '.' },
   ],
   [
     {

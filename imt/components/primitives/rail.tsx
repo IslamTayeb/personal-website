@@ -31,9 +31,12 @@ export function RailItem({
   dotClassName,
   marker,
   markerHeight,
+  nextMarkerHeight,
   title,
   meta,
   description,
+  descriptionLines,
+  wrapDescription = false,
   connector = 'solid',
   connectorClassName,
   hoverAccent,
@@ -57,11 +60,19 @@ export function RailItem({
   // plain square. It may be wider or taller than the dot and overhangs evenly.
   marker?: ReactNode;
   // Rendered height of `marker` in px. The connector uses it to keep the same
-  // air around the mark that the plain 12px dot gets (5px below, 9px above).
+  // 5px of air under the mark that the plain 12px dot gets.
   markerHeight?: number;
+  // Rendered height of the next row's mark in px, so the connector also stops
+  // 5px above it. Defaults to the plain dot size.
+  nextMarkerHeight?: number;
   title: ReactNode;
   meta?: ReactNode;
   description?: ReactNode;
+  // Additional one-line description rows rendered under `description`,
+  // each in its own paragraph so the single-line truncation still applies.
+  descriptionLines?: ReactNode[];
+  // Let description rows wrap on desktop instead of truncating to one line.
+  wrapDescription?: boolean;
   connector?: RailConnector;
   connectorClassName?: string;
   hoverAccent?: RailAccent;
@@ -115,9 +126,13 @@ export function RailItem({
     <li
       data-testid={testId}
       style={
-        marker && markerHeight
-          ? ({ '--rail-mark-height': `${markerHeight}px` } as CSSProperties)
-          : undefined
+        {
+          '--rail-mark-height':
+            marker && markerHeight ? `${markerHeight}px` : undefined,
+          '--rail-next-mark-height': nextMarkerHeight
+            ? `${nextMarkerHeight}px`
+            : undefined,
+        } as CSSProperties
       }
       className={cn(
         'relative grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pb-2 last:pb-0',
@@ -130,14 +145,15 @@ export function RailItem({
           data-testid={connectorTestId}
           className={cn(
             'absolute w-px',
-            // The plain dot spans 4px to 16px of the row; the line starts 5px
-            // under it and stops 9px above the next dot. A mark is centered on
-            // the same 10px midline, so the same gaps follow from its height.
-            // A 1px line centered on the 12px box also lands on a half pixel
-            // and snaps left, so under a mark it starts on the center pixel.
+            // The plain dot spans 4px to 16px of the row and the next one
+            // starts 4px into the next row. Marks are centered on the same
+            // 10px midline, so both 5px gaps follow from the mark heights.
+            'top-[calc(15px+var(--rail-mark-height,var(--rail-marker-size))/2)] bottom-[calc(var(--rail-next-mark-height,var(--rail-marker-size))/2-5px)]',
+            // A 1px line centered on the 12px box lands on a half pixel and
+            // snaps left, so under a mark it starts on the center pixel.
             marker && markerHeight
-              ? 'left-[calc(var(--rail-marker-size)/2)] top-[calc(15px+var(--rail-mark-height)/2)] bottom-[calc(var(--rail-mark-height)/2-1px)]'
-              : 'left-[calc(var(--rail-marker-size)/2-0.5px)] top-[21px] bottom-[5px]',
+              ? 'left-[calc(var(--rail-marker-size)/2)]'
+              : 'left-[calc(var(--rail-marker-size)/2-0.5px)]',
             connector === 'solid' ? 'bg-border' : 'text-border',
             connectorClassName
           )}
@@ -182,17 +198,22 @@ export function RailItem({
         ) : (
           <div className={topRowClassName}>{topRow}</div>
         )}
-        {description ? (
-          <p
-            data-one-line="true"
-            className={cn(
-              'reading-copy text-base leading-snug text-foreground site-desktop:truncate',
-              descriptionClassName
-            )}
-          >
-            {description}
-          </p>
-        ) : null}
+        {[description, ...(descriptionLines ?? [])].map((row, index) =>
+          row ? (
+            <p
+              key={index}
+              data-rail-description="true"
+              data-one-line={wrapDescription ? undefined : 'true'}
+              className={cn(
+                'reading-copy text-base leading-snug text-foreground',
+                !wrapDescription && 'site-desktop:truncate',
+                descriptionClassName
+              )}
+            >
+              {row}
+            </p>
+          ) : null
+        )}
         {footer ? <div>{footer}</div> : null}
       </div>
     </li>

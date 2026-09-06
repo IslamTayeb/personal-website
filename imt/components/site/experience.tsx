@@ -10,7 +10,6 @@ import {
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { RichText } from '@/components/primitives/rich-text';
 import { RoybLinkText } from '@/components/primitives/royb-link';
-import { SectionActionButton } from '@/components/primitives/section-action';
 import { BorderedPanel, Section } from '@/components/primitives/section';
 import { cn } from '@/lib/utils';
 
@@ -70,17 +69,15 @@ function AdvisorLabel({
 
 function RailGroup({
   group,
-  expanded,
   boxedAdvisorLabels,
 }: {
   group: ExperienceGroup;
-  expanded: boolean;
   boxedAdvisorLabels: boolean;
 }) {
-  const roles = expanded
-    ? group.roles
-    : group.roles.slice(0, group.visibleCount);
-  const hasHidden = group.roles.length > group.visibleCount;
+  const roles = group.roles;
+  const markerHeights = roles.map((role) =>
+    role.orgKey ? orgMarkBalancedHeight(role.orgKey, 12) : undefined
+  );
 
   return (
     <RailList>
@@ -97,9 +94,7 @@ function RailGroup({
             : state === 'present'
               ? 'bg-roy-o'
               : 'bg-foreground/75';
-        const markerHeight = role.orgKey
-          ? orgMarkBalancedHeight(role.orgKey, 12)
-          : undefined;
+        const markerHeight = markerHeights[index];
         const marker = role.orgKey ? (
           <OrgMark
             org={role.orgKey}
@@ -115,13 +110,7 @@ function RailGroup({
         ) : (
           role.org
         );
-        const isLastVisibleRole = index === roles.length - 1;
-        const connector =
-          index < roles.length - 1
-            ? 'solid'
-            : isLastVisibleRole && hasHidden && !expanded
-              ? 'dashed'
-              : 'none';
+        const connector = index < roles.length - 1 ? 'solid' : 'none';
 
         return (
           <RailItem
@@ -129,6 +118,7 @@ function RailGroup({
             dotClassName={dotClassName}
             marker={marker}
             markerHeight={markerHeight}
+            nextMarkerHeight={markerHeights[index + 1]}
             hoverAccent={state === 'ended' ? 'o' : undefined}
             incoming={role.incoming}
             state={state}
@@ -166,6 +156,30 @@ function RailGroup({
                 <RichText text={role.desc} />
               )
             }
+            wrapDescription
+            descriptionLines={role.descLines?.map((line) => (
+              <span key={`${line.label ?? ''}:${line.text}`}>
+                {line.label ? (
+                  <>
+                    <em
+                      data-testid="experience-line-label"
+                      className="text-muted-foreground"
+                    >
+                      {line.label}:
+                    </em>{' '}
+                  </>
+                ) : null}
+                {line.links?.length ? (
+                  <LinkedDescription
+                    text={line.text}
+                    links={line.links}
+                    section="o"
+                  />
+                ) : (
+                  <RichText text={line.text} />
+                )}
+              </span>
+            ))}
             connector={connector}
           />
         );
@@ -255,21 +269,14 @@ function RailGroupBlock({
   open,
   isLast,
   onToggleOpen,
-  expanded,
-  onToggleExpanded,
   boxedAdvisorLabels,
 }: {
   group: ExperienceGroup;
   open: boolean;
   isLast: boolean;
   onToggleOpen: () => void;
-  expanded: boolean;
-  onToggleExpanded: () => void;
   boxedAdvisorLabels: boolean;
 }) {
-  const hasHidden = group.roles.length > group.visibleCount;
-  const allowShowMore = group.kind !== 'teaching';
-  const showAllRows = group.kind === 'teaching' ? true : expanded;
   const label = experienceGroupLabel(group.kind);
 
   return (
@@ -297,7 +304,6 @@ function RailGroupBlock({
           data-group={group.kind}
           className="w-fit justify-self-start"
           section="o"
-          variant="plain"
         >
           <span
             data-testid="experience-group-label-name"
@@ -308,28 +314,7 @@ function RailGroupBlock({
         </RoybLinkText>
       </button>
       {open ? (
-        <RailGroup
-          group={group}
-          expanded={showAllRows}
-          boxedAdvisorLabels={boxedAdvisorLabels}
-        />
-      ) : null}
-      {open && hasHidden && allowShowMore ? (
-        <div
-          data-testid="experience-more-row"
-          className="grid grid-cols-[var(--rail-gutter)_minmax(0,1fr)] pt-2"
-        >
-          <span aria-hidden />
-          <div className="flex min-w-0 justify-start">
-            <SectionActionButton
-              section="o"
-              onClick={onToggleExpanded}
-              testId="experience-more-control"
-            >
-              {expanded ? 'show less...' : 'show more...'}
-            </SectionActionButton>
-          </div>
-        </div>
+        <RailGroup group={group} boxedAdvisorLabels={boxedAdvisorLabels} />
       ) : null}
     </div>
   );
@@ -344,13 +329,6 @@ export function Experience({
     Record<ExperienceGroup['kind'], boolean>
   >({
     research: true,
-    engineering: true,
-    teaching: false,
-  });
-  const [expandedGroups, setExpandedGroups] = useState<
-    Record<ExperienceGroup['kind'], boolean>
-  >({
-    research: false,
     engineering: false,
     teaching: false,
   });
@@ -377,14 +355,7 @@ export function Experience({
                   [group.kind]: !current[group.kind],
                 }))
               }
-              expanded={expandedGroups[group.kind]}
               boxedAdvisorLabels={boxedAdvisorLabels}
-              onToggleExpanded={() =>
-                setExpandedGroups((current) => ({
-                  ...current,
-                  [group.kind]: !current[group.kind],
-                }))
-              }
             />
           ))}
         </div>

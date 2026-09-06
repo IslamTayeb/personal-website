@@ -6,7 +6,7 @@ import { PostTags } from '@/components/primitives/post-tags';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { externalWriting } from '@/data/external-writing';
 import { absoluteSiteUrl, siteMetadata } from '@/data/site-metadata';
-import { getListedPosts, isNewPost, postHref } from '@/lib/blog/posts';
+import { getListedPosts, postHref } from '@/lib/blog/posts';
 import { formatMonthYear } from '@/lib/blog/date';
 
 const postDotClassName = 'bg-foreground/75';
@@ -52,25 +52,23 @@ export default async function BlogIndexPage() {
         <BorderedPanel>
           <RailList testId="blog-index-rail">
             {posts.map((post, index) => {
-              const isNew = isNewPost(index);
-
               return (
                 <RailItem
                   key={post.manifest.slug}
-                  dotClassName={isNew ? 'bg-roy-b' : postDotClassName}
-                  hoverAccent={isNew ? undefined : 'b'}
+                  dotClassName={postDotClassName}
+                  hoverAccent="b"
                   titleClassName="font-semibold"
                   title={
                     <span>
                       <ExternalLink
                         href={postHref(post)}
                         section="b"
-                        data-rail-hover-source={isNew ? undefined : 'true'}
+                        data-rail-hover-source="true"
                         className="text-base font-semibold leading-tight text-foreground"
                       >
                         {post.manifest.title}
                       </ExternalLink>
-                      <PostTags isNew={isNew} kind={post.manifest.kind} />
+                      <PostTags kind={post.manifest.kind} />
                     </span>
                   }
                   meta={formatMonthYear(post.manifest.publishedAt)}
@@ -98,15 +96,18 @@ export default async function BlogIndexPage() {
                 hoverAccent="b"
                 titleClassName="font-semibold"
                 title={
-                  <ExternalLink
-                    href={item.href}
-                    section="b"
-                    data-rail-hover-source="true"
-                    data-testid="external-writing-title"
-                    className="min-w-0 text-base font-semibold leading-tight text-foreground"
-                  >
-                    {item.title}
-                  </ExternalLink>
+                  <span>
+                    <ExternalLink
+                      href={item.href}
+                      section="b"
+                      data-rail-hover-source="true"
+                      data-testid="external-writing-title"
+                      className="min-w-0 text-base font-semibold leading-tight text-foreground"
+                    >
+                      {item.title}
+                    </ExternalLink>
+                    <PostTags external />
+                  </span>
                 }
                 meta={item.date}
                 footer={

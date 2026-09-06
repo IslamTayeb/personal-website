@@ -1,5 +1,17 @@
 import type { OrgKey } from '@/components/primitives/org-marks';
 
+type DescriptionLink = {
+  text: string;
+  href: string;
+};
+
+type DescriptionLine = {
+  // Italic lead-in rendered before `text`, without its trailing colon.
+  label?: string;
+  text: string;
+  links?: DescriptionLink[];
+};
+
 type ExperienceRole = {
   org: string;
   orgKey?: OrgKey;
@@ -7,10 +19,9 @@ type ExperienceRole = {
   piHref?: string;
   date: string;
   desc: string;
-  descLinks?: {
-    text: string;
-    href: string;
-  }[];
+  descLinks?: DescriptionLink[];
+  // Extra rows rendered under `desc`, each on its own one-line row.
+  descLines?: DescriptionLine[];
   href?: string;
   incoming?: boolean;
   state?: 'present' | 'ended' | 'incoming';
@@ -18,14 +29,12 @@ type ExperienceRole = {
 
 export type ExperienceGroup = {
   kind: 'research' | 'engineering' | 'teaching';
-  visibleCount: number;
   roles: ExperienceRole[];
 };
 
 export const experienceGroups: ExperienceGroup[] = [
   {
     kind: 'research',
-    visibleCount: 3,
     roles: [
       /*
       {
@@ -46,15 +55,31 @@ export const experienceGroups: ExperienceGroup[] = [
         date: 'Aug 2025 - Present',
         href: 'https://www.romerolab.org/',
         state: 'present',
-        desc: 'Chemistry data-mining agents with Anthropic + Microsoft Research',
-        descLinks: [
+        desc: 'Agents for chemical reaction data extraction and analysis',
+        descLines: [
           {
-            text: 'Anthropic',
-            href: 'https://www.anthropic.com/news/ai-for-science-program',
+            label: 'Collabs & Grants',
+            text: 'Anthropic (AI for Science Program) + Microsoft Research',
+            links: [
+              {
+                text: 'Anthropic (AI for Science Program)',
+                href: 'https://www.anthropic.com/news/ai-for-science-program',
+              },
+              {
+                text: 'Microsoft Research',
+                href: 'https://www.microsoft.com/en-us/research/people/kevyan/',
+              },
+            ],
           },
           {
-            text: 'Microsoft Research',
-            href: 'https://www.microsoft.com/en-us/research/people/kevyan/',
+            label: 'Outputs',
+            text: 'AI Scientist Summer Workshop (Poster)',
+            links: [
+              {
+                text: 'AI Scientist Summer Workshop',
+                href: 'https://ai-scientist-workshop.github.io/',
+              },
+            ],
           },
         ],
       },
@@ -66,19 +91,55 @@ export const experienceGroups: ExperienceGroup[] = [
         href: 'https://sites.duke.edu/navid/',
         state: 'ended',
         desc: 'Continual learning for antibody affinity prediction',
+        descLines: [
+          {
+            label: 'Outputs',
+            text: 'Preprint',
+            links: [
+              {
+                text: 'Preprint',
+                href: 'https://doi.org/10.13140/RG.2.2.11182.98880',
+              },
+            ],
+          },
+        ],
       },
       {
         org: 'KFUPM',
         orgKey: 'kfupm',
         piName: 'Mahmoud Abdelnaby',
-        date: 'Jul 2022 - Sep 2023',
+        date: 'Jul 2022 - Aug 2023',
         href: 'https://scholar.google.com/citations?user=BLMFawMAAAAJ&hl=en',
         state: 'ended',
-        desc: 'Polymer property prediction and synthesis for CO₂ capture with Saudi Aramco',
-        descLinks: [
+        desc: 'Polymer property prediction and synthesis for CO₂ capture',
+        descLines: [
           {
+            label: 'Collabs & Grants',
             text: 'Saudi Aramco',
-            href: 'https://www.aramco.com/',
+            links: [
+              {
+                text: 'Saudi Aramco',
+                href: 'https://www.aramco.com/',
+              },
+            ],
+          },
+          {
+            label: 'Outputs',
+            text: '3 publications @ Q1 journals in applied ML, organic synthesis, and a review',
+            links: [
+              {
+                text: 'applied ML',
+                href: 'https://doi.org/10.1016/j.jece.2025.119315',
+              },
+              {
+                text: 'organic synthesis',
+                href: 'https://doi.org/10.1016/j.jcou.2023.102647',
+              },
+              {
+                text: 'a review',
+                href: 'https://doi.org/10.1002/tcr.202400188',
+              },
+            ],
           },
         ],
       },
@@ -86,7 +147,6 @@ export const experienceGroups: ExperienceGroup[] = [
   },
   {
     kind: 'engineering',
-    visibleCount: 1,
     roles: [
       {
         org: 'Soff (YC S24)',
@@ -97,12 +157,24 @@ export const experienceGroups: ExperienceGroup[] = [
         desc: 'Agentic sales intelligence for manufacturers, employee #2',
       },
       {
-        org: 'Life Edit Therapeutics',
-        orgKey: 'life-edit',
+        org: 'Duke Impact Investing Group',
+        orgKey: 'diig',
         date: 'Sep 2024 - May 2025',
-        href: 'https://lifeeditinc.com/',
+        href: 'https://dukeimpact.com/',
         state: 'ended',
         desc: 'Non-linear RNA-seq analysis for CRISPR experiments',
+        descLines: [
+          {
+            label: 'Collabs',
+            text: 'Life Edit Therapeutics',
+            links: [
+              {
+                text: 'Life Edit Therapeutics',
+                href: 'https://lifeeditinc.com/',
+              },
+            ],
+          },
+        ],
       },
       {
         org: 'Duke Institute for Health Innovation',
@@ -116,52 +188,33 @@ export const experienceGroups: ExperienceGroup[] = [
   },
   {
     kind: 'teaching',
-    visibleCount: 1,
     roles: [
       {
         org: 'Operating Systems',
         orgKey: 'duke',
-        piName: 'TA',
+        piName: 'Matthew Lentz',
         date: 'Aug 2026 - Dec 2026',
         href: 'https://courses.cs.duke.edu/fall26/compsci310/',
         state: 'present',
-        desc: 'Introducing kernels with Matthew Lentz, co-leading a discussion section + office hours',
-        descLinks: [
-          {
-            text: 'Matthew Lentz',
-            href: 'https://users.cs.duke.edu/~mlentz/',
-          },
-        ],
+        desc: 'Leading a discussion section + office hours',
       },
       {
         org: 'Computer Systems',
         orgKey: 'duke',
-        piName: 'TA',
+        piName: 'Matthew Lentz',
         date: 'Jan 2026 - May 2026',
         href: 'https://courses.cs.duke.edu/spring26/compsci210d/',
         state: 'ended',
-        desc: 'Introduced CPUs with Matthew Lentz, co-led a discussion section + office hours',
-        descLinks: [
-          {
-            text: 'Matthew Lentz',
-            href: 'https://users.cs.duke.edu/~mlentz/',
-          },
-        ],
+        desc: 'Led a discussion section + office hours',
       },
       {
         org: 'Organic Chemistry I',
         orgKey: 'duke',
-        piName: 'Tutor',
+        piName: 'SAGE Tutor',
         href: 'https://arc.duke.edu/peer-education/',
         date: 'Jan 2025 - May 2025',
         state: 'ended',
-        desc: 'Led a study group with SAGE, saw kids quit pre-med as the semester went',
-        descLinks: [
-          {
-            text: 'SAGE',
-            href: 'https://arc.duke.edu/peer-education/',
-          },
-        ],
+        desc: 'Led a study group, saw kids quit pre-med as the semester went',
       },
     ],
   },

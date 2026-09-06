@@ -57,10 +57,6 @@ export async function getListedPosts() {
   return (await getAllPosts()).filter((post) => post.manifest.listed);
 }
 
-export function isNewPost(index: number) {
-  return index === 0;
-}
-
 export async function getPostBySlug(slug: string) {
   return (await getAllPosts()).find((post) => post.manifest.slug === slug);
 }

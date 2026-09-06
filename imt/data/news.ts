@@ -1,19 +1,33 @@
+import type { TextSegment } from '@/data/profile';
+
 export type NewsItem = {
-  text: string;
-  href?: string;
+  // Only the segments that name something get an href.
+  segments: TextSegment[];
   date: string;
 };
 
 // Newest first. Kept to a few lines; each renders as a single rail row.
 export const newsItems: NewsItem[] = [
   {
-    text: 'Presented at the AI Research Scientist Workshop at Microsoft Research in Boston',
-    href: 'https://ai-scientist-workshop.github.io/',
+    segments: [
+      { text: 'Presented at the ' },
+      {
+        text: 'AI Research Scientist Workshop',
+        href: 'https://ai-scientist-workshop.github.io/',
+      },
+      { text: ' at Microsoft Research in Boston' },
+    ],
     date: 'Aug 2026',
   },
   {
-    text: 'Accepted into the Anthropic AI for Science program',
-    href: 'https://www.anthropic.com/news/ai-for-science-program',
+    segments: [
+      { text: 'Accepted into the ' },
+      {
+        text: 'Anthropic AI for Science program',
+        href: 'https://www.anthropic.com/news/ai-for-science-program',
+      },
+      { text: ', thx for the compute!' },
+    ],
     date: 'Jun 2026',
   },
 ];

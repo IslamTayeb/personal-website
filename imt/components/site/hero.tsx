@@ -6,6 +6,7 @@ import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { SectionHeader } from '@/components/primitives/section';
+import { cn } from '@/lib/utils';
 
 function ContactDetails() {
   return (
@@ -49,13 +50,24 @@ function ContactIndex() {
   );
 }
 
-function HeroSegment({ segment }: { segment: TextSegment }) {
+function HeroSegment({
+  segment,
+  quiet,
+}: {
+  segment: TextSegment;
+  // Skip the pointer cursor so the link reads as plain text until hovered.
+  quiet?: boolean;
+}) {
   if (!segment.href) {
     return segment.text;
   }
 
   return (
-    <ExternalLink href={segment.href} section="r">
+    <ExternalLink
+      href={segment.href}
+      section="r"
+      className={cn('text-foreground', quiet && 'cursor-default')}
+    >
       {segment.text}
     </ExternalLink>
   );
@@ -86,28 +98,17 @@ function News() {
     <RailList testId="hero-news" className="mt-3">
       {newsItems.map((item, index) => {
         const isLatest = index === 0;
+        const text = item.segments.map((segment) => segment.text).join('');
 
         return (
           <RailItem
-            key={`${item.date}-${item.text}`}
+            key={`${item.date}-${text}`}
             testId="hero-news-row"
             dotClassName={isLatest ? 'bg-roy-r' : 'bg-foreground/75'}
-            hoverAccent={isLatest ? undefined : 'r'}
             titleClassName="reading-copy font-normal leading-snug site-desktop:truncate"
-            title={
-              item.href ? (
-                <ExternalLink
-                  href={item.href}
-                  section="r"
-                  data-rail-hover-source={isLatest ? undefined : 'true'}
-                  className="text-foreground"
-                >
-                  {item.text}
-                </ExternalLink>
-              ) : (
-                item.text
-              )
-            }
+            title={item.segments.map((segment, segmentIndex) => (
+              <HeroSegment key={segmentIndex} segment={segment} quiet />
+            ))}
             meta={item.date}
             connector={index < newsItems.length - 1 ? 'solid' : 'none'}
           />
