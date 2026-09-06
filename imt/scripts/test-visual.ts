@@ -283,44 +283,83 @@ async function assertThemeBootstrapBeforeHeader() {
 
 async function assertRoybBandPlacement(page: Page) {
   const placement = await page.evaluate(() => {
+    const sitePage = document.querySelector<HTMLElement>(
+      '[data-testid="site-page"]'
+    );
     const header = document.querySelector('[data-testid="site-header"]');
+    const wordmark = document.querySelector('[data-testid="wordmark"]');
     const wrap = document.querySelector('[data-testid="royb-band-wrap"]');
     const band = document.querySelector('[data-testid="royb-band"]');
+    const headerStyle = header ? getComputedStyle(header) : null;
+    const sitePageStyle = sitePage ? getComputedStyle(sitePage) : null;
     const bandStyle = band ? getComputedStyle(band) : null;
     const nextContent = document.querySelector(
       'main > section header span, [data-testid="blog-article-title"]'
     );
+    const pageRect = sitePage?.getBoundingClientRect();
 
     return {
       headerBottom: header?.getBoundingClientRect().bottom ?? 0,
+      headerBorderBottomWidth: Number.parseFloat(
+        headerStyle?.borderBottomWidth ?? '0'
+      ),
+      wordmarkBottom: wordmark?.getBoundingClientRect().bottom ?? 0,
       wrapTop: wrap?.getBoundingClientRect().top ?? 0,
-      wrapBottom: wrap?.getBoundingClientRect().bottom ?? 0,
       bandTop: band?.getBoundingClientRect().top ?? 0,
       bandBottom: band?.getBoundingClientRect().bottom ?? 0,
+      bandLeft: band?.getBoundingClientRect().left ?? 0,
+      bandRight: band?.getBoundingClientRect().right ?? 0,
       bandHeight: band?.getBoundingClientRect().height ?? 0,
-      bandBorderTopWidth: Number.parseFloat(bandStyle?.borderTopWidth ?? '0'),
-      bandBorderTopColor: bandStyle?.borderTopColor ?? '',
+      bandBorderWidths: [
+        bandStyle?.borderTopWidth,
+        bandStyle?.borderRightWidth,
+        bandStyle?.borderBottomWidth,
+        bandStyle?.borderLeftWidth,
+      ].map((width) => Number.parseFloat(width ?? '0')),
+      pageInnerLeft:
+        (pageRect?.left ?? 0) +
+        Number.parseFloat(sitePageStyle?.borderLeftWidth ?? '0'),
+      pageInnerRight:
+        (pageRect?.right ?? 0) -
+        Number.parseFloat(sitePageStyle?.borderRightWidth ?? '0'),
       nextContentTop: nextContent?.getBoundingClientRect().top ?? 0,
     };
   });
 
-  const topGap = placement.bandTop - placement.headerBottom;
+  const topGap = placement.bandTop - placement.wordmarkBottom;
   const bottomGap = placement.nextContentTop - placement.bandBottom;
 
   assert.equal(placement.bandHeight, 9, 'ROYB bar should be 9px tall');
   assert.equal(
-    placement.bandBorderTopWidth,
-    1,
-    'ROYB bar should keep a thin hard border'
+    placement.headerBorderBottomWidth,
+    0,
+    'site header should not draw its own rule; the ROYB bar separates it'
   );
-  assert.ok(topGap >= 16, `ROYB top gap should be doubled: ${topGap}px`);
+  assert.deepEqual(
+    placement.bandBorderWidths,
+    [1, 0, 1, 0],
+    'ROYB bar should keep thin hard rules above and below only'
+  );
+  assert.ok(
+    Math.abs(placement.bandTop - placement.headerBottom) <= 0.5,
+    `ROYB bar should sit flush under the header: ${placement.bandTop} / ${placement.headerBottom}`
+  );
+  assert.ok(
+    Math.abs(placement.wrapTop - placement.headerBottom) <= 1,
+    'ROYB wrapper should stay directly after the in-page header'
+  );
+  assert.ok(
+    Math.abs(topGap - 12) <= 1,
+    `wordmark to ROYB bar should be the header's 12px: ${topGap}px`
+  );
   assert.ok(
     Math.abs(topGap - bottomGap) <= 2,
     `ROYB gap above and below should match visually: ${topGap}px / ${bottomGap}px`
   );
   assert.ok(
-    Math.abs(placement.wrapTop - placement.headerBottom) <= 1,
-    'ROYB wrapper should stay directly after the in-page header'
+    Math.abs(placement.bandLeft - placement.pageInnerLeft) <= 0.5 &&
+      Math.abs(placement.bandRight - placement.pageInnerRight) <= 0.5,
+    `ROYB bar should bleed edge to edge of the page: ${placement.bandLeft}-${placement.bandRight} vs ${placement.pageInnerLeft}-${placement.pageInnerRight}`
   );
 
   return {
@@ -354,8 +393,8 @@ async function assertDarkRoybBandBorder(page: Page) {
       result.borderBottomWidth,
       result.borderLeftWidth,
     ],
-    [1, 1, 1, 1],
-    'dark ROYB bar should render a thin hard border'
+    [1, 0, 1, 0],
+    'dark ROYB bar should render thin hard rules above and below'
   );
   assert.equal(
     result.borderTopColor,
