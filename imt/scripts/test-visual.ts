@@ -353,8 +353,8 @@ async function assertRoybBandPlacement(page: Page) {
     `wordmark to ROYB bar should be the header's 12px: ${topGap}px`
   );
   assert.ok(
-    Math.abs(topGap - bottomGap) <= 2,
-    `ROYB gap above and below should match visually: ${topGap}px / ${bottomGap}px`
+    Math.abs(bottomGap - 16) <= 1,
+    `ROYB bar to first section should be 16px: ${bottomGap}px`
   );
   assert.ok(
     Math.abs(placement.bandLeft - placement.pageInnerLeft) <= 0.5 &&

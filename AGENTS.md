@@ -94,8 +94,8 @@ Use meaningful commit messages that describe the why.
   ROYB band sits flush under it, bleeds across the page's 20px gutters with
   `-mx-5` so it spans the paper sheet on desktop and the screen on mobile, and
   keeps only its top and bottom ink rules (side rules would double the page
-  frame). Spacing is symmetric: 12px from wordmark to band (header `py-3`) and
-  12px from band to the first section (`pb-3`).
+  frame). Spacing: 12px from wordmark to band (header `py-3`) and 16px from
+  band to the first section (`pb-4`).
 - **Links:** React-rendered hyperlinks should use
   `components/primitives/external-link.tsx`. Markdown-rendered article links
   should receive the same ROYB link classes in the renderer.
