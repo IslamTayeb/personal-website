@@ -30,4 +30,15 @@ export const newsItems: NewsItem[] = [
     ],
     date: 'Jun 2026',
   },
+  {
+    segments: [
+      { text: 'Posted ' },
+      {
+        text: 'On Agent Memory Fidelity',
+        href: '/blog/on-agent-memory-fidelity',
+      },
+      { text: ', on giving agents adaptive, reversible forgetting' },
+    ],
+    date: 'Jun 2026',
+  },
 ];

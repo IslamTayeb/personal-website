@@ -6,7 +6,6 @@ import { heroParagraphs, type TextSegment } from '@/data/profile';
 import { ExternalLink } from '@/components/primitives/external-link';
 import { RailItem, RailList } from '@/components/primitives/rail';
 import { SectionHeader } from '@/components/primitives/section';
-import { cn } from '@/lib/utils';
 
 function ContactDetails() {
   return (
@@ -50,14 +49,7 @@ function ContactIndex() {
   );
 }
 
-function HeroSegment({
-  segment,
-  quiet,
-}: {
-  segment: TextSegment;
-  // Skip the pointer cursor so the link reads as plain text until hovered.
-  quiet?: boolean;
-}) {
+function HeroSegment({ segment }: { segment: TextSegment }) {
   if (!segment.href) {
     return segment.text;
   }
@@ -66,7 +58,7 @@ function HeroSegment({
     <ExternalLink
       href={segment.href}
       section="r"
-      className={cn('text-foreground', quiet && 'cursor-default')}
+      className="text-foreground"
     >
       {segment.text}
     </ExternalLink>
@@ -107,7 +99,7 @@ function News() {
             dotClassName={isLatest ? 'bg-roy-r' : 'bg-foreground/75'}
             titleClassName="reading-copy font-normal leading-snug site-desktop:truncate"
             title={item.segments.map((segment, segmentIndex) => (
-              <HeroSegment key={segmentIndex} segment={segment} quiet />
+              <HeroSegment key={segmentIndex} segment={segment} />
             ))}
             meta={item.date}
             connector={index < newsItems.length - 1 ? 'solid' : 'none'}
