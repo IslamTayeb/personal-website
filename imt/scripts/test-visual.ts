@@ -2225,7 +2225,7 @@ async function assertHome(page: Page) {
   assert.ok(!research?.text.includes('Aug 2025 - present'));
   assert.ok(
     research?.text.includes(
-      'Collabs & Grants: Anthropic (AI for Science Program) + Microsoft Research'
+      'Collabs & Grants: Microsoft Research + Anthropic (AI for Science Program)'
     ),
     'the Romero row should carry a labeled collabs line'
   );

@@ -59,15 +59,15 @@ export const experienceGroups: ExperienceGroup[] = [
         descLines: [
           {
             label: 'Collabs & Grants',
-            text: 'Anthropic (AI for Science Program) + Microsoft Research',
+            text: 'Microsoft Research + Anthropic (AI for Science Program)',
             links: [
-              {
-                text: 'Anthropic (AI for Science Program)',
-                href: 'https://www.anthropic.com/news/ai-for-science-program',
-              },
               {
                 text: 'Microsoft Research',
                 href: 'https://www.microsoft.com/en-us/research/people/kevyan/',
+              },
+              {
+                text: 'Anthropic (AI for Science Program)',
+                href: 'https://www.anthropic.com/news/ai-for-science-program',
               },
             ],
           },
